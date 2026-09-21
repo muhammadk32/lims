@@ -1,10 +1,58 @@
-﻿venv/
+﻿# ---- Python ----
 __pycache__/
-*.pyc
-.env
-database.db
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ---- Virtualenvs ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- Flask ----
+instance/
+*.db
+*.sqlite
 *.sqlite3
-migrations/
+!instance/.gitkeep
+
+# ---- Env / secrets ----
+.env
+.env.*
+!.env.example
+
+# ---- Logs ----
+logs/
+*.log
+
+# ---- Uploads (user content) ----
+static/uploads/
+!static/uploads/.gitkeep
+!static/uploads/branding/.gitkeep
+
+# ---- IDE / OS ----
 .vscode/
 .idea/
+*.swp
 .DS_Store
+Thumbs.db
+
+# ---- Test / cache ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---- Project one-offs ----
+project_tree.txt
+New Text Document.txt
+*.bak
+*.bak.*
