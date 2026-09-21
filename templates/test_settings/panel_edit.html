@@ -56,13 +56,15 @@
                 Panel Price <span class="text-danger">*</span>
               </label>
               <div class="input-group">
-                <span class="input-group-text">$</span>
+                {% if config.APP_CURRENCY %}
+                  <span class="input-group-text">{{ config.APP_CURRENCY }}</span>
+                {% endif %}
                 <input type="number" name="price" class="form-control"
                        step="0.01" min="0" required
                        value="{{ '%.2f'|format(panel.price) if panel else '0.00' }}">
               </div>
               <div class="form-text">
-                Only this price is charged — parameters are billed at $0.
+                Only this price is charged — parameters are billed at 0.
               </div>
             </div>
 
@@ -175,7 +177,7 @@
             {{ panel.code if panel else 'CODE' }}
           </div>
           <div class="panel-preview-price">
-            $<span id="previewPrice">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
+            <span id="previewPrice">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
           </div>
         </div>
 
@@ -189,7 +191,7 @@
         <div class="d-flex justify-content-between small text-muted">
           <span>Patient pays:</span>
           <span class="fw-bold text-success">
-            $<span id="previewTotal">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
+            <span id="previewTotal">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
           </span>
         </div>
         <div class="small text-muted mt-1">

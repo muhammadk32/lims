@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
-{% block title %}Payments — LabMS{% endblock %}
+{% block title %}Payments â€” LabMS{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -36,9 +36,9 @@
             <td><code>{{ p.order.order_code }}</code></td>
             <td>{{ p.order.patient.full_name }}</td>
             <td><span class="badge bg-info text-dark">{{ p.method_label }}</span></td>
-            <td class="small">{{ p.reference or '—' }}</td>
-            <td class="small">{{ p.received_by.full_name if p.received_by else '—' }}</td>
-            <td class="text-end fw-semibold text-success">${{ '%.2f'|format(p.amount) }}</td>
+            <td class="small">{{ p.reference or 'â€”' }}</td>
+            <td class="small">{{ p.received_by.full_name if p.received_by else 'â€”' }}</td>
+            <td class="text-end fw-semibold text-success">{{ p.amount | money }}</td>
           </tr>
           {% else %}
           <tr><td colspan="7" class="text-center text-muted py-4">No payments yet.</td></tr>

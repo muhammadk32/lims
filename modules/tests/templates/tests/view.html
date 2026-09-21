@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
-{% block title %}{{ test.name }} — LabMS{% endblock %}
+{% block title %}{{ test.name }} â€” LabMS{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -19,7 +19,7 @@
           <h3 class="fw-bold mb-1">{{ test.name }}</h3>
           <p class="text-muted small mb-0">
             <code>{{ test.code }}</code>
-            {% if test.category_ref %} · {{ test.category_ref.name }}{% endif %}
+            {% if test.category_ref %} Â· {{ test.category_ref.name }}{% endif %}
           </p>
         </div>
         <div class="d-flex gap-2">
@@ -35,15 +35,15 @@
       <div class="row g-3">
         <div class="col-md-3">
           <p class="text-muted small mb-1">Price</p>
-          <p class="fw-semibold text-success fs-5">${{ '%.2f'|format(test.price) }}</p>
+          <p class="fw-semibold text-success fs-5">{{ test.price | money }}</p>
         </div>
         <div class="col-md-3">
           <p class="text-muted small mb-1">Unit</p>
-          <p class="fw-semibold">{{ test.unit or '—' }}</p>
+          <p class="fw-semibold">{{ test.unit or 'â€”' }}</p>
         </div>
         <div class="col-md-3">
           <p class="text-muted small mb-1">Normal Range</p>
-          <p class="fw-semibold">{{ test.normal_range or '—' }}</p>
+          <p class="fw-semibold">{{ test.normal_range or 'â€”' }}</p>
         </div>
         <div class="col-md-3">
           <p class="text-muted small mb-1">Turnaround</p>
