@@ -32,6 +32,11 @@ class Config:
     APP_VERSION = '1.0.0'
     APP_NAME = 'LabMS'
 
+    # Currency — used by the `money` Jinja filter.
+    # Leave blank '' for plain numbers (e.g. 1500.00).
+    # Set to 'Rs.' / 'PKR' / '₨' / '$' to prefix amounts with a symbol.
+    APP_CURRENCY = os.getenv('APP_CURRENCY', '')
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

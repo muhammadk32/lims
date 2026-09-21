@@ -70,7 +70,7 @@
                   <div class="fw-semibold">{{ item.test.name }}</div>
                   <div class="text-muted small">{{ item.test.code }}</div>
                 </td>
-                <td class="text-end">${{ '%.2f'|format(item.price) }}</td>
+                <td class="text-end">{{ item.price | money }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -81,26 +81,28 @@
               <table class="table table-sm mb-0">
                 <tr>
                   <td>Subtotal</td>
-                  <td class="text-end">${{ '%.2f'|format(order.total_amount) }}</td>
+                  <td class="text-end">{{ order.total_amount | money }}</td>
                 </tr>
                 {% if tax_rate > 0 %}
                 <tr>
                   <td>Tax ({{ (tax_rate * 100)|round(1) }}%)</td>
-                  <td class="text-end">${{ '%.2f'|format(order.total_amount * tax_rate) }}</td>
+                  <td class="text-end">{{ (order.total_amount * tax_rate) | money }}</td>
                 </tr>
                 {% endif %}
                 <tr class="fw-bold border-top">
                   <td>Total</td>
-                  <td class="text-end text-success">${{ '%.2f'|format(order.total_amount * (1 + tax_rate)) }}</td>
+                  <td class="text-end text-success">
+                    {{ (order.total_amount * (1 + tax_rate)) | money }}
+                  </td>
                 </tr>
                 <tr>
                   <td>Paid</td>
-                  <td class="text-end text-primary">${{ '%.2f'|format(order.paid_amount) }}</td>
+                  <td class="text-end text-primary">{{ order.paid_amount | money }}</td>
                 </tr>
                 <tr class="fw-bold">
                   <td>Balance Due</td>
                   <td class="text-end text-{{ 'success' if order.balance_due < 0.01 else 'danger' }}">
-                    ${{ '%.2f'|format(order.balance_due) }}
+                    {{ order.balance_due | money }}
                   </td>
                 </tr>
               </table>
@@ -135,7 +137,7 @@
                 <td><span class="badge bg-info text-dark">{{ p.method_label }}</span></td>
                 <td class="small">{{ p.reference or '—' }}</td>
                 <td class="small">{{ p.received_by.full_name if p.received_by else '—' }}</td>
-                <td class="text-end fw-semibold text-success">${{ '%.2f'|format(p.amount) }}</td>
+                <td class="text-end fw-semibold text-success">{{ p.amount | money }}</td>
                 <td class="text-end">
                   <form method="POST" action="{{ url_for('billing.delete_payment', payment_id=p.id) }}"
                         onsubmit="return confirm('Delete this payment?');">
@@ -169,14 +171,16 @@
               <div class="mb-2">
                 <label class="form-label small">Amount</label>
                 <div class="input-group">
-                  <span class="input-group-text">$</span>
+                  {% if config.APP_CURRENCY %}
+                    <span class="input-group-text">{{ config.APP_CURRENCY }}</span>
+                  {% endif %}
                   <input type="number" step="0.01" min="0.01"
                          max="{{ order.balance_due }}"
                          name="amount"
                          value="{{ '%.2f'|format(order.balance_due) }}"
                          class="form-control" required>
                 </div>
-                <div class="form-text">Balance: ${{ '%.2f'|format(order.balance_due) }}</div>
+                <div class="form-text">Balance: {{ order.balance_due | money }}</div>
               </div>
 
               <div class="mb-2">

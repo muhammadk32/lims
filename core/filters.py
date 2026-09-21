@@ -25,3 +25,21 @@ def register_filters(app):
                 return dt.strftime(fmt)
             except Exception:
                 return '—'
+
+    @app.template_filter('money')
+    def _money_filter(value, decimals=2):
+        """Format a number as money: '<currency> 1,234.56'.
+
+        Reads the currency symbol from app config (APP_CURRENCY).
+        Empty string = no symbol, just the number.
+        """
+        if value is None or value == '':
+            return '—'
+        try:
+            num = float(value)
+        except (ValueError, TypeError):
+            return str(value)
+
+        symbol = app.config.get('APP_CURRENCY', '') or ''
+        formatted = f'{num:,.{decimals}f}'
+        return f'{symbol} {formatted}' if symbol else formatted
