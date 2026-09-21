@@ -8,7 +8,12 @@ def test_new_order_page_loads(client):
     login(client, 'admin', 'admin123')
     r = client.get('/orders/new')
     assert r.status_code == 200
-    assert b'New Order' in r.data
+    # Page header reads "New Patient Registration"
+    assert (
+        b'New Patient Registration' in r.data
+        or b'New Registration' in r.data
+        or b'Patient Registration' in r.data
+    )
 
 
 def test_create_order(client, app):

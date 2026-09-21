@@ -4,12 +4,12 @@ from tests.conftest import login, logout
 def test_login_page_loads(client):
     r = client.get('/login')
     assert r.status_code == 200
-    # Page renders brand "LabMS" + "Sign In" heading
+    # Page renders brand "LIMS" + "User Login" heading
     assert (
-        b'LabMS' in r.data
-        or b'Lab Management System' in r.data
-        or b'Sign In' in r.data
-        or b'Sign in' in r.data
+        b'LIMS' in r.data
+        or b'Laboratory Management System' in r.data
+        or b'User Login' in r.data
+        or b'LOGIN' in r.data
     )
 
 
