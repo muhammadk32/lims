@@ -307,7 +307,7 @@
 
      An item is "pending" when:
        - it has no result, OR
-       - a pathologist flagged it for correction (needs_correction)
+       - a pathologist flagged it (or its parent panel) for correction
      ============================================================ #}
   {% set pending_items = [] %}
   {% set verified_items = [] %}
@@ -318,7 +318,8 @@
       {% set _ = verified_items.append(top) %}
     {% else %}
       {% if top.has_children %}
-        {# Panel: include if any child is missing a result OR needs correction #}
+        {# Panel: include if any child is missing a result OR needs correction
+           OR the parent panel itself needs correction #}
         {% set panel_needs = namespace(flag=false) %}
         {% for child in top.children %}
           {% if (not child.result_value) or child.needs_correction %}
@@ -329,7 +330,7 @@
         {% if panel_needs.flag or top.needs_correction %}
           {% set _ = pending_items.append(top) %}
           {% for child in top.children %}
-            {% if (not child.result_value) or child.needs_correction %}
+            {% if (not child.result_value) or child.needs_correction or top.needs_correction %}
               {% set _ = pending_leaves.append(child) %}
             {% endif %}
           {% endfor %}
@@ -376,26 +377,38 @@
                 </td>
                 <td class="text-muted-sm">—</td>
                 <td class="text-muted-sm">—</td>
-                <td class="text-muted-sm">See children below</td>
+                <td class="text-muted-sm">
+                  {% if item.needs_correction %}
+                    Re-enter all children below
+                  {% else %}
+                    See children below
+                  {% endif %}
+                </td>
                 <td></td>
                 <td></td>
               </tr>
 
-              {# ---- Children with inputs ---- #}
+              {# ---- Children with inputs (rendered if any child needs a result
+                    OR the parent panel was sent back for correction) ---- #}
               {% for child in item.children %}
-                {% if (not child.result_value) or child.needs_correction %}
-                <tr class="child-row {% if child.result_value and not child.needs_correction %}filled{% elif child.needs_correction %}correction-row{% endif %}">
+                {% if (not child.result_value) or child.needs_correction or item.needs_correction %}
+                <tr class="child-row {% if child.result_value and not child.needs_correction and not item.needs_correction %}filled{% elif child.needs_correction or item.needs_correction %}correction-row{% endif %}">
                   <td class="test-cell">
                     <span class="text-muted">↳</span>
                     {{ child.test.name }}
-                    {% if child.needs_correction %}
+                    {% if child.needs_correction or item.needs_correction %}
                       <span class="badge-correction">Correction</span>
                     {% endif %}
                     <div class="test-code"><code>{{ child.test.code }}</code></div>
-                    {% if child.needs_correction and child.correction_note %}
+                    {% if child.correction_note %}
                       <div class="text-danger small mt-1">
                         <i class="bi bi-exclamation-triangle-fill"></i>
                         {{ child.correction_note }}
+                      </div>
+                    {% elif item.needs_correction and item.correction_note %}
+                      <div class="text-danger small mt-1">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        {{ item.correction_note }}
                       </div>
                     {% endif %}
                   </td>

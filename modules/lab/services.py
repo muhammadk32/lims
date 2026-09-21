@@ -65,6 +65,9 @@ def send_back_items(items, reason, user, *, order_note_mode='single'):
       'single'  → set order.correction_note to '<test>: <reason>'
       'bulk'    → set order.correction_note to just <reason>
       'skip'    → don't touch order.correction_note
+
+    Panels: when a top-level panel is sent back, each child is ALSO
+    flagged so the results-entry page renders inputs for them.
     """
     now = datetime.utcnow()
     touched_order_ids = set()
@@ -76,6 +79,14 @@ def send_back_items(items, reason, user, *, order_note_mode='single'):
         item.verified_at = None
         item.verified_by_id = None
         touched_order_ids.add(item.order_id)
+
+        # Propagate correction to every panel child so the technician
+        # can re-enter results for each parameter.
+        if item.has_children:
+            for child in item.children:
+                child.correction_note = reason
+                child.correction_at = now
+                child.correction_by_id = user.id
 
     for oid in touched_order_ids:
         order = Order.query.get(oid)
