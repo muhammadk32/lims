@@ -91,6 +91,9 @@
 .enter-table tbody tr.filled {
   background: rgba(25, 135, 84, 0.06);
 }
+.enter-table tbody tr.correction-row {
+  background: rgba(255, 193, 7, 0.10);
+}
 .enter-table code {
   font-size: 0.76rem;
   padding: 1px 4px;
@@ -113,11 +116,29 @@
   font-weight: 600;
   color: #1e40af;
 }
+.enter-table tr.panel-header.correction-row td {
+  background: rgba(255, 193, 7, 0.15);
+  color: #92400e;
+}
 
 /* Child row indent */
 .enter-table tr.child-row td.test-cell {
   padding-left: 26px;
   font-weight: 400;
+}
+
+/* Small inline badge for "correction" hint */
+.badge-correction {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  border: 1px solid #fde68a;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 /* Locked / already-verified section */
@@ -258,6 +279,13 @@
     This report is <strong>approved</strong>. Editing any result will
     reset it to <strong>completed</strong> and require re-approval.
   </div>
+  {% elif order.status == 'correction' %}
+  <div class="alert alert-warning py-2 small">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <strong>Correction in progress.</strong> Update the flagged result(s)
+    below and click <strong>Save All Results</strong> to return this order
+    to the pathologist for re-approval.
+  </div>
   {% elif order.all_results_done %}
   <div class="alert alert-success py-2 small">
     <i class="bi bi-check-circle-fill"></i>
@@ -276,6 +304,10 @@
        pending_items  — top-level items still needing action
        verified_items — already verified (locked)
        pending_leaves — flat list of leaf items to render as inputs
+
+     An item is "pending" when:
+       - it has no result, OR
+       - a pathologist flagged it for correction (needs_correction)
      ============================================================ #}
   {% set pending_items = [] %}
   {% set verified_items = [] %}
@@ -286,15 +318,25 @@
       {% set _ = verified_items.append(top) %}
     {% else %}
       {% if top.has_children %}
-        {% set _ = pending_items.append(top) %}
-        {# queue each child that needs a result #}
+        {# Panel: include if any child is missing a result OR needs correction #}
+        {% set panel_needs = namespace(flag=false) %}
         {% for child in top.children %}
-          {% if not child.result_value %}
-            {% set _ = pending_leaves.append(child) %}
+          {% if (not child.result_value) or child.needs_correction %}
+            {% set panel_needs.flag = true %}
           {% endif %}
         {% endfor %}
+
+        {% if panel_needs.flag or top.needs_correction %}
+          {% set _ = pending_items.append(top) %}
+          {% for child in top.children %}
+            {% if (not child.result_value) or child.needs_correction %}
+              {% set _ = pending_leaves.append(child) %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       {% else %}
-        {% if not top.result_value %}
+        {# Standalone: include if result is missing OR needs correction #}
+        {% if (not top.result_value) or top.needs_correction %}
           {% set _ = pending_items.append(top) %}
           {% set _ = pending_leaves.append(top) %}
         {% endif %}
@@ -323,11 +365,14 @@
 
             {% if item.has_children %}
               {# ---- Panel header row (no input) ---- #}
-              <tr class="panel-header">
+              <tr class="panel-header {% if item.needs_correction %}correction-row{% endif %}">
                 <td>
                   <i class="bi bi-collection"></i>
                   {{ item.test.name }}
                   <span class="text-muted small">({{ item.children|length }} params)</span>
+                  {% if item.needs_correction %}
+                    <span class="badge-correction">Correction</span>
+                  {% endif %}
                 </td>
                 <td class="text-muted-sm">—</td>
                 <td class="text-muted-sm">—</td>
@@ -338,12 +383,21 @@
 
               {# ---- Children with inputs ---- #}
               {% for child in item.children %}
-                {% if not child.result_value %}
-                <tr class="child-row {% if child.result_value %}filled{% endif %}">
+                {% if (not child.result_value) or child.needs_correction %}
+                <tr class="child-row {% if child.result_value and not child.needs_correction %}filled{% elif child.needs_correction %}correction-row{% endif %}">
                   <td class="test-cell">
                     <span class="text-muted">↳</span>
                     {{ child.test.name }}
+                    {% if child.needs_correction %}
+                      <span class="badge-correction">Correction</span>
+                    {% endif %}
                     <div class="test-code"><code>{{ child.test.code }}</code></div>
+                    {% if child.needs_correction and child.correction_note %}
+                      <div class="text-danger small mt-1">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        {{ child.correction_note }}
+                      </div>
+                    {% endif %}
                   </td>
                   <td class="text-muted-sm">{{ child.test.normal_range or '—' }}</td>
                   <td class="text-muted-sm">{{ child.test.unit or '—' }}</td>
@@ -373,10 +427,21 @@
 
             {% else %}
               {# ---- Standalone test with input ---- #}
-              <tr class="{% if item.result_value %}filled{% endif %}">
+              <tr class="{% if item.result_value and not item.needs_correction %}filled{% elif item.needs_correction %}correction-row{% endif %}">
                 <td>
-                  <div class="test-name">{{ item.test.name }}</div>
+                  <div class="test-name">
+                    {{ item.test.name }}
+                    {% if item.needs_correction %}
+                      <span class="badge-correction">Correction</span>
+                    {% endif %}
+                  </div>
                   <div class="test-code"><code>{{ item.test.code }}</code></div>
+                  {% if item.needs_correction and item.correction_note %}
+                    <div class="text-danger small mt-1">
+                      <i class="bi bi-exclamation-triangle-fill"></i>
+                      {{ item.correction_note }}
+                    </div>
+                  {% endif %}
                 </td>
                 <td class="text-muted-sm">{{ item.test.normal_range or '—' }}</td>
                 <td class="text-muted-sm">{{ item.test.unit or '—' }}</td>

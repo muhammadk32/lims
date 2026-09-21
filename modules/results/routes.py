@@ -15,24 +15,36 @@ from modules.orders.models import Order, OrderItem, OrderStatus
 def _pending_items_for_order(order):
     """Return the top-level items that still need technician action.
 
-    An item needs action when EITHER:
+    An item needs action when ANY of:
       - it has no result yet (missing), OR
-      - it has a result but hasn't been verified by a pathologist
+      - a pathologist sent it back for correction (needs_correction)
 
-    Items that are already verified are hidden.
+    For panels, needs action when any child is missing a result
+    OR any child was sent back for correction.
+
+    Items already verified are hidden.
     """
     result = []
     for top in order.top_level_items:
         if top.is_verified:
             continue
+
+        # Correction flag on the top-level item itself → always pending.
+        if getattr(top, 'needs_correction', False):
+            result.append(top)
+            continue
+
         if top.has_children:
-            # Panel: needs action if any child is missing
-            # (if all children have results but not verified → pathologist's job)
-            if any(not c.result_value for c in top.children):
+            # Panel: pending if any child is missing a result OR
+            # any child was sent back for correction.
+            if any(
+                (not c.result_value) or getattr(c, 'needs_correction', False)
+                for c in top.children
+            ):
                 result.append(top)
         else:
-            # Standalone: needs action only if result is missing
-            # (pathologist's job if it's filled but not verified)
+            # Standalone: pending only if result is missing.
+            # (If it's filled and unverified, that's the pathologist's job.)
             if not top.result_value:
                 result.append(top)
     return result
@@ -63,6 +75,7 @@ def index():
 
       - Missing results (not yet entered)
       - Panels with missing children
+      - Any item sent back for correction
 
     Items already verified by a pathologist are hidden, even if
     their results are shown elsewhere.
@@ -104,9 +117,7 @@ def index():
 
         # (b) Correction state → always show
         if order.status == OrderStatus.CORRECTION:
-            # Attach the pending list so the template can render the expanded view
             order.pending_items = _pending_items_for_order(order)
-            # If nothing missing (all entered but sent back for correction), still show
             pending_orders.append(order)
             continue
 
@@ -151,27 +162,40 @@ def enter(order_id):
 
     Behaviour on POST:
       - Saves all result values and notes for the order's items.
+      - Clears per-item correction flags for anything re-saved.
       - If the order was already APPROVED, editing any value resets
         it to COMPLETED and clears reported_at / reported_by_id.
       - Verified items are cleared back to 'entered' when edited.
+      - If the order was CORRECTION and nothing needs correction any
+        more, it moves back to COMPLETED (ready for re-verification).
     """
     order = Order.query.get_or_404(order_id)
 
     if request.method == 'POST':
         was_approved = (order.status == OrderStatus.APPROVED)
+        was_correction = (order.status == OrderStatus.CORRECTION)
         old_values = {i.id: i.result_value for i in order.items}
 
+        # --- Save every item's value + notes ---
         for item in order.items:
             value = request.form.get(f'result_value_{item.id}', '').strip()
             notes = request.form.get(f'result_notes_{item.id}', '').strip()
             item.result_value = value or None
             item.result_notes = notes or None
 
+        # --- Detect changes ---
         something_changed = False
         for item in order.items:
             if old_values.get(item.id) != item.result_value:
                 something_changed = True
                 break
+
+        # --- Clear correction flags on any item that now has a value ---
+        for item in order.items:
+            if item.correction_note and item.result_value:
+                item.correction_note = None
+                item.correction_at = None
+                item.correction_by_id = None
 
         # --- If editing an APPROVED order → reset approval ---
         if was_approved and something_changed:
@@ -179,8 +203,6 @@ def enter(order_id):
             order.reported_at = None
             order.reported_by_id = None
 
-            # Reset per-item verification on any top-level item whose
-            # leaf values changed
             for top in order.top_level_items:
                 if top.is_verified:
                     top.verified_at = None
@@ -200,6 +222,24 @@ def enter(order_id):
                 'warning'
             )
             return redirect(url_for('orders.view_order', order_id=order.id))
+
+        # --- If order was in CORRECTION and nothing still needs it → clear state ---
+        if was_correction:
+            still_needs_correction = any(
+                getattr(t, 'needs_correction', False)
+                for t in order.top_level_items
+            ) or any(
+                getattr(c, 'needs_correction', False)
+                for t in order.top_level_items
+                for c in t.children
+            )
+
+            if not still_needs_correction:
+                order.correction_note = None
+                order.correction_at = None
+                order.correction_by_id = None
+                if order.status == OrderStatus.CORRECTION:
+                    order.status = OrderStatus.COMPLETED
 
         # --- Normal path — auto-complete when all results are in ---
         if order.all_results_done and order.status != OrderStatus.COMPLETED:
