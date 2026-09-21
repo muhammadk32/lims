@@ -1,0 +1,57 @@
+﻿# Version control
+.git/
+.gitignore
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenv
+venv/
+.venv/
+env/
+ENV/
+
+# Database + instance data
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Uploads
+static/uploads/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Project docs and one-offs
+project_tree.txt
+New Text Document.txt
+readme.md
+make.bat
+lims.bat
+Makefile
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
