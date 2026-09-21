@@ -1,0 +1,189 @@
+{% extends 'base_public.html' %}
+
+{% block title %}Login · {{ branding.lab_name or 'LabMS' }}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-wrapper">
+
+  <!-- ===================== TOP BANNER ===================== -->
+  <header class="login-banner">
+    <div class="container-fluid d-flex align-items-center justify-content-center py-3">
+
+      {# Prefer uploaded logo from Branding Settings; fallback to static/images/logo.png #}
+      {% if branding.logo_url %}
+        <img src="{{ branding.logo_url }}"
+             alt="{{ branding.lab_name }}"
+             class="login-banner-logo">
+      {% else %}
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             alt="{{ branding.lab_name }}"
+             class="login-banner-logo"
+             onerror="this.style.display='none';">
+      {% endif %}
+
+      <div class="ms-3 text-start">
+        <div class="login-banner-title">
+          {{ branding.lab_name or 'Laboratory Management System' }}
+        </div>
+        {% if branding.tagline %}
+          <div class="login-banner-tagline">{{ branding.tagline }}</div>
+        {% endif %}
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== MAIN AREA ===================== -->
+  <main class="login-main">
+
+    <!-- Background image + gradient overlay -->
+    <div class="login-bg-layer"></div>
+    <div class="login-bg-overlay"></div>
+
+    <div class="container login-content">
+      <div class="row g-4 align-items-center justify-content-center w-100">
+
+        <!-- ---------- LEFT: LOGIN FORM ---------- -->
+        <div class="col-12 col-md-6 col-lg-5">
+          <div class="login-card shadow-lg">
+
+            <div class="login-card-header">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <span>User Login</span>
+            </div>
+
+            <div class="login-card-body">
+
+              {# ---- Flash messages (rendered here, not in base_public) ---- #}
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} py-2 small mb-3" role="alert">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endwith %}
+
+              <form method="POST" novalidate>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">User Name</label>
+                  <input
+                    type="text"
+                    name="username"
+                    class="form-control form-control-lg"
+                    required
+                    autofocus
+                    autocomplete="username"
+                    value="{{ request.form.username or '' }}"
+                  >
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    class="form-control form-control-lg"
+                    required
+                    autocomplete="current-password"
+                  >
+                </div>
+
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox"
+                         name="remember" id="remember">
+                  <label class="form-check-label small" for="remember">
+                    Remember me
+                  </label>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary w-100 py-2 fw-semibold">
+                  LOGIN
+                </button>
+
+              </form>
+
+              <p class="text-muted small text-center mt-4 mb-0">
+                If you are unable to login, please contact the lab management.
+              </p>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- RIGHT: LAB INFO ---------- -->
+        <div class="col-12 col-md-6 col-lg-5">
+          <div class="login-info-panel">
+
+            <h2 class="login-info-title">
+              LIMS <span class="text-muted">2.0</span>
+            </h2>
+            <div class="login-info-subtitle">
+              Product ID: 0.0.1
+            </div>
+
+            <h4 class="login-info-heading">
+              Lab Information &amp; Management System
+            </h4>
+
+            <div class="login-info-details">
+
+              {% if branding.address %}
+                <div class="login-info-line">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span>{{ branding.address }}</span>
+                </div>
+              {% endif %}
+
+              {% if branding.phone %}
+                <div class="login-info-line">
+                  <i class="bi bi-telephone-fill"></i>
+                  <span>{{ branding.phone }}</span>
+                </div>
+              {% endif %}
+
+              {% if branding.email %}
+                <div class="login-info-line">
+                  <i class="bi bi-envelope-fill"></i>
+                  <span>{{ branding.email }}</span>
+                </div>
+              {% endif %}
+
+              {% if branding.website %}
+                <div class="login-info-line">
+                  <i class="bi bi-globe"></i>
+                  <span>{{ branding.website }}</span>
+                </div>
+              {% endif %}
+
+              {% if branding.license_no %}
+                <div class="login-info-line">
+                  <i class="bi bi-patch-check-fill"></i>
+                  <span>License: {{ branding.license_no }}</span>
+                </div>
+              {% endif %}
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="login-footer">
+    &copy; 2025 {{ branding.lab_name or 'LabMS' }}
+    {% if branding.website %} · {{ branding.website }}{% endif %}
+  </footer>
+
+</div>
+
+{% endblock %}

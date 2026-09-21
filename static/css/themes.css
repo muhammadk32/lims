@@ -1,0 +1,391 @@
+/* ==========================================================
+   LabMS — Theme Overrides
+   ==========================================================
+   The `data-bs-theme` attribute on <html> picks the theme.
+   Bootstrap 5.3 handles `light` and `dark` natively.
+   Custom themes: grey, blue, green, purple, high_contrast.
+   `auto` is handled by JS.
+   ========================================================== */
+
+/* ==========================================================
+   CRITICAL: Bootstrap non-color variables.
+   Custom themes only override colors, so modals, dropdowns,
+   tooltips etc. lose their z-index values. Restoring them
+   here fixes modal-on-top-of-input bugs.
+   ========================================================== */
+:root,
+[data-bs-theme="light"],
+[data-bs-theme="dark"],
+[data-bs-theme="grey"],
+[data-bs-theme="blue"],
+[data-bs-theme="green"],
+[data-bs-theme="purple"],
+[data-bs-theme="high_contrast"] {
+  /* Modal */
+  --bs-modal-zindex: 1055;
+  --bs-modal-width: 500px;
+  --bs-modal-padding: 1rem;
+  --bs-modal-margin: 0.5rem;
+  --bs-modal-color: inherit;
+  --bs-modal-bg: var(--bs-body-bg);
+  --bs-modal-border-color: var(--bs-border-color);
+  --bs-modal-border-width: 1px;
+  --bs-modal-border-radius: 0.5rem;
+  --bs-modal-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --bs-modal-inner-border-radius: calc(0.5rem - 1px);
+  --bs-modal-header-padding: 1rem 1rem;
+  --bs-modal-header-border-color: var(--bs-border-color);
+  --bs-modal-footer-border-color: var(--bs-border-color);
+
+  /* Backdrop */
+  --bs-backdrop-zindex: 1050;
+  --bs-backdrop-bg: #000;
+  --bs-backdrop-opacity: 0.5;
+
+  /* Dropdown */
+  --bs-dropdown-zindex: 1000;
+  --bs-dropdown-min-width: 10rem;
+  --bs-dropdown-padding-x: 0;
+  --bs-dropdown-padding-y: 0.5rem;
+  --bs-dropdown-spacer: 0.125rem;
+  --bs-dropdown-font-size: 1rem;
+  --bs-dropdown-color: var(--bs-body-color);
+  --bs-dropdown-bg: var(--bs-body-bg);
+  --bs-dropdown-border-color: var(--bs-border-color);
+  --bs-dropdown-border-radius: 0.375rem;
+  --bs-dropdown-border-width: 1px;
+  --bs-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+  /* Tooltip */
+  --bs-tooltip-zindex: 1080;
+  --bs-tooltip-max-width: 200px;
+  --bs-tooltip-padding-x: 0.5rem;
+  --bs-tooltip-padding-y: 0.25rem;
+  --bs-tooltip-font-size: 0.875rem;
+  --bs-tooltip-color: #fff;
+  --bs-tooltip-bg: #000;
+  --bs-tooltip-border-radius: 0.375rem;
+
+  /* Popover */
+  --bs-popover-zindex: 1070;
+  --bs-popover-max-width: 276px;
+
+  /* Toast */
+  --bs-toast-zindex: 1090;
+}
+
+/* ==========================================================
+   NUCLEAR FIX — Force modal z-index with !important
+   Bypasses any var() resolution issue entirely.
+   ========================================================== */
+.modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1040 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #000 !important;
+}
+.modal-backdrop.show,
+.modal-backdrop.fade.show {
+  opacity: 0.5 !important;
+}
+.modal-backdrop.fade:not(.show) {
+  opacity: 0 !important;
+}
+
+.modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1055 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  outline: 0 !important;
+}
+.modal.show {
+  display: block !important;
+}
+
+.modal-dialog {
+  position: relative !important;
+  z-index: 1056 !important;
+  width: auto !important;
+  margin: 1.75rem auto !important;
+  max-width: 500px !important;
+  pointer-events: auto !important;
+}
+
+.modal-content {
+  position: relative !important;
+  z-index: 1057 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  pointer-events: auto !important;
+  background-clip: padding-box !important;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+}
+
+.modal input,
+.modal textarea,
+.modal select,
+.modal button {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1058 !important;
+}
+
+/* ==========================================================
+   GREY — slate / neutral grey
+   ========================================================== */
+[data-bs-theme="grey"] {
+  --bs-body-bg: #e5e7eb;
+  --bs-body-color: #1f2937;
+  --bs-secondary-color: #6b7280;
+  --bs-tertiary-bg: #f3f4f6;
+  --bs-border-color: #d1d5db;
+
+  --topnav-bg: #374151;
+  --topnav-hover: #4b5563;
+  --topnav-text: #e5e7eb;
+  --border-color: #d1d5db;
+}
+[data-bs-theme="grey"] .card,
+[data-bs-theme="grey"] .app-topbar,
+[data-bs-theme="grey"] .app-footer {
+  background: #f9fafb;
+}
+[data-bs-theme="grey"] .topnav-dropdown {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+[data-bs-theme="grey"] .topnav-dropdown .dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+/* ==========================================================
+   OCEAN BLUE
+   ========================================================== */
+[data-bs-theme="blue"] {
+  --bs-body-bg: #eff6ff;
+  --bs-body-color: #1e3a8a;
+  --bs-secondary-color: #3b82f6;
+  --bs-tertiary-bg: #dbeafe;
+  --bs-border-color: #bfdbfe;
+
+  --topnav-bg: #1e40af;
+  --topnav-hover: #1d4ed8;
+  --topnav-text: #dbeafe;
+  --border-color: #bfdbfe;
+}
+[data-bs-theme="blue"] .card,
+[data-bs-theme="blue"] .app-topbar,
+[data-bs-theme="blue"] .app-footer {
+  background: #ffffff;
+}
+[data-bs-theme="blue"] .topnav-dropdown {
+  background: #ffffff;
+  border-color: #bfdbfe;
+}
+[data-bs-theme="blue"] .topnav-dropdown .dropdown-item:hover {
+  background: #dbeafe;
+}
+
+/* ==========================================================
+   MEDICAL GREEN
+   ========================================================== */
+[data-bs-theme="green"] {
+  --bs-body-bg: #f0fdf4;
+  --bs-body-color: #14532d;
+  --bs-secondary-color: #16a34a;
+  --bs-tertiary-bg: #dcfce7;
+  --bs-border-color: #bbf7d0;
+
+  --topnav-bg: #166534;
+  --topnav-hover: #15803d;
+  --topnav-text: #dcfce7;
+  --border-color: #bbf7d0;
+}
+[data-bs-theme="green"] .card,
+[data-bs-theme="green"] .app-topbar,
+[data-bs-theme="green"] .app-footer {
+  background: #ffffff;
+}
+[data-bs-theme="green"] .topnav-dropdown {
+  background: #ffffff;
+  border-color: #bbf7d0;
+}
+[data-bs-theme="green"] .topnav-dropdown .dropdown-item:hover {
+  background: #dcfce7;
+}
+
+/* ==========================================================
+   ROYAL PURPLE
+   ========================================================== */
+[data-bs-theme="purple"] {
+  --bs-body-bg: #faf5ff;
+  --bs-body-color: #3b0764;
+  --bs-secondary-color: #9333ea;
+  --bs-tertiary-bg: #f3e8ff;
+  --bs-border-color: #e9d5ff;
+
+  --topnav-bg: #581c87;
+  --topnav-hover: #6b21a8;
+  --topnav-text: #f3e8ff;
+  --border-color: #e9d5ff;
+}
+[data-bs-theme="purple"] .card,
+[data-bs-theme="purple"] .app-topbar,
+[data-bs-theme="purple"] .app-footer {
+  background: #ffffff;
+}
+[data-bs-theme="purple"] .topnav-dropdown {
+  background: #ffffff;
+  border-color: #e9d5ff;
+}
+[data-bs-theme="purple"] .topnav-dropdown .dropdown-item:hover {
+  background: #f3e8ff;
+}
+
+/* ==========================================================
+   HIGH CONTRAST
+   ========================================================== */
+[data-bs-theme="high_contrast"] {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #000000;
+  --bs-secondary-color: #000000;
+  --bs-tertiary-bg: #f0f0f0;
+  --bs-border-color: #000000;
+
+  --topnav-bg: #000000;
+  --topnav-hover: #333333;
+  --topnav-text: #ffffff;
+  --border-color: #000000;
+}
+[data-bs-theme="high_contrast"] body {
+  font-weight: 500;
+}
+[data-bs-theme="high_contrast"] .card {
+  border: 2px solid #000 !important;
+}
+[data-bs-theme="high_contrast"] .topnav-dropdown {
+  background: #ffffff;
+  border: 2px solid #000;
+}
+[data-bs-theme="high_contrast"] .topnav-dropdown .dropdown-item {
+  color: #000;
+}
+[data-bs-theme="high_contrast"] .topnav-dropdown .dropdown-item:hover {
+  background: #ffeb3b;
+  color: #000;
+}
+[data-bs-theme="high_contrast"] .topnav-link.active {
+  background: #ffcc00 !important;
+  color: #000 !important;
+  font-weight: 700;
+}
+
+/* ==========================================================
+   THEME PICKER
+   ========================================================== */
+.theme-picker-menu .theme-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  border-radius: 6px;
+  color: inherit;
+  font-size: 0.9rem;
+  transition: background 0.12s;
+}
+.theme-picker-menu .theme-option:hover {
+  background: var(--bs-tertiary-bg);
+}
+.theme-picker-menu .theme-option.active {
+  background: var(--brand-primary, #0d6efd);
+  color: #fff;
+}
+
+.theme-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+  background-size: cover;
+}
+.theme-picker-menu .theme-option.active .theme-swatch {
+  border-color: rgba(255, 255, 255, 0.65);
+}
+.theme-picker-menu .theme-check {
+  font-size: 1.05rem;
+}
+
+[data-bs-theme="dark"] .theme-picker-menu .theme-option:hover {
+  background: #334155;
+}
+[data-bs-theme="dark"] .theme-swatch {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================
+   POLISH — cards & inputs on custom themes
+   ========================================================== */
+[data-bs-theme="grey"] .card-header,
+[data-bs-theme="blue"] .card-header,
+[data-bs-theme="green"] .card-header,
+[data-bs-theme="purple"] .card-header {
+  background: var(--bs-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme="grey"] .form-control,
+[data-bs-theme="blue"] .form-control,
+[data-bs-theme="green"] .form-control,
+[data-bs-theme="purple"] .form-control,
+[data-bs-theme="grey"] .form-select,
+[data-bs-theme="blue"] .form-select,
+[data-bs-theme="green"] .form-select,
+[data-bs-theme="purple"] .form-select {
+  background-color: #ffffff;
+  border-color: var(--bs-border-color);
+  color: #212529;
+}
+[data-bs-theme="high_contrast"] .form-control,
+[data-bs-theme="high_contrast"] .form-select {
+  border: 2px solid #000;
+}
+
+/* ==========================================================
+   MODAL CONTENT — themed background
+   ========================================================== */
+.modal-content {
+  background: var(--bs-modal-bg, #fff);
+  color: var(--bs-body-color);
+  border-color: var(--bs-modal-border-color, var(--bs-border-color));
+}
+.modal-header,
+.modal-footer {
+  border-color: var(--bs-modal-header-border-color, var(--bs-border-color));
+}
+
+[data-bs-theme="dark"] .modal-content,
+[data-bs-theme="grey"] .modal-content,
+[data-bs-theme="blue"] .modal-content,
+[data-bs-theme="green"] .modal-content,
+[data-bs-theme="purple"] .modal-content {
+  color: var(--bs-body-color);
+}

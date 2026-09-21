@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %}Preview — {{ order.order_code }}{% endblock %}
+
+{% block head %}
+<style>
+  .report-sheet {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+  }
+  .report-header { text-align: center; margin-bottom: 24px; }
+  .report-header h2 { color: #0d6efd; margin-bottom: 4px; }
+  .report-header .tagline { color: #6c757d; font-size: 0.9rem; margin-bottom: 6px; }
+  .report-header .contact { font-size: 0.8rem; color: #495057; }
+  .info-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .info-section {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .info-section h6 {
+    background: #e7f1ff;
+    padding: 8px 12px;
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .info-section .row-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 0.9rem;
+  }
+  .info-section .row-item:last-child { border-bottom: none; }
+  .info-section .label { color: #6c757d; }
+  .report-table th {
+    background: #0d6efd;
+    color: white;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  .report-table td {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+  .abnormal-row { background: #f8d7da !important; }
+  .abnormal-row td:nth-child(2) { color: #b02a37; font-weight: 600; }
+  .panel-header-row { background: #dbeafe !important; }
+  .panel-header-row td { font-weight: 700; color: #1e40af; }
+  .panel-child td:first-child { padding-left: 30px; color: #495057; }
+  .report-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  .signature-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  .signature-line {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  .signature-line .line {
+    border-top: 1px solid #495057;
+    width: 180px;
+    margin-bottom: 6px;
+    padding-top: 30px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{{ url_for('reports.index') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Reports
+    </a>
+    <div>
+      <a href="{{ url_for('reports.view_pdf', order_id=order.id) }}"
+         target="_blank" class="btn btn-outline-primary">
+        <i class="bi bi-eye"></i> Open PDF
+      </a>
+      <a href="{{ url_for('reports.order_pdf', order_id=order.id) }}"
+         class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf"></i> Download PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="report-sheet">
+
+    <!-- Header -->
+    <div class="report-header">
+      <h2>{{ lab.name }}</h2>
+      <div class="tagline">{{ lab.tagline }}</div>
+      <div class="contact">
+        {{ lab.address }} · {{ lab.phone }} · {{ lab.email }} · {{ lab.website }}
+      </div>
+    </div>
+    <hr style="border-top: 2px solid #0d6efd;">
+
+    <!-- Info -->
+    <div class="info-box">
+
+      <div class="info-section">
+        <h6>Patient Information</h6>
+        <div class="row-item"><span class="label">Name</span><span class="fw-semibold">{{ order.patient.full_name }}</span></div>
+        <div class="row-item"><span class="label">Code</span><span>{{ order.patient.patient_code }}</span></div>
+        <div class="row-item"><span class="label">Gender</span><span>{{ order.patient.gender or '—' }}</span></div>
+        <div class="row-item"><span class="label">Age</span><span>{{ order.patient.compute_age() or '—' }}</span></div>
+        <div class="row-item"><span class="label">Phone</span><span>{{ order.patient.phone or '—' }}</span></div>
+      </div>
+
+      <div class="info-section">
+        <h6>Order Information</h6>
+        <div class="row-item"><span class="label">Order</span><span>{{ order.order_code }}</span></div>
+        <div class="row-item"><span class="label">Order Date</span><span>{{ order.created_at | localtime }}</span></div>
+        <div class="row-item"><span class="label">Reported On</span><span>{{ order.updated_at | localtime }}</span></div>
+        <div class="row-item"><span class="label">Doctor</span><span>{{ order.doctor.full_name if order.doctor else '—' }}</span></div>
+        <div class="row-item"><span class="label">Status</span><span>{{ order.status|capitalize }}</span></div>
+      </div>
+
+    </div>
+
+    <!-- Results (with panel grouping) -->
+    <table class="table report-table">
+      <thead>
+        <tr>
+          <th>Test</th>
+          <th>Result</th>
+          <th>Unit</th>
+          <th>Normal Range</th>
+          <th>Flag</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set ns = namespace(abnormal_count=0) %}
+
+        {% for item in order.top_level_items %}
+
+          {% if item.has_children %}
+            {# ---- Panel header row ---- #}
+            <tr class="panel-header-row">
+              <td colspan="5">
+                <i class="bi bi-collection"></i> {{ item.test.name }}
+                <span class="badge bg-info ms-2">{{ item.children|length }} params</span>
+              </td>
+            </tr>
+
+            {# ---- Children rows ---- #}
+            {% for child in item.children %}
+              {% set flag = check_result(child.test.normal_range, child.result_value) %}
+              {% if flag == 'abnormal' %}{% set ns.abnormal_count = ns.abnormal_count + 1 %}{% endif %}
+              <tr class="panel-child {% if flag == 'abnormal' %}abnormal-row{% endif %}">
+                <td>{{ child.test.name }}</td>
+                <td>{{ child.result_value or '—' }}</td>
+                <td class="text-muted">{{ child.test.unit or '—' }}</td>
+                <td class="text-muted">{{ child.test.normal_range or '—' }}</td>
+                <td>
+                  {% if flag == 'normal' %}
+                    <span class="badge bg-success">Normal</span>
+                  {% elif flag == 'abnormal' %}
+                    <span class="badge bg-danger">Abnormal</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+
+          {% else %}
+            {# ---- Standalone test ---- #}
+            {% set flag = check_result(item.test.normal_range, item.result_value) %}
+            {% if flag == 'abnormal' %}{% set ns.abnormal_count = ns.abnormal_count + 1 %}{% endif %}
+            <tr class="{% if flag == 'abnormal' %}abnormal-row{% endif %}">
+              <td class="fw-semibold">{{ item.test.name }}</td>
+              <td>{{ item.result_value or '—' }}</td>
+              <td class="text-muted">{{ item.test.unit or '—' }}</td>
+              <td class="text-muted">{{ item.test.normal_range or '—' }}</td>
+              <td>
+                {% if flag == 'normal' %}
+                  <span class="badge bg-success">Normal</span>
+                {% elif flag == 'abnormal' %}
+                  <span class="badge bg-danger">Abnormal</span>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Summary -->
+    <div class="mt-3">
+      {% if ns.abnormal_count %}
+        <p class="text-danger small mb-0">
+          <strong>Note:</strong> {{ ns.abnormal_count }} result(s) flagged as <strong>abnormal</strong>. Please consult your physician.
+        </p>
+      {% else %}
+        <p class="text-success small mb-0">
+          <strong>✓</strong> All results are within normal ranges.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="report-footer">
+      <div class="signature-row">
+        <div class="signature-line">
+          <div class="line"></div>
+          Performed by (Technician)
+        </div>
+        <div class="signature-line">
+          <div class="line"></div>
+          Verified by (Pathologist)
+        </div>
+      </div>
+      This report is computer-generated and is intended for medical use only.
+      Results should be interpreted by a qualified healthcare professional.
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

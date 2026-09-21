@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bill — {{ order.order_code }}</title>
+<style>
+/* ============================================================
+   Printable Bill — A4. Pages: Patient Bill, Lab Bill.
+   Controlled by ?copy=patient|lab|both
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@page { size: A4; margin: 12mm; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 10pt;
+  color: #212529;
+  line-height: 1.35;
+  background: #fff;
+}
+
+.page-sheet {
+  width: 186mm;
+  min-height: 273mm;
+  margin: 0 auto 10mm auto;
+  background: #fff;
+  padding: 6mm 4mm;
+  position: relative;
+  page-break-after: always;
+}
+.page-sheet:last-child { page-break-after: auto; }
+
+/* ---------------- Header ---------------- */
+.bill-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #0d6efd;
+  margin-bottom: 10px;
+}
+.bill-header .logo { height: 48px; width: auto; object-fit: contain; }
+.bill-header .info { text-align: center; flex: 1; }
+.bill-header .lab-name {
+  font-size: 18pt; font-weight: 800; color: #0d6efd; line-height: 1.1;
+}
+.bill-header .tagline {
+  font-size: 8.5pt; color: #6c757d; margin-top: 2px; font-style: italic;
+}
+.bill-header .contact {
+  font-size: 8pt; color: #495057; margin-top: 3px;
+}
+
+/* ---------------- Meta block ---------------- */
+.meta-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 24px;
+  font-size: 9pt;
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  border: 1px solid #dee2e6;
+  background: #fbfcfd;
+}
+.meta-block .row {
+  display: flex; align-items: baseline; gap: 8px; padding: 1px 0;
+}
+.meta-block .row.full { grid-column: 1 / -1; }
+.meta-block .key {
+  font-weight: 600; color: #495057; min-width: 90px; flex-shrink: 0;
+}
+.meta-block .val {
+  color: #212529; font-weight: 500; word-break: break-word;
+}
+
+/* ---------------- Page title ---------------- */
+.bill-title {
+  text-align: center;
+  font-size: 15pt;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #212529;
+  padding: 6px 0;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid #212529;
+  border-top: 1.5px solid #212529;
+}
+.bill-title.lab {
+  border-top-color: #198754;
+  border-bottom-color: #198754;
+  color: #14532d;
+}
+
+/* ---------------- Patient Copy — Bill table ---------------- */
+table.bill-table {
+  width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 8px;
+}
+table.bill-table th {
+  background: #e9ecef;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #212529;
+  padding: 5px 8px;
+  border: 1px solid #adb5bd;
+  text-align: left;
+}
+table.bill-table th.num { text-align: right; width: 90px; }
+table.bill-table td {
+  padding: 5px 8px; border: 1px solid #adb5bd;
+  vertical-align: top; font-size: 9.5pt;
+}
+table.bill-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.bill-table td.test-name { font-weight: 500; }
+table.bill-table tr.summary-row td { background: #f8f9fa; font-weight: 700; }
+table.bill-table tr.total-row td {
+  background: #e8f5e9; font-weight: 800; font-size: 11pt; color: #14532d;
+}
+table.bill-table tr.discount-row td { color: #b02a37; font-weight: 600; }
+
+/* ---------------- Lab Copy — Grid of tests ---------------- */
+.lab-section { margin-bottom: 10px; }
+.lab-section-title {
+  font-size: 11pt; font-weight: 700; color: #14532d;
+  background: #e8f5e9; padding: 4px 10px;
+  border-left: 4px solid #198754; margin-bottom: 5px;
+}
+.lab-section-meta {
+  font-size: 8pt; color: #6c757d;
+  padding: 0 10px 4px 10px; margin-top: -3px; margin-bottom: 4px;
+  border-bottom: 1px dashed #dee2e6;
+}
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(38mm, 1fr));
+  gap: 4px;
+}
+.lab-box {
+  border: 1.2px solid #212529;
+  padding: 4px 6px;
+  font-size: 8.5pt;
+  min-height: 42px;
+  background: #fff;
+  display: flex; flex-direction: column; justify-content: flex-start;
+}
+.lab-box .box-name { font-weight: 600; line-height: 1.2; }
+.lab-box .box-unit { font-size: 7pt; color: #6c757d; margin-top: 1px; }
+
+/* ---------------- Consent ---------------- */
+.consent-block {
+  margin-top: 12px;
+  padding: 6px 10px;
+  border: 1px solid #adb5bd;
+  background: #fbfcfd;
+  font-size: 9pt;
+  display: flex; align-items: center; gap: 8px;
+}
+.consent-block .box {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 1.2px solid #212529;
+  text-align: center; line-height: 11px;
+  font-size: 10pt; flex-shrink: 0;
+}
+
+/* ---------------- Signature ---------------- */
+.signature-block {
+  margin-top: 14mm;
+  display: flex; justify-content: space-between;
+  font-size: 8.5pt; color: #495057;
+}
+.signature-block .sig-line {
+  border-top: 1px solid #495057;
+  width: 55mm; padding-top: 3px; text-align: center;
+}
+
+/* ---------------- Footer ---------------- */
+.bill-footer {
+  position: absolute;
+  bottom: 6mm; left: 4mm; right: 4mm;
+  font-size: 8pt; color: #6c757d;
+  border-top: 1px solid #dee2e6;
+  padding-top: 4px;
+  display: flex; justify-content: space-between;
+}
+.bill-footer .left  { text-align: left; }
+.bill-footer .right { text-align: right; }
+
+/* ---------------- Screen-only action bar ---------------- */
+.print-bar {
+  position: fixed;
+  top: 10px; right: 10px;
+  z-index: 999;
+  display: flex; gap: 8px; align-items: center;
+  background: rgba(255,255,255,0.95);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.print-bar .copy-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  background: #fff;
+  color: #212529;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.print-bar button,
+.print-bar a.btn-close-bar {
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: inline-block;
+}
+.print-bar a.btn-close-bar { background: #6c757d; }
+.print-bar button:hover { background: #0b5ed7; }
+.print-bar a.btn-close-bar:hover { background: #5c636a; }
+
+/* ---------------- Print rules ---------------- */
+@media print {
+  .print-bar { display: none !important; }
+  body { margin: 0; }
+  .page-sheet {
+    width: auto;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+  }
+  /* Server-rendered data-print attr hides the unwanted page */
+  body[data-print="patient"] .page-sheet.lab-sheet     { display: none !important; }
+  body[data-print="lab"]     .page-sheet.patient-sheet { display: none !important; }
+}
+
+/* Same hiding on-screen so the user sees only the chosen copy */
+body[data-print="patient"] .page-sheet.lab-sheet     { display: none; }
+body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
+</style>
+</head>
+<body data-print="{% if copy == 'patient' %}patient{% elif copy == 'lab' %}lab{% endif %}">
+
+<!-- ============================================================
+     Screen-only action bar: choose which copy, then print
+     ============================================================ -->
+<div class="print-bar">
+
+  <select class="copy-select"
+          onchange="if(this.value){window.location.href=this.value;}">
+    <option value="{{ url_for('orders.print_order', order_id=order.id, copy='both') }}"
+            {% if copy == 'both' %}selected{% endif %}>📄 Both Copies</option>
+    <option value="{{ url_for('orders.print_order', order_id=order.id, copy='patient') }}"
+            {% if copy == 'patient' %}selected{% endif %}>👤 Patient Bill only</option>
+    <option value="{{ url_for('orders.print_order', order_id=order.id, copy='lab') }}"
+            {% if copy == 'lab' %}selected{% endif %}>🧪 Lab Bill only</option>
+  </select>
+
+  <button onclick="window.print()">🖨️ Print</button>
+  <a class="btn-close-bar" href="{{ url_for('orders.view_order', order_id=order.id) }}">Close</a>
+</div>
+
+{# ============================================================
+   PAGE 1 — PATIENT BILL
+   ============================================================ #}
+<div class="page-sheet patient-sheet">
+
+  <div class="bill-header">
+    {% if branding.logo_url %}
+      <img src="{{ branding.logo_url }}" alt="logo" class="logo">
+    {% endif %}
+    <div class="info">
+      <div class="lab-name">{{ branding.lab_name or 'Laboratory' }}</div>
+      {% if branding.tagline %}
+        <div class="tagline">{{ branding.tagline }}</div>
+      {% endif %}
+      <div class="contact">
+        {% set parts = [] %}
+        {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('✉ ' ~ branding.email) %}{% endif %}
+        {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
+        {{ parts | join(' · ') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="meta-block">
+    <div class="row"><span class="key">Patient #:</span><span class="val">{{ order.patient.patient_code }}</span></div>
+    <div class="row"><span class="key">Lab #:</span><span class="val">{{ order.order_code }}</span></div>
+
+    <div class="row full"><span class="key">Patient Name:</span><span class="val">{{ order.patient.full_name }}</span></div>
+
+    <div class="row"><span class="key">Age / Gender:</span>
+      <span class="val">
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
+      </span>
+    </div>
+    <div class="row"><span class="key">Phone:</span><span class="val">{{ order.patient.phone or '—' }}</span></div>
+
+    <div class="row full"><span class="key">Address:</span><span class="val">{{ order.patient.address or '—' }}</span></div>
+
+    <div class="row"><span class="key">Reference:</span><span class="val">{{ order.doctor.full_name if order.doctor else 'Walk-in' }}</span></div>
+    <div class="row"><span class="key">Advised by:</span><span class="val">{{ order.doctor.full_name if order.doctor else '—' }}</span></div>
+
+    <div class="row"><span class="key">Registered At:</span><span class="val">{{ branding.lab_name or '—' }}</span></div>
+    <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
+
+    <div class="row full"><span class="key">Specimen:</span><span class="val">Taken in Lab</span></div>
+  </div>
+
+  <div class="bill-title">PATIENT  BILL</div>
+
+  <table class="bill-table">
+    <thead>
+      <tr>
+        <th>Test Name</th>
+        <th>Report Date</th>
+        <th class="num">Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.top_level_items %}
+        {% set report_dt = order.created_at + timedelta(hours=(item.test.turnaround_hours or 24)) %}
+        <tr>
+          <td class="test-name">
+            {{ item.test.name }}
+            {% if item.has_children %}
+              <span style="font-size:7.5pt; color:#0d6efd;">(Panel)</span>
+            {% endif %}
+          </td>
+          <td>{{ report_dt.strftime('%d-%b-%Y') }}</td>
+          <td class="num">{{ '%.0f'|format(item.price) }}</td>
+        </tr>
+      {% endfor %}
+
+      <tr class="summary-row">
+        <td colspan="2" style="text-align:right;">Total :</td>
+        <td class="num">{{ '%.0f'|format(order.subtotal) }}</td>
+      </tr>
+      {% if order.discount_value > 0 %}
+      <tr class="discount-row">
+        <td colspan="2" style="text-align:right;">Discount :</td>
+        <td class="num">−{{ '%.0f'|format(order.discount_value) }}</td>
+      </tr>
+      {% endif %}
+      <tr class="total-row">
+        <td colspan="2" style="text-align:right;">To be Paid :</td>
+        <td class="num">{{ '%.0f'|format(order.final_total) }}</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">Paid :</td>
+        <td class="num">{{ '%.0f'|format(order.paid_amount) }}</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">Dues Received :</td>
+        <td class="num">{{ '%.0f'|format(order.balance_due) }}</td>
+      </tr>
+      <tr class="summary-row">
+        <td colspan="2" style="text-align:right;">Balance :</td>
+        <td class="num">{{ '%.0f'|format(order.balance_due) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bill-footer">
+    <div class="left">
+      Online Reporting: {{ branding.website or branding.email or '—' }}
+    </div>
+    <div class="right">
+      Patient No: {{ order.patient.patient_code }} · Lab #: {{ order.order_code }}
+    </div>
+  </div>
+
+</div>
+
+{# ============================================================
+   PAGE 2 — LAB BILL
+   ============================================================ #}
+<div class="page-sheet lab-sheet">
+
+  <div class="bill-header">
+    {% if branding.logo_url %}
+      <img src="{{ branding.logo_url }}" alt="logo" class="logo">
+    {% endif %}
+    <div class="info">
+      <div class="lab-name">{{ branding.lab_name or 'Laboratory' }}</div>
+      {% if branding.tagline %}
+        <div class="tagline">{{ branding.tagline }}</div>
+      {% endif %}
+      <div class="contact">
+        {% set parts = [] %}
+        {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('✉ ' ~ branding.email) %}{% endif %}
+        {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
+        {{ parts | join(' · ') }}
+      </div>
+    </div>
+  </div>
+
+  <div class="meta-block">
+    <div class="row full"><span class="key">Patient Name:</span><span class="val">{{ order.patient.full_name }}</span></div>
+    <div class="row"><span class="key">Age / Gender:</span>
+      <span class="val">{{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}</span>
+    </div>
+    <div class="row"><span class="key">Phone:</span><span class="val">{{ order.patient.phone or '—' }}</span></div>
+    <div class="row"><span class="key">Patient #:</span><span class="val">{{ order.patient.patient_code }}</span></div>
+    <div class="row"><span class="key">Lab #:</span><span class="val">{{ order.order_code }}</span></div>
+    <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
+    <div class="row"><span class="key">Advised by:</span><span class="val">{{ order.doctor.full_name if order.doctor else '—' }}</span></div>
+  </div>
+
+  <div class="bill-title lab">LAB BILL</div>
+
+  {% for item in order.top_level_items %}
+    {% set report_dt = order.created_at + timedelta(hours=(item.test.turnaround_hours or 24)) %}
+
+    <div class="lab-section">
+      <div class="lab-section-title">
+        {{ item.test.name }}
+        {% if item.has_children %}
+          <span style="font-size:8pt; font-weight:400; color:#495057;">
+            ({{ item.children|length }} parameters)
+          </span>
+        {% endif %}
+      </div>
+      <div class="lab-section-meta">
+        Report on: {{ report_dt.strftime('%d-%b-%Y') }}
+      </div>
+
+      {% if item.has_children %}
+        <div class="lab-grid">
+          {% for child in item.children %}
+            <div class="lab-box">
+              <div class="box-name">{{ child.test.name }}</div>
+              {% if child.test.unit %}
+                <div class="box-unit">{{ child.test.unit }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="lab-grid" style="grid-template-columns: repeat(auto-fill, minmax(50mm, 1fr));">
+          <div class="lab-box" style="min-height: 50px;">
+            <div class="box-name">{{ item.test.name }}</div>
+            {% if item.test.unit %}
+              <div class="box-unit">{{ item.test.unit }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="consent-block">
+    <span class="box">✓</span>
+    <span>I allow the staff for phlebotomy procedure for mentioned lab investigation(s).</span>
+  </div>
+
+  <div class="signature-block">
+    <div class="sig-line">Received by (Technician)</div>
+    <div class="sig-line">Verified by (Pathologist)</div>
+  </div>
+
+  <div class="bill-footer">
+    <div class="left">Lab Copy — sample handling slip</div>
+    <div class="right">Time: {{ order.created_at | localtime('%I:%M %p') }}</div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // Auto-print only when explicitly requested (?auto=1)
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('auto') === '1') {
+    window.addEventListener('load', function () {
+      setTimeout(function () { window.print(); }, 400);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

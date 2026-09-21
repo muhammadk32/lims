@@ -1,0 +1,214 @@
+{% extends "test_settings/base.html" %}
+
+{% block title %}
+  {% if mode == 'create' %}New Panel{% else %}Edit {{ panel.name }}{% endif %}
+  · Lab Test Settings
+{% endblock %}
+
+{% block settings_content %}
+
+<div class="row g-4">
+
+  {# ============ LEFT: Form ============ #}
+  <div class="col-12 col-lg-7">
+    <form method="POST"
+          action="{% if mode == 'create' %}{{ url_for('test_settings.panel_create') }}{% else %}{{ url_for('test_settings.panel_update', panel_id=panel.id) }}{% endif %}"
+          id="panelForm">
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-body fw-semibold">
+          <i class="bi bi-info-circle"></i> Panel Information
+        </div>
+        <div class="card-body">
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Code <span class="text-danger">*</span></label>
+              <input type="text" name="code" class="form-control" required
+                     maxlength="20" style="text-transform: uppercase;"
+                     value="{{ panel.code if panel else '' }}"
+                     placeholder="e.g. CBC">
+              <div class="form-text">Unique short code</div>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label fw-semibold">Panel Name <span class="text-danger">*</span></label>
+              <input type="text" name="name" class="form-control" required
+                     maxlength="120"
+                     value="{{ panel.name if panel else '' }}"
+                     placeholder="e.g. Complete Blood Count">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Category</label>
+              <select name="category_id" class="form-select">
+                <option value="">— None —</option>
+                {% for c in categories %}
+                  <option value="{{ c.id }}"
+                    {% if panel and panel.category_id == c.id %}selected{% endif %}>
+                    {{ c.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Panel Price <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="number" name="price" class="form-control"
+                       step="0.01" min="0" required
+                       value="{{ '%.2f'|format(panel.price) if panel else '0.00' }}">
+              </div>
+              <div class="form-text">
+                Only this price is charged — parameters are billed at $0.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea name="description" class="form-control" rows="2"
+                        maxlength="2000"
+                        placeholder="Optional notes about this panel">{{ panel.description if panel else '' }}</textarea>
+            </div>
+
+            {% if mode == 'edit' %}
+            <div class="col-12">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="is_active"
+                       id="isActiveSwitch" value="1"
+                       {% if panel.is_active %}checked{% endif %}>
+                <label class="form-check-label" for="isActiveSwitch">
+                  Active (orderable)
+                </label>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+
+      {# ============ Parameter Selector ============ #}
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-body d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">
+            <i class="bi bi-list-check"></i> Panel Parameters
+          </span>
+          <span class="text-muted small">
+            Selected: <span id="selectedCount">0</span>
+          </span>
+        </div>
+        <div class="card-body">
+
+          <div class="input-group mb-3">
+            <span class="input-group-text bg-body"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control" id="paramSearch"
+                   placeholder="Search tests by name or code...">
+          </div>
+
+          <div id="selectedParams"></div>
+
+          <div class="param-picker" id="paramList" style="max-height: 420px; overflow-y: auto;">
+            {% for t in standalone_tests %}
+            <label class="param-item d-flex align-items-center gap-2"
+                   data-test-id="{{ t.id }}"
+                   data-search="{{ t.code|lower }} {{ t.name|lower }}">
+              <input type="checkbox"
+                     class="form-check-input param-checkbox"
+                     value="{{ t.id }}"
+                     {% if t.id in selected_ids %}checked{% endif %}>
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2">
+                  <code class="small">{{ t.code }}</code>
+                  <span class="fw-semibold small">{{ t.name }}</span>
+                </div>
+                {% if t.unit or t.normal_range %}
+                  <div class="text-muted" style="font-size: 0.78rem;">
+                    {% if t.unit %}{{ t.unit }}{% endif %}
+                    {% if t.normal_range %} · {{ t.normal_range }}{% endif %}
+                  </div>
+                {% endif %}
+              </div>
+              <span class="param-order-badge" style="display: none;"></span>
+            </label>
+            {% else %}
+            <div class="text-center text-muted py-4">
+              <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+              <div>No standalone tests available.</div>
+              <div class="small">Create some tests in the catalog first.</div>
+            </div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="{{ url_for('test_settings.panels') }}"
+           class="btn btn-outline-secondary">
+          <i class="bi bi-x-lg"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-lg"></i>
+          {% if mode == 'create' %}Create Panel{% else %}Save Changes{% endif %}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  {# ============ RIGHT: Live preview ============ #}
+  <div class="col-12 col-lg-5">
+    <div class="card border-0 shadow-sm sticky-top" style="top: 80px;">
+      <div class="card-header bg-body fw-semibold">
+        <i class="bi bi-eye"></i> Preview
+      </div>
+      <div class="card-body">
+
+        <div class="panel-preview mb-3">
+          <div class="panel-preview-name">
+            {{ panel.name if panel else 'Your Panel Name' }}
+          </div>
+          <div class="panel-preview-code">
+            {{ panel.code if panel else 'CODE' }}
+          </div>
+          <div class="panel-preview-price">
+            $<span id="previewPrice">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
+          </div>
+        </div>
+
+        <div class="fw-semibold small mb-2">Included Parameters:</div>
+        <ul class="preview-param-list" id="previewParamList">
+          <li class="text-muted small">No parameters selected yet</li>
+        </ul>
+
+        <hr>
+
+        <div class="d-flex justify-content-between small text-muted">
+          <span>Patient pays:</span>
+          <span class="fw-bold text-success">
+            $<span id="previewTotal">{{ '%.2f'|format(panel.price) if panel else '0.00' }}</span>
+          </span>
+        </div>
+        <div class="small text-muted mt-1">
+          Parameters are recorded but not billed separately.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block settings_scripts %}
+<script src="{{ url_for('static', filename='js/test_settings.js') }}"></script>
+<script>
+  TestSettings.initPanelEdit({
+    csrf: "{{ csrf_token() if csrf_token is defined else '' }}",
+  });
+</script>
+{% endblock %}

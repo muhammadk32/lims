@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+
+{% block title %}Cash Summary — LabMS{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Cash Summary — flat dense one-page layout (Daily Ledger style)
+   ============================================================ */
+
+.cash-page {
+  max-width: 100%;
+  padding: 12px 16px 40px;
+}
+
+.cash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cash-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.cash-header p {
+  font-size: 0.78rem;
+  margin: 0;
+}
+.cash-header .meta {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+}
+
+/* Filter bar */
+.cash-filters {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.cash-filters .row {
+  --bs-gutter-x: 8px;
+  --bs-gutter-y: 6px;
+}
+.cash-filters label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  margin-bottom: 2px;
+  display: block;
+}
+.cash-filters .form-control,
+.cash-filters .form-select {
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  min-height: 30px;
+}
+
+/* Table wrapper — no overflow:hidden so dropdowns could escape if added later */
+.cash-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.cash-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.cash-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.cash-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+.cash-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+.cash-table tbody td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.cash-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.cash-table tbody tr:hover {
+  background: var(--bs-tertiary-bg);
+}
+.cash-table code {
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  background: var(--bs-tertiary-bg);
+  border-radius: 3px;
+}
+.cash-table .text-end { text-align: right; }
+.cash-table .text-center { text-align: center; }
+
+.cash-table .invoice-cell { line-height: 1.2; }
+.cash-table .invoice-cell .code { font-weight: 600; }
+.cash-table .invoice-cell .date {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.cash-table .patient-cell { line-height: 1.2; }
+.cash-table .patient-cell .name { font-weight: 600; }
+.cash-table .patient-cell .code {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.status-pill {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-pill.paid    { background: #d1e7dd; color: #0a3622; }
+.status-pill.unpaid  { background: #f8d7da; color: #58151c; }
+.status-pill.partial { background: #fff3cd; color: #664d03; }
+
+/* Summary footer */
+.cash-summary {
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 24px;
+}
+.cash-summary .stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.cash-summary .stat .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.cash-summary .stat .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.cash-summary .stat.highlight .value {
+  font-size: 1.05rem;
+  color: var(--bs-success);
+}
+.cash-summary .stat.danger .value {
+  color: var(--bs-danger);
+}
+.cash-summary .stat.primary .value {
+  color: var(--bs-primary);
+}
+
+.cash-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+
+@media (max-width: 767.98px) {
+  .cash-table { font-size: 0.75rem; }
+  .cash-table thead th,
+  .cash-table tbody td { padding: 4px 6px; }
+  .cash-summary { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cash-page">
+
+  {# ============ HEADER ============ #}
+  <div class="cash-header">
+    <div>
+      <h3><i class="bi bi-cash-coin"></i> Cash Summary</h3>
+      <p class="text-muted">Invoices, payments, and outstanding balances</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <div class="meta">
+        {{ stats.total_orders }} record{{ 's' if stats.total_orders != 1 }}
+      </div>
+      {% if current_user.role == 'admin' %}
+      <a href="{{ url_for('billing.revenue') }}"
+         class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-graph-up"></i> Revenue Report
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ============ FILTERS ============ #}
+  <form method="GET" action="{{ url_for('billing.index') }}" class="cash-filters">
+    <div class="row">
+
+      <div class="col-12 col-md-6">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="Lab # / patient name / patient #">
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label>Status</label>
+        <select name="filter" class="form-select">
+          <option value="all"     {% if filter_by == 'all' %}selected{% endif %}>All</option>
+          <option value="unpaid"  {% if filter_by == 'unpaid' %}selected{% endif %}>Unpaid only</option>
+          <option value="partial" {% if filter_by == 'partial' %}selected{% endif %}>Partial</option>
+          <option value="paid"    {% if filter_by == 'paid' %}selected{% endif %}>Fully Paid</option>
+        </select>
+      </div>
+
+      <div class="col-6 col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <div class="col-12 col-md-1 d-flex align-items-end justify-content-md-end">
+        {% if q or filter_by != 'all' %}
+        <a href="{{ url_for('billing.index') }}"
+           class="btn btn-sm btn-outline-danger w-100">
+          <i class="bi bi-x-lg"></i>
+        </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </form>
+
+  {# ============ TABLE ============ #}
+  <div class="cash-table-wrap">
+    <table class="cash-table">
+      <thead>
+        <tr>
+          <th style="width: 140px;">Invoice</th>
+          <th>Patient</th>
+          <th style="width: 105px;">Patient #</th>
+          <th class="text-end" style="width: 100px;">Total</th>
+          <th class="text-end" style="width: 100px;">Paid</th>
+          <th class="text-end" style="width: 100px;">Balance</th>
+          <th style="width: 90px;">Status</th>
+          <th class="text-end" style="width: 100px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td class="invoice-cell">
+            <div class="code"><code>INV-{{ o.order_code }}</code></div>
+            <div class="date">{{ o.created_at | localtime('%d/%m/%y') }}</div>
+          </td>
+          <td class="patient-cell">
+            <div class="name">{{ o.patient.full_name }}</div>
+          </td>
+          <td><code>{{ o.patient.patient_code }}</code></td>
+          <td class="text-end">{{ config.currency_symbol }} {{ '%.2f'|format(o.total_amount) }}</td>
+          <td class="text-end text-success">{{ config.currency_symbol }} {{ '%.2f'|format(o.paid_amount) }}</td>
+          <td class="text-end {% if o.balance_due > 0.001 %}text-danger fw-semibold{% else %}text-muted{% endif %}">
+            {{ config.currency_symbol }} {{ '%.2f'|format(o.balance_due) }}
+          </td>
+          <td>
+            {% set ps = o.payment_status %}
+            <span class="status-pill {{ ps }}">
+              {% if ps == 'paid' %}Paid
+              {% elif ps == 'partial' %}Partial
+              {% else %}Unpaid{% endif %}
+            </span>
+          </td>
+          <td class="text-end">
+            <a href="{{ url_for('billing.invoice', order_id=o.id) }}"
+               class="btn btn-sm btn-primary py-0 px-2">
+              <i class="bi bi-receipt" style="font-size:0.72rem;"></i> Invoice
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8">
+            <div class="cash-empty">
+              <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+              <div class="fw-semibold">No invoices found</div>
+              <div class="small">Try adjusting the search or filter above.</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# ============ SUMMARY ============ #}
+  <div class="cash-summary">
+    <div class="stat">
+      <span class="label">Total Billed</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.total_billed) }}</span>
+    </div>
+    <div class="stat highlight">
+      <span class="label">Collected</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.total_collected) }}</span>
+    </div>
+    <div class="stat danger">
+      <span class="label">Outstanding</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.outstanding) }}</span>
+    </div>
+    <div class="stat primary">
+      <span class="label">Today</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.today_collected) }}</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

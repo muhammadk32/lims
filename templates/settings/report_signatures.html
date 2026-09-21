@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Report Signatures — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.sig-page {
+  max-width: 100%;
+  padding: 12px 16px 40px;
+}
+.sig-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.sig-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.sig-header p {
+  font-size: 0.78rem;
+  margin: 0;
+}
+.sig-header .meta {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+}
+
+.sig-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.sig-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.sig-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.sig-table thead th:first-child { border-top-left-radius: 8px; }
+.sig-table thead th:last-child  { border-top-right-radius: 8px; }
+.sig-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.sig-table tbody tr:last-child td { border-bottom: none; }
+.sig-table tbody tr:hover { background: var(--bs-tertiary-bg); }
+.sig-table tbody tr.inactive { opacity: 0.55; }
+
+.sig-table .order-cell {
+  color: var(--bs-secondary-color);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+.sig-table .name-cell  { font-weight: 600; }
+.sig-table .quals-cell {
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+  white-space: pre-line;
+}
+.sig-table .desig-cell { font-size: 0.8rem; }
+
+.sig-badge {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sig-badge.active   { background: #d1e7dd; color: #0a3622; }
+.sig-badge.inactive { background: #e2e3e5; color: #41464b; }
+
+.sig-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.sig-actions .btn {
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+.sig-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sig-page">
+
+  {# HEADER #}
+  <div class="sig-header">
+    <div>
+      <h3><i class="bi bi-person-badge"></i> Report Signatures</h3>
+      <p class="text-muted">
+        Panel of doctors and staff printed at the bottom of every result report.
+      </p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <div class="meta">
+        {{ signatures|length }} total · {{ signatures|selectattr('is_active')|list|length }} shown
+      </div>
+      <button class="btn btn-sm btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#sigModal"
+              onclick="openSigModal('create')">
+        <i class="bi bi-plus-lg"></i> New Signature
+      </button>
+      <a href="{{ url_for('settings.branding') }}"
+         class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Branding
+      </a>
+    </div>
+  </div>
+
+  {# TABLE #}
+  <div class="sig-table-wrap">
+    <table class="sig-table">
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th>Name</th>
+          <th style="width: 240px;">Qualifications</th>
+          <th style="width: 180px;">Designation</th>
+          <th style="width: 90px;">Status</th>
+          <th class="text-end" style="width: 180px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in signatures %}
+        <tr class="{% if not s.is_active %}inactive{% endif %}">
+          <td class="order-cell">{{ loop.index }}</td>
+          <td class="name-cell">{{ s.name }}</td>
+          <td class="quals-cell">{{ s.qualifications or '—' }}</td>
+          <td class="desig-cell">{{ s.designation or '—' }}</td>
+          <td>
+            {% if s.is_active %}
+              <span class="sig-badge active">Shown</span>
+            {% else %}
+              <span class="sig-badge inactive">Hidden</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            <div class="sig-actions">
+
+              {# Move up #}
+              <form method="POST"
+                    action="{{ url_for('settings.report_signature_move', sig_id=s.id, direction='up') }}"
+                    class="d-inline">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() if csrf_token is defined else '' }}">
+                <button type="submit" class="btn btn-sm btn-outline-secondary"
+                        title="Move up" {% if loop.first %}disabled{% endif %}>
+                  <i class="bi bi-arrow-up"></i>
+                </button>
+              </form>
+
+              {# Move down #}
+              <form method="POST"
+                    action="{{ url_for('settings.report_signature_move', sig_id=s.id, direction='down') }}"
+                    class="d-inline">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() if csrf_token is defined else '' }}">
+                <button type="submit" class="btn btn-sm btn-outline-secondary"
+                        title="Move down" {% if loop.last %}disabled{% endif %}>
+                  <i class="bi bi-arrow-down"></i>
+                </button>
+              </form>
+
+              {# Edit #}
+              <button class="btn btn-sm btn-outline-primary"
+                      title="Edit"
+                      onclick="openSigModal('edit', {{ s.id }}, {{ s.name|tojson }}, {{ (s.qualifications or '')|tojson }}, {{ (s.designation or '')|tojson }})">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              {# Toggle visibility #}
+              <form method="POST"
+                    action="{{ url_for('settings.report_signature_toggle', sig_id=s.id) }}"
+                    class="d-inline">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() if csrf_token is defined else '' }}">
+                <button type="submit" class="btn btn-sm btn-outline-secondary"
+                        title="{{ 'Hide' if s.is_active else 'Show' }}">
+                  <i class="bi bi-{{ 'eye-slash' if s.is_active else 'eye' }}"></i>
+                </button>
+              </form>
+
+              {# Delete #}
+              <form method="POST"
+                    action="{{ url_for('settings.report_signature_delete', sig_id=s.id) }}"
+                    class="d-inline"
+                    onsubmit="return confirm('Delete signature &quot;{{ s.name }}&quot;?');">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() if csrf_token is defined else '' }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6">
+            <div class="sig-empty">
+              <i class="bi bi-person-plus fs-3 d-block mb-2"></i>
+              <div class="fw-semibold">No signatures yet</div>
+              <div class="small">Click "New Signature" to add the first one.</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{# MODAL — add / edit #}
+<div class="modal fade" id="sigModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" id="sigForm">
+      <input type="hidden" name="csrf_token"
+             value="{{ csrf_token() if csrf_token is defined else '' }}">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sigModalTitle">New Signature</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label">Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" id="sigName" class="form-control"
+                   placeholder="Prof. Dr. Khalid Mahmood" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Qualifications</label>
+            <textarea name="qualifications" id="sigQuals" class="form-control" rows="2"
+                      placeholder="M.B.B.S.(Kar),M.Phil(Pb),Ph.D(Micro)"></textarea>
+            <small class="text-muted">Press Enter for multiple lines.</small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Designation</label>
+            <input type="text" name="designation" id="sigDesig" class="form-control"
+                   placeholder="Consultant Microbiologist">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="bi bi-check-lg"></i> Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openSigModal(mode, id, name, quals, desig) {
+  const form = document.getElementById('sigForm');
+  const title = document.getElementById('sigModalTitle');
+  const nameInput = document.getElementById('sigName');
+  const qualsInput = document.getElementById('sigQuals');
+  const desigInput = document.getElementById('sigDesig');
+
+  if (mode === 'edit') {
+    title.textContent = 'Edit Signature';
+    form.action = '/settings/report-signatures/' + id + '/update';
+    nameInput.value = name || '';
+    qualsInput.value = quals || '';
+    desigInput.value = desig || '';
+  } else {
+    title.textContent = 'New Signature';
+    form.action = '{{ url_for("settings.report_signature_create") }}';
+    nameInput.value = '';
+    qualsInput.value = '';
+    desigInput.value = '';
+  }
+}
+</script>
+{% endblock %}

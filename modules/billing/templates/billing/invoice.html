@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}Invoice INV-{{ order.order_code }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <a href="{{ url_for('billing.index') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Billing
+    </a>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('billing.invoice_view_pdf', order_id=order.id) }}" target="_blank"
+         class="btn btn-outline-primary">
+        <i class="bi bi-eye"></i> Preview PDF
+      </a>
+      <a href="{{ url_for('billing.invoice_pdf', order_id=order.id) }}"
+         class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf"></i> Download Invoice
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- Left: invoice summary -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+            <div>
+              <h4 class="fw-bold text-danger mb-1">{{ lab.name }}</h4>
+              <p class="text-muted small mb-0">{{ lab.address }}</p>
+              <p class="text-muted small mb-0">{{ lab.phone }} · {{ lab.email }}</p>
+              <p class="text-muted small mb-0">Tax ID: {{ lab.tax_id }}</p>
+            </div>
+            <div class="text-end">
+              <h3 class="text-primary mb-0">INVOICE</h3>
+              <p class="text-muted small mb-0"><code>INV-{{ order.order_code }}</code></p>
+              <p class="text-muted small mb-0">{{ order.created_at | localtime('%Y-%m-%d') }}</p>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <p class="text-muted small mb-1">BILLED TO</p>
+              <p class="fw-semibold mb-0">{{ order.patient.full_name }}</p>
+              <p class="small text-muted mb-0">{{ order.patient.patient_code }}</p>
+              <p class="small text-muted mb-0">{{ order.patient.phone or '' }}</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <p class="text-muted small mb-1">ORDER</p>
+              <p class="fw-semibold mb-0">{{ order.order_code }}</p>
+              <p class="small text-muted mb-0">{{ order.item_count }} tests</p>
+            </div>
+          </div>
+
+          <table class="table">
+            <thead class="table-light">
+              <tr>
+                <th>Test</th>
+                <th class="text-end">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order.items %}
+              <tr>
+                <td>
+                  <div class="fw-semibold">{{ item.test.name }}</div>
+                  <div class="text-muted small">{{ item.test.code }}</div>
+                </td>
+                <td class="text-end">${{ '%.2f'|format(item.price) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="row justify-content-end">
+            <div class="col-md-5">
+              <table class="table table-sm mb-0">
+                <tr>
+                  <td>Subtotal</td>
+                  <td class="text-end">${{ '%.2f'|format(order.total_amount) }}</td>
+                </tr>
+                {% if tax_rate > 0 %}
+                <tr>
+                  <td>Tax ({{ (tax_rate * 100)|round(1) }}%)</td>
+                  <td class="text-end">${{ '%.2f'|format(order.total_amount * tax_rate) }}</td>
+                </tr>
+                {% endif %}
+                <tr class="fw-bold border-top">
+                  <td>Total</td>
+                  <td class="text-end text-success">${{ '%.2f'|format(order.total_amount * (1 + tax_rate)) }}</td>
+                </tr>
+                <tr>
+                  <td>Paid</td>
+                  <td class="text-end text-primary">${{ '%.2f'|format(order.paid_amount) }}</td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>Balance Due</td>
+                  <td class="text-end text-{{ 'success' if order.balance_due < 0.01 else 'danger' }}">
+                    ${{ '%.2f'|format(order.balance_due) }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Payments history -->
+      <div class="card border-0 shadow-sm mt-3">
+        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+          <h6 class="fw-bold mb-0"><i class="bi bi-clock-history"></i> Payment History</h6>
+          <span class="badge bg-secondary">{{ order.payments|length }}</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Date</th>
+                <th>Method</th>
+                <th>Reference</th>
+                <th>Received by</th>
+                <th class="text-end">Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in order.payments|sort(attribute='id', reverse=True) %}
+              <tr>
+                <td class="text-muted small">{{ p.created_at | localtime }}</td>
+                <td><span class="badge bg-info text-dark">{{ p.method_label }}</span></td>
+                <td class="small">{{ p.reference or '—' }}</td>
+                <td class="small">{{ p.received_by.full_name if p.received_by else '—' }}</td>
+                <td class="text-end fw-semibold text-success">${{ '%.2f'|format(p.amount) }}</td>
+                <td class="text-end">
+                  <form method="POST" action="{{ url_for('billing.delete_payment', payment_id=p.id) }}"
+                        onsubmit="return confirm('Delete this payment?');">
+                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="6" class="text-center text-muted py-3">No payments recorded yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: payment form -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm sticky-top" style="top: 80px;">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle"></i> Record Payment</h6>
+
+          {% if order.balance_due < 0.01 %}
+            <div class="alert alert-success small mb-0">
+              <i class="bi bi-check-circle"></i> This invoice is fully paid.
+            </div>
+          {% else %}
+            <form method="POST" action="{{ url_for('billing.add_payment', order_id=order.id) }}">
+              <div class="mb-2">
+                <label class="form-label small">Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" step="0.01" min="0.01"
+                         max="{{ order.balance_due }}"
+                         name="amount"
+                         value="{{ '%.2f'|format(order.balance_due) }}"
+                         class="form-control" required>
+                </div>
+                <div class="form-text">Balance: ${{ '%.2f'|format(order.balance_due) }}</div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label small">Method</label>
+                <select name="method" class="form-select">
+                  {% for m in methods %}
+                  <option value="{{ m }}">{{ method_labels[m] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label small">Reference (optional)</label>
+                <input type="text" name="reference" class="form-control" placeholder="Txn ID, cheque #...">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small">Notes (optional)</label>
+                <textarea name="notes" class="form-control" rows="2"></textarea>
+              </div>
+
+              <button class="btn btn-success w-100">
+                <i class="bi bi-check-lg"></i> Record Payment
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

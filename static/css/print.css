@@ -1,0 +1,10 @@
+@media print {
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .card { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .badge { border: 1px solid #333; color: #333 !important; background: transparent !important; }
+  a { color: black !important; text-decoration: none !important; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+  .report-sheet { box-shadow: none !important; border: none !important; padding: 0 !important; }
+}

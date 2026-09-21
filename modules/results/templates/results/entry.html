@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter Results — {{ order.order_code }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="mb-3">
+    <a href="{{ url_for('results.index') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Results
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="fw-bold mb-1">Enter Results</h4>
+          <p class="text-muted small mb-0">
+            Order <code>{{ order.order_code }}</code>
+            · {{ order.patient.full_name }} ({{ order.patient.patient_code }})
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          {% set badge = {'pending':'warning','collected':'info','completed':'success','cancelled':'secondary'} %}
+          <span class="badge bg-{{ badge.get(order.status, 'secondary') }} text-dark">
+            {{ order.status|capitalize }}
+          </span>
+          <a href="{{ url_for('orders.view_order', order_id=order.id) }}"
+             class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-receipt"></i> View Order
+          </a>
+          <a href="{{ url_for('results.patient_history', patient_id=order.patient.id) }}"
+             class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-clock-history"></i> History
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert banner -->
+  {% if order.all_results_done %}
+  <div class="alert alert-success">
+    <i class="bi bi-check-circle-fill"></i>
+    All results entered. This order is <strong>completed</strong>.
+    You can still edit individual values.
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i>
+    Fill in the result for each test. Order auto-completes once all values are filled.
+  </div>
+  {% endif %}
+
+  <!-- Results form -->
+  <form method="POST">
+
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 22%;">Test</th>
+              <th style="width: 15%;">Normal Range</th>
+              <th style="width: 10%;">Unit</th>
+              <th style="width: 25%;">Result</th>
+              <th>Notes</th>
+              <th style="width: 60px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.items %}
+            <tr class="{% if item.result_value %}table-success-subtle{% endif %}">
+              <td>
+                <div class="fw-semibold">{{ item.test.name }}</div>
+                <div class="text-muted small"><code>{{ item.test.code }}</code></div>
+              </td>
+              <td class="text-muted small">{{ item.test.normal_range or '—' }}</td>
+              <td class="text-muted small">{{ item.test.unit or '—' }}</td>
+              <td>
+                <input
+                  type="text"
+                  name="result_{{ item.id }}"
+                  value="{{ item.result_value or '' }}"
+                  class="form-control form-control-sm"
+                  placeholder="Enter value"
+                  autocomplete="off"
+                >
+              </td>
+              <td>
+                <input
+                  type="text"
+                  name="notes_{{ item.id }}"
+                  value="{{ item.result_notes or '' }}"
+                  class="form-control form-control-sm"
+                  placeholder="Optional note"
+                >
+              </td>
+              <td class="text-end">
+                {% if item.result_value %}
+                <button
+                  type="submit"
+                  formaction="{{ url_for('results.clear_result', item_id=item.id) }}"
+                  formmethod="POST"
+                  class="btn btn-sm btn-outline-danger"
+                  title="Clear this result"
+                  onclick="return confirm('Clear this result?');"
+                >
+                  <i class="bi bi-eraser"></i>
+                </button>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+      <a href="{{ url_for('results.index') }}" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Save All Results
+      </button>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}

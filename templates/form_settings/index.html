@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}Reception Form Settings · {{ branding.lab_name }}{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Reception Form Settings — single compact block
+   ============================================================ */
+
+.fs-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 16px;
+  padding-bottom: 60px;
+}
+
+/* ---------- Header (super compact) ---------- */
+.fs-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fs-top h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.15rem;
+}
+.fs-top .presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fs-top .presets button {
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 5px;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.fs-top .presets button:hover {
+  background: var(--brand-primary, var(--bs-primary));
+  border-color: var(--brand-primary, var(--bs-primary));
+  color: #fff;
+}
+.fs-top .stats {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+}
+
+/* ---------- ONE master block ---------- */
+.fs-block {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Section header (inside the block) */
+.fs-sec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--bs-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+  cursor: pointer;
+  user-select: none;
+}
+.fs-sec:hover {
+  background: color-mix(in srgb, var(--bs-tertiary-bg) 90%, var(--bs-primary));
+}
+.fs-sec .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fs-sec .title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bs-body-color);
+  margin: 0;
+}
+.fs-sec .title i {
+  color: var(--brand-primary, var(--bs-primary));
+  font-size: 0.85rem;
+}
+.fs-sec .badge {
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 2px 7px;
+}
+.fs-sec .form-check-input {
+  margin: 0;
+  cursor: pointer;
+  width: 2em;
+  height: 1.1em;
+}
+
+/* ---------- Fields grid ---------- */
+.fs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.fs-grid:last-child {
+  border-bottom: none;
+}
+
+.fs-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-right: 1px solid var(--bs-border-color-translucent);
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  font-size: 0.84rem;
+  min-height: 36px;
+}
+.fs-item:nth-child(4n) { border-right: none; }
+
+.fs-item .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  min-width: 0;
+}
+.fs-item .name.req::after {
+  content: ' *';
+  color: var(--bs-danger);
+}
+
+.fs-item .vis-toggle {
+  flex-shrink: 0;
+}
+.fs-item .vis-toggle .form-check-input {
+  margin: 0;
+  cursor: pointer;
+  width: 1.9em;
+  height: 1.05em;
+}
+.fs-item .req-check {
+  margin: 0;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.fs-item.not-visible {
+  opacity: 0.45;
+}
+.fs-item.not-visible .req-check {
+  cursor: not-allowed;
+}
+
+/* ---------- Sticky action bar ---------- */
+.fs-actions {
+  position: sticky;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin-top: 12px;
+  font-size: 0.8rem;
+}
+.fs-actions .info {
+  color: var(--bs-secondary-color);
+}
+
+.fs-reset {
+  text-align: center;
+  margin-top: 10px;
+}
+.fs-reset button {
+  background: transparent;
+  border: none;
+  color: var(--bs-danger);
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1199.98px) {
+  .fs-grid { grid-template-columns: repeat(3, 1fr); }
+  .fs-item:nth-child(4n) { border-right: 1px solid var(--bs-border-color-translucent); }
+  .fs-item:nth-child(3n) { border-right: none; }
+}
+@media (max-width: 767.98px) {
+  .fs-grid { grid-template-columns: repeat(2, 1fr); }
+  .fs-item:nth-child(3n) { border-right: 1px solid var(--bs-border-color-translucent); }
+  .fs-item:nth-child(2n) { border-right: none; }
+}
+@media (max-width: 479.98px) {
+  .fs-grid { grid-template-columns: 1fr; }
+  .fs-item { border-right: none; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="fs-page">
+
+  {# ============ COMPACT TOP ROW ============ #}
+  <div class="fs-top">
+    <h3><i class="bi bi-ui-checks"></i> Reception Form Settings</h3>
+
+    <div class="presets">
+      <span class="text-muted me-1" style="font-size:0.78rem;">Presets:</span>
+      {% for p in preset_list %}
+      <form method="POST" class="d-inline"
+            action="{{ url_for('form_settings.apply_preset', preset_key=p.key) }}"
+            onsubmit="return confirm('Apply the {{ p.label }} preset? This will reset all field configurations.');">
+        <button type="submit" title="{{ p.description }}">{{ p.label }}</button>
+      </form>
+      {% endfor %}
+    </div>
+
+    <div class="stats">
+      {{ stats.visible }} of {{ stats.total }} visible · {{ stats.required }} required
+      <a href="{{ url_for('orders.new_order') }}" target="_blank"
+         class="btn btn-outline-primary btn-sm ms-2" style="font-size:0.75rem;">
+        <i class="bi bi-eye"></i> Preview
+      </a>
+    </div>
+  </div>
+
+  {# ============ FORM ============ #}
+  <form method="POST" action="{{ url_for('form_settings.index') }}" id="settingsForm">
+    <div class="fs-block">
+
+      {% for section in sections %}
+        {# ---- Section header (inside the block) ---- #}
+        <div class="fs-sec" data-section="{{ section.key }}">
+          <div class="left">
+            <div class="form-check form-switch" style="margin:0;">
+              <input class="form-check-input section-toggle"
+                     type="checkbox"
+                     name="section_visible"
+                     value="{{ section.key }}"
+                     id="sec_{{ section.key }}"
+                     {% if section.is_visible %}checked{% endif %}>
+            </div>
+            <span class="title">
+              <i class="bi bi-folder"></i> {{ section.label }}
+            </span>
+            <span class="badge bg-secondary">
+              {{ section.visible_count }}/{{ section.field_count }}
+            </span>
+          </div>
+          <i class="bi bi-chevron-down small text-muted"></i>
+        </div>
+
+        {# ---- Fields grid ---- #}
+        <div class="fs-grid" data-grid="{{ section.key }}">
+          {% for f in section.fields %}
+          <div class="fs-item {% if not f.is_visible %}not-visible{% endif %}"
+               data-field="{{ f.key }}">
+
+            <span class="name {% if f.is_required %}req{% endif %}"
+                  title="{{ f.key }}">{{ f.label }}</span>
+
+            <input type="checkbox"
+                   class="form-check-input req-check field-required"
+                   id="req_{{ f.key }}"
+                   name="field_required_{{ f.key }}"
+                   title="Required"
+                   {% if f.is_required %}checked{% endif %}
+                   {% if not f.is_visible %}disabled{% endif %}>
+
+            <div class="form-check form-switch vis-toggle" title="Visible">
+              <input class="form-check-input field-visible"
+                     type="checkbox"
+                     id="vis_{{ f.key }}"
+                     name="field_visible_{{ f.key }}"
+                     {% if f.is_visible %}checked{% endif %}>
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+    </div>
+
+    {# Hidden: all field keys #}
+    {% for section in sections %}
+      {% for f in section.fields %}
+        <input type="hidden" name="all_field_keys" value="{{ f.key }}">
+      {% endfor %}
+    {% endfor %}
+
+    {# ============ STICKY ACTIONS ============ #}
+    <div class="fs-actions">
+      <span class="info">
+        <i class="bi bi-info-circle"></i>
+        Changes take effect immediately after saving.
+      </span>
+      <button type="submit" class="btn btn-primary btn-sm">
+        <i class="bi bi-check-lg"></i> Save Settings
+      </button>
+    </div>
+
+  </form>
+
+  {# ============ RESET ============ #}
+  <div class="fs-reset">
+    <form method="POST"
+          action="{{ url_for('form_settings.reset_defaults') }}"
+          onsubmit="return confirm('Reset all fields to catalog defaults? This will lose your customizations.');">
+      <button type="submit">
+        <i class="bi bi-arrow-counterclockwise"></i> Reset to Catalog Defaults
+      </button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  'use strict';
+
+  // Row state sync (Visible → Req enabled/disabled)
+  function updateRowState(row) {
+    const visible = row.querySelector('.field-visible');
+    const required = row.querySelector('.field-required');
+    const nameEl = row.querySelector('.name');
+    if (!visible || !required || !nameEl) return;
+
+    row.classList.toggle('not-visible', !visible.checked);
+    required.disabled = !visible.checked;
+    if (!visible.checked) required.checked = false;
+
+    nameEl.classList.toggle('req', required.checked);
+  }
+
+  document.querySelectorAll('.field-visible').forEach(cb => {
+    cb.addEventListener('change', () => updateRowState(cb.closest('.fs-item')));
+  });
+  document.querySelectorAll('.field-required').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const row = cb.closest('.fs-item');
+      const visible = row.querySelector('.field-visible');
+      if (cb.checked && visible && !visible.checked) visible.checked = true;
+      updateRowState(row);
+    });
+  });
+
+  document.querySelectorAll('.fs-item').forEach(updateRowState);
+
+  // Section toggle dims its grid
+  document.querySelectorAll('.section-toggle').forEach(cb => {
+    const apply = () => {
+      const sec = cb.closest('.fs-sec');
+      const key = cb.value;
+      const grid = document.querySelector('.fs-grid[data-grid="' + key + '"]');
+      if (grid) {
+        grid.style.opacity = cb.checked ? '1' : '0.4';
+        grid.style.pointerEvents = cb.checked ? '' : 'none';
+      }
+    };
+    cb.addEventListener('change', apply);
+    apply();
+  });
+
+  // Collapse section when clicking the header
+  document.querySelectorAll('.fs-sec').forEach(h => {
+    h.addEventListener('click', (e) => {
+      if (e.target.closest('.form-check')) return;
+      const key = h.dataset.section;
+      const grid = document.querySelector('.fs-grid[data-grid="' + key + '"]');
+      const icon = h.querySelector('i.bi-chevron-down, i.bi-chevron-right');
+      if (!grid) return;
+      if (grid.style.display === 'none') {
+        grid.style.display = '';
+        if (icon) icon.className = 'bi bi-chevron-down small text-muted';
+      } else {
+        grid.style.display = 'none';
+        if (icon) icon.className = 'bi bi-chevron-right small text-muted';
+      }
+    });
+  });
+
+})();
+</script>
+{% endblock %}

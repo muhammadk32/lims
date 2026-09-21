@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit' if patient else 'Add' }} Patient — LabMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div style="max-width: 900px;">
+
+    <div class="mb-3">
+      <a href="{{ url_for('patients.list_patients') }}" class="text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Back to Patients
+      </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        <h4 class="fw-bold mb-4">
+          {% if patient %}
+            <i class="bi bi-pencil-square"></i> Edit Patient
+          {% else %}
+            <i class="bi bi-person-plus"></i> Add New Patient
+          {% endif %}
+        </h4>
+
+        <form method="POST">
+
+          <div class="row g-3">
+
+            <!-- Full name -->
+            <div class="col-md-6">
+              <label class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                name="full_name"
+                class="form-control"
+                required
+                autofocus
+                value="{{ form.full_name if form else (patient.full_name if patient else '') }}"
+              >
+            </div>
+
+            <!-- Phone -->
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                class="form-control"
+                value="{{ form.phone if form else (patient.phone if patient else '') }}"
+              >
+            </div>
+
+            <!-- DOB -->
+            <div class="col-md-4">
+              <label class="form-label">Date of Birth</label>
+              <input
+                type="date"
+                name="date_of_birth"
+                class="form-control"
+                value="{{ form.date_of_birth if form else (patient.date_of_birth.isoformat() if patient and patient.date_of_birth else '') }}"
+              >
+            </div>
+
+            <!-- Age (fallback if no DOB) -->
+            <div class="col-md-2">
+              <label class="form-label">Age</label>
+              <input
+                type="number"
+                name="age"
+                min="0"
+                max="150"
+                class="form-control"
+                value="{{ form.age if form else (patient.age if patient and patient.age else '') }}"
+              >
+            </div>
+
+            <!-- Gender -->
+            <div class="col-md-3">
+              <label class="form-label">Gender</label>
+              <select name="gender" class="form-select">
+                {% set current_gender = form.gender if form else (patient.gender if patient else '') %}
+                <option value="">— Select —</option>
+                <option value="Male" {% if current_gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if current_gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if current_gender == 'Other' %}selected{% endif %}>Other</option>
+              </select>
+            </div>
+
+            <!-- Blood group -->
+            <div class="col-md-3">
+              <label class="form-label">Blood Group</label>
+              {% set current_bg = form.blood_group if form else (patient.blood_group if patient else '') %}
+              <select name="blood_group" class="form-select">
+                <option value="">—</option>
+                {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+                <option value="{{ bg }}" {% if current_bg == bg %}selected{% endif %}>{{ bg }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Email -->
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                value="{{ form.email if form else (patient.email if patient else '') }}"
+              >
+            </div>
+
+            <!-- Address -->
+            <div class="col-12">
+              <label class="form-label">Address</label>
+              <textarea name="address" class="form-control" rows="2">{{ form.address if form else (patient.address if patient else '') }}</textarea>
+            </div>
+
+            <!-- Notes -->
+            <div class="col-12">
+              <label class="form-label">Notes</label>
+              <textarea name="notes" class="form-control" rows="2" placeholder="Medical history, allergies, etc.">{{ form.notes if form else (patient.notes if patient else '') }}</textarea>
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('patients.list_patients') }}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg"></i>
+              {{ 'Update' if patient else 'Save' }} Patient
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

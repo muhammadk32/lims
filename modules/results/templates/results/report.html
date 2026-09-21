@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Report — Lab # {{ order.order_code }}</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+@page { size: A4; margin: 12mm; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 10pt;
+  color: #212529;
+  line-height: 1.35;
+  background: #fff;
+}
+
+.page-sheet {
+  width: 186mm;
+  min-height: 273mm;
+  margin: 0 auto 10mm auto;
+  background: #fff;
+  padding: 6mm 4mm;
+  position: relative;
+}
+
+/* ---------- Header ---------- */
+.rep-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #0d6efd;
+  margin-bottom: 10px;
+}
+.rep-header .logo { height: 48px; width: auto; object-fit: contain; }
+.rep-header .info { text-align: center; flex: 1; }
+.rep-header .lab-name {
+  font-size: 18pt; font-weight: 800; color: #0d6efd; line-height: 1.1;
+}
+.rep-header .tagline {
+  font-size: 8.5pt; color: #6c757d; margin-top: 2px; font-style: italic;
+}
+.rep-header .contact {
+  font-size: 8pt; color: #495057; margin-top: 3px;
+}
+
+/* ---------- Meta ---------- */
+.rep-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 24px;
+  font-size: 9pt;
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  border: 1px solid #dee2e6;
+  background: #fbfcfd;
+}
+.rep-meta .row { display: flex; align-items: baseline; gap: 8px; padding: 1px 0; }
+.rep-meta .row.full { grid-column: 1 / -1; }
+.rep-meta .key {
+  font-weight: 600; color: #495057; min-width: 90px; flex-shrink: 0;
+}
+.rep-meta .val { color: #212529; font-weight: 500; word-break: break-word; }
+
+/* ---------- Report title ---------- */
+.rep-title {
+  text-align: center;
+  font-size: 14pt;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #14532d;
+  padding: 6px 0;
+  margin-bottom: 10px;
+  border-top: 1.5px solid #198754;
+  border-bottom: 1.5px solid #198754;
+}
+
+/* ---------- Results table ---------- */
+table.rep-table {
+  width: 100%; border-collapse: collapse; font-size: 9.5pt; margin-bottom: 10px;
+}
+table.rep-table th {
+  background: #e9ecef;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #212529;
+  padding: 5px 8px;
+  border: 1px solid #adb5bd;
+  text-align: left;
+}
+table.rep-table td {
+  padding: 5px 8px;
+  border: 1px solid #adb5bd;
+  vertical-align: top;
+  font-size: 9.5pt;
+}
+table.rep-table td.test-name { font-weight: 500; }
+table.rep-table td.result-val { font-weight: 700; }
+table.rep-table td.unit { color: #495057; }
+table.rep-table td.range { color: #6c757d; font-size: 9pt; }
+table.rep-table td.notes { font-size: 8pt; color: #495057; font-style: italic; }
+
+table.rep-table tr.panel-title td {
+  background: #f1f3f5;
+  font-weight: 700;
+  font-size: 9.5pt;
+  color: #14532d;
+}
+table.rep-table tr.child td.test-name {
+  padding-left: 20px;
+  font-weight: 400;
+}
+
+/* ---------- Signature panel ---------- */
+.rep-signatures {
+  margin-top: 14mm;
+}
+.rep-signatures .verified-line {
+  text-align: center;
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: #212529;
+  padding: 6px 0;
+  border-bottom: 1px solid #adb5bd;
+  margin-bottom: 8px;
+}
+.rep-sig-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 12px;
+}
+.rep-sig-item {
+  font-size: 8pt;
+  line-height: 1.35;
+  page-break-inside: avoid;
+}
+.rep-sig-item .sig-name {
+  font-weight: 700;
+  font-size: 9pt;
+  color: #212529;
+}
+.rep-sig-item .sig-quals {
+  color: #495057;
+  white-space: pre-line;
+  margin-top: 1px;
+}
+.rep-sig-item .sig-desig {
+  color: #6c757d;
+  font-size: 7.5pt;
+  margin-top: 1px;
+}
+
+/* ---------- Footer ---------- */
+.rep-footer {
+  position: absolute;
+  bottom: 6mm; left: 4mm; right: 4mm;
+  font-size: 8pt; color: #6c757d;
+  border-top: 1px solid #dee2e6;
+  padding-top: 4px;
+  display: flex; justify-content: space-between;
+}
+
+/* ---------- Screen-only action bar ---------- */
+.print-bar {
+  position: fixed; top: 10px; right: 10px;
+  z-index: 999;
+  display: flex; gap: 8px; align-items: center;
+  background: rgba(255,255,255,0.95);
+  padding: 6px; border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.print-bar button,
+.print-bar a.btn-close-bar {
+  background: #0d6efd; color: #fff;
+  border: none; padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: inline-block;
+}
+.print-bar a.btn-close-bar { background: #6c757d; }
+
+@media print {
+  .print-bar { display: none !important; }
+  body { margin: 0; }
+  .page-sheet {
+    width: auto; min-height: auto; margin: 0; padding: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+{# ============ SCREEN-ONLY ACTION BAR ============ #}
+<div class="print-bar">
+  <button onclick="window.print()">🖨️ Print</button>
+  <a class="btn-close-bar"
+     href="{{ url_for('results.enter', order_id=order.id) }}">Close</a>
+</div>
+
+<div class="page-sheet">
+
+  {# ============ HEADER ============ #}
+  <div class="rep-header">
+    {% if branding.logo_url %}
+      <img src="{{ branding.logo_url }}" alt="logo" class="logo">
+    {% endif %}
+    <div class="info">
+      <div class="lab-name">{{ branding.lab_name or 'Laboratory' }}</div>
+      {% if branding.tagline %}
+        <div class="tagline">{{ branding.tagline }}</div>
+      {% endif %}
+      <div class="contact">
+        {% set parts = [] %}
+        {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('✉ ' ~ branding.email) %}{% endif %}
+        {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
+        {{ parts | join(' · ') }}
+      </div>
+    </div>
+  </div>
+
+  {# ============ PATIENT META ============ #}
+  <div class="rep-meta">
+    <div class="row full"><span class="key">Patient:</span>
+      <span class="val">{{ order.patient.full_name }}</span>
+    </div>
+    <div class="row"><span class="key">Patient #:</span>
+      <span class="val">{{ order.patient.patient_code }}</span>
+    </div>
+    <div class="row"><span class="key">Lab #:</span>
+      <span class="val">{{ order.order_code }}</span>
+    </div>
+    <div class="row"><span class="key">Age / Gender:</span>
+      <span class="val">
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
+      </span>
+    </div>
+    <div class="row"><span class="key">Phone:</span>
+      <span class="val">{{ order.patient.phone or '—' }}</span>
+    </div>
+    <div class="row"><span class="key">Registered On:</span>
+      <span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span>
+    </div>
+    <div class="row"><span class="key">Reporting Date:</span>
+      <span class="val">
+        {% if order.reported_at %}
+          {{ order.reported_at | localtime('%d-%b-%Y %I:%M %p') }}
+        {% else %}
+          <span style="color: #adb5bd; font-style: italic;">Pending Approval</span>
+        {% endif %}
+      </span>
+    </div>
+    <div class="row"><span class="key">Referred by:</span>
+      <span class="val">{{ order.doctor.full_name if order.doctor else 'Walk-in' }}</span>
+    </div>
+  </div>
+
+  {# ============ TITLE ============ #}
+  <div class="rep-title">R E S U L T   R E P O R T</div>
+
+  {# ============ RESULTS TABLE ============ #}
+  <table class="rep-table">
+    <thead>
+      <tr>
+        <th style="width: 42%;">Test</th>
+        <th style="width: 18%;">Result</th>
+        <th style="width: 12%;">Unit</th>
+        <th style="width: 28%;">Reference Range</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.top_level_items %}
+        {% if item.has_children %}
+          {# Panel header #}
+          <tr class="panel-title">
+            <td colspan="4">{{ item.test.name }}</td>
+          </tr>
+          {# Panel children #}
+          {% for child in item.children %}
+            <tr class="child">
+              <td class="test-name">{{ child.test.name }}</td>
+              <td class="result-val">
+                {% if child.result_value %}{{ child.result_value }}{% else %}—{% endif %}
+                {% if child.result_notes %}
+                  <div class="notes">{{ child.result_notes }}</div>
+                {% endif %}
+              </td>
+              <td class="unit">{{ child.test.unit or '—' }}</td>
+              <td class="range">{{ child.test.normal_range or '—' }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          {# Standalone test #}
+          <tr>
+            <td class="test-name">{{ item.test.name }}</td>
+            <td class="result-val">
+              {% if item.result_value %}{{ item.result_value }}{% else %}—{% endif %}
+              {% if item.result_notes %}
+                <div class="notes">{{ item.result_notes }}</div>
+              {% endif %}
+            </td>
+            <td class="unit">{{ item.test.unit or '—' }}</td>
+            <td class="range">{{ item.test.normal_range or '—' }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {# ============ SIGNATURE PANEL ============ #}
+  {% include 'results/_signatures_footer.html' %}
+
+  {# ============ FOOTER ============ #}
+  <div class="rep-footer">
+    <div class="left">
+      Online Reporting: {{ branding.website or branding.email or '—' }}
+    </div>
+    <div class="right">
+      Lab #: {{ order.order_code }}
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('auto') === '1') {
+    window.addEventListener('load', function () {
+      setTimeout(function () { window.print(); }, 400);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+
+    <a class="navbar-brand fw-bold" href="{{ url_for('dashboard.index') }}">
+      🔬 LabMS
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('dashboard.index') }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('patients.list_patients') }}">
+            <i class="bi bi-people"></i> Patients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('tests.list_tests') }}">
+            <i class="bi bi-clipboard2-pulse"></i> Lab Tests
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('orders.list_orders') }}">
+            <i class="bi bi-receipt"></i> Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('results.index') }}">
+            <i class="bi bi-clipboard-check"></i> Results
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('reports.index') }}">
+            <i class="bi bi-file-earmark-medical"></i> Reports
+          </a>
+        </li>
+
+        {% if current_user.role in ['admin', 'receptionist'] %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('billing.index') }}">
+            <i class="bi bi-cash-coin"></i> Billing
+          </a>
+        </li>
+        {% endif %}
+
+        {% if current_user.role == 'admin' %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('users.list_users') }}">
+            <i class="bi bi-person-badge"></i> Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('audit.index') }}">
+            <i class="bi bi-shield-check"></i> Audit
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      <form class="d-flex me-3" method="GET" action="{{ url_for('dashboard.global_search') }}">
+        <div class="input-group input-group-sm">
+          <input type="text" name="q" class="form-control" placeholder="Search patients, orders..." autocomplete="off">
+          <button class="btn btn-light" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <i class="bi bi-person-circle"></i>
+            {{ current_user.full_name }}
+            <span class="badge bg-light text-primary ms-1">{{ current_user.role }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="{{ url_for('users.profile') }}">
+                <i class="bi bi-person-circle"></i> My Profile
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>

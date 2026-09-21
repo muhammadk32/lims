@@ -1,0 +1,500 @@
+/* ==========================================================
+   LabMS — Global Styles (Top Navigation Layout)
+   ========================================================== */
+
+/* ---------- Root variables ---------- */
+:root {
+  --topbar-height: 64px;
+  --topnav-height: 46px;
+  --primary: #0d6efd;
+  --topnav-bg: #1e293b;
+  --topnav-hover: #334155;
+  --topnav-active: #0d6efd;
+  --topnav-text: #cbd5e1;
+  --topnav-text-active: #ffffff;
+  --border-color: #e9ecef;
+}
+
+/* Dark mode */
+[data-bs-theme="dark"] {
+  --topnav-bg: #0f172a;
+  --topnav-hover: #1e293b;
+  --border-color: #334155;
+}
+
+/* ---------- Global ---------- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", sans-serif;
+  background: var(--bs-body-bg);
+  min-height: 100vh;
+}
+
+/* ---------- App layout ---------- */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  padding: 20px 24px;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ==========================================================
+   PRIMARY TOP BAR (brand + search + user)
+   ========================================================== */
+.app-topbar {
+  height: var(--topbar-height);
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1040;                    /* above topnav */
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+.topbar-brand:hover { color: inherit; }
+
+.topbar-brand .brand-logo {
+  height: 36px;
+  width: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.topbar-brand .brand-icon-fallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #fff;
+  background: var(--brand-primary, #0d6efd);
+}
+
+.topbar-brand .brand-text {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--brand-primary, #0d6efd);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-brand .brand-sub {
+  font-size: 0.72rem;
+  color: var(--bs-secondary-color);
+  margin-top: -2px;
+}
+
+.topbar-search {
+  flex: 1;
+  max-width: 420px;
+}
+.topbar-search .form-control {
+  background: var(--bs-tertiary-bg);
+  border-color: transparent;
+}
+
+.topbar-contact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+  flex-shrink: 0;
+}
+
+.topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background: var(--brand-primary, var(--primary));
+  color: #fff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================
+   SECONDARY NAV BAR — horizontal menu with dropdowns
+   ========================================================== */
+.app-topnav {
+  background: var(--topnav-bg);
+  color: var(--topnav-text);
+  position: sticky;
+  top: var(--topbar-height);
+  z-index: 1035;                     /* below topbar, above content */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-topnav .nav-container {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 4px;
+  min-height: var(--topnav-height);
+  /* CRITICAL: visible so dropdowns can extend below the nav */
+  overflow: visible;
+}
+
+/* Nav links */
+.topnav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  color: var(--topnav-text);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.topnav-link:hover {
+  background: var(--topnav-hover);
+  color: #fff;
+}
+.topnav-link.active {
+  background: var(--topnav-active);
+  color: #fff;
+}
+.topnav-link i { font-size: 1rem; }
+
+/* Dropdown container */
+.topnav-item {
+  position: relative;
+}
+
+/* Dropdown menu — uses display, NOT opacity/visibility */
+.topnav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 0;
+  padding: 6px;
+  min-width: 220px;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1060;
+  display: none;                     /* hidden by default */
+}
+
+/* Show on hover OR focus OR explicit .open (mobile) */
+.topnav-item:hover > .topnav-dropdown,
+.topnav-item:focus-within > .topnav-dropdown,
+.topnav-item.open > .topnav-dropdown {
+  display: block;
+}
+
+.topnav-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+.topnav-dropdown .dropdown-item:hover {
+  background: var(--bs-tertiary-bg);
+  color: var(--brand-primary, #0d6efd);
+}
+.topnav-dropdown .dropdown-item.active {
+  background: var(--brand-primary, #0d6efd);
+  color: #fff;
+}
+.topnav-dropdown .dropdown-item i {
+  width: 18px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.topnav-dropdown .dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 4px;
+}
+
+.topnav-dropdown .dropdown-section {
+  padding: 8px 12px 4px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+}
+
+/* Mobile hamburger — hidden on desktop */
+.topnav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.35rem;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   BREADCRUMBS
+   ========================================================== */
+.app-breadcrumbs { padding: 0 0 16px; }
+.breadcrumb {
+  background: transparent;
+  font-size: 0.85rem;
+  margin: 0;
+}
+.breadcrumb a {
+  color: var(--bs-secondary-color);
+  text-decoration: none;
+}
+.breadcrumb a:hover { color: var(--brand-primary, #0d6efd); }
+
+/* ==========================================================
+   CARDS / TABLES
+   ========================================================== */
+.card { border-radius: 10px; }
+.table > :not(caption) > * > * { padding: 0.75rem 0.75rem; }
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+.empty-state { padding: 60px 20px; }
+.empty-state .empty-icon {
+  font-size: 3.5rem; line-height: 1; opacity: 0.6; user-select: none;
+}
+.empty-state h5 { margin-bottom: 0.5rem; }
+.empty-state p { max-width: 380px; margin: 0 auto; }
+.empty-state .btn { margin-top: 0.25rem; }
+@media (min-width: 768px) {
+  .empty-state .empty-icon { font-size: 4rem; }
+}
+
+/* ==========================================================
+   LOADING OVERLAY
+   ========================================================== */
+.loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9998;
+}
+[data-bs-theme="dark"] .loading-overlay { background: rgba(0, 0, 0, 0.6); }
+.loading-text { font-size: 0.9rem; color: var(--bs-secondary-color); }
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.app-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bs-body-bg);
+}
+
+/* ==========================================================
+   TOAST
+   ========================================================== */
+.toast { border-left: 4px solid var(--brand-primary, #0d6efd); }
+.toast.toast-success { border-left-color: #198754; }
+.toast.toast-danger  { border-left-color: #dc3545; }
+.toast.toast-warning { border-left-color: #ffc107; }
+.toast.toast-info    { border-left-color: #0dcaf0; }
+
+/* ==========================================================
+   DARK MODE — dropdowns
+   ========================================================== */
+[data-bs-theme="dark"] .topnav-dropdown {
+  background: #1e293b;
+  border-color: #334155;
+}
+[data-bs-theme="dark"] .topnav-dropdown .dropdown-item {
+  color: #cbd5e1;
+}
+[data-bs-theme="dark"] .topnav-dropdown .dropdown-item:hover {
+  background: #334155;
+  color: #fff;
+}
+[data-bs-theme="dark"] .topnav-dropdown .dropdown-item.active {
+  background: var(--brand-primary, #0d6efd);
+  color: #fff;
+}
+[data-bs-theme="dark"] .topnav-dropdown .dropdown-section {
+  color: #94a3b8;
+}
+[data-bs-theme="dark"] .topnav-dropdown .dropdown-divider {
+  background: #334155;
+}
+
+/* ==========================================================
+   MOBILE (< 992px)
+   ========================================================== */
+@media (max-width: 991.98px) {
+  .topnav-toggle { display: inline-flex; }
+
+  .app-topnav .nav-container {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px;
+    max-height: calc(100vh - var(--topbar-height) - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .app-topnav.open .nav-container {
+    display: flex;
+  }
+
+  .topnav-link {
+    padding: 10px 12px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Dropdowns become inline expandable on mobile */
+  .topnav-dropdown {
+    position: static;
+    display: none;
+    box-shadow: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.04);
+    margin: 4px 0 4px 16px;
+    padding: 4px;
+    width: auto;
+    min-width: 0;
+  }
+  .topnav-item.open .topnav-dropdown {
+    display: block;
+  }
+  .topnav-item:hover > .topnav-dropdown {
+    /* disable hover on mobile — only click works */
+    display: none;
+  }
+  .topnav-item.open:hover > .topnav-dropdown {
+    display: block;
+  }
+
+  .topnav-dropdown .dropdown-item {
+    color: var(--topnav-text);
+    padding: 8px 12px;
+  }
+  .topnav-dropdown .dropdown-item:hover {
+    background: var(--topnav-hover);
+    color: #fff;
+  }
+  .topnav-dropdown .dropdown-item.active {
+    background: var(--brand-primary, #0d6efd);
+    color: #fff;
+  }
+  .topnav-dropdown .dropdown-section {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  .topnav-dropdown .dropdown-divider {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .topbar-search { display: none !important; }
+  .topbar-contact { display: none !important; }
+  .app-content { padding: 16px; }
+}
+
+/* ==========================================================
+   PRINT
+   ========================================================== */
+@media print {
+  .app-topbar, .app-topnav, .app-footer,
+  .app-breadcrumbs, .toast-container, .loading-overlay,
+  .empty-state .empty-icon, .empty-state .btn {
+    display: none !important;
+  }
+  .app-content { padding: 0 !important; }
+}
+/* ==========================================================
+   Compact forms (global) — safe tweaks for density
+   ========================================================== */
+
+/* Slightly tighter form controls everywhere */
+.form-control,
+.form-select {
+  padding: 0.32rem 0.65rem;
+  font-size: 0.92rem;
+}
+
+.form-control-sm,
+.form-select-sm {
+  padding: 0.22rem 0.5rem;
+  font-size: 0.84rem;
+}
+
+/* Tighter labels */
+.form-label {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Tighter cards */
+.card-body {
+  padding: 1rem 1.15rem;
+}
+
+/* Table cells a bit tighter */
+.table > :not(caption) > * > * {
+  padding: 0.55rem 0.75rem;
+}
+
+/* Breadcrumb tighter */
+.breadcrumb {
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+}
+
+/* Reduce vertical gap in .app-content */
+.app-content {
+  padding-top: 16px;
+}

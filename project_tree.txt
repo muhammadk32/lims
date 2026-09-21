@@ -1,0 +1,203 @@
+﻿       0       0  core\__init__.py
+       0       0  core\helpers.py
+       0       0  core\New Text Document.txt
+       0       0  lab_management_system\__init__.py
+       0       0  logs\errors.log
+       0       0  modules\__init__.py
+       0       0  modules\audit\New Text Document.txt
+       0       0  modules\audit\templates\audit\New Text Document.txt
+       0       0  modules\billing\New Text Document.txt
+       0       0  modules\billing\templates\billing\New Text Document.txt
+       0       0  modules\dashboard\New Text Document.txt
+       0       0  modules\dashboard\templates\dashboard\New Text Document.txt
+       0       0  modules\form_settings\New Text Document.txt
+       0       0  modules\lab\New Text Document.txt
+       0       0  modules\orders\templates\orders\New Text Document.txt
+       0       0  modules\reports\New Text Document.txt
+       0       0  modules\reports\templates\reports\New Text Document.txt
+       0       0  modules\results\New Text Document.txt
+       0       0  modules\results\templates\results\New Text Document.txt
+       0       0  modules\settings\__init__.py
+       0       0  modules\settings\New Text Document.txt
+       0       0  modules\settings\templates\New Text Document.txt
+       0       0  modules\test_settings\New Text Document.txt
+       0       0  modules\tests\templates\tests\New Text Document.txt
+       0       0  modules\users\New Text Document.txt
+       0       0  modules\users\templates\users\New Text Document.txt
+       0       0  New Text Document.txt
+       0       0  project_tree.txt
+       0       0  scripts\__init__.py
+       0       0  scripts\New Text Document.txt
+       0       0  static\css\New Text Document.txt
+       0       0  static\js\New Text Document.txt
+       0       0  static\uploads\branding\.gitkeep
+       0       0  static\uploads\branding\New Text Document.txt
+       0       0  templates\errors\New Text Document.txt
+       0       0  templates\layout\New Text Document.txt
+       0       0  templates\New Text Document.txt
+       0       0  templates\partials\New Text Document.txt
+       0       0  templates\results\New Text Document.txt
+       0       0  templates\settings\New Text Document.txt
+       0       0  tests\__init__.py
+       0       0  tests\New Text Document.txt
+      41       1  migrations\README
+      94      10  .gitignore
+     115       3  check_uri.py
+     121       4  .env
+     129       6  PYTEST.INI
+     158       7  modules\auth\__init__.py
+     168       7  modules\dashboard\__init__.py
+     180       8  modules\lab\__init__.py
+     186       8  modules\audit\__init__.py
+     186       8  modules\users\__init__.py
+     189       8  modules\orders\__init__.py
+     192       8  modules\billing\__init__.py
+     192       8  modules\reports\__init__.py
+     192       8  modules\results\__init__.py
+     195       8  modules\patients\__init__.py
+     322      11  run_query.py
+     343      11  list_tables.py
+     404      11  .env.example
+     435      10  lab_management_system\asgi.py
+     435      10  lab_management_system\wsgi.py
+     456      12  templates\errors\404.html
+     456      12  templates\errors\500.html
+     459      12  templates\errors\403.html
+     494      17  migrations\script.py.mako
+     500      12  extensions.py
+     531      18  modules\form_settings\__init__.py
+     542      10  static\css\print.css
+     586      18  templates\layout\breadcrumbs.html
+     597      12  templates\partials\empty_state.html
+     625      20  modules\results\templates\results\_signatures_footer.html
+     626      16  where_db.py
+     647      20  inspect_users.py
+     663      21  modules\test_settings\__init__.py
+     699      18  manage.py
+     777      19  check_orders.py
+     799      20  lab_management_system\urls.py
+     804      27  modules\tests\__init__.py
+     813      23  modules\results\models.py
+     857      38  migrations\alembic.ini
+     918      18  modules\form_settings\forms.py
+    1002      29  make.bat
+    1003      29  check_results.py
+    1123      26  seed_users.py
+    1154      27  templates\layout\footer.html
+    1164      32  requirements.txt
+    1218      34  tests\test_tests_catalog.py
+    1219      32  tests\test_patients.py
+    1343      38  modules\audit\routes.py
+    1375      32  modules\settings\forms.py
+    1378      29  tests\test_results.py
+    1416      30  fix_localtime.ps1
+    1419      31  tests\test_permissions.py
+    1437      47  config.py
+    1456      33  modules\patients\models.py
+    1501      45  lims.bat
+    1508      43  core\branding.py
+    1523      40  modules\billing\models.py
+    1730      49  core\audit.py
+    1857      51  core\logging_config.py
+    1926      61  modules\dashboard\routes.py
+    1942      49  modules\results\validators.py
+    1946      39  modules\auth\routes.py
+    2071      55  tests\test_billing.py
+    2077      64  fix_theme_column.py
+    2091      53  tests\test_orders.py
+    2148      73  core\themes.py
+    2279      56  modules\tests\templates\tests\view.html
+    2288      61  console.py
+    2306      61  check_db.py
+    2343      53  core\roles.py
+    2369      54  templates\test_settings\coming_soon.html
+    2414      70  templates\test_settings\base.html
+    2499      60  modules\billing\templates\billing\payments.html
+    2581     106  static\css\form_settings.css
+    2784      70  modules\patients\templates\patients\view.html
+    2798      67  core\decorators.py
+    2807      71  modules\dashboard\templates\dashboard\search.html
+    2845      74  scripts\restore.py
+    2894      58  templates\base_public.html
+    3122      83  scripts\backup.py
+    3144      84  tests\conftest.py
+    3210      79  modules\form_settings\helpers.py
+    3344      83  migrations\env.py
+    3370      92  lab_management_system\settings.py
+    3462      83  modules\users\templates\users\profile.html
+    3644      99  modules\test_settings\forms.py
+    3664      77  modules\users\templates\users\form.html
+    3782      92  scripts\seed_form_config.py
+    3856     103  templates\layout\navbar.html
+    4052      80  modules\tests\templates\tests\form.html
+    4053     108  modules\reports\routes.py
+    4200     124  diagnose_and_fix.py
+    4225     103  modules\test_settings\helpers.py
+    4303     111  modules\audit\templates\audit\list.html
+    4406      93  templates\base.html
+    4805     123  modules\results\templates\results\list.html
+    4808     122  modules\results\templates\results\entry.html
+    4815      73  modules\tests\seed.py
+    5066     126  templates\layout\topbar.html
+    5338     153  readme.md
+    5353     122  modules\patients\templates\patients\form.html
+    5359      96  templates\layout\topnav.html
+    5629     231  static\css\login.css
+    5850     139  modules\users\templates\users\list.html
+    5932     144  templates\test_settings\panels.html
+    5976     132  modules\reports\templates\reports\list.html
+    5994     154  modules\tests\models.py
+    6160     134  templates\settings\branding.html
+    6287     151  modules\auth\templates\auth\login.html
+    6319     148  modules\tests\templates\tests\list.html
+    6373     276  static\css\style.css.bak.css
+    6818     157  modules\tests\routes.py
+    7258     171  modules\test_settings\categories.html
+    7303     180  modules\billing\templates\billing\revenue.html
+    7657     174  modules\form_settings\routes.py
+    7849     193  modules\dashboard\charts.py
+    8320     200  modules\settings\routes.py
+    8326     181  core\models.py
+    8471     187  templates\test_settings\panel_edit.html
+    8777     227  modules\reports\templates\reports\preview.html
+    8815     194  modules\billing\templates\billing\invoice.html
+    8986     229  app.py
+    9224     229  modules\patients\routes.py
+    9539     303  modules\results\templates\results\history.html
+    9622     242  templates\test_settings\formats.html
+    9697     387  static\css\test_settings.css
+    9711     217  scripts\seed_data.py
+    9781     284  modules\patients\templates\patients\list.html
+   10023     254  static\js\main.js
+   10179     316  modules\billing\templates\billing\list.html
+   10179     323  modules\results\templates\results\report.html
+   10285     258  modules\billing\routes.py
+   10514     286  templates\settings\report_signatures.html
+   10658     245  modules\users\routes.py
+   10780     246  modules\results\routes.py
+   10882     261  modules\orders\models.py
+   11163     362  static\css\themes.css
+   11693     202  core\form_fields.py
+   11711     365  templates\form_settings\index.html
+   11957     285  modules\lab\routes.py
+   12414      85  static\images\logo-bg.jpg
+   12490     453  static\css\style.css
+   12578     332  modules\dashboard\templates\dashboard\index.html
+   13016     315  static\js\test_settings.js
+   13164     327  templates\test_settings\categories.html
+   14074     445  modules\results\templates\results\index.html
+   15683     409  modules\test_settings\routes.py
+   16009     470  modules\results\templates\results\enter.html
+   16474     468  modules\orders\templates\orders\list.html
+   16759     515  modules\lab\templates\lab\verify.html
+   17513     452  modules\orders\templates\orders\print.html
+   18048     442  modules\billing\invoice_generator.py
+   18893     523  modules\orders\templates\orders\view.html
+   23316     595  modules\reports\pdf_generator.py
+   23655     593  modules\orders\routes.py
+   32207     439  logs\app.log
+   46881    1197  modules\orders\templates\orders\new.html
+   49823     365  static\images\logo.png
+   49823     365  static\uploads\branding\logo_212382e2461a.png
+  131072     365  instance\database.backup.db
+  458752    4161  instance\database.db

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ test.name }} — LabMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="mb-3">
+    <a href="{{ url_for('tests.list_tests') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Tests
+    </a>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+          <h3 class="fw-bold mb-1">{{ test.name }}</h3>
+          <p class="text-muted small mb-0">
+            <code>{{ test.code }}</code>
+            {% if test.category_ref %} · {{ test.category_ref.name }}{% endif %}
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('tests.edit_test', test_id=test.id) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-pencil"></i> Edit
+          </a>
+          <form method="POST" action="{{ url_for('tests.delete_test', test_id=test.id) }}" onsubmit="return confirm('Archive this test?');">
+            <button class="btn btn-outline-danger"><i class="bi bi-trash"></i> Archive</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Price</p>
+          <p class="fw-semibold text-success fs-5">${{ '%.2f'|format(test.price) }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Unit</p>
+          <p class="fw-semibold">{{ test.unit or '—' }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Normal Range</p>
+          <p class="fw-semibold">{{ test.normal_range or '—' }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Turnaround</p>
+          <p class="fw-semibold">{{ test.turnaround_hours }} hours</p>
+        </div>
+        {% if test.description %}
+        <div class="col-12">
+          <p class="text-muted small mb-1">Description</p>
+          <p class="fw-semibold">{{ test.description }}</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,281 @@
+{% extends "test_settings/base.html" %}
+
+{% block title %}Test Formats · Lab Test Settings{% endblock %}
+
+{% block settings_content %}
+
+  {# ============ FILTER BAR ============ #}
+  <form method="GET" action="{{ url_for('test_settings.formats') }}"
+        class="settings-filters mb-2">
+
+    <div class="row">
+
+      <div class="col-12 col-md-5">
+        <label>Search</label>
+        <input type="text"
+               name="q"
+               class="form-control"
+               placeholder="Search by code or name..."
+               value="{{ q }}">
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label>Format</label>
+        <select name="format" class="form-select">
+          <option value="">All formats</option>
+          {% for key, label in result_formats %}
+            <option value="{{ key }}" {% if fmt_filter == key %}selected{% endif %}>
+              {{ label }}{% if format_counts[key] %} ({{ format_counts[key] }}){% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label>Category</label>
+        <select name="category" class="form-select">
+          <option value="">All categories</option>
+          {% for c in categories %}
+            <option value="{{ c.id }}" {% if cat_filter == c.id|string %}selected{% endif %}>
+              {{ c.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-12 col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <div class="col-12 d-flex align-items-center gap-2 mt-1 flex-wrap">
+        {% if q or fmt_filter or cat_filter %}
+        <a href="{{ url_for('test_settings.formats') }}"
+           class="btn btn-sm btn-outline-danger ms-auto">
+          <i class="bi bi-x-lg"></i> Clear filters
+        </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </form>
+
+  {# ============ TESTS TABLE ============ #}
+  <div class="settings-table-wrap">
+
+    <div class="settings-table-header">
+      <div class="title">
+        <i class="bi bi-list-ul"></i> Tests &amp; Panels
+        <span class="text-muted small">({{ tests|length }} shown)</span>
+      </div>
+      <div class="actions">
+        <a href="{{ url_for('tests.new_test') }}"
+           class="btn btn-sm btn-primary">
+          <i class="bi bi-plus-lg"></i> New Test
+        </a>
+        <a href="{{ url_for('test_settings.panel_new') }}"
+           class="btn btn-sm btn-outline-primary">
+          <i class="bi bi-collection"></i> New Panel
+        </a>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="settings-table">
+        <thead>
+          <tr>
+            <th style="width: 90px;">Code</th>
+            <th>Test Name</th>
+            <th class="d-none d-md-table-cell" style="width: 160px;">Category</th>
+            <th class="d-none d-lg-table-cell" style="width: 120px;">Unit</th>
+            <th class="d-none d-lg-table-cell" style="width: 160px;">Normal Range</th>
+            <th style="width: 260px;">Result Format</th>
+            <th class="text-end" style="width: 90px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for test in tests %}
+            <tr data-test-id="{{ test.id }}">
+              <td><code>{{ test.code }}</code></td>
+
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  {% if test.is_panel %}
+                    <i class="bi bi-collection text-primary" title="Panel"></i>
+                  {% endif %}
+                  <span>{{ test.name }}</span>
+                </div>
+                {% if test.description %}
+                  <div class="text-muted small text-truncate"
+                       style="max-width: 400px;"
+                       title="{{ test.description }}">
+                    {{ test.description }}
+                  </div>
+                {% endif %}
+              </td>
+
+              <td class="d-none d-md-table-cell">
+                {% if test.category_ref %}
+                  <span class="badge text-bg-light border">
+                    {{ test.category_ref.name }}
+                  </span>
+                {% else %}
+                  <span class="text-muted small">—</span>
+                {% endif %}
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                {% if test.unit %}
+                  <span class="text-muted">{{ test.unit }}</span>
+                {% else %}
+                  <span class="text-muted small">—</span>
+                {% endif %}
+              </td>
+
+              <td class="d-none d-lg-table-cell">
+                {% if test.normal_range %}
+                  <span class="text-muted">{{ test.normal_range }}</span>
+                {% else %}
+                  <span class="text-muted small">—</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="format-selector">
+                  <select class="form-select form-select-sm format-dropdown"
+                          data-test-id="{{ test.id }}"
+                          data-original="{{ test.result_format }}">
+                    {% for key, label in result_formats %}
+                      <option value="{{ key }}"
+                        {% if test.result_format == key %}selected{% endif %}>
+                        {{ label }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  <span class="format-status"></span>
+                </div>
+              </td>
+
+              <td class="text-end">
+                <a href="{{ url_for('tests.edit_test', test_id=test.id) }}"
+                   class="btn btn-sm btn-outline-primary py-0 px-1"
+                   title="Edit test">
+                  <i class="bi bi-pencil" style="font-size:0.75rem;"></i>
+                </a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="7">
+                <div class="settings-empty">
+                  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                  <div class="fw-semibold">No tests match these filters</div>
+                  <div class="small">
+                    Try clearing the search or picking a different format.
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  {# ============ TOAST (AJAX feedback) ============ #}
+  <div class="test-settings-toast" id="settingsToast" aria-live="polite">
+    <span class="toast-message"></span>
+  </div>
+
+{% endblock %}
+
+{% block settings_scripts %}
+<script>
+(function () {
+  'use strict';
+
+  const UPDATE_ENDPOINT = '/settings/tests/formats/';
+  const CSRF = "{{ csrf_token() if csrf_token is defined else '' }}";
+  const toast = document.getElementById('settingsToast');
+
+  function showToast(message, kind) {
+    if (!toast) return;
+    toast.className = 'test-settings-toast show ' + (kind || 'success');
+    toast.querySelector('.toast-message').textContent = message;
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
+  document.querySelectorAll('.format-dropdown').forEach(select => {
+    select.addEventListener('change', async (e) => {
+      const el = e.target;
+      const testId = el.dataset.testId;
+      const oldFormat = el.dataset.original;
+      const newFormat = el.value;
+      const status = el.parentElement.querySelector('.format-status');
+
+      if (newFormat === oldFormat) return;
+
+      el.disabled = true;
+      status.textContent = 'Saving…';
+      status.className = 'format-status saving';
+
+      try {
+        const resp = await fetch(UPDATE_ENDPOINT + testId + '/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': CSRF,
+            'Accept': 'application/json',
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({ result_format: newFormat }),
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok || !data.ok) {
+          throw new Error(data.error || 'Save failed');
+        }
+
+        el.dataset.original = data.result_format;
+        status.textContent = '✓';
+        status.className = 'format-status saved';
+        showToast('Format updated: ' + data.label, 'success');
+
+        if (data.panel_changed) {
+          showToast('Panel status changed — reload to refresh list', 'info');
+          setTimeout(() => window.location.reload(), 900);
+        }
+
+        setTimeout(() => {
+          status.textContent = '';
+          status.className = 'format-status';
+        }, 1500);
+
+      } catch (err) {
+        console.error('[format-update]', err);
+        el.value = oldFormat;
+        status.textContent = '✗';
+        status.className = 'format-status failed';
+        showToast(err.message || 'Could not save format', 'danger');
+
+        setTimeout(() => {
+          status.textContent = '';
+          status.className = 'format-status';
+        }, 2500);
+
+      } finally {
+        el.disabled = false;
+      }
+    });
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit' if test else 'Add' }} Test — LabMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div style="max-width: 900px;">
+
+    <div class="mb-3">
+      <a href="{{ url_for('tests.list_tests') }}" class="text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Back to Tests
+      </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+
+        <h4 class="fw-bold mb-4">
+          {% if test %}<i class="bi bi-pencil-square"></i> Edit Test
+          {% else %}<i class="bi bi-plus-circle"></i> Add New Test{% endif %}
+        </h4>
+
+        <form method="POST">
+          <div class="row g-3">
+
+            <div class="col-md-3">
+              <label class="form-label">Code <span class="text-danger">*</span></label>
+              <input type="text" name="code" class="form-control" required
+                value="{{ form.code if form else (test.code if test else '') }}"
+                placeholder="e.g. CBC">
+            </div>
+
+            <div class="col-md-9">
+              <label class="form-label">Test Name <span class="text-danger">*</span></label>
+              <input type="text" name="name" class="form-control" required
+                value="{{ form.name if form else (test.name if test else '') }}"
+                placeholder="e.g. Complete Blood Count">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Category</label>
+              {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
+              <select name="category_id" class="form-select">
+                <option value="">— Select —</option>
+                {% for c in categories %}
+                <option value="{{ c.id }}" {% if cur_cat|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Price ($)</label>
+              <input type="number" step="0.01" min="0" name="price" class="form-control"
+                value="{{ form.price if form else (test.price if test else '0.00') }}">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Turnaround (hours)</label>
+              <input type="number" min="1" name="turnaround_hours" class="form-control"
+                value="{{ form.turnaround_hours if form else (test.turnaround_hours if test else 24) }}">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Unit</label>
+              <input type="text" name="unit" class="form-control"
+                value="{{ form.unit if form else (test.unit if test else '') }}"
+                placeholder="e.g. mg/dL, g/dL, x10^9/L">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Normal Range</label>
+              <input type="text" name="normal_range" class="form-control"
+                value="{{ form.normal_range if form else (test.normal_range if test else '') }}"
+                placeholder="e.g. 70 - 100">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Description / Notes</label>
+              <textarea name="description" class="form-control" rows="3">{{ form.description if form else (test.description if test else '') }}</textarea>
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('tests.list_tests') }}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg"></i> {{ 'Update' if test else 'Save' }} Test
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

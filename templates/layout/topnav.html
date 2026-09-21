@@ -1,0 +1,112 @@
+<nav class="app-topnav" id="appTopnav">
+  <div class="nav-container">
+
+    <!-- Dashboard -->
+    <a href="{{ url_for('dashboard.index') }}"
+       class="topnav-link {% if request.endpoint and request.endpoint.startswith('dashboard.') %}active{% endif %}">
+      <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+    </a>
+
+    <!-- Operations dropdown -->
+    <div class="topnav-item">
+      <button type="button" class="topnav-link
+        {% if request.endpoint and (request.endpoint.startswith('orders.') or request.endpoint.startswith('results.') or request.endpoint.startswith('reports.')) %}active{% endif %}">
+        <i class="bi bi-clipboard2-pulse"></i>
+        <span>Operations</span>
+        <i class="bi bi-chevron-down small"></i>
+      </button>
+      <div class="topnav-dropdown">
+        {# ─── Patient Registration (opens the FORM) ─── #}
+        <a href="{{ url_for('orders.new_order') }}"
+           class="dropdown-item {% if request.endpoint == 'orders.new_order' %}active{% endif %}">
+          <i class="bi bi-person-plus"></i> Patient Registration
+        </a>
+
+        {# ─── Daily Ledger (opens the LIST) ─── #}
+        <a href="{{ url_for('orders.list_orders') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('orders.') and request.endpoint != 'orders.new_order' %}active{% endif %}">
+          <i class="bi bi-journal-text"></i> Daily Ledger
+        </a>
+
+        <a href="{{ url_for('results.index') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('results.') %}active{% endif %}">
+          <i class="bi bi-clipboard-check"></i> Results
+        </a>
+        <a href="{{ url_for('reports.index') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}">
+          <i class="bi bi-file-earmark-medical"></i> Reports
+        </a>
+      </div>
+    </div>
+
+    <!-- Laboratory (admin & doctor only) -->
+    {% if current_user.role in ['admin', 'doctor'] %}
+    <a href="{{ url_for('lab.verify_queue') }}"
+       class="topnav-link {% if request.endpoint and request.endpoint.startswith('lab.') %}active{% endif %}">
+      <i class="bi bi-clipboard2-check"></i><span>Laboratory</span>
+    </a>
+    {% endif %}
+
+    <!-- Cash Summary (was: Billing) -->
+    {% if current_user.role in ['admin', 'receptionist'] %}
+    <a href="{{ url_for('billing.index') }}"
+       class="topnav-link {% if request.endpoint and request.endpoint.startswith('billing.') %}active{% endif %}">
+      <i class="bi bi-cash-coin"></i><span>Cash Summary</span>
+    </a>
+    {% endif %}
+
+    <!-- Administration (admin only) -->
+    {% if current_user.role == 'admin' %}
+    <div class="topnav-item">
+      <button type="button" class="topnav-link
+        {% if request.endpoint and (request.endpoint.startswith('users.') or request.endpoint.startswith('audit.') or request.endpoint.startswith('settings.') or request.endpoint.startswith('test_settings.') or request.endpoint.startswith('form_settings.') or request.endpoint.startswith('patients.')) %}active{% endif %}">
+        <i class="bi bi-shield-check"></i>
+        <span>Administration</span>
+        <i class="bi bi-chevron-down small"></i>
+      </button>
+      <div class="topnav-dropdown">
+
+        <div class="dropdown-section">Manage</div>
+        <a href="{{ url_for('patients.list_patients') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('patients.') %}active{% endif %}">
+          <i class="bi bi-people"></i> Patient Directory
+        </a>
+        <a href="{{ url_for('users.list_users') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('users.') %}active{% endif %}">
+          <i class="bi bi-person-badge"></i> Users
+        </a>
+        <a href="{{ url_for('audit.index') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('audit.') %}active{% endif %}">
+          <i class="bi bi-shield-check"></i> Audit Log
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <div class="dropdown-section">Configuration</div>
+
+        <a href="{{ url_for('test_settings.formats') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('test_settings.') %}active{% endif %}">
+          <i class="bi bi-sliders2"></i> Lab Test Settings
+        </a>
+
+        <a href="{{ url_for('form_settings.index') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('form_settings.') %}active{% endif %}">
+          <i class="bi bi-ui-checks"></i> Reception Form
+        </a>
+
+        <a href="{{ url_for('settings.branding') }}"
+           class="dropdown-item {% if request.endpoint == 'settings.branding' %}active{% endif %}">
+          <i class="bi bi-gear"></i> Branding Settings
+        </a>
+
+        <a href="{{ url_for('settings.report_signatures') }}"
+           class="dropdown-item {% if request.endpoint == 'settings.report_signatures' %}active{% endif %}">
+          <i class="bi bi-person-badge"></i> Report Signatures
+        </a>
+
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</nav>

@@ -1,0 +1,501 @@
+{% extends 'base.html' %}
+
+{% block title %}Enter Results — Lab # {{ order.order_code }}{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Enter Results — flat dense layout (Daily Ledger style)
+   ============================================================ */
+
+.enter-page {
+  max-width: 1100px;
+  padding: 12px 16px 40px;
+}
+
+.enter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.enter-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.enter-header p {
+  font-size: 0.78rem;
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+
+.enter-meta {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px 24px;
+  font-size: 0.85rem;
+}
+.enter-meta .row-item {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.enter-meta .key {
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  min-width: 70px;
+}
+.enter-meta .val { color: var(--bs-body-color); }
+
+.enter-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.enter-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 0;
+}
+.enter-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.enter-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.enter-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.enter-table tbody tr.filled {
+  background: rgba(25, 135, 84, 0.06);
+}
+.enter-table code {
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  background: var(--bs-tertiary-bg);
+  border-radius: 3px;
+}
+.enter-table .test-name { font-weight: 600; }
+.enter-table .test-code {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+.enter-table .text-muted-sm {
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+}
+
+/* Panel header row */
+.enter-table tr.panel-header td {
+  background: var(--bs-tertiary-bg);
+  font-weight: 600;
+  color: #1e40af;
+}
+
+/* Child row indent */
+.enter-table tr.child-row td.test-cell {
+  padding-left: 26px;
+  font-weight: 400;
+}
+
+/* Locked / already-verified section */
+.locked-section {
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+}
+.locked-section .head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+}
+.locked-section .head .count {
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+.locked-section .list {
+  margin-top: 8px;
+  padding-left: 4px;
+}
+.locked-section .item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--bs-border-color-translucent);
+  font-size: 0.8rem;
+}
+.locked-section .item:last-child { border-bottom: none; }
+.locked-section .item .name {
+  flex: 1;
+  color: var(--bs-secondary-color);
+}
+.locked-section .item .value {
+  font-weight: 600;
+  color: var(--bs-success);
+}
+.locked-section .item .check {
+  color: var(--bs-success);
+  font-size: 0.85rem;
+}
+
+.enter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.enter-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--bs-secondary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="enter-page">
+
+  <div class="mb-2">
+    <a href="{{ url_for('results.index') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Pending Results
+    </a>
+  </div>
+
+  {# ============ HEADER ============ #}
+  <div class="enter-header">
+    <div>
+      <h3><i class="bi bi-pencil-square"></i> Enter Results</h3>
+      <p>Lab # <code>{{ order.order_code }}</code></p>
+    </div>
+    <div class="d-flex gap-2">
+      {% set badge = {'pending':'warning','collected':'info','completed':'primary','approved':'success','correction':'warning','cancelled':'secondary'} %}
+      <span class="badge bg-{{ badge.get(order.status, 'secondary') }} {% if order.status in ['pending','collected','correction'] %}text-dark{% endif %}">
+        {{ order.status|capitalize }}
+      </span>
+      <a href="{{ url_for('orders.view_order', order_id=order.id) }}"
+         class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-receipt"></i> View Details
+      </a>
+      <a href="{{ url_for('results.patient_history', patient_id=order.patient.id) }}"
+         class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-clock-history"></i> History
+      </a>
+    </div>
+  </div>
+
+  {# ============ META BLOCK ============ #}
+  <div class="enter-meta">
+    <div class="row-item">
+      <span class="key">Patient:</span>
+      <span class="val">{{ order.patient.full_name }}</span>
+    </div>
+    <div class="row-item">
+      <span class="key">Patient #:</span>
+      <span class="val"><code>{{ order.patient.patient_code }}</code></span>
+    </div>
+    <div class="row-item">
+      <span class="key">Age / Gender:</span>
+      <span class="val">
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
+      </span>
+    </div>
+    <div class="row-item">
+      <span class="key">Requested:</span>
+      <span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span>
+    </div>
+  </div>
+
+  {# ============ CORRECTION BANNER ============ #}
+  {% if order.status == 'correction' %}
+  <div class="alert alert-warning py-2 small mb-2">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <strong>Correction requested</strong>
+    {% if order.correction_by %} by {{ order.correction_by.full_name }}{% endif %}
+    {% if order.correction_at %} on {{ order.correction_at | localtime('%d-%b-%Y %I:%M %p') }}{% endif %}:
+    <div class="mt-1 ps-3 fw-semibold">{{ order.correction_note }}</div>
+    <div class="mt-1 small text-muted">
+      Fix the issues above and re-save — the report will need re-approval.
+    </div>
+  </div>
+  {% endif %}
+
+  {# ============ ALERT ============ #}
+  {% if order.status == 'approved' %}
+  <div class="alert alert-success py-2 small">
+    <i class="bi bi-check-circle-fill"></i>
+    This report is <strong>approved</strong>. Editing any result will
+    reset it to <strong>completed</strong> and require re-approval.
+  </div>
+  {% elif order.all_results_done %}
+  <div class="alert alert-success py-2 small">
+    <i class="bi bi-check-circle-fill"></i>
+    All results entered. This order is <strong>completed</strong> —
+    awaiting pathologist approval.
+  </div>
+  {% else %}
+  <div class="alert alert-info py-2 small">
+    <i class="bi bi-info-circle"></i>
+    Fill in the result for each test. Order auto-completes once all values are filled.
+  </div>
+  {% endif %}
+
+  {# ============================================================
+     Build the working lists in-template:
+       pending_items  — top-level items still needing action
+       verified_items — already verified (locked)
+       pending_leaves — flat list of leaf items to render as inputs
+     ============================================================ #}
+  {% set pending_items = [] %}
+  {% set verified_items = [] %}
+  {% set pending_leaves = [] %}
+
+  {% for top in order.top_level_items %}
+    {% if top.is_verified %}
+      {% set _ = verified_items.append(top) %}
+    {% else %}
+      {% if top.has_children %}
+        {% set _ = pending_items.append(top) %}
+        {# queue each child that needs a result #}
+        {% for child in top.children %}
+          {% if not child.result_value %}
+            {% set _ = pending_leaves.append(child) %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% if not top.result_value %}
+          {% set _ = pending_items.append(top) %}
+          {% set _ = pending_leaves.append(top) %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {# ============ EDITABLE FORM ============ #}
+  {% if pending_leaves %}
+  <form method="POST">
+
+    <div class="enter-table-wrap">
+      <table class="enter-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">Test</th>
+            <th style="width: 16%;">Normal Range</th>
+            <th style="width: 10%;">Unit</th>
+            <th style="width: 24%;">Result</th>
+            <th>Notes</th>
+            <th style="width: 60px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in pending_items %}
+
+            {% if item.has_children %}
+              {# ---- Panel header row (no input) ---- #}
+              <tr class="panel-header">
+                <td>
+                  <i class="bi bi-collection"></i>
+                  {{ item.test.name }}
+                  <span class="text-muted small">({{ item.children|length }} params)</span>
+                </td>
+                <td class="text-muted-sm">—</td>
+                <td class="text-muted-sm">—</td>
+                <td class="text-muted-sm">See children below</td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              {# ---- Children with inputs ---- #}
+              {% for child in item.children %}
+                {% if not child.result_value %}
+                <tr class="child-row {% if child.result_value %}filled{% endif %}">
+                  <td class="test-cell">
+                    <span class="text-muted">↳</span>
+                    {{ child.test.name }}
+                    <div class="test-code"><code>{{ child.test.code }}</code></div>
+                  </td>
+                  <td class="text-muted-sm">{{ child.test.normal_range or '—' }}</td>
+                  <td class="text-muted-sm">{{ child.test.unit or '—' }}</td>
+                  <td>
+                    <input
+                      type="text"
+                      name="result_value_{{ child.id }}"
+                      value="{{ child.result_value or '' }}"
+                      class="form-control form-control-sm"
+                      placeholder="Enter value"
+                      autocomplete="off"
+                    >
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="result_notes_{{ child.id }}"
+                      value="{{ child.result_notes or '' }}"
+                      class="form-control form-control-sm"
+                      placeholder="Optional note"
+                    >
+                  </td>
+                  <td class="text-end"></td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+
+            {% else %}
+              {# ---- Standalone test with input ---- #}
+              <tr class="{% if item.result_value %}filled{% endif %}">
+                <td>
+                  <div class="test-name">{{ item.test.name }}</div>
+                  <div class="test-code"><code>{{ item.test.code }}</code></div>
+                </td>
+                <td class="text-muted-sm">{{ item.test.normal_range or '—' }}</td>
+                <td class="text-muted-sm">{{ item.test.unit or '—' }}</td>
+                <td>
+                  <input
+                    type="text"
+                    name="result_value_{{ item.id }}"
+                    value="{{ item.result_value or '' }}"
+                    class="form-control form-control-sm"
+                    placeholder="Enter value"
+                    autocomplete="off"
+                  >
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="result_notes_{{ item.id }}"
+                    value="{{ item.result_notes or '' }}"
+                    class="form-control form-control-sm"
+                    placeholder="Optional note"
+                  >
+                </td>
+                <td class="text-end"></td>
+              </tr>
+            {% endif %}
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="enter-actions">
+      <a href="{{ url_for('results.index') }}" class="btn btn-sm btn-outline-secondary">
+        Cancel
+      </a>
+      <button type="submit" class="btn btn-sm btn-primary">
+        <i class="bi bi-check-lg"></i> Save All Results
+      </button>
+    </div>
+
+  </form>
+
+  {% else %}
+  <div class="enter-table-wrap">
+    <div class="enter-empty">
+      <i class="bi bi-check2-circle fs-3 d-block mb-2"></i>
+      <div class="fw-semibold">Nothing left to enter</div>
+      <div class="small">
+        All pending tests have results. Verified tests are listed below.
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {# ============ VERIFIED (LOCKED) SECTION ============ #}
+  {% if verified_items %}
+  <div class="locked-section">
+    <div class="head" onclick="toggleLocked()">
+      <i class="bi bi-check-circle-fill text-success"></i>
+      <span>Verified results</span>
+      <span class="count">({{ verified_items|length }} test{{ 's' if verified_items|length != 1 }})</span>
+      <i class="bi bi-chevron-down ms-auto" id="lockedChevron"></i>
+    </div>
+    <div class="list" id="lockedList" style="display:none;">
+      {% for top in verified_items %}
+        {% if top.has_children %}
+          <div class="item">
+            <span class="name">
+              <i class="bi bi-collection"></i>
+              {{ top.test.name }}
+              <span class="text-muted small">({{ top.children|length }} params)</span>
+            </span>
+            <span class="value">
+              {% if top.verified_at %}
+                {{ top.verified_at | localtime('%d-%b-%y %I:%M %p') }}
+              {% endif %}
+            </span>
+            <span class="check"><i class="bi bi-check-lg"></i></span>
+          </div>
+          {% for child in top.children %}
+          <div class="item" style="padding-left: 24px;">
+            <span class="name">
+              <i class="bi bi-arrow-return-right"></i>
+              {{ child.test.name }}
+            </span>
+            <span class="value">{{ child.result_value or '—' }}</span>
+            <span class="check"></span>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="item">
+            <span class="name">
+              <i class="bi bi-droplet"></i>
+              {{ top.test.name }}
+            </span>
+            <span class="value">{{ top.result_value or '—' }}</span>
+            <span class="check"><i class="bi bi-check-lg"></i></span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleLocked() {
+  var list = document.getElementById('lockedList');
+  var chev = document.getElementById('lockedChevron');
+  if (!list) return;
+  var open = list.style.display !== 'none';
+  list.style.display = open ? 'none' : 'block';
+  if (chev) {
+    chev.classList.toggle('bi-chevron-down', open);
+    chev.classList.toggle('bi-chevron-up', !open);
+  }
+}
+</script>
+{% endblock %}

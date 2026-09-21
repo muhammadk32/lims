@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Directory — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.pd-page { max-width: 100%; padding: 12px 16px 40px; }
+
+.pd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pd-header h3 { font-weight: 700; margin: 0; font-size: 1.25rem; }
+
+/* Stats cards */
+.pd-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.pd-stat {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pd-stat .label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.pd-stat .value {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Filter bar */
+.pd-filters {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.pd-filters .form-control,
+.pd-filters .form-select {
+  font-size: 0.82rem;
+  padding: 0.28rem 0.55rem;
+  min-height: 32px;
+}
+
+/* Table */
+.pd-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.pd-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 7px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.pd-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.pd-table tbody tr:last-child td { border-bottom: none; }
+.pd-table tbody tr:hover { background: var(--bs-tertiary-bg); cursor: pointer; }
+.pd-table .text-end { text-align: right; }
+.pd-table .text-center { text-align: center; }
+
+.pd-table .serial-cell {
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+}
+
+.pd-table .patient-name {
+  font-weight: 600;
+}
+.pd-table .patient-meta {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.gender-pill {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.gender-pill.Male   { background: #cff4fc; color: #055160; }
+.gender-pill.Female { background: #f8d7da; color: #58151c; }
+.gender-pill.Other  { background: #e2e3e5; color: #41464b; }
+
+.pd-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+
+/* Pagination */
+.pd-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pd-page">
+
+  {# ============ HEADER ============ #}
+  <div class="pd-header">
+    <div>
+      <h3><i class="bi bi-people"></i> Patient Directory</h3>
+      <p class="text-muted small mb-0">All registered patients with their billing history</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('patients.export_csv', q=q, gender=gender_filter) }}"
+         class="btn btn-outline-success btn-sm">
+        <i class="bi bi-file-earmark-arrow-down"></i> Export CSV
+      </a>
+    </div>
+  </div>
+
+  {# ============ STATS ============ #}
+  <div class="pd-stats">
+    <div class="pd-stat">
+      <span class="label">Total Patients</span>
+      <span class="value">{{ total_patients }}</span>
+    </div>
+    <div class="pd-stat">
+      <span class="label">New This Month</span>
+      <span class="value text-success">{{ new_this_month }}</span>
+    </div>
+    <div class="pd-stat">
+      <span class="label">Showing</span>
+      <span class="value">{{ rows|length }} of {{ pagination.total }}</span>
+    </div>
+  </div>
+
+  {# ============ FILTERS ============ #}
+  <form method="GET" action="{{ url_for('patients.list_patients') }}" class="pd-filters">
+    <div class="row g-2">
+      <div class="col-12 col-md-6">
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="Search by name, phone, or patient code...">
+      </div>
+      <div class="col-6 col-md-3">
+        <select name="gender" class="form-select">
+          <option value="">All genders</option>
+          <option value="Male"   {% if gender_filter == 'Male' %}selected{% endif %}>Male</option>
+          <option value="Female" {% if gender_filter == 'Female' %}selected{% endif %}>Female</option>
+          <option value="Other"  {% if gender_filter == 'Other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm flex-fill">
+          <i class="bi bi-search"></i> Search
+        </button>
+        {% if q or gender_filter %}
+        <a href="{{ url_for('patients.list_patients') }}"
+           class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-x-lg"></i>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+
+  {# ============ TABLE ============ #}
+  {% set start_index = (pagination.page - 1) * pagination.per_page %}
+  <div class="pd-table-wrap">
+    <table class="pd-table">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 50px;">#</th>
+          <th>Name</th>
+          <th style="width: 130px;">Phone</th>
+          <th class="text-center" style="width: 55px;">Age</th>
+          <th class="text-center" style="width: 75px;">Gender</th>
+          <th style="width: 110px;">Last Visit</th>
+          <th class="text-center" style="width: 65px;">Orders</th>
+          <th class="text-end" style="width: 100px;">Total Billed</th>
+          <th class="text-end" style="width: 60px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        {% set p = row.patient %}
+        <tr onclick="window.location='{{ url_for('patients.view_patient', patient_id=p.id) }}'">
+          <td class="text-center serial-cell">{{ start_index + loop.index }}</td>
+          <td>
+            <div class="patient-name">{{ p.full_name }}</div>
+            {% if p.email %}
+              <div class="patient-meta">{{ p.email }}</div>
+            {% endif %}
+          </td>
+          <td>{{ p.phone or '—' }}</td>
+          <td class="text-center">{{ p.compute_age() or '—' }}</td>
+          <td class="text-center">
+            {% if p.gender %}
+              <span class="gender-pill {{ p.gender }}">{{ p.gender }}</span>
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-muted" style="font-size:0.75rem;">
+            {% if row.last_visit %}
+              {{ row.last_visit | localtime('%d/%m/%Y') }}
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-center">
+            <span class="badge bg-secondary" style="font-size:0.68rem;">{{ row.order_count }}</span>
+          </td>
+          <td class="text-end fw-semibold">{{ config.currency_symbol }} {{ '%.2f'|format(row.total_billed) }}</td>
+          <td class="text-end" onclick="event.stopPropagation();">
+            <a href="{{ url_for('patients.edit_patient', patient_id=p.id) }}"
+               class="btn btn-sm btn-outline-secondary py-0 px-1" title="Edit">
+              <i class="bi bi-pencil" style="font-size:0.75rem;"></i>
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9">
+            <div class="pd-empty">
+              <i class="bi bi-people fs-3 d-block mb-2"></i>
+              <div class="fw-semibold">No patients found</div>
+              <div class="small">
+                {% if q or gender_filter %}
+                  Try adjusting your filters.
+                {% else %}
+                  Patients will appear here after registration.
+                {% endif %}
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# ============ PAGINATION ============ #}
+  {% if pagination.pages > 1 %}
+  <nav class="pd-pagination">
+    <ul class="pagination pagination-sm">
+      <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('patients.list_patients', page=pagination.prev_num, q=q, gender=gender_filter) }}">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      </li>
+      {% for num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if num %}
+        <li class="page-item {% if num == pagination.page %}active{% endif %}">
+          <a class="page-link"
+             href="{{ url_for('patients.list_patients', page=num, q=q, gender=gender_filter) }}">{{ num }}</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+      <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+        <a class="page-link"
+           href="{{ url_for('patients.list_patients', page=pagination.next_num, q=q, gender=gender_filter) }}">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  {% endif %}
+
+</div>
+{% endblock %}

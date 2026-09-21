@@ -1,0 +1,565 @@
+{% extends 'base.html' %}
+
+{% block title %}Lab # {{ order.order_code }} — LabMS{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Order view — dense clinical layout (for verification)
+   ============================================================ */
+
+.ov-page {
+  max-width: 1200px;
+  padding: 12px 16px 40px;
+}
+
+/* Header */
+.ov-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ov-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.ov-header .sub {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+  margin-top: 2px;
+}
+.ov-header .actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Meta strip */
+.ov-meta {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px 24px;
+  font-size: 0.85rem;
+}
+.ov-meta .row-item {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.ov-meta .key {
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  min-width: 90px;
+}
+.ov-meta .val { color: var(--bs-body-color); }
+
+/* Tests table */
+.ov-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.ov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 0;
+}
+.ov-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.ov-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.ov-table tbody tr:last-child td { border-bottom: none; }
+.ov-table tbody tr:hover { background: var(--bs-tertiary-bg); }
+.ov-table tbody tr.verified {
+  background: rgba(25, 135, 84, 0.04);
+}
+.ov-table tbody tr.panel-header {
+  background: var(--bs-tertiary-bg);
+}
+.ov-table tbody tr.panel-header td {
+  font-weight: 600;
+  color: #1e40af;
+}
+.ov-table tbody tr.child-row td.test-cell {
+  padding-left: 26px;
+  font-weight: 400;
+}
+.ov-table code {
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  background: var(--bs-tertiary-bg);
+  border-radius: 3px;
+}
+.ov-table .col-check {
+  width: 36px;
+  text-align: center;
+}
+.ov-table .text-end { text-align: right; }
+
+.test-name { font-weight: 600; }
+.test-code {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+.result-cell {
+  font-weight: 600;
+  text-align: right;
+}
+.result-cell.empty { color: var(--bs-secondary-color); font-weight: 400; }
+.unit-cell, .range-cell {
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+}
+
+.verified-tick {
+  color: #198754;
+  font-weight: 700;
+}
+
+.params-badge {
+  font-size: 0.66rem;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #cff4fc;
+  color: #055160;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* Empty state */
+.ov-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ov-page">
+
+  {# ============ HEADER ============ #}
+  <div class="ov-header">
+    <div>
+      <h3>
+        <i class="bi bi-receipt"></i>
+        Lab # <code>{{ order.order_code }}</code>
+      </h3>
+      <div class="sub">
+        {{ order.patient.full_name }} · {{ order.patient.patient_code }}
+        · Registered {{ order.created_at | localtime('%d/%m/%Y %I:%M %p') }}
+      </div>
+    </div>
+    <div class="actions">
+      <a href="{{ url_for('orders.list_orders') }}"
+         class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back
+      </a>
+      <a href="{{ url_for('results.enter', order_id=order.id) }}"
+         class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-pencil-square"></i> Enter Results
+      </a>
+
+      {% if current_user.role in ['admin', 'doctor'] %}
+      <button type="button"
+              class="btn btn-sm btn-success"
+              id="approveSelectedBtn"
+              disabled
+              onclick="submitApprove()">
+        <i class="bi bi-check-circle"></i>
+        Approve Selected
+        <span class="badge bg-white text-success ms-1" id="approveCount" style="display:none;">0</span>
+      </button>
+      <button type="button"
+              class="btn btn-sm btn-warning"
+              id="sendBackSelectedBtn"
+              disabled
+              onclick="openSendBack()">
+        <i class="bi bi-arrow-return-left"></i>
+        Send Back Selected
+        <span class="badge bg-white text-warning ms-1" id="sendBackCount" style="display:none;">0</span>
+      </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ============ CORRECTION BANNER ============ #}
+  {% if order.needs_correction %}
+  <div class="alert alert-warning py-2 small mb-2">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <strong>Correction requested</strong>
+    {% if order.correction_by %} by {{ order.correction_by.full_name }}{% endif %}
+    {% if order.correction_at %} on {{ order.correction_at | localtime('%d/%m/%Y %I:%M %p') }}{% endif %}:
+    <div class="mt-1 ps-3">{{ order.correction_note }}</div>
+  </div>
+  {% endif %}
+
+  {# ============ APPROVED BANNER ============ #}
+  {% if order.is_approved %}
+  <div class="alert alert-success py-2 small mb-2">
+    <i class="bi bi-check-circle-fill"></i>
+    <strong>Approved</strong>
+    {% if order.reported_by %} by {{ order.reported_by.full_name }}{% endif %}
+    {% if order.reported_at %} on {{ order.reported_at | localtime('%d/%m/%Y %I:%M %p') }}{% endif %}
+  </div>
+  {% endif %}
+
+  {# ============ META STRIP (clinical only, no money) ============ #}
+  <div class="ov-meta">
+    <div class="row-item">
+      <span class="key">Status:</span>
+      {% set status_colors = {
+        'pending':    'secondary',
+        'collected':  'info',
+        'completed':  'primary',
+        'approved':   'success',
+        'correction': 'warning',
+        'cancelled':  'dark'
+      } %}
+      <span class="val">
+        <span class="badge bg-{{ status_colors.get(order.status, 'secondary') }} {% if order.status in ['collected','correction'] %}text-dark{% endif %}">
+          {{ order.status_label }}
+        </span>
+      </span>
+    </div>
+    <div class="row-item">
+      <span class="key">Age / Gender:</span>
+      <span class="val">
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
+      </span>
+    </div>
+    <div class="row-item">
+      <span class="key">Phone:</span>
+      <span class="val">{{ order.patient.phone or '—' }}</span>
+    </div>
+    <div class="row-item">
+      <span class="key">Sample collected:</span>
+      <span class="val">
+        {% if order.sample_collected_at %}
+          {{ order.sample_collected_at | localtime('%d-%b-%Y %I:%M %p') }}
+        {% else %}—{% endif %}
+      </span>
+    </div>
+    <div class="row-item">
+      <span class="key">Referred by:</span>
+      <span class="val">{{ order.doctor.full_name if order.doctor else 'Walk-in' }}</span>
+    </div>
+    <div class="row-item">
+      <span class="key">Tests:</span>
+      <span class="val">
+        {{ order.top_level_items|length }}
+        · {{ order.verified_items|length }} verified
+        · {{ order.pending_verification_items|length }} pending
+      </span>
+    </div>
+  </div>
+
+  {# ============ TESTS TABLE (no price column) ============ #}
+  <form method="POST" id="bulkForm">
+    <input type="hidden" name="csrf_token"
+           value="{{ csrf_token() if csrf_token is defined else '' }}">
+
+    <div class="ov-table-wrap">
+      <table class="ov-table">
+        <thead>
+          <tr>
+            <th class="col-check">
+              {% if current_user.role in ['admin', 'doctor'] %}
+              <input type="checkbox" id="checkAll" onclick="toggleAll(this)"
+                     title="Select all unverified tests">
+              {% endif %}
+            </th>
+            <th style="width: 4%;">#</th>
+            <th>Test</th>
+            <th style="width: 140px;" class="text-end">Result</th>
+            <th style="width: 100px;">Unit</th>
+            <th style="width: 150px;">Normal Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.top_level_items %}
+
+            {% if item.has_children %}
+              {# ---------- Panel header row ---------- #}
+              <tr class="panel-header {% if item.is_verified %}verified{% endif %}">
+                <td class="col-check">
+                  {% if current_user.role in ['admin', 'doctor'] %}
+                    {% if item.is_verifiable and not item.is_verified %}
+                      <input type="checkbox" name="item_ids" value="{{ item.id }}"
+                             class="item-check" onclick="onItemToggle()">
+                    {% elif item.is_verified %}
+                      <span class="verified-tick" title="Verified">✓</span>
+                    {% endif %}
+                  {% elif item.is_verified %}
+                    <span class="verified-tick">✓</span>
+                  {% endif %}
+                </td>
+                <td>{{ loop.index }}</td>
+                <td>
+                  <i class="bi bi-collection text-primary"></i>
+                  {{ item.test.name if item.test else '—' }}
+                  <span class="params-badge">{{ item.children|length }} params</span>
+                </td>
+                <td class="result-cell empty">—</td>
+                <td class="unit-cell">—</td>
+                <td class="range-cell">—</td>
+              </tr>
+
+              {# ---------- Panel children ---------- #}
+              {% for child in item.children %}
+              <tr class="child-row">
+                <td class="col-check"></td>
+                <td></td>
+                <td class="test-cell">
+                  <span class="text-muted">↳</span>
+                  {{ child.test.name if child.test else '—' }}
+                </td>
+                <td class="result-cell {% if not child.result_value %}empty{% endif %}">
+                  {% if child.result_value %}
+                    {{ child.result_value }}
+                    {% if child.result_notes %}
+                      <div style="font-size:0.72rem;font-weight:400;color:var(--bs-secondary-color);font-style:italic;">
+                        {{ child.result_notes }}
+                      </div>
+                    {% endif %}
+                  {% else %}—{% endif %}
+                </td>
+                <td class="unit-cell">{{ child.test.unit or '—' }}</td>
+                <td class="range-cell">{{ child.test.normal_range or '—' }}</td>
+              </tr>
+              {% endfor %}
+
+            {% else %}
+              {# ---------- Standalone test row ---------- #}
+              <tr class="{% if item.is_verified %}verified{% endif %}">
+                <td class="col-check">
+                  {% if current_user.role in ['admin', 'doctor'] %}
+                    {% if item.is_verifiable and not item.is_verified %}
+                      <input type="checkbox" name="item_ids" value="{{ item.id }}"
+                             class="item-check" onclick="onItemToggle()">
+                    {% elif item.is_verified %}
+                      <span class="verified-tick" title="Verified">✓</span>
+                    {% endif %}
+                  {% elif item.is_verified %}
+                    <span class="verified-tick">✓</span>
+                  {% endif %}
+                </td>
+                <td>{{ loop.index }}</td>
+                <td>
+                  <div class="test-name">{{ item.test.name if item.test else '—' }}</div>
+                  {% if item.test and item.test.code %}
+                    <div class="test-code"><code>{{ item.test.code }}</code></div>
+                  {% endif %}
+                </td>
+                <td class="result-cell {% if not item.result_value %}empty{% endif %}">
+                  {% if item.result_value %}
+                    {{ item.result_value }}
+                    {% if item.result_notes %}
+                      <div style="font-size:0.72rem;font-weight:400;color:var(--bs-secondary-color);font-style:italic;">
+                        {{ item.result_notes }}
+                      </div>
+                    {% endif %}
+                  {% else %}—{% endif %}
+                </td>
+                <td class="unit-cell">{{ item.test.unit or '—' }}</td>
+                <td class="range-cell">{{ item.test.normal_range or '—' }}</td>
+              </tr>
+            {% endif %}
+
+          {% else %}
+            <tr>
+              <td colspan="6">
+                <div class="ov-empty">
+                  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                  <div class="fw-semibold">No items</div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+</div>
+
+{# ============ SEND BACK MODAL ============ #}
+<div class="modal fade" id="sendBackModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Send Back for Correction</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small text-muted">
+          The selected <strong id="sbCount">0</strong> test(s) will be sent back
+          for correction. The technician will see this note.
+        </p>
+        <div class="mb-3">
+          <label class="form-label">Reason <span class="text-danger">*</span></label>
+          <textarea id="sbReason" class="form-control" rows="4" required
+                    placeholder="e.g., Sample was hemolyzed — please repeat."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning btn-sm" onclick="submitSendBack()">
+          <i class="bi bi-arrow-return-left"></i> Send Back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  'use strict';
+
+  var approveBtn = document.getElementById('approveSelectedBtn');
+  var sendBackBtn = document.getElementById('sendBackSelectedBtn');
+  var approveCount = document.getElementById('approveCount');
+  var sendBackCount = document.getElementById('sendBackCount');
+  var checkAll = document.getElementById('checkAll');
+
+  function updateButtons() {
+    var checked = document.querySelectorAll('.item-check:checked');
+    var n = checked.length;
+
+    if (approveBtn) {
+      approveBtn.disabled = (n === 0);
+      if (approveCount) {
+        approveCount.textContent = n;
+        approveCount.style.display = (n > 0) ? 'inline-block' : 'none';
+      }
+    }
+    if (sendBackBtn) {
+      sendBackBtn.disabled = (n === 0);
+      if (sendBackCount) {
+        sendBackCount.textContent = n;
+        sendBackCount.style.display = (n > 0) ? 'inline-block' : 'none';
+      }
+    }
+
+    if (checkAll) {
+      var total = document.querySelectorAll('.item-check').length;
+      checkAll.indeterminate = (n > 0 && n < total);
+      checkAll.checked = (n > 0 && n === total);
+    }
+  }
+
+  window.toggleAll = function (source) {
+    document.querySelectorAll('.item-check').forEach(function (cb) {
+      cb.checked = source.checked;
+    });
+    updateButtons();
+  };
+
+  window.onItemToggle = function () { updateButtons(); };
+
+  window.submitApprove = function () {
+    var checked = document.querySelectorAll('.item-check:checked');
+    if (checked.length === 0) return;
+    var n = checked.length;
+    if (!confirm('Approve ' + n + ' selected test' + (n === 1 ? '' : 's') + '?')) return;
+
+    var form = document.getElementById('bulkForm');
+    form.action = '{{ url_for("lab.bulk_approve") }}';
+    form.submit();
+  };
+
+  window.openSendBack = function () {
+    var checked = document.querySelectorAll('.item-check:checked');
+    if (checked.length === 0) return;
+    document.getElementById('sbCount').textContent = checked.length;
+    document.getElementById('sbReason').value = '';
+    var modal = new bootstrap.Modal(document.getElementById('sendBackModal'));
+    modal.show();
+  };
+
+  window.submitSendBack = function () {
+    var reason = document.getElementById('sbReason').value.trim();
+    if (!reason) {
+      alert('Please enter a reason.');
+      return;
+    }
+    var checked = document.querySelectorAll('.item-check:checked');
+    if (checked.length === 0) return;
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ url_for("lab.bulk_send_back") }}';
+    form.style.display = 'none';
+
+    var csrf = document.querySelector('input[name="csrf_token"]');
+    if (csrf) {
+      var csrfInput = document.createElement('input');
+      csrfInput.type = 'hidden';
+      csrfInput.name = 'csrf_token';
+      csrfInput.value = csrf.value;
+      form.appendChild(csrfInput);
+    }
+
+    checked.forEach(function (cb) {
+      var inp = document.createElement('input');
+      inp.type = 'hidden';
+      inp.name = 'item_ids';
+      inp.value = cb.value;
+      form.appendChild(inp);
+    });
+
+    var reasonInput = document.createElement('input');
+    reasonInput.type = 'hidden';
+    reasonInput.name = 'reason';
+    reasonInput.value = reason;
+    form.appendChild(reasonInput);
+
+    document.body.appendChild(form);
+    form.submit();
+  };
+
+  updateButtons();
+
+  try {
+    var wantPatient = sessionStorage.getItem('labms_print_patient') === '1';
+    var wantLab = sessionStorage.getItem('labms_print_lab') === '1';
+    sessionStorage.removeItem('labms_print_patient');
+    sessionStorage.removeItem('labms_print_lab');
+    if (wantPatient || wantLab) {
+      setTimeout(function () {
+        window.location.replace(
+          "{{ url_for('orders.print_order', order_id=order.id) }}"
+        );
+      }, 300);
+    }
+  } catch (_) {}
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+
+{% block title %}History — {{ patient.full_name }} — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.hist-page {
+  max-width: 1100px;
+  padding: 12px 16px 40px;
+}
+
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.hist-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.hist-header p {
+  font-size: 0.78rem;
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+
+.hist-patient {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px 24px;
+  font-size: 0.85rem;
+}
+.hist-patient .key {
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  margin-right: 6px;
+}
+
+.hist-order {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.hist-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bs-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.hist-order-header .lab-code {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.hist-order-header .meta {
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.hist-table th {
+  background: #f8f9fa;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 5px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.hist-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.hist-table tr:last-child td {
+  border-bottom: none;
+}
+.hist-table .panel-row td {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #1e40af;
+}
+.hist-table .child-name {
+  padding-left: 26px;
+  font-weight: 400;
+}
+.hist-table .result-val {
+  font-weight: 600;
+}
+.hist-table .result-val.empty {
+  color: var(--bs-secondary-color);
+  font-weight: 400;
+}
+.hist-table .unit,
+.hist-table .range {
+  color: var(--bs-secondary-color);
+  font-size: 0.78rem;
+}
+.hist-table .notes {
+  font-size: 0.72rem;
+  color: var(--bs-secondary-color);
+  font-style: italic;
+}
+
+.flag-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.flag-badge.normal   { background: #d1e7dd; color: #0a3622; }
+.flag-badge.abnormal { background: #f8d7da; color: #58151c; }
+.flag-badge.unknown  { background: #e9ecef; color: #6c757d; }
+
+.status-badge {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.status-badge.pending    { background: #fff3cd; color: #664d03; }
+.status-badge.collected  { background: #cff4fc; color: #055160; }
+.status-badge.completed  { background: #cfe2ff; color: #052c65; }
+.status-badge.approved   { background: #d1e7dd; color: #0a3622; }
+.status-badge.correction { background: #fff3cd; color: #664d03; }
+
+.hist-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hist-page">
+
+  {# ============ BREADCRUMB ============ #}
+  <div class="mb-2">
+    <a href="javascript:history.back()" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
+
+  {# ============ HEADER ============ #}
+  <div class="hist-header">
+    <div>
+      <h3><i class="bi bi-clock-history"></i> Patient History</h3>
+      <p class="text-muted">{{ orders|length }} order{{ 's' if orders|length != 1 }} on record</p>
+    </div>
+    <div>
+      <a href="{{ url_for('orders.new_order') }}"
+         class="btn btn-sm btn-primary">
+        <i class="bi bi-person-plus"></i> New Order
+      </a>
+    </div>
+  </div>
+
+  {# ============ PATIENT CARD ============ #}
+  <div class="hist-patient">
+    <div><span class="key">Name:</span>{{ patient.full_name }}</div>
+    <div><span class="key">Patient #:</span><code>{{ patient.patient_code }}</code></div>
+    <div>
+      <span class="key">Age / Gender:</span>
+      {{ patient.compute_age() or '—' }} / {{ patient.gender or '—' }}
+    </div>
+    <div><span class="key">Phone:</span>{{ patient.phone or '—' }}</div>
+  </div>
+
+  {# ============ ORDERS ============ #}
+  {% for order in orders %}
+  <div class="hist-order">
+
+    {# ---- Order header ---- #}
+    <div class="hist-order-header">
+      <div>
+        <a href="{{ url_for('orders.view_order', order_id=order.id) }}"
+           class="text-decoration-none">
+          <span class="lab-code"><i class="bi bi-receipt"></i> Lab # {{ order.order_code }}</span>
+        </a>
+      </div>
+      <div class="meta">
+        <span>
+          <i class="bi bi-calendar"></i>
+          Registered {{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}
+        </span>
+        {% if order.reported_at %}
+        <span>
+          <i class="bi bi-check-circle"></i>
+          Reported {{ order.reported_at | localtime('%d-%b-%Y %I:%M %p') }}
+        </span>
+        {% endif %}
+        {% set badge = {
+          'pending':'pending', 'collected':'collected',
+          'completed':'completed', 'approved':'approved',
+          'correction':'correction'
+        } %}
+        <span class="status-badge {{ badge.get(order.status, 'pending') }}">
+          {{ order.status|capitalize }}
+        </span>
+        <a href="{{ url_for('results.report', order_id=order.id) }}"
+           target="_blank"
+           class="btn btn-sm btn-outline-primary py-0 px-2 ms-1">
+          <i class="bi bi-printer" style="font-size:0.72rem;"></i> Report
+        </a>
+      </div>
+    </div>
+
+    {# ---- Results table ---- #}
+    <table class="hist-table">
+      <thead>
+        <tr>
+          <th style="width: 40%;">Test</th>
+          <th style="width: 15%;">Result</th>
+          <th style="width: 12%;">Unit</th>
+          <th style="width: 20%;">Reference Range</th>
+          <th style="width: 13%;">Flag</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.top_level_items %}
+
+          {% if item.has_children %}
+            {# ---------- Panel header ---------- #}
+            <tr class="panel-row">
+              <td colspan="5">
+                <i class="bi bi-collection"></i>
+                {{ item.test.name if item.test else '—' }}
+                <span class="text-muted small">({{ item.children|length }} params)</span>
+              </td>
+            </tr>
+
+            {# ---------- Panel children ---------- #}
+            {% for child in item.children %}
+            <tr>
+              <td class="child-name">{{ child.test.name if child.test else '—' }}</td>
+              <td class="result-val {% if not child.result_value %}empty{% endif %}">
+                {{ child.result_value or '—' }}
+              </td>
+              <td class="unit">{{ child.test.unit or '—' }}</td>
+              <td class="range">{{ child.test.normal_range or '—' }}</td>
+              <td>
+                {% if child.result_value %}
+                  {% set flag = check_flag(child.test.normal_range, child.result_value) %}
+                  <span class="flag-badge {{ flag }}">{{ flag|capitalize }}</span>
+                {% else %}
+                  <span class="flag-badge unknown">—</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+
+          {% else %}
+            {# ---------- Standalone test ---------- #}
+            <tr>
+              <td>{{ item.test.name if item.test else '—' }}</td>
+              <td class="result-val {% if not item.result_value %}empty{% endif %}">
+                {{ item.result_value or '—' }}
+                {% if item.result_notes %}
+                  <div class="notes">{{ item.result_notes }}</div>
+                {% endif %}
+              </td>
+              <td class="unit">{{ item.test.unit or '—' }}</td>
+              <td class="range">{{ item.test.normal_range or '—' }}</td>
+              <td>
+                {% if item.result_value %}
+                  {% set flag = check_flag(item.test.normal_range, item.result_value) %}
+                  <span class="flag-badge {{ flag }}">{{ flag|capitalize }}</span>
+                {% else %}
+                  <span class="flag-badge unknown">—</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+  {% else %}
+  <div class="hist-order">
+    <div class="hist-empty">
+      <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+      <div class="fw-semibold">No orders for this patient</div>
+      <div class="small">Once you register an order, it appears here.</div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  'use strict';
+  // Placeholder — no JS needed for this page
+})();
+</script>
+{% endblock %}

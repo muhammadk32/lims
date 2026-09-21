@@ -1,0 +1,483 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Results — LabMS{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Pending Results — one row per order, expandable
+   ============================================================ */
+
+.results-page {
+  max-width: 100%;
+  padding: 12px 16px 40px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.results-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.results-header p {
+  font-size: 0.78rem;
+  margin: 0;
+}
+.results-header .meta {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+}
+
+/* Filter bar */
+.results-filters {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.results-filters .row {
+  --bs-gutter-x: 8px;
+  --bs-gutter-y: 6px;
+}
+.results-filters label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  margin-bottom: 2px;
+  display: block;
+}
+.results-filters .form-control,
+.results-filters .form-select {
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  min-height: 30px;
+}
+
+/* Table */
+.results-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.results-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.results-table tbody td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.results-table tbody tr.order-row:last-child td {
+  border-bottom: none;
+}
+.results-table tbody tr.order-row:hover {
+  background: var(--bs-tertiary-bg);
+}
+.results-table code {
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  background: var(--bs-tertiary-bg);
+  border-radius: 3px;
+}
+.results-table .text-end { text-align: right; }
+.results-table .text-center { text-align: center; }
+
+.results-table .patient-cell { line-height: 1.2; }
+.results-table .patient-cell .name { font-weight: 600; }
+.results-table .patient-cell .code {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+/* Toggle column */
+.toggle-col {
+  width: 36px;
+  padding: 2px !important;
+  text-align: center;
+}
+.toggle-btn {
+  background: transparent;
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-secondary-color);
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 4px;
+  line-height: 1;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, color 0.1s;
+}
+.toggle-btn:hover {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}
+.toggle-btn.expanded {
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Correction badge */
+.correction-badge {
+  font-size: 0.66rem;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #fff3cd;
+  color: #664d03;
+  font-weight: 600;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+.correction-badge i { font-size: 0.7rem; }
+
+/* Pending item-count badge on collapsed row */
+.count-badge {
+  font-size: 0.68rem;
+  padding: 1px 7px;
+  border-radius: 8px;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+/* Expanded row */
+.items-row td {
+  padding: 0 !important;
+  background: var(--bs-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+}
+.items-inner {
+  padding: 6px 12px 8px 44px;
+}
+
+.test-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 0.8rem;
+  border-bottom: 1px dashed var(--bs-border-color-translucent);
+}
+.test-line:last-child { border-bottom: none; }
+
+.test-line .test-icon {
+  width: 14px;
+  color: var(--bs-secondary-color);
+  flex-shrink: 0;
+}
+.test-line .test-name {
+  font-weight: 500;
+  flex: 1;
+}
+.test-line .test-range,
+.test-line .test-unit {
+  color: var(--bs-secondary-color);
+  font-size: 0.74rem;
+  min-width: 90px;
+}
+.test-line .test-status {
+  min-width: 90px;
+  text-align: right;
+  font-size: 0.76rem;
+}
+.test-line .test-status.filled {
+  color: var(--bs-success);
+  font-weight: 600;
+}
+
+/* Child rows (panel parameters) */
+.test-line.child {
+  padding-left: 26px;
+}
+.test-line.child .test-name {
+  font-weight: 400;
+}
+
+/* Panel-header line */
+.test-line.panel-header .test-name {
+  font-weight: 600;
+  color: var(--bs-primary);
+}
+.panel-params-badge {
+  font-size: 0.64rem;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #cff4fc;
+  color: #055160;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.results-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+
+@media (max-width: 767.98px) {
+  .results-table { font-size: 0.75rem; }
+  .results-table thead th,
+  .results-table tbody td { padding: 4px 6px; }
+  .items-inner { padding-left: 30px; }
+  .test-line .test-range,
+  .test-line .test-unit { display: none; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="results-page">
+
+  {# ============ HEADER ============ #}
+  <div class="results-header">
+    <div>
+      <h3><i class="bi bi-hourglass-split"></i> Pending Results</h3>
+      <p class="text-muted">Tests awaiting results entry</p>
+    </div>
+    <div class="meta">
+      {{ pending_orders|length }} order{{ 's' if pending_orders|length != 1 }} pending
+    </div>
+  </div>
+
+  {# ============ FILTERS ============ #}
+  <form method="GET" action="{{ url_for('results.index') }}" class="results-filters">
+    <div class="row">
+
+      <div class="col-12 col-md-6">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q or '' }}" class="form-control"
+               placeholder="Lab # / patient name / test name">
+      </div>
+
+      <div class="col-6 col-md-3">
+        <label>Status</label>
+        <select name="order" class="form-select">
+          <option value="">All pending</option>
+          <option value="incomplete" {% if order_filter == 'incomplete' %}selected{% endif %}>Partially entered</option>
+          <option value="empty"      {% if order_filter == 'empty' %}selected{% endif %}>Not started</option>
+        </select>
+      </div>
+
+      <div class="col-6 col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <div class="col-12 col-md-1 d-flex align-items-end justify-content-md-end">
+        {% if q or order_filter %}
+        <a href="{{ url_for('results.index') }}"
+           class="btn btn-sm btn-outline-danger w-100">
+          <i class="bi bi-x-lg"></i>
+        </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </form>
+
+  {# ============ TABLE ============ #}
+  <div class="results-table-wrap">
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th class="toggle-col"></th>
+          <th style="width: 110px;">Lab #</th>
+          <th style="width: 90px;">Patient #</th>
+          <th>Patient</th>
+          <th style="width: 90px;">Pending</th>
+          <th style="width: 120px;">Registered</th>
+          <th class="text-end" style="width: 130px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in pending_orders %}
+        <tr class="order-row">
+          <td class="toggle-col">
+            <button type="button" class="toggle-btn"
+                    data-order-id="{{ order.id }}"
+                    onclick="toggleOrder({{ order.id }})">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </td>
+          <td>
+            <a href="{{ url_for('orders.view_order', order_id=order.id) }}"
+               class="text-decoration-none">
+              <code>{{ order.order_code }}</code>
+            </a>
+          </td>
+          <td><code>{{ order.patient.patient_code }}</code></td>
+          <td class="patient-cell">
+            <div class="name">{{ order.patient.full_name }}</div>
+          </td>
+          <td>
+            <span class="count-badge">{{ order.pending_items|length }} test{{ 's' if order.pending_items|length != 1 }}</span>
+            {% if order.status == 'correction' %}
+              <span class="correction-badge">
+                <i class="bi bi-exclamation-triangle-fill"></i> Correction
+              </span>
+            {% endif %}
+          </td>
+          <td class="text-muted" style="font-size:0.72rem;">
+            {{ order.created_at | localtime('%d/%m/%y %H:%M') }}
+          </td>
+          <td class="text-end">
+            <a href="{{ url_for('results.report', order_id=order.id) }}"
+               target="_blank"
+               class="btn btn-sm btn-outline-secondary py-0 px-2 me-1"
+               title="Print Report">
+              <i class="bi bi-printer" style="font-size:0.72rem;"></i>
+            </a>
+            <a href="{{ url_for('results.enter', order_id=order.id) }}"
+               class="btn btn-sm btn-success py-0 px-2">
+              <i class="bi bi-pencil-square" style="font-size:0.72rem;"></i> Enter
+            </a>
+          </td>
+        </tr>
+
+        {# ---- Inline items preview (hidden by default) ---- #}
+        <tr class="items-row" id="items-row-{{ order.id }}" style="display:none;">
+          <td colspan="7">
+            <div class="items-inner">
+              {% for item in order.pending_items %}
+
+                {% if item.has_children %}
+                  {# Panel header #}
+                  <div class="test-line panel-header">
+                    <span class="test-icon"><i class="bi bi-collection"></i></span>
+                    <span class="test-name">
+                      {{ item.test.name }}
+                      <span class="panel-params-badge">{{ item.children|length }} params</span>
+                    </span>
+                    <span class="test-range"></span>
+                    <span class="test-unit"></span>
+                    <span class="test-status"></span>
+                  </div>
+
+                  {# Panel children — show only those missing a result #}
+                  {% for child in item.children %}
+                    {% if not child.result_value %}
+                    <div class="test-line child">
+                      <span class="test-icon"><i class="bi bi-arrow-return-right"></i></span>
+                      <span class="test-name">{{ child.test.name }}</span>
+                      <span class="test-range">{{ child.test.normal_range or '—' }}</span>
+                      <span class="test-unit">{{ child.test.unit or '—' }}</span>
+                      <span class="test-status">Pending</span>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+
+                {% else %}
+                  {# Standalone test with a missing result #}
+                  <div class="test-line">
+                    <span class="test-icon"><i class="bi bi-droplet"></i></span>
+                    <span class="test-name">{{ item.test.name }}</span>
+                    <span class="test-range">{{ item.test.normal_range or '—' }}</span>
+                    <span class="test-unit">{{ item.test.unit or '—' }}</span>
+                    <span class="test-status">Pending</span>
+                  </div>
+                {% endif %}
+
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7">
+            <div class="results-empty">
+              <i class="bi bi-check2-circle fs-3 d-block mb-2"></i>
+              <div class="fw-semibold">No pending results</div>
+              <div class="small">All caught up. 🎉</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'labms_pending_results_expanded';
+
+  function loadExpanded() {
+    try {
+      var raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) || {}) : {};
+    } catch (_) { return {}; }
+  }
+  function saveExpanded(set) {
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(set)); } catch (_) {}
+  }
+  function applyState(orderId, expanded) {
+    var row = document.getElementById('items-row-' + orderId);
+    var btn = document.querySelector('button.toggle-btn[data-order-id="' + orderId + '"]');
+    if (!row || !btn) return;
+
+    if (expanded) {
+      row.style.display = 'table-row';
+      btn.classList.add('expanded');
+      btn.innerHTML = '<i class="bi bi-dash-lg"></i>';
+    } else {
+      row.style.display = 'none';
+      btn.classList.remove('expanded');
+      btn.innerHTML = '<i class="bi bi-plus-lg"></i>';
+    }
+  }
+
+  window.toggleOrder = function (orderId) {
+    var set = loadExpanded();
+    var open = !!set[orderId];
+    if (open) delete set[orderId];
+    else set[orderId] = 1;
+    saveExpanded(set);
+    applyState(orderId, !open);
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var set = loadExpanded();
+    Object.keys(set).forEach(function (orderId) {
+      applyState(orderId, true);
+    });
+  });
+})();
+</script>
+{% endblock %}

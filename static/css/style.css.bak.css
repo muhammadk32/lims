@@ -1,0 +1,320 @@
+/* ---------- Root variables ---------- */
+:root {
+  --sidebar-width: 240px;
+  --topbar-height: 60px;
+  --primary: #0d6efd;
+  --sidebar-bg: #1e293b;
+  --sidebar-hover: #334155;
+  --sidebar-active: #0d6efd;
+  --sidebar-text: #cbd5e1;
+  --sidebar-text-active: #ffffff;
+  --border-color: #e9ecef;
+}
+
+/* Dark mode */
+[data-bs-theme="dark"] {
+  --sidebar-bg: #0f172a;
+  --sidebar-hover: #1e293b;
+  --border-color: #334155;
+}
+
+/* ---------- Global ---------- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bs-body-bg);
+  min-height: 100vh;
+}
+
+/* ---------- App wrapper ---------- */
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin 0.25s ease;
+}
+
+.app-content {
+  flex: 1;
+  padding: 20px 24px;
+}
+
+/* ---------- Sidebar ---------- */
+.app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  z-index: 1030;
+  transition: transform 0.25s ease;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-brand {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-icon { font-size: 1.4rem; }
+
+.sidebar-close-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 8px;
+}
+
+.sidebar-section {
+  padding: 14px 14px 6px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  margin: 2px 6px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-link i { font-size: 1.05rem; }
+
+.sidebar-link:hover {
+  background: var(--sidebar-hover);
+  color: #ffffff;
+}
+
+.sidebar-link.active {
+  background: var(--sidebar-active);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  padding: 14px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1025;
+}
+
+.sidebar-overlay.show { display: block; }
+
+/* ---------- Topbar ---------- */
+.app-topbar {
+  height: var(--topbar-height);
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.topbar-search {
+  flex: 1;
+  max-width: 480px;
+}
+
+.topbar-search .form-control {
+  background: var(--bs-tertiary-bg);
+  border-color: transparent;
+}
+
+.topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ---------- Breadcrumbs ---------- */
+.app-breadcrumbs {
+  padding: 0 0 16px;
+}
+
+.breadcrumb {
+  background: transparent;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.breadcrumb a {
+  color: var(--bs-secondary-color);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover { color: var(--primary); }
+
+/* ---------- Cards ---------- */
+.card {
+  border-radius: 10px;
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  padding: 60px 20px;
+}
+
+.empty-state .empty-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  opacity: 0.6;
+  user-select: none;
+}
+
+.empty-state h5 {
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-state .btn {
+  margin-top: 0.25rem;
+}
+
+/* Larger emoji on wider screens */
+@media (min-width: 768px) {
+  .empty-state .empty-icon { font-size: 4rem; }
+}
+
+/* ---------- Loading overlay ---------- */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
+[data-bs-theme="dark"] .loading-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  color: var(--bs-secondary-color);
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bs-body-bg);
+}
+
+/* ---------- Toast ---------- */
+.toast { border-left: 4px solid var(--primary); }
+.toast.toast-success { border-left-color: #198754; }
+.toast.toast-danger  { border-left-color: #dc3545; }
+.toast.toast-warning { border-left-color: #ffc107; }
+.toast.toast-info    { border-left-color: #0dcaf0; }
+
+/* ---------- Tables ---------- */
+.table > :not(caption) > * > * { padding: 0.75rem 0.75rem; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.show {
+    transform: translateX(0);
+  }
+  .app-main {
+    margin-left: 0;
+  }
+  .app-content {
+    padding: 16px;
+  }
+  .topbar-search { display: none !important; }
+}
+
+/* ---------- Print tweaks ---------- */
+@media print {
+  .app-sidebar, .app-topbar, .app-footer,
+  .app-breadcrumbs, .toast-container, .loading-overlay,
+  .empty-state .empty-icon, .empty-state .btn {
+    display: none !important;
+  }
+  .app-main { margin-left: 0 !important; }
+  .app-content { padding: 0 !important; }
+}
+
+/* ---- Branding ---- */
+.sidebar-brand .brand-text {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-brand .brand-logo {
+  flex-shrink: 0;
+}

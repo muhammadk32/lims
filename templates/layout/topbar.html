@@ -1,0 +1,136 @@
+<header class="app-topbar">
+
+  <!-- Mobile nav toggle -->
+  <button class="topnav-toggle" id="topnavToggle" aria-label="Toggle menu">
+    <i class="bi bi-list"></i>
+  </button>
+
+  <!-- Brand -->
+  <a href="{{ url_for('dashboard.index') }}" class="topbar-brand">
+    {% if branding.logo_url %}
+      <img src="{{ branding.logo_url }}" alt="logo" class="brand-logo">
+    {% else %}
+      <span class="brand-icon-fallback">🔬</span>
+    {% endif %}
+    <div class="d-flex flex-column lh-1">
+      <span class="brand-text">{{ branding.lab_name or 'LabMS' }}</span>
+      {% if branding.tagline %}
+        <span class="brand-sub">{{ branding.tagline }}</span>
+      {% endif %}
+    </div>
+  </a>
+
+  <!-- Search -->
+  <form class="topbar-search d-none d-lg-block" method="GET"
+        action="{{ url_for('dashboard.global_search') }}">
+    <div class="input-group">
+      <span class="input-group-text bg-transparent border-end-0">
+        <i class="bi bi-search"></i>
+      </span>
+      <input type="text" name="q" id="globalSearchInput"
+             class="form-control border-start-0"
+             placeholder="Search patients, orders... (press /)"
+             autocomplete="off">
+      <span class="input-group-text bg-transparent border-start-0">
+        <kbd>/</kbd>
+      </span>
+    </div>
+  </form>
+
+  <!-- Contact strip (optional, desktop only) -->
+  {% if branding.phone or branding.email %}
+  <div class="topbar-contact d-none d-xl-flex">
+    {% if branding.phone %}
+      <span><i class="bi bi-telephone"></i> {{ branding.phone }}</span>
+    {% endif %}
+    {% if branding.email %}
+      <span><i class="bi bi-envelope"></i> {{ branding.email }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Right-side actions -->
+  <div class="topbar-actions">
+
+    <!-- ================= THEME PICKER ================= -->
+    <div class="dropdown">
+      <button class="btn btn-light"
+              type="button"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="true"
+              title="Change theme"
+              id="themePickerBtn"
+              aria-label="Change theme">
+        <i class="bi bi-palette" id="themePickerIcon"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end theme-picker-menu"
+          style="min-width: 240px;">
+        <li class="px-3 py-2 border-bottom">
+          <div class="fw-semibold small">Theme</div>
+          <div class="text-muted" style="font-size: 0.72rem;">
+            Saved to your account
+          </div>
+        </li>
+        {% for t in themes %}
+          <li>
+            <button type="button"
+                    class="dropdown-item theme-option d-flex align-items-center gap-2"
+                    data-theme-key="{{ t.key }}">
+              <span class="theme-swatch"
+                    style="background: {{ t.preview }};"></span>
+              <i class="bi {{ t.icon }}"></i>
+              <span>{{ t.label }}</span>
+              <i class="bi bi-check2 ms-auto theme-check"
+                 data-theme-match="{{ t.key }}"
+                 style="display: none;"></i>
+            </button>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <!-- =============== /THEME PICKER ================= -->
+
+    <!-- Notifications -->
+    <div class="dropdown">
+      <button class="btn btn-light position-relative" data-bs-toggle="dropdown">
+        <i class="bi bi-bell"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end p-2" style="min-width: 280px;">
+        <li class="text-center text-muted small py-3">
+          <i class="bi bi-bell-slash"></i> No new notifications
+        </li>
+      </ul>
+    </div>
+
+    <!-- User menu -->
+    {% if current_user.is_authenticated %}
+    <div class="dropdown">
+      <button class="btn btn-light d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+        <span class="avatar-circle">{{ current_user.full_name[0]|upper }}</span>
+        <span class="d-none d-md-inline">{{ current_user.full_name.split()[0] }}</span>
+        <i class="bi bi-chevron-down small"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li class="px-3 py-2 border-bottom">
+          <div class="fw-semibold small">{{ current_user.full_name }}</div>
+          <div class="text-muted" style="font-size: 0.75rem;">{{ current_user.role_label }}</div>
+        </li>
+        <li>
+          <a class="dropdown-item" href="{{ url_for('users.profile') }}">
+            <i class="bi bi-person-circle"></i> My Profile
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+
+  </div>
+
+</header>

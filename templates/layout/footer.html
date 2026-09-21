@@ -1,0 +1,31 @@
+<footer class="app-footer">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+    <!-- Left: brand + contact -->
+    <div class="text-muted small">
+      <strong style="color: {{ branding.primary_color }};">{{ branding.lab_name }}</strong>
+      {% if branding.address %} · {{ branding.address }}{% endif %}
+      {% if branding.phone %} · ☎ {{ branding.phone }}{% endif %}
+      {% if branding.email %} · ✉ {{ branding.email }}{% endif %}
+      {% if branding.website %} · 🌐 {{ branding.website }}{% endif %}
+    </div>
+
+    <!-- Right: version + links -->
+    <div class="text-muted small">
+      &copy; {{ 2025 }} · v{{ config.get('APP_VERSION', '1.0.0') }}
+      ·
+      <a href="#" class="text-decoration-none text-muted">Help</a>
+      ·
+      <a href="#" class="text-decoration-none text-muted">Privacy</a>
+      ·
+      <a href="#" class="text-decoration-none text-muted">Support</a>
+    </div>
+
+  </div>
+
+  {% if branding.footer_note %}
+    <div class="text-center text-muted small mt-1 fst-italic">
+      {{ branding.footer_note }}
+    </div>
+  {% endif %}
+</footer>

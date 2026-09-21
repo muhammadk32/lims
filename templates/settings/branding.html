@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Branding Settings{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-0">🏥 Branding Settings</h2>
+      <small class="text-muted">
+        Logo, name, and contact details shown across the app and printed reports.
+      </small>
+    </div>
+    <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary btn-sm">← Back</a>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- LEFT: Form -->
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+
+            <!-- Logo -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Logo</label>
+              <div class="d-flex align-items-center gap-3">
+                <div class="border rounded d-flex align-items-center justify-content-center"
+                     style="width: 110px; height: 110px; background:#f8f9fa;">
+                  {% if settings.logo_url %}
+                    <img src="{{ settings.logo_url }}" alt="logo"
+                         style="max-width:100%; max-height:100%; object-fit:contain;">
+                  {% else %}
+                    <span class="text-muted small">No logo</span>
+                  {% endif %}
+                </div>
+                <div class="flex-grow-1">
+                  {{ form.logo(class="form-control") }}
+                  <small class="text-muted">PNG, JPG, SVG, or WEBP. Max ~2 MB recommended.</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Name / tagline -->
+            <div class="row g-3">
+              <div class="col-md-8">
+                {{ form.lab_name.label(class="form-label fw-semibold") }}
+                {{ form.lab_name(class="form-control" + (" is-invalid" if form.lab_name.errors else "")) }}
+                {% for e in form.lab_name.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-4">
+                {{ form.primary_color.label(class="form-label fw-semibold") }}
+                <div class="d-flex gap-2">
+                  {{ form.primary_color(class="form-control form-control-color", type="color") }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                {{ form.tagline.label(class="form-label fw-semibold") }}
+                {{ form.tagline(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                {{ form.address.label(class="form-label fw-semibold") }}
+                {{ form.address(class="form-control") }}
+              </div>
+
+              <div class="col-md-4">
+                {{ form.phone.label(class="form-label fw-semibold") }}
+                {{ form.phone(class="form-control") }}
+              </div>
+              <div class="col-md-4">
+                {{ form.email.label(class="form-label fw-semibold") }}
+                {{ form.email(class="form-control") }}
+              </div>
+              <div class="col-md-4">
+                {{ form.website.label(class="form-label fw-semibold") }}
+                {{ form.website(class="form-control") }}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.license_no.label(class="form-label fw-semibold") }}
+                {{ form.license_no(class="form-control") }}
+              </div>
+
+              <div class="col-12">
+                {{ form.footer_note.label(class="form-label fw-semibold") }}
+                {{ form.footer_note(class="form-control") }}
+                <small class="text-muted">Printed at the bottom of every report/invoice.</small>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              {{ form.submit(class="btn btn-primary") }}
+              {% if settings.logo_url %}
+              <button type="button" class="btn btn-outline-danger"
+                      onclick="document.getElementById('removeLogoForm').submit();">
+                Remove Logo
+              </button>
+              {% endif %}
+            </div>
+          </form>
+
+          {% if settings.logo_url %}
+          <form id="removeLogoForm" method="POST"
+                action="{{ url_for('settings.remove_logo') }}" class="d-none">
+            <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Live preview -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-header bg-light fw-semibold">Live Preview</div>
+        <div class="card-body">
+          <div class="border rounded p-3 mb-3 d-flex align-items-center gap-3">
+            {% if settings.logo_url %}
+              <img src="{{ settings.logo_url }}" style="height:48px; object-fit:contain;">
+            {% else %}
+              <div class="rounded bg-secondary-subtle" style="width:48px;height:48px;"></div>
+            {% endif %}
+            <div>
+              <div class="fw-bold" style="color: {{ settings.primary_color }};">
+                {{ settings.lab_name }}
+              </div>
+              <small class="text-muted">{{ settings.tagline }}</small>
+            </div>
+          </div>
+
+          <div class="small text-muted">
+            <div><strong>Address:</strong> {{ settings.address or '—' }}</div>
+            <div><strong>Phone:</strong> {{ settings.phone or '—' }}</div>
+            <div><strong>Email:</strong> {{ settings.email or '—' }}</div>
+            <div><strong>Website:</strong> {{ settings.website or '—' }}</div>
+            <div><strong>License:</strong> {{ settings.license_no or '—' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

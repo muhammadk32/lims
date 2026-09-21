@@ -1,0 +1,23 @@
+{% if report_signatures %}
+<div class="rep-signatures">
+
+  <div class="verified-line">
+    Electronically verified report. No signature(s) required.
+  </div>
+
+  <div class="rep-sig-grid">
+    {% for sig in report_signatures %}
+      <div class="rep-sig-item">
+        <div class="sig-name">{{ sig.name }}</div>
+        {% if sig.qualifications %}
+          <div class="sig-quals">{{ sig.qualifications }}</div>
+        {% endif %}
+        {% if sig.designation %}
+          <div class="sig-desig">{{ sig.designation }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endif %}

@@ -1,0 +1,510 @@
+{% extends 'base.html' %}
+
+{% block title %}Daily Ledger — LabMS{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Daily Ledger — flat dense one-page layout
+   ============================================================ */
+
+.ledger-page {
+  max-width: 100%;
+  padding: 12px 16px 40px;
+}
+
+.ledger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ledger-header h3 {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.25rem;
+}
+.ledger-header .meta {
+  font-size: 0.78rem;
+  color: var(--bs-secondary-color);
+}
+
+/* Filter bar */
+.ledger-filters {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.ledger-filters .row {
+  --bs-gutter-x: 8px;
+  --bs-gutter-y: 6px;
+}
+.ledger-filters label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  margin-bottom: 2px;
+  display: block;
+}
+.ledger-filters .form-control,
+.ledger-filters .form-select {
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  min-height: 30px;
+}
+
+.quick-range {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 4px;
+}
+.quick-range button {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+}
+.quick-range button:hover {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}
+
+/* Table wrapper — no overflow:hidden so dropdowns can escape */
+.ledger-table-wrap {
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.ledger-table thead th {
+  background: var(--bs-tertiary-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-secondary-color);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--bs-border-color);
+  white-space: nowrap;
+}
+.ledger-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+.ledger-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+.ledger-table tbody td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  vertical-align: middle;
+}
+.ledger-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.ledger-table tbody tr:hover {
+  background: var(--bs-tertiary-bg);
+}
+.ledger-table code {
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  background: var(--bs-tertiary-bg);
+  border-radius: 3px;
+}
+.ledger-table .text-end { text-align: right; }
+.ledger-table .text-center { text-align: center; }
+
+.ledger-table .patient-cell { line-height: 1.2; }
+.ledger-table .patient-cell .name { font-weight: 600; }
+.ledger-table .patient-cell .code {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.pay-pill {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pay-pill.paid    { background: #d1e7dd; color: #0a3622; }
+.pay-pill.unpaid  { background: #f8d7da; color: #58151c; }
+.pay-pill.partial { background: #fff3cd; color: #664d03; }
+
+.status-badge {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.status-badge.pending   { background: #fff3cd; color: #664d03; }
+.status-badge.collected { background: #cff4fc; color: #055160; }
+.status-badge.completed { background: #d1e7dd; color: #0a3622; }
+
+/* Summary footer */
+.ledger-summary {
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 24px;
+}
+.ledger-summary .stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.ledger-summary .stat .label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ledger-summary .stat .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-summary .stat.highlight .value {
+  font-size: 1.05rem;
+  color: var(--bs-success);
+}
+.ledger-summary .stat.danger .value {
+  color: var(--bs-danger);
+}
+
+.ledger-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--bs-secondary-color);
+}
+
+@media (max-width: 767.98px) {
+  .ledger-table { font-size: 0.75rem; }
+  .ledger-table thead th,
+  .ledger-table tbody td { padding: 4px 6px; }
+  .ledger-summary { grid-template-columns: 1fr; }
+}
+
+/* Action dropdown in ledger table */
+.ledger-actions-menu {
+  font-size: 0.82rem;
+  min-width: 190px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border: 1px solid var(--bs-border-color);
+}
+.ledger-actions-menu .dropdown-item {
+  padding: 6px 12px;
+}
+.ledger-actions-menu .dropdown-item:hover {
+  background: var(--bs-tertiary-bg);
+}
+.ledger-actions-menu .dropdown-item i {
+  width: 16px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Hide Bootstrap's default caret on our tiny icon button */
+.ledger-table .dropdown-toggle::after {
+  display: none !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ledger-page">
+
+  {# ============ HEADER ============ #}
+  <div class="ledger-header">
+    <div>
+      <h3><i class="bi bi-journal-text"></i> Daily Ledger</h3>
+      <p class="text-muted small mb-0">Registrations and payment status between selected dates</p>
+    </div>
+    <div class="meta">
+      {{ stats.case_count }} registration{{ 's' if stats.case_count != 1 }} in this range
+    </div>
+  </div>
+
+  {# ============ FILTERS ============ #}
+  <form method="GET" action="{{ url_for('orders.list_orders') }}" class="ledger-filters">
+    <div class="row">
+
+      <div class="col-6 col-md-2">
+        <label>From</label>
+        <input type="date" name="date_from" value="{{ date_from }}" class="form-control">
+      </div>
+
+      <div class="col-6 col-md-2">
+        <label>To</label>
+        <input type="date" name="date_to" value="{{ date_to }}" class="form-control">
+      </div>
+
+      <div class="col-12 col-md-3">
+        <label>Search</label>
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="Lab # / patient / mobile">
+      </div>
+
+      <div class="col-6 col-md-2">
+        <label>Status</label>
+        <select name="status" class="form-select">
+          <option value="">All</option>
+          {% for s in statuses %}
+          <option value="{{ s }}" {% if status == s %}selected{% endif %}>{{ s|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-6 col-md-2">
+        <label>Paid</label>
+        <select name="paid" class="form-select">
+          <option value="">Any</option>
+          <option value="yes"     {% if paid_filter == 'yes' %}selected{% endif %}>Paid</option>
+          <option value="no"      {% if paid_filter == 'no' %}selected{% endif %}>Unpaid</option>
+          <option value="partial" {% if paid_filter == 'partial' %}selected{% endif %}>Partial</option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-1 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+
+      <div class="col-12 d-flex align-items-center gap-2 mt-1 flex-wrap">
+        <span class="text-muted" style="font-size:0.7rem; text-transform:uppercase; font-weight:600;">Quick:</span>
+        <div class="quick-range">
+          <button type="button" onclick="setRange(0)">Today</button>
+          <button type="button" onclick="setRange(1)">Yesterday</button>
+          <button type="button" onclick="setRange(6)">Last 7 days</button>
+          <button type="button" onclick="setRange(29)">Last 30 days</button>
+          <button type="button" onclick="setMonth()">This month</button>
+        </div>
+        {% if q or status or paid_filter or date_from != today or date_to != today %}
+        <a href="{{ url_for('orders.list_orders') }}"
+           class="btn btn-sm btn-outline-danger ms-auto">
+          <i class="bi bi-x-lg"></i> Clear filters
+        </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </form>
+
+  {# ============ TABLE ============ #}
+  <div class="ledger-table-wrap">
+    <table class="ledger-table">
+      <thead>
+        <tr>
+          <th style="width: 85px;">Lab #</th>
+          <th>Patient</th>
+          <th style="width: 105px;">Patient #</th>
+          <th style="width: 130px;">Mobile</th>
+          <th class="text-center" style="width: 55px;">Items</th>
+          <th class="text-end" style="width: 90px;">Total</th>
+          <th class="text-end" style="width: 90px;">Discount</th>
+          <th class="text-end" style="width: 90px;">Net</th>
+          <th class="text-end" style="width: 90px;">Paid</th>
+          <th class="text-end" style="width: 90px;">Due</th>
+          <th style="width: 90px;">Status</th>
+          <th style="width: 75px;">Payment</th>
+          <th style="width: 115px;">Registered</th>
+          <th class="text-end" style="width: 50px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td><code>{{ o.order_code }}</code></td>
+          <td class="patient-cell">
+            <div class="name">{{ o.patient.full_name }}</div>
+          </td>
+          <td><code>{{ o.patient.patient_code }}</code></td>
+          <td class="text-muted" style="font-size:0.78rem;">
+            {{ o.patient.phone or '—' }}
+          </td>
+          <td class="text-center">
+            <span class="badge bg-secondary" style="font-size:0.68rem;">{{ o.item_count }}</span>
+          </td>
+          <td class="text-end">{{ config.currency_symbol }} {{ '%.2f'|format(o.subtotal) }}</td>
+          <td class="text-end text-danger">
+            {% if o.discount_value > 0 %}
+              −{{ config.currency_symbol }} {{ '%.2f'|format(o.discount_value) }}
+            {% else %}—{% endif %}
+          </td>
+          <td class="text-end fw-semibold">{{ config.currency_symbol }} {{ '%.2f'|format(o.final_total) }}</td>
+          <td class="text-end text-success">{{ config.currency_symbol }} {{ '%.2f'|format(o.paid_amount) }}</td>
+          <td class="text-end {% if o.balance_due > 0.001 %}text-danger fw-semibold{% else %}text-muted{% endif %}">
+            {{ config.currency_symbol }} {{ '%.2f'|format(o.balance_due) }}
+          </td>
+          <td>
+            <span class="status-badge {{ o.status }}">{{ o.status|capitalize }}</span>
+          </td>
+          <td>
+            {% set ps = o.payment_status %}
+            <span class="pay-pill {{ ps }}">
+              {% if ps == 'paid' %}Paid
+              {% elif ps == 'partial' %}Partial
+              {% else %}Unpaid{% endif %}
+            </span>
+          </td>
+          <td class="text-muted" style="font-size:0.72rem;">
+            {{ o.created_at | localtime('%d/%m/%y %H:%M') }}
+          </td>
+          <td class="text-end">
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-primary py-0 px-1 dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      data-bs-strategy="fixed"
+                      aria-expanded="false"
+                      title="Actions">
+                <i class="bi bi-eye" style="font-size:0.75rem;"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end ledger-actions-menu">
+
+                <li>
+                  <a class="dropdown-item"
+                     href="{{ url_for('orders.view_order', order_id=o.id) }}">
+                    <i class="bi bi-file-earmark-text me-2"></i> View Details
+                  </a>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                  <a class="dropdown-item"
+                     href="{{ url_for('orders.print_order', order_id=o.id, copy='patient', auto=1) }}"
+                     target="_blank" rel="noopener">
+                    <i class="bi bi-person-vcard me-2 text-primary"></i> Patient Bill
+                  </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item"
+                     href="{{ url_for('orders.print_order', order_id=o.id, copy='lab', auto=1) }}"
+                     target="_blank" rel="noopener">
+                    <i class="bi bi-clipboard2-pulse me-2 text-success"></i> Lab Bill
+                  </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item"
+                     href="{{ url_for('orders.print_order', order_id=o.id, copy='both', auto=1) }}"
+                     target="_blank" rel="noopener">
+                    <i class="bi bi-files me-2 text-secondary"></i> Both Bills
+                  </a>
+                </li>
+
+              </ul>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="14">
+            <div class="ledger-empty">
+              <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+              <div class="fw-semibold">No registrations in this range</div>
+              <div class="small">Try adjusting the date range or filters above.</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# ============ SUMMARY ============ #}
+  <div class="ledger-summary">
+    <div class="stat">
+      <span class="label">Total Amount</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.total_amount) }}</span>
+    </div>
+    <div class="stat danger">
+      <span class="label">Discounted</span>
+      <span class="value">−{{ config.currency_symbol }} {{ '%.2f'|format(stats.total_discount) }}</span>
+    </div>
+    <div class="stat highlight">
+      <span class="label">Net Amount</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.net_amount) }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">Received</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.paid_amount) }}</span>
+    </div>
+    <div class="stat danger">
+      <span class="label">Due Amount</span>
+      <span class="value">{{ config.currency_symbol }} {{ '%.2f'|format(stats.due_amount) }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">No. of Cases</span>
+      <span class="value">{{ stats.case_count }}</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* Daily Ledger — date range helpers */
+(function () {
+  'use strict';
+
+  const form = document.querySelector('.ledger-filters');
+  const fromInput = form ? form.querySelector('input[name="date_from"]') : null;
+  const toInput = form ? form.querySelector('input[name="date_to"]') : null;
+
+  function isoDate(d) {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd;
+  }
+
+  window.setRange = function (daysAgo) {
+    if (!form) return;
+    const today = new Date();
+    const from = new Date();
+    from.setDate(today.getDate() - daysAgo);
+    if (fromInput) fromInput.value = isoDate(from);
+    if (toInput) toInput.value = isoDate(today);
+    form.submit();
+  };
+
+  window.setMonth = function () {
+    if (!form) return;
+    const today = new Date();
+    const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    if (fromInput) fromInput.value = isoDate(firstOfMonth);
+    if (toInput) toInput.value = isoDate(today);
+    form.submit();
+  };
+
+})();
+</script>
+{% endblock %}

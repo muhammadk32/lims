@@ -1,0 +1,13 @@
+{# Usage: {% include 'partials/empty_state.html' with context %} #}
+{# Set variables before include: icon, title, message, cta_label, cta_url #}
+
+<div class="empty-state text-center py-5">
+  <div class="empty-icon mb-3">{{ icon|default('📋') }}</div>
+  <h5 class="fw-bold">{{ title|default('Nothing here yet') }}</h5>
+  <p class="text-muted mb-3">{{ message|default('Get started by creating your first item.') }}</p>
+  {% if cta_url %}
+  <a href="{{ cta_url }}" class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> {{ cta_label|default('Add New') }}
+  </a>
+  {% endif %}
+</div>

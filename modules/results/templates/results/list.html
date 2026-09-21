@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Results — LabMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="fw-bold mb-0"><i class="bi bi-clipboard-check"></i> Results</h3>
+      <p class="text-muted small mb-0">Enter and review test results</p>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <form method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search by order code or patient name...">
+      <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i> Search</button>
+      {% if q %}
+      <a href="{{ url_for('results.index') }}" class="btn btn-outline-danger"><i class="bi bi-x-lg"></i></a>
+      {% endif %}
+    </div>
+  </form>
+
+  <div class="row g-3">
+
+    <!-- Pending -->
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h6 class="fw-bold mb-0">
+            <i class="bi bi-hourglass-split text-warning"></i>
+            Pending Results
+            <span class="badge bg-warning text-dark ms-2">{{ pending_orders|length }}</span>
+          </h6>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Order</th>
+                <th>Patient</th>
+                <th>Tests</th>
+                <th>Done</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in pending_orders %}
+              {% set done = o.items|selectattr('result_value')|list|length %}
+              <tr>
+                <td>
+                  <code>{{ o.order_code }}</code>
+                  <div class="text-muted small">{{ o.created_at | localtime('%Y-%m-%d') }}</div>
+                </td>
+                <td>
+                  <div class="fw-semibold">{{ o.patient.full_name }}</div>
+                  <div class="text-muted small">{{ o.patient.patient_code }}</div>
+                </td>
+                <td><span class="badge bg-secondary">{{ o.item_count }}</span></td>
+                <td>
+                  <div class="progress" style="height: 6px; min-width: 60px;">
+                    <div class="progress-bar bg-success"
+                         style="width: {{ (done / o.item_count * 100) if o.item_count else 0 }}%"></div>
+                  </div>
+                  <div class="text-muted small mt-1">{{ done }}/{{ o.item_count }}</div>
+                </td>
+                <td class="text-end">
+                  <a href="{{ url_for('results.enter', order_id=o.id) }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-pencil-square"></i> Enter
+                  </a>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                  🎉 No pending results. Great job!
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completed -->
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h6 class="fw-bold mb-0">
+            <i class="bi bi-check-circle text-success"></i>
+            Recently Completed
+          </h6>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Order</th>
+                <th>Patient</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in completed_orders %}
+              <tr>
+                <td><code>{{ o.order_code }}</code></td>
+                <td>{{ o.patient.full_name }}</td>
+                <td class="text-end">
+                  <a href="{{ url_for('orders.view_order', order_id=o.id) }}"
+                     class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="3" class="text-center text-muted py-4">No completed orders yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="{{ current_user.theme if current_user.is_authenticated and current_user.theme else 'light' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {# ---------- CSRF meta tag for AJAX on public pages ---------- #}
+  <meta name="csrf-token" content="{{ csrf_token() if csrf_token is defined else '' }}">
+
+  <title>{% block title %}{{ branding.lab_name or 'LabMS' }}{% endblock %}</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">   {# ← NEW #}
+
+  {# ---- Favicon: uploaded logo first, then static logo, then emoji ---- #}
+  {% if branding.logo_url %}
+    <link rel="icon" href="{{ branding.logo_url }}">
+  {% else %}
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}">
+  {% endif %}
+
+  {# ---- Branding theme variables ---- #}
+  <style>
+    :root {
+      --brand-primary: {{ branding.primary_color or '#0d6efd' }};
+    }
+    .btn-primary {
+      background-color: var(--brand-primary) !important;
+      border-color: var(--brand-primary) !important;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus { filter: brightness(0.92); }
+    .text-primary { color: var(--brand-primary) !important; }
+    .bg-primary   { background-color: var(--brand-primary) !important; }
+    a { color: var(--brand-primary); }
+  </style>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  {% block content %}{% endblock %}
+
+  <!-- Toast container -->
+  <div class="toast-container position-fixed top-0 end-0 p-3"
+       id="toastContainer" style="z-index: 9999;"></div>
+
+  {# ---------- Globals for JS ---------- #}   {# ← NEW #}
+  <script>
+    window.LABMS_THEME = "{{ current_user.theme if current_user.is_authenticated and current_user.theme else 'light' }}";
+    window.LABMS_THEME_ENDPOINT = "{{ url_for('users.set_theme') if current_user.is_authenticated else '' }}";
+    window.LABMS_CSRF_TOKEN = "{{ csrf_token() if csrf_token is defined else '' }}";
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  <script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        window.LabMS && window.LabMS.showToast({{ message|tojson }}, {{ category|tojson }});
+      {% endfor %}
+    {% endwith %}
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
