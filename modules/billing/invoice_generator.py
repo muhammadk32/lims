@@ -1,4 +1,4 @@
-"""
+﻿"""
 Professional invoice PDF generator.
 Includes: line items, subtotal, discount, total, payments, balance.
 Branding (name, logo, contact, color) is DB-driven via LabSettings.
@@ -8,9 +8,6 @@ IMPORTANT: Panel children (which have price=0 and parent_item_id set)
 are NOT shown on invoices. Only top-level items are billed.
 """
 import io
-import os
-from datetime import datetime
-from zoneinfo import ZoneInfo
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -21,127 +18,15 @@ from reportlab.platypus import (
     HRFlowable, Image,
 )
 
+# ---- Shared branding + timezone ----
+from core.lab_branding import (
+    _DEFAULT_LAB, _get_lab, _hex,
+    LAB_NAME, LAB_ADDRESS, LAB_PHONE, LAB_EMAIL, LAB_WEBSITE, LAB_TAX_ID,
+)
+from modules.reports.pdf.base import (
+    TIMEZONE_NAME, _now, _fmt_dt,
+)
 
-# ============================================================
-# Timezone helper
-# ============================================================
-TIMEZONE_NAME = 'Asia/Karachi'
-
-
-def _now():
-    try:
-        from flask import current_app
-        tz_name = current_app.config.get('TIMEZONE', TIMEZONE_NAME)
-    except Exception:
-        tz_name = TIMEZONE_NAME
-    try:
-        return datetime.now(ZoneInfo(tz_name))
-    except Exception:
-        return datetime.now()
-
-
-def _fmt_dt(dt, fmt='%Y-%m-%d %H:%M'):
-    if not dt:
-        return '—'
-    try:
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=ZoneInfo('UTC'))
-        return dt.astimezone(ZoneInfo(TIMEZONE_NAME)).strftime(fmt)
-    except Exception:
-        try:
-            return dt.strftime(fmt)
-        except Exception:
-            return '—'
-
-
-# ============================================================
-# Lab identity
-# ============================================================
-_DEFAULT_LAB = {
-    'name': 'Laboratory Management System',
-    'tagline': '',
-    'address': '',
-    'phone': '',
-    'email': '',
-    'website': '',
-    'license_no': '',
-    'logo_filename': None,
-    'logo_path': None,
-    'primary_color': '#0d6efd',
-    'footer_note': '',
-    'currency_symbol': 'Rs',
-}
-
-
-def _logo_abs_path(filename):
-    if not filename:
-        return None
-    try:
-        from flask import current_app
-        path = os.path.join(
-            current_app.root_path, 'static', 'uploads', 'branding', filename
-        )
-        return path if os.path.exists(path) else None
-    except Exception:
-        return None
-
-
-def _lab_dict_from_settings(s):
-    return {
-        'name': s.lab_name or _DEFAULT_LAB['name'],
-        'tagline': s.tagline or '',
-        'address': s.address or '',
-        'phone': s.phone or '',
-        'email': s.email or '',
-        'website': s.website or '',
-        'license_no': s.license_no or '',
-        'logo_filename': s.logo_filename,
-        'logo_path': _logo_abs_path(s.logo_filename),
-        'primary_color': s.primary_color or '#0d6efd',
-        'footer_note': s.footer_note or '',
-        'currency_symbol': getattr(s, 'currency_symbol', None) or 'Rs',
-    }
-
-
-def _get_lab():
-    try:
-        from flask import has_app_context
-        from core.models import LabSettings
-
-        if has_app_context():
-            s = LabSettings.get()
-            if s:
-                return _lab_dict_from_settings(s)
-
-        try:
-            from app import app as _app
-            with _app.app_context():
-                s = LabSettings.get()
-                if s:
-                    return _lab_dict_from_settings(s)
-        except Exception:
-            pass
-    except Exception as e:
-        print(f'[invoice_generator] _get_lab failed: {e}')
-
-    return dict(_DEFAULT_LAB)
-
-
-def _hex(color_str, fallback='#0d6efd'):
-    try:
-        return colors.HexColor(color_str or fallback)
-    except Exception:
-        return colors.HexColor(fallback)
-
-
-# ---------- Backwards-compat constants ----------
-_initial = _get_lab()
-LAB_NAME = _initial['name']
-LAB_ADDRESS = _initial['address']
-LAB_PHONE = _initial['phone']
-LAB_EMAIL = _initial['email']
-LAB_WEBSITE = _initial['website']
-LAB_TAX_ID = _initial['license_no']
 
 DEFAULT_TAX_RATE = 0.0
 
@@ -290,14 +175,10 @@ def _info_block(order):
 
 
 # ============================================================
-# Line items — ONLY top-level (billable) items
+# Line items
 # ============================================================
 def _line_items_table(order):
-    """
-    Line items table.
-    IMPORTANT: Only shows top_level_items (parent items with price).
-    Panel children (price=0) are NOT shown.
-    """
+    """Line items table — top-level items only (panel children excluded)."""
     lab = _get_lab()
     primary = _hex(lab['primary_color'])
     cur = lab.get('currency_symbol', 'Rs')
@@ -317,11 +198,7 @@ def _line_items_table(order):
         Paragraph('Amount', header),
     ]]
 
-    # Only billable = top-level items
-    billable_items = order.top_level_items
-
-    for i, item in enumerate(billable_items, start=1):
-        # Show panel indicator for panels
+    for i, item in enumerate(order.top_level_items, start=1):
         display_name = item.test.name
         if item.has_children:
             display_name = f'{display_name}  (Panel)'
@@ -397,7 +274,7 @@ def _totals_table(order, tax_rate=DEFAULT_TAX_RATE):
     ]
 
     t = Table(rows, colWidths=[45 * mm, 30 * mm])
-    style = [
+    t.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (-1, -1), 6),
@@ -405,8 +282,7 @@ def _totals_table(order, tax_rate=DEFAULT_TAX_RATE):
         ('TOPPADDING', (0, 0), (-1, -1), 5),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
         ('LINEABOVE', (0, 1), (-1, 1), 0.5, colors.HexColor('#adb5bd')),
-    ]
-    t.setStyle(TableStyle(style))
+    ]))
 
     outer = Table([['', t]], colWidths=[105 * mm, 75 * mm])
     outer.setStyle(TableStyle([
