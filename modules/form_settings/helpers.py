@@ -10,6 +10,19 @@ from core.form_fields import (
 )
 
 
+def _default_currency():
+    """Fallback currency from app config (APP_CURRENCY).
+
+    Used when the DB's LabSettings row has no currency_symbol.
+    Returns the config value if set, otherwise 'Rs'.
+    """
+    try:
+        from flask import current_app
+        return current_app.config.get('APP_CURRENCY', '') or 'Rs'
+    except Exception:
+        return 'Rs'
+
+
 def get_form_config():
     """
     Return a dict describing the current reception form configuration.
@@ -26,6 +39,11 @@ def get_form_config():
       'required_fields': {'patient_name', 'patient_age', ...},
       'currency_symbol': 'Rs',
     }
+
+    The currency_symbol comes from:
+      1. LabSettings.currency_symbol (DB) if set, else
+      2. config.APP_CURRENCY, else
+      3. 'Rs'
     """
     definitions = get_field_definitions()
     field_configs = {c.field_key: c for c in FormFieldConfig.query.all()}
@@ -79,10 +97,11 @@ def get_form_config():
             'fields': fields_in_section,
         })
 
-    # Currency symbol from LabSettings
+    # Currency symbol — DB value if present, else config.APP_CURRENCY, else 'Rs'
     from core.models import LabSettings
     ls = LabSettings.get()
-    currency_symbol = ls.currency_symbol if ls else 'Rs'
+    db_symbol = (ls.currency_symbol if ls else None) or None
+    currency_symbol = db_symbol or _default_currency()
 
     return {
         'sections': sections_out,
