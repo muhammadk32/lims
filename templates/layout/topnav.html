@@ -1,4 +1,4 @@
-<nav class="app-topnav" id="appTopnav">
+﻿<nav class="app-topnav" id="appTopnav">
   <div class="nav-container">
 
     <!-- Dashboard -->
@@ -16,13 +16,13 @@
         <i class="bi bi-chevron-down small"></i>
       </button>
       <div class="topnav-dropdown">
-        {# ─── Patient Registration (opens the FORM) ─── #}
+        {# â”€â”€â”€ Patient Registration (opens the FORM) â”€â”€â”€ #}
         <a href="{{ url_for('orders.new_order') }}"
            class="dropdown-item {% if request.endpoint == 'orders.new_order' %}active{% endif %}">
           <i class="bi bi-person-plus"></i> Patient Registration
         </a>
 
-        {# ─── Daily Ledger (opens the LIST) ─── #}
+        {# â”€â”€â”€ Daily Ledger (opens the LIST) â”€â”€â”€ #}
         <a href="{{ url_for('orders.list_orders') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('orders.') and request.endpoint != 'orders.new_order' %}active{% endif %}">
           <i class="bi bi-journal-text"></i> Daily Ledger
@@ -35,6 +35,10 @@
         <a href="{{ url_for('reports.index') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}">
           <i class="bi bi-file-earmark-medical"></i> Reports
+        </a>
+
+        <a href="{{ url_for('analytics.index') }}" class="dropdown-item {% if request.path.startswith('/analytics') %}active{% endif %}">
+          <i class="bi bi-bar-chart-line"></i> Management Reports
         </a>
       </div>
     </div>

@@ -1,0 +1,50 @@
+﻿{% extends 'base.html' %}
+{% block title %}Reports — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.rh-page { max-width: 1100px; margin: 0 auto; padding: 24px 24px 60px; }
+.rh-title { font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+.rh-sub { color: #6c757d; font-size: 0.85rem; margin-bottom: 24px; }
+.rh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.rh-card { display: block; padding: 18px 20px; border: 1px solid #dee2e6; background: #fff;
+           text-decoration: none; color: #212529; transition: all 0.12s; }
+.rh-card:hover { border-color: #198754; background: #f8fff9; transform: translateY(-1px); }
+.rh-card .icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+.rh-card .name { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+.rh-card .desc { font-size: 0.78rem; color: #6c757d; line-height: 1.4; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rh-page">
+  <h1 class="rh-title"><i class="bi bi-bar-chart-line"></i> Reports</h1>
+  <p class="rh-sub">Management and analytical reports — all with Print and Excel export</p>
+
+  <div class="rh-grid">
+    <a class="rh-card" href="{{ url_for('analytics.doctors') }}">
+      <span class="icon text-primary"><i class="bi bi-person-badge"></i></span>
+      <div class="name">Doctor / Referral</div>
+      <div class="desc">Orders, tests, and revenue by referring doctor or external referral.</div>
+    </a>
+
+    <a class="rh-card" href="{{ url_for('analytics.tests') }}">
+      <span class="icon text-success"><i class="bi bi-clipboard2-pulse"></i></span>
+      <div class="name">Test Volume</div>
+      <div class="desc">Top tests by orders and revenue, broken down by category.</div>
+    </a>
+
+    <a class="rh-card" href="{{ url_for('analytics.abnormal') }}">
+      <span class="icon text-danger"><i class="bi bi-exclamation-triangle"></i></span>
+      <div class="name">Abnormal Results</div>
+      <div class="desc">Every abnormal result with patient, value, and reference range.</div>
+    </a>
+
+    <a class="rh-card" href="{{ url_for('analytics.daily') }}">
+      <span class="icon text-secondary"><i class="bi bi-calendar-week"></i></span>
+      <div class="name">Daily Summary</div>
+      <div class="desc">One row per day — orders, tests, billed, collected, outstanding.</div>
+    </a>
+  </div>
+</div>
+{% endblock %}

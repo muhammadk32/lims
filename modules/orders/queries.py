@@ -91,7 +91,6 @@ def get_ledger_orders(q='', status='', paid_filter='',
     from modules.patients.models import Patient
 
     query = Order.query.filter(
-        Order.status != OrderStatus.CANCELLED,
         func.date(Order.created_at) >= date_from,
         func.date(Order.created_at) <= date_to,
     )
@@ -121,20 +120,25 @@ def get_ledger_orders(q='', status='', paid_filter='',
 
 
 def compute_ledger_stats(orders):
-    """Aggregate totals for the ledger footer."""
+    """Aggregate totals for the ledger footer.
+
+    Cancelled orders are excluded from the money totals but counted
+    separately so the operator can see them.
+    """
+    from .models import OrderStatus
+    billable = [o for o in orders if o.status != OrderStatus.CANCELLED]
+    cancelled = [o for o in orders if o.status == OrderStatus.CANCELLED]
+
     return {
-        'total_amount':   round_money(sum(o.subtotal for o in orders)),
-        'total_discount': round_money(sum(o.discount_value for o in orders)),
-        'net_amount':     round_money(sum(o.final_total for o in orders)),
-        'paid_amount':    round_money(sum(o.paid_amount for o in orders)),
-        'due_amount':     round_money(sum(o.balance_due for o in orders)),
-        'case_count':     len(orders),
+        'total_amount':    round_money(sum(o.subtotal for o in billable)),
+        'total_discount':  round_money(sum(o.discount_value for o in billable)),
+        'net_amount':      round_money(sum(o.final_total for o in billable)),
+        'paid_amount':     round_money(sum(o.paid_amount for o in billable)),
+        'due_amount':      round_money(sum(o.balance_due for o in billable)),
+        'refunded_amount': round_money(sum(o.paid_amount for o in cancelled)),
+        'case_count':      len(billable),
+        'cancelled_count': len(cancelled),
     }
-
-
-# ============================================================
-# Lookups (AJAX)
-# ============================================================
 def lookup_patients(phone='', query='', limit=10):
     """Search patients by phone or free text. Returns a list of dicts."""
     from modules.patients.models import Patient

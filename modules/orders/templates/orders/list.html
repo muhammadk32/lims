@@ -4,6 +4,37 @@
 
 {% block head %}
 <style>
+.cancelled-row td { background: #f8f9fa !important; }
+.strike-cancelled {
+  text-decoration: line-through;
+  color: #adb5bd !important;
+}
+.cancelled-badge {
+  display: inline-block;
+  background: #6c757d; color: #fff;
+  font-size: 0.66rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+.refund-pill {
+  color: #b02a37; font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.cancelled-row { opacity: 0.7; }
+.cancelled-row td { background: #f8f9fa !important; }
+.cancelled-row .strike { text-decoration: line-through; color: #adb5bd; }
+.cancelled-badge {
+  background: #dc3545; color: #fff;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase;
+}
+.refund-note {
+  font-size: 0.7rem; color: #b02a37;
+  font-weight: 600;
+}
+
 /* ============================================================
    Daily Ledger — flat dense one-page layout
    ============================================================ */
@@ -337,7 +368,7 @@
       </thead>
       <tbody>
         {% for o in orders %}
-        <tr>
+        <tr class="order-row {% if o.status == 'cancelled' %}cancelled-row{% endif %}">
           <td><code>{{ o.order_code }}</code></td>
           <td class="patient-cell">
             <div class="name">{{ o.patient.full_name }}</div>
@@ -349,27 +380,25 @@
           <td class="text-center">
             <span class="badge bg-secondary" style="font-size:0.68rem;">{{ o.item_count }}</span>
           </td>
-          <td class="text-end">{{ config.currency_symbol }} {{ '%.2f'|format(o.subtotal) }}</td>
-          <td class="text-end text-danger">
+          <td class="text-end {% if o.status == 'cancelled' %}strike-cancelled{% endif %}">{{ config.currency_symbol }} {{ '%.2f'|format(o.subtotal) }}</td>
+          <td class="text-end text-danger {% if o.status == 'cancelled' %}strike-cancelled{% endif %}">
             {% if o.discount_value > 0 %}
               −{{ config.currency_symbol }} {{ '%.2f'|format(o.discount_value) }}
             {% else %}—{% endif %}
           </td>
-          <td class="text-end fw-semibold">{{ config.currency_symbol }} {{ '%.2f'|format(o.final_total) }}</td>
-          <td class="text-end text-success">{{ config.currency_symbol }} {{ '%.2f'|format(o.paid_amount) }}</td>
-          <td class="text-end {% if o.balance_due > 0.001 %}text-danger fw-semibold{% else %}text-muted{% endif %}">
-            {{ config.currency_symbol }} {{ '%.2f'|format(o.balance_due) }}
-          </td>
+          <td class="text-end fw-semibold {% if o.status == 'cancelled' %}strike-cancelled{% endif %}">{{ config.currency_symbol }} {{ '%.2f'|format(o.final_total) }}</td>
+          <td class="text-end">{% if o.status == 'cancelled' %}<span class="refund-pill">refunded</span>{% else %}{{ config.currency_symbol }} {{ '%.2f'|format(o.paid_amount) }}{% endif %}</td>
+          <td class="text-end">{% if o.status == 'cancelled' %}—{% else %}{{ config.currency_symbol }} {{ '%.2f'|format(o.balance_due) }}{% endif %}</td>
           <td>
             <span class="status-badge {{ o.status }}">{{ o.status|capitalize }}</span>
           </td>
           <td>
             {% set ps = o.payment_status %}
-            <span class="pay-pill {{ ps }}">
+            {% if o.status == 'cancelled' %}<span class="cancelled-badge">Cancelled</span>{% else %}<span class="pay-pill {{ ps }}">
               {% if ps == 'paid' %}Paid
               {% elif ps == 'partial' %}Partial
               {% else %}Unpaid{% endif %}
-            </span>
+            </span>{% endif %}
           </td>
           <td class="text-muted" style="font-size:0.72rem;">
             {{ o.created_at | localtime('%d/%m/%y %H:%M') }}
@@ -451,6 +480,17 @@
                     <i class="bi bi-lock-fill me-2"></i> Report PDF
                     <span class="small ms-2">(balance due)</span>
                   </span>
+                </li>
+                {% endif %}
+
+                {% if o.status not in ['cancelled', 'approved'] %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item text-danger fw-semibold"
+                     href="#"
+                     onclick="openCancelModal(event, {{ o.id }}, '{{ o.order_code }}', '{{ o.patient.full_name|e }}', {{ o.paid_amount or 0 }});">
+                    <i class="bi bi-x-circle me-2"></i> Cancel Order
+                  </a>
                 </li>
                 {% endif %}
 
@@ -542,4 +582,65 @@
 
 })();
 </script>
+
+
+{# ============================================================
+   Cancel Order Modal (shared — used by all rows)
+   ============================================================ #}
+<div class="modal fade" id="cancelOrderModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" id="cancelOrderForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-x-circle text-danger"></i> Cancel Order
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">
+            <strong id="cancelOrderLabel"></strong>
+          </p>
+          <div class="alert alert-warning small py-2">
+            <i class="bi bi-arrow-return-left"></i>
+            <strong>Auto-refund:</strong>
+            <span id="cancelRefundAmount" class="fw-bold">Rs 0</span>
+            will be returned to the patient and deducted from today's
+            Cash Summary automatically.
+          </div>
+          <div class="mb-2">
+            <label class="form-label fw-semibold">
+              Reason for cancellation <span class="text-danger">*</span>
+            </label>
+            <textarea name="reason" class="form-control" rows="3" required
+                      placeholder="e.g. Patient refused, sample hemolyzed, test not available..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary"
+                  data-bs-dismiss="modal">Keep Order</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-x-circle"></i> Confirm Cancellation
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openCancelModal(event, orderId, orderCode, patientName, paidAmount) {
+  event.preventDefault();
+  var form = document.getElementById('cancelOrderForm');
+  form.action = '/orders/' + orderId + '/cancel';
+  document.getElementById('cancelOrderLabel').textContent =
+    'Lab # ' + orderCode + ' \u2014 ' + patientName;
+  var cur = '{{ config.currency_symbol }}';
+  document.getElementById('cancelRefundAmount').textContent =
+    cur + ' ' + Number(paidAmount || 0).toFixed(2);
+  var modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+  modal.show();
+}
+</script>
+
 {% endblock %}

@@ -181,6 +181,10 @@ def create_order(patient, tests, form, user):
 
     order.recompute_total()
 
+    # Guard: flag when 100 percent discount wipes the entire total
+    _warn_full_discount = (order.subtotal > 0 and order.final_total <= 0.01)
+
+
     # ---------- Payment ----------
     try:
         pay_amount = float(form.get('payment_amount') or 0)
@@ -221,6 +225,18 @@ def create_order(patient, tests, form, user):
         f'subtotal {order.subtotal:.2f}, discount {order.discount_value:.2f}, '
         f'total {order.final_total:.2f}',
     )
+    # Flash a warning if the discount wiped the full amount
+    if _warn_full_discount:
+        try:
+            from flask import flash
+            flash(
+                'Note: order ' + order.order_code +
+                ' has a 100 percent discount - Rs 0 is due from the patient.',
+                'warning',
+            )
+        except Exception:
+            pass
+
     return order
 
 
@@ -250,19 +266,53 @@ def set_paid(order, value, user):
     return order
 
 
-def cancel_order(order, user):
+def cancel_order(order, reason, user):
+    """Cancel an order and automatically refund any amount already paid.
+
+    Creates a negative Payment row so the refund is deducted from the
+    Cash Summary on the date of cancellation.
+
+    Returns (ok, error_message, refund_amount).
+    """
+    from modules.billing.models import Payment, PaymentMethod
+    from modules.orders.models import OrderStatus
+
+    if order.status == OrderStatus.CANCELLED:
+        return False, 'Order is already cancelled.', 0.0
+
+    reason = (reason or '').strip()
+    if not reason:
+        return False, 'Please provide a reason for cancellation.', 0.0
+
+    now = datetime.utcnow()
+    refund_amount = round_money(order.paid_amount or 0)
+
+    # 1. Cancel the order
     order.status = OrderStatus.CANCELLED
+    order.cancel_reason = reason
+    order.cancelled_at = now
+    order.cancelled_by_id = user.id if user else None
+
+    # 2. Auto-refund whatever was paid
+    if refund_amount > 0.001:
+        db.session.add(Payment(
+            order_id=order.id,
+            amount=-refund_amount,               # negative = refund
+            method=PaymentMethod.CASH,
+            reference='Auto-refund on cancellation',
+            notes=f'Cancelled: {reason[:120]}',
+            received_by_id=user.id if user else None,
+        ))
+        order.refunded_at = now
+
     db.session.commit()
-    log_action('delete', 'order', order.id,
-               f'Cancelled order {order.order_code}')
-    return order
 
-
-# ============================================================
-# Pathologist approval / correction
-# ============================================================
-def can_approve(user):
-    return bool(user and user.is_authenticated and user.role in ('admin', 'doctor'))
+    log_action(
+        'cancel', 'order', order.id,
+        f'Cancelled order {order.order_code} — refunded Rs {refund_amount:.2f} '
+        f'({reason[:80]})',
+    )
+    return True, None, refund_amount
 
 
 def approve_order(order, user):

@@ -132,6 +132,13 @@ def _handle_new_order_post():
         flash(str(e), 'danger')
         return redirect(url_for('orders.new_order'))
 
+    # Warn if the discount wiped the full amount
+    if order.subtotal > 0 and order.final_total <= 0.01:
+        flash(
+            'Note: order ' + order.order_code +
+            ' has a 100pct discount - Rs 0 is due.',
+            'warning',
+        )
     flash(
         f'Lab # {order.order_code} created for {patient.full_name} '
         f'— Total: {order.final_total:.2f}',
@@ -255,9 +262,22 @@ def mark_unpaid(order_id):
 @login_required
 @permission_required('cancel_order')
 def cancel_order(order_id):
+    """Cancel an order and auto-refund any amount paid."""
     order = _get_order_or_404(order_id)
-    svc.cancel_order(order, current_user)
-    flash(f'Lab # {order.order_code} cancelled.', 'info')
+    reason = (request.form.get('reason') or '').strip()
+
+    ok, error, refund = svc.cancel_order(order, reason, current_user)
+    if not ok:
+        flash(error, 'warning')
+    else:
+        if refund > 0:
+            flash(
+                f'Order {order.order_code} cancelled. '
+                f'Refunded {refund:.2f} to patient.',
+                'info',
+            )
+        else:
+            flash(f'Order {order.order_code} cancelled. Nothing to refund.', 'info')
     return redirect(url_for('orders.view_order', order_id=order.id))
 
 

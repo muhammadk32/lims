@@ -18,7 +18,7 @@ def list_billing_orders(q='', filter_by='all'):
     from modules.orders.models import Order, OrderStatus
     from modules.patients.models import Patient
 
-    query = Order.query.filter(Order.status != OrderStatus.CANCELLED)
+    query = Order.query   # includes cancelled orders for audit
 
     if q:
         like = f'%{q}%'
@@ -41,21 +41,20 @@ def list_billing_orders(q='', filter_by='all'):
 
 
 def compute_billing_stats():
-    """Return dashboard totals."""
+    """Dashboard totals. Cancelled orders are excluded from money."""
     from modules.orders.models import Order, OrderStatus
 
     today = date.today()
 
-    total_orders = (
-        Order.query
-        .filter(Order.status != OrderStatus.CANCELLED)
-        .count()
-    )
+    active = Order.status != OrderStatus.CANCELLED
+
+    total_orders = Order.query.filter(active).count()
     total_billed = (
         db.session.query(func.coalesce(func.sum(Order.total_amount), 0.0))
-        .filter(Order.status != OrderStatus.CANCELLED)
+        .filter(active)
         .scalar()
     )
+    # Payments: includes negative refunds automatically (they reduce sum)
     total_collected = (
         db.session.query(func.coalesce(func.sum(Payment.amount), 0.0))
         .scalar()
@@ -65,6 +64,8 @@ def compute_billing_stats():
         .filter(func.date(Payment.created_at) == today)
         .scalar()
     )
+
+    # Outstanding = billed - collected, but only on active orders
     outstanding = max(0.0, total_billed - total_collected)
 
     return {
@@ -74,11 +75,6 @@ def compute_billing_stats():
         'today_collected': today_collected,
         'outstanding': outstanding,
     }
-
-
-# ============================================================
-# Payment history (paginated)
-# ============================================================
 def paginate_payments(page=1, per_page=20):
     """Return a Flask-SQLAlchemy Pagination object of payments."""
     return (
@@ -187,3 +183,32 @@ def revenue_report(start_dt, end_dt):
         'orders_created': orders_created,
         'orders_billed': orders_billed,
     }
+
+# ============================================================
+# Range-based report query
+# ============================================================
+def list_billing_orders_for_range(date_from, date_to):
+    """Return (orders, stats) for a date range — used by /billing/report."""
+    from modules.orders.models import Order
+    from sqlalchemy import func
+
+    orders = (
+        Order.query
+        .filter(func.date(Order.created_at) >= date_from)
+        .filter(func.date(Order.created_at) <= date_to)
+        .order_by(Order.id.desc())
+        .all()
+    )
+
+    total_billed = round(sum(o.final_total for o in orders if o.status != 'cancelled'), 2)
+    total_collected = round(sum(o.paid_amount for o in orders), 2)
+    outstanding = round(sum(o.balance_due for o in orders if o.status != 'cancelled'), 2)
+    active_count = sum(1 for o in orders if o.status != 'cancelled')
+
+    stats = {
+        'total_billed': total_billed,
+        'total_collected': total_collected,
+        'outstanding': outstanding,
+        'total_orders': active_count,
+    }
+    return orders, stats

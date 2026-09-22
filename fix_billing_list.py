@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿content = """{% extends 'base.html' %}
 {% block title %}Cash Summary - LabMS{% endblock %}
 
 {% block content %}
@@ -40,3 +40,9 @@
 
 </div>
 {% endblock %}
+"""
+
+path = 'modules/billing/templates/billing/list.html'
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(content)
+print('OK - list.html fully replaced')

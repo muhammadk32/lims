@@ -1,0 +1,52 @@
+﻿{% extends 'analytics/_base.html' %}
+{% block report_title %}Doctor / Referral Performance{% endblock %}
+{% block excel_url %}{{ url_for('analytics.doctors_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
+
+{% block report_body %}
+<table class="an-kpi">
+  <tr>
+    <td><div class="an-kpi-label">Referrals</div><div class="an-kpi-value">{{ totals.refs }}</div></td>
+    <td><div class="an-kpi-label">Orders</div><div class="an-kpi-value">{{ totals.orders }}</div></td>
+    <td><div class="an-kpi-label">Tests</div><div class="an-kpi-value">{{ totals.tests }}</div></td>
+    <td><div class="an-kpi-label">Billed</div><div class="an-kpi-value">{{ totals.billed | money }}</div></td>
+    <td><div class="an-kpi-label">Collected</div><div class="an-kpi-value">{{ totals.collected | money }}</div></td>
+  </tr>
+</table>
+
+<table class="an-table">
+  <thead>
+    <tr>
+      <th>Referral Name</th>
+      <th class="num">Orders</th>
+      <th class="num">Tests</th>
+      <th class="num">Billed</th>
+      <th class="num">Collected</th>
+      <th class="num">Avg / Order</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="fw-semibold"><a href="/analytics/doctors/{{ r.name }}" class="text-decoration-none">{{ r.name }}</a></td>
+      <td class="num">{{ r.orders }}</td>
+      <td class="num">{{ r.tests }}</td>
+      <td class="num">{{ r.billed | money }}</td>
+      <td class="num">{{ r.collected | money }}</td>
+      <td class="num">{{ r.avg | money }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="an-empty">No data for this date range.</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>TOTAL</td>
+      <td class="num">{{ totals.orders }}</td>
+      <td class="num">{{ totals.tests }}</td>
+      <td class="num">{{ totals.billed | money }}</td>
+      <td class="num">{{ totals.collected | money }}</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}

@@ -54,6 +54,14 @@ class Order(BaseModel):
     reported_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     correction_note = db.Column(db.Text, nullable=True)
+
+    # ---- Cancellation + auto-refund ----
+    cancel_reason = db.Column(db.String(255), nullable=True)
+    cancelled_at = db.Column(db.DateTime, nullable=True)
+    cancelled_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    refunded_at = db.Column(db.DateTime, nullable=True)
+    cancelled_by = db.relationship('User', foreign_keys=[cancelled_by_id])
+
     correction_at = db.Column(db.DateTime, nullable=True)
     correction_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
@@ -215,6 +223,9 @@ class Order(BaseModel):
 
     @property
     def payment_status(self):
+        # Nothing is owed (100pct discount) -> treat as paid
+        if (self.final_total or 0) <= 0.001:
+            return 'paid'
         if self.paid_amount <= 0.001:
             return 'unpaid'
         if self.is_fully_paid:

@@ -1,0 +1,99 @@
+﻿{% extends 'base.html' %}
+
+{% block head %}
+<style>
+.an-page { max-width: 1400px; margin: 0 auto; padding: 14px 22px 40px; font-size: 0.82rem; }
+.an-header { display: flex; justify-content: space-between; align-items: flex-end;
+             border-bottom: 2px solid #212529; padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.an-title { font-size: 1.15rem; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.02em; }
+.an-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; font-family: Consolas, Monaco, monospace; }
+.an-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.an-btn { display: inline-block; padding: 5px 14px; font-size: 0.78rem; font-weight: 600;
+          border: 1px solid #212529; background: #fff; color: #212529; text-decoration: none;
+          border-radius: 0; cursor: pointer; text-transform: uppercase; letter-spacing: 0.03em; }
+.an-btn:hover { background: #f1f3f5; color: #212529; }
+.an-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.an-btn-primary:hover { background: #146c43; color: #fff; }
+.an-btn-warn { background: #dc3545; border-color: #dc3545; color: #fff; }
+.an-btn-warn:hover { background: #b02a37; color: #fff; }
+
+.an-filter { background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px 12px; margin-bottom: 12px;
+             display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+.an-filter label { font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+                   letter-spacing: 0.06em; color: #6c757d; display: block; margin-bottom: 3px; }
+.an-filter input[type="date"] { padding: 4px 8px; border: 1px solid #6c757d; font-size: 0.82rem; }
+
+.an-kpi { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; margin-bottom: 12px; }
+.an-kpi td { border: 1px solid #6c757d; padding: 8px 14px; background: #f8f9fa; }
+.an-kpi-label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em;
+                color: #6c757d; font-weight: 700; margin-bottom: 3px; }
+.an-kpi-value { font-size: 1.15rem; font-weight: 700; font-family: Consolas, Monaco, monospace; }
+
+.an-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; font-size: 0.78rem; }
+.an-table thead th { background: #212529; color: #fff; font-size: 0.68rem; font-weight: 700;
+                     text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px;
+                     text-align: left; border: 1px solid #212529; white-space: nowrap; }
+.an-table thead th.num { text-align: right; }
+.an-table tbody td { padding: 5px 8px; border: 1px solid #6c757d; vertical-align: middle; }
+.an-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.an-table tbody tr:hover { background: #f1f3f5; }
+.an-table td.num { text-align: right; font-family: Consolas, Monaco, monospace; font-variant-numeric: tabular-nums; }
+.an-table .muted { color: #6c757d; font-size: 0.74rem; }
+.an-table .fw-semibold { font-weight: 600; }
+.an-table tfoot td { background: #e9ecef; font-weight: 700; border-top: 2px solid #212529;
+                     padding: 6px 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.an-table tfoot td.num { text-align: right; font-family: Consolas, Monaco, monospace; text-transform: none; letter-spacing: 0; }
+.an-empty { text-align: center; padding: 32px; color: #6c757d; font-style: italic; }
+.an-footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid #dee2e6;
+             font-size: 0.7rem; color: #6c757d; text-align: right; font-family: Consolas, Monaco, monospace; }
+
+.badge-abn { background: #dc3545; color: #fff; padding: 1px 6px; font-size: 0.64rem; font-weight: 700; }
+.badge-ok  { background: #198754; color: #fff; padding: 1px 6px; font-size: 0.64rem; font-weight: 700; }
+.badge-cancel { background: #6c757d; color: #fff; padding: 1px 6px; font-size: 0.64rem; font-weight: 700; }
+
+@media print {
+  body { background: #fff !important; }
+  .an-actions, .an-filter { display: none !important; }
+  .an-page { padding: 0; max-width: 100%; }
+  .an-table thead th, .an-kpi td, .an-table tfoot td {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="an-page">
+  <div class="an-header">
+    <div>
+      <h1 class="an-title">{% block report_title %}Report{% endblock %}</h1>
+      <div class="an-subtitle">
+        {{ date_from }} to {{ date_to }}
+      </div>
+    </div>
+    <div class="an-actions">
+      <button class="an-btn an-btn-primary" onclick="window.print()">Print</button>
+      <a class="an-btn" href="{% block excel_url %}#{% endblock %}">Excel</a>
+      <a class="an-btn" href="{{ url_for('analytics.index') }}">Back</a>
+    </div>
+  </div>
+
+  <form method="GET" class="an-filter d-print-none">
+    <div>
+      <label>From</label>
+      <input type="date" name="date_from" value="{{ date_from_raw }}" required>
+    </div>
+    <div>
+      <label>To</label>
+      <input type="date" name="date_to" value="{{ date_to_raw }}" required>
+    </div>
+    <button type="submit" class="an-btn an-btn-primary">Apply</button>
+  </form>
+
+  {% block report_body %}{% endblock %}
+
+  <div class="an-footer">
+    Generated: {{ generated_at.strftime('%d-%b-%Y %I:%M %p') if generated_at else '' }}
+  </div>
+</div>
+{% endblock %}

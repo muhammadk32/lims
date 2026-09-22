@@ -1,0 +1,48 @@
+﻿{% extends 'analytics/_base.html' %}
+{% block report_title %}Test Volume Report{% endblock %}
+{% block excel_url %}{{ url_for('analytics.tests_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
+
+{% block report_body %}
+<table class="an-kpi">
+  <tr>
+    <td><div class="an-kpi-label">Unique Tests</div><div class="an-kpi-value">{{ totals.unique_tests }}</div></td>
+    <td><div class="an-kpi-label">Total Ordered</div><div class="an-kpi-value">{{ totals.total_count }}</div></td>
+    <td><div class="an-kpi-label">Total Revenue</div><div class="an-kpi-value">{{ totals.total_revenue | money }}</div></td>
+  </tr>
+</table>
+
+<table class="an-table">
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Test Name</th>
+      <th>Category</th>
+      <th class="num">Times Ordered</th>
+      <th class="num">Revenue</th>
+      <th class="num">Avg Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td><code>{{ r.code }}</code></td>
+      <td class="fw-semibold">{{ r.name }}</td>
+      <td class="muted">{{ r.category }}</td>
+      <td class="num">{{ r.count }}</td>
+      <td class="num">{{ r.revenue | money }}</td>
+      <td class="num">{{ r.avg | money }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="an-empty">No data for this date range.</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">TOTAL</td>
+      <td class="num">{{ totals.total_count }}</td>
+      <td class="num">{{ totals.total_revenue | money }}</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}

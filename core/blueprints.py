@@ -1,4 +1,4 @@
-"""Blueprint registration — kept in one place so app.py stays slim."""
+﻿"""Blueprint registration â€” kept in one place so app.py stays slim."""
 
 
 def register_blueprints(app):
@@ -18,6 +18,7 @@ def register_blueprints(app):
     from modules.settings.routes import settings_bp
     from modules.test_settings import test_settings_bp
     from modules.form_settings import form_settings_bp
+    from modules.analytics import analytics_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
@@ -33,3 +34,4 @@ def register_blueprints(app):
     app.register_blueprint(settings_bp, url_prefix='/settings')
     app.register_blueprint(test_settings_bp)
     app.register_blueprint(form_settings_bp)
+    app.register_blueprint(analytics_bp)

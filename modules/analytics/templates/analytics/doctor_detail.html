@@ -1,0 +1,61 @@
+{% extends 'analytics/_base.html' %}
+{% block report_title %}Referral Detail: {{ referral_name }}{% endblock %}
+{% block excel_url %}/analytics/doctors/{{ referral_name }}.xlsx?date_from={{ date_from_raw }}&date_to={{ date_to_raw }}{% endblock %}
+
+{% block report_body %}
+<table class="an-kpi">
+  <tr>
+    <td><div class="an-kpi-label">Orders</div><div class="an-kpi-value">{{ totals.orders }}</div></td>
+    <td><div class="an-kpi-label">Patients</div><div class="an-kpi-value">{{ totals.patients }}</div></td>
+    <td><div class="an-kpi-label">Tests</div><div class="an-kpi-value">{{ totals.tests }}</div></td>
+    <td><div class="an-kpi-label">Billed</div><div class="an-kpi-value">{{ totals.billed | money }}</div></td>
+    <td><div class="an-kpi-label">Collected</div><div class="an-kpi-value text-success">{{ totals.collected | money }}</div></td>
+    <td><div class="an-kpi-label">Outstanding</div><div class="an-kpi-value text-danger">{{ totals.due | money }}</div></td>
+  </tr>
+</table>
+
+<table class="an-table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Invoice</th>
+      <th>Patient</th>
+      <th>Patient #</th>
+      <th>Phone</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Tests</th>
+      <th class="num">Billed</th>
+      <th class="num">Collected</th>
+      <th class="num">Due</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="muted">{{ r.date | localtime('%d/%m/%y %H:%M') }}</td>
+      <td><a href="/orders/{{ r.order_id }}" class="text-decoration-none"><code>INV-{{ r.order_code }}</code></a></td>
+      <td class="fw-semibold">{{ r.patient }}</td>
+      <td class="muted">{{ r.patient_code }}</td>
+      <td class="muted">{{ r.phone }}</td>
+      <td class="muted">{{ r.age }}</td>
+      <td class="muted">{{ r.gender }}</td>
+      <td class="muted">{{ r.tests }}</td>
+      <td class="num">{{ r.billed | money }}</td>
+      <td class="num text-success">{{ r.collected | money }}</td>
+      <td class="num text-danger">{% if r.due > 0 %}{{ r.due | money }}{% else %}—{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="11" class="an-empty">No orders for this referral in this date range.</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="8">TOTAL</td>
+      <td class="num">{{ totals.billed | money }}</td>
+      <td class="num">{{ totals.collected | money }}</td>
+      <td class="num">{{ totals.due | money }}</td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}
