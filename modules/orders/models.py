@@ -1,4 +1,4 @@
-# modules/orders/models.py
+﻿# modules/orders/models.py
 from extensions import db
 from core.models import BaseModel
 from datetime import datetime
@@ -44,7 +44,11 @@ class Order(BaseModel):
     sample_collected_at = db.Column(db.DateTime, nullable=True)
     notes = db.Column(db.Text, nullable=True)
 
-    # Order-level approval (kept for backward compat — but the source of
+    # Free-text referral name (set when receptionist types a name
+    # in the Referred-by typeahead). Falls back to `doctor` when empty.
+    referred_by_name = db.Column(db.String(120), nullable=True)
+
+    # Order-level approval (kept for backward compat â€” but the source of
     # truth is now per-item verification)
     reported_at = db.Column(db.DateTime, nullable=True)
     reported_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -245,7 +249,7 @@ class OrderItem(BaseModel):
     verified_at = db.Column(db.DateTime, nullable=True)
     verified_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
-    # Per-item correction note (NEW) — pathologist sends back a specific test
+    # Per-item correction note (NEW) â€” pathologist sends back a specific test
     correction_note = db.Column(db.Text, nullable=True)
     correction_at = db.Column(db.DateTime, nullable=True)
     correction_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -301,7 +305,7 @@ class OrderItem(BaseModel):
     def is_verified(self):
         """True only for top-level items verified by a pathologist.
 
-        Panel children are never verified individually — only the
+        Panel children are never verified individually â€” only the
         top-level panel is. A standalone top-level test verifies itself.
         """
         if self.is_child:

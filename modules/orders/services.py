@@ -1,4 +1,4 @@
-"""Business logic for order creation, payment, status, approval.
+﻿"""Business logic for order creation, payment, status, approval.
 
 No HTTP, no flash, no redirect. Pure domain operations.
 """
@@ -6,6 +6,7 @@ from datetime import datetime
 
 from extensions import db
 from core.audit import log_action
+from modules.referrals.services import upsert_referral
 from .models import Order, OrderItem, OrderStatus
 from .queries import (
     generate_order_code,
@@ -85,13 +86,17 @@ def create_order(patient, tests, form, user):
         raise ValueError('Please select at least one test.')
 
     # ---------- Referral ----------
+    # The form field can hold either:
+    #   - a numeric User id (registered doctor)
+    #   - a free-text name (external / walk-in referral)
     referred_by = (form.get('referred_by') or '').strip() or None
     doctor_id = None
+    referred_by_name = None
     if referred_by:
         try:
             doctor_id = int(referred_by)
         except (ValueError, TypeError):
-            doctor_id = None
+            referred_by_name = referred_by
 
     # ---------- Sample date ----------
     sample_date_str = form.get('sample_date') or ''
@@ -114,11 +119,8 @@ def create_order(patient, tests, form, user):
         status=OrderStatus.PENDING,
         sample_collected_at=sample_collected_at,
         notes=(form.get('notes') or '').strip() or None,
+        referred_by_name=referred_by_name,
     )
-
-    if referred_by and doctor_id is None:
-        ext_note = f'Referred by: {referred_by}'
-        order.notes = (order.notes + '\n' + ext_note) if order.notes else ext_note
 
     db.session.add(order)
     db.session.flush()
@@ -203,11 +205,19 @@ def create_order(patient, tests, form, user):
         db.session.flush()
         order.paid = order.is_fully_paid
 
+    # ---------- Referral suggestion cache ----------
+    # Store the free-text name in the suggestions table for the typeahead.
+    if referred_by_name:
+        try:
+            upsert_referral(referred_by_name)
+        except Exception as e:
+            print(f'[orders.services] referral upsert failed: {e}')
+
     db.session.commit()
 
     log_action(
         'create', 'order', order.id,
-        f'Created order {order.order_code} for {patient.full_name} — '
+        f'Created order {order.order_code} for {patient.full_name} â€” '
         f'subtotal {order.subtotal:.2f}, discount {order.discount_value:.2f}, '
         f'total {order.final_total:.2f}',
     )
@@ -226,7 +236,7 @@ def change_order_status(order, new_status, user):
         order.sample_collected_at = datetime.utcnow()
     db.session.commit()
     log_action('status', 'order', order.id,
-               f'Order {order.order_code} → {new_status}')
+               f'Order {order.order_code} â†’ {new_status}')
     return True
 
 
@@ -260,7 +270,7 @@ def approve_order(order, user):
     if order.status not in (OrderStatus.COMPLETED, OrderStatus.CORRECTION):
         return False, 'Only completed or correction orders can be approved.'
     if not order.all_results_done:
-        return False, 'Cannot approve — some results are still missing.'
+        return False, 'Cannot approve â€” some results are still missing.'
 
     order.status = OrderStatus.APPROVED
     order.reported_at = datetime.utcnow()

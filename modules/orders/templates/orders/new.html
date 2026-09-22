@@ -3,390 +3,16 @@
 {% block title %}New Registration — Reception{% endblock %}
 
 {% block head %}
-<style>
-/* ============================================================
-   Reception page — compact unified grid
-   ============================================================ */
-
-.rec-page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-top: 16px;
-  padding-bottom: 30px;
-}
-
-.rec-page .form-control,
-.rec-page .form-select {
-  padding: 0.28rem 0.6rem;
-  font-size: 0.9rem;
-  min-height: 34px;
-}
-.rec-page .form-control-sm,
-.rec-page .form-select-sm {
-  padding: 0.2rem 0.5rem;
-  font-size: 0.82rem;
-  min-height: 30px;
-}
-.rec-page .input-group-text {
-  padding: 0.28rem 0.55rem;
-  font-size: 0.85rem;
-}
-.rec-page .form-label {
-  font-size: 0.78rem;
-  margin-bottom: 2px;
-}
-
-.rec-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.rec-header h3 { font-weight: 700; margin: 0; font-size: 1.35rem; }
-.rec-header p { font-size: 0.82rem; }
-
-.rec-section {
-  background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 10px;
-}
-
-.rec-section-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--bs-secondary-color);
-  margin-bottom: 10px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--bs-border-color);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.rec-section-title i {
-  color: var(--brand-primary, var(--bs-primary));
-  font-size: 0.85rem;
-}
-.rec-section-title .badge {
-  margin-left: auto;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 0.68rem;
-  padding: 3px 8px;
-}
-
-.rec-field label {
-  display: block;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--bs-secondary-color);
-  margin-bottom: 2px;
-}
-.rec-field label .req { color: var(--bs-danger); margin-left: 2px; }
-
-/* Age: number + unit dropdown */
-.age-inline {
-  display: flex;
-  gap: 6px;
-  align-items: stretch;
-}
-.age-inline input[type="number"] {
-  width: 65px;
-  text-align: center;
-  flex-shrink: 0;
-}
-.age-inline select {
-  flex: 1;
-  min-width: 90px;
-}
-
-/* Mobile lookup */
-.mobile-lookup-wrap { position: relative; }
-.mobile-lookup-wrap .lookup-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--bs-secondary-color);
-  font-size: 0.85rem;
-  pointer-events: none;
-}
-.mobile-lookup-wrap input { padding-left: 28px; }
-
-.lookup-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1050;
-  background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  margin-top: 4px;
-  max-height: 280px;
-  overflow-y: auto;
-}
-.lookup-result {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
-  transition: background 0.1s;
-}
-.lookup-result:last-child { border-bottom: none; }
-.lookup-result:hover { background: var(--bs-tertiary-bg); }
-.lookup-result .lr-name { font-weight: 600; font-size: 0.88rem; }
-.lookup-result .lr-meta {
-  color: var(--bs-secondary-color);
-  font-size: 0.75rem;
-  margin-top: 1px;
-}
-.lookup-empty {
-  padding: 12px;
-  text-align: center;
-  color: var(--bs-secondary-color);
-  font-size: 0.82rem;
-}
-
-.selected-patient-pill {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 8px 12px;
-  background: color-mix(in srgb, var(--bs-success) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--bs-success) 40%, transparent);
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 0.88rem;
-}
-.selected-patient-pill .sp-name { font-weight: 700; }
-.selected-patient-pill .sp-meta {
-  color: var(--bs-secondary-color);
-  font-size: 0.8rem;
-  margin-left: 6px;
-}
-
-/* Test search */
-.test-search-input { font-size: 0.9rem; }
-.test-search-results {
-  margin-top: 6px;
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid var(--bs-border-color);
-  border-radius: 8px;
-  background: var(--bs-body-bg);
-}
-.test-search-result {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid var(--bs-border-color-translucent);
-  transition: background 0.1s;
-}
-.test-search-result:last-child { border-bottom: none; }
-.test-search-result:hover,
-.test-search-result.highlighted { background: var(--bs-tertiary-bg); }
-.test-search-result.is-panel {
-  background: color-mix(in srgb, var(--brand-primary, var(--bs-primary)) 4%, transparent);
-}
-.test-search-result.is-panel.highlighted {
-  background: color-mix(in srgb, var(--brand-primary, var(--bs-primary)) 12%, transparent);
-}
-.test-search-result .tsr-name {
-  font-weight: 600;
-  font-size: 0.88rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.test-search-result .tsr-meta {
-  color: var(--bs-secondary-color);
-  font-size: 0.74rem;
-  margin-top: 1px;
-}
-.test-search-result .tsr-price {
-  font-weight: 700;
-  color: var(--bs-success);
-  flex-shrink: 0;
-  font-size: 0.88rem;
-  margin-left: 8px;
-}
-.test-search-hint {
-  padding: 16px;
-  text-align: center;
-  color: var(--bs-secondary-color);
-  font-size: 0.85rem;
-}
-
-.selected-list { list-style: none; padding: 0; margin: 0; }
-.selected-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 12px;
-  border-radius: 6px;
-  background: var(--bs-tertiary-bg);
-  margin-bottom: 4px;
-  border-left: 3px solid var(--brand-primary, var(--bs-primary));
-  font-size: 0.88rem;
-}
-.selected-item.is-panel { border-left-color: var(--bs-info); }
-.selected-item .si-name { font-weight: 600; }
-.selected-item .si-meta {
-  color: var(--bs-secondary-color);
-  font-size: 0.74rem;
-}
-.selected-item .si-price { font-weight: 700; margin-right: 8px; }
-.selected-item .si-remove {
-  background: transparent;
-  border: none;
-  color: var(--bs-danger);
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-}
-.selected-item .si-remove:hover {
-  background: color-mix(in srgb, var(--bs-danger) 12%, transparent);
-}
-.selected-empty {
-  text-align: center;
-  color: var(--bs-secondary-color);
-  padding: 12px;
-  font-size: 0.85rem;
-}
-
-/* Billing */
-.billing-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
-}
-.billing-row .label {
-  color: var(--bs-secondary-color);
-  font-size: 0.85rem;
-}
-.billing-row .value {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-.billing-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  margin-top: 4px;
-  border-top: 2px solid var(--bs-border-color);
-  border-bottom: 2px solid var(--bs-border-color);
-}
-.billing-total .label {
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.billing-total .value {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--bs-success);
-}
-
-/* Discount block */
-.discount-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  align-items: end;
-  margin-top: 6px;
-}
-.discount-block .discount-field {
-  display: flex;
-  flex-direction: column;
-}
-.discount-block .discount-field label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--bs-secondary-color);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 2px;
-}
-.discount-block .input-group {
-  display: flex;
-}
-.discount-block .input-group-text {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
-  background: var(--bs-tertiary-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 4px 0 0 4px;
-}
-.discount-block .input-group .form-control {
-  border-radius: 0 4px 4px 0;
-  border-left: none;
-}
-
-.balance-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-.balance-row .value { font-size: 1rem; }
-
-.rec-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.rec-actions .btn { padding: 8px 20px; font-weight: 600; font-size: 0.92rem; }
-
-.print-options {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  padding: 8px 0;
-  border-top: 1px dashed var(--bs-border-color);
-  margin-top: 8px;
-}
-.print-options label {
-  font-size: 0.85rem;
-  color: var(--bs-secondary-color);
-  cursor: pointer;
-  margin: 0;
-}
-
-@media (max-width: 767.98px) {
-  .rec-page { padding-top: 10px; padding-left: 10px; padding-right: 10px; }
-  .rec-section { padding: 10px 12px; }
-  .billing-total .value { font-size: 1.2rem; }
-  .discount-block { grid-template-columns: 1fr; }
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reception.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="rec-page">
+<div class="rec-page" id="recPage" data-currency="{{ config.currency_symbol }}">
 
   <div class="rec-header">
     <div>
       <h3><i class="bi bi-person-plus"></i> New Patient Registration</h3>
-      <p class="text-muted small mb-0">Reception desk — patient, tests, discount, payment</p>
+      <p>Reception desk — patient, tests, discount, payment</p>
     </div>
     <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary btn-sm">
       <i class="bi bi-x-lg"></i> Close
@@ -396,319 +22,326 @@
   <form method="POST" id="orderForm" autocomplete="off" enctype="multipart/form-data">
     <input type="hidden" name="patient_id" id="patientIdInput" value="">
 
-    {# ============================================================
-       SECTION 1 — PATIENT
-       ============================================================ #}
-    {% set patient_section = config.sections | selectattr('key', 'equalto', 'patient') | first %}
-    {% if patient_section and patient_section.is_visible %}
-    <div class="rec-section">
-      <div class="rec-section-title">
-        <i class="bi bi-person"></i> Patient
-        <span class="badge bg-secondary" id="patientBadge">New</span>
-      </div>
+    <div class="rec-grid">
 
-      <div id="selectedPatientBox" style="display: none;">
-        <div class="selected-patient-pill">
-          <div>
-            <i class="bi bi-check-circle-fill text-success"></i>
-            <strong id="spName" class="sp-name"></strong>
-            <span class="sp-meta" id="spMeta"></span>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btnChangePatient">
-            <i class="bi bi-arrow-repeat"></i> Change
-          </button>
+      {# ============================================================
+         COLUMN 1 — PATIENT
+         ============================================================ #}
+      {% set patient_section = config.sections | selectattr('key', 'equalto', 'patient') | first %}
+      <div class="rec-cell">
+        <div class="rec-cell-title">
+          <i class="bi bi-person"></i> Patient
+          <span class="badge bg-secondary" id="patientBadge">New</span>
         </div>
-      </div>
+        <div class="rec-cell-body">
 
-      <div class="row g-2" id="newPatientForm">
+          {% if patient_section and patient_section.is_visible %}
 
-        {# Mobile lookup #}
-        {% if 'patient_phone' in config.visible_fields %}
-        <div class="col-12 col-md-6 col-lg-4 rec-field">
-          <label for="lookupPhone">
-            {{ config.field_map.patient_phone.label }}
-            {% if 'patient_phone' in config.required_fields %}<span class="req">*</span>{% endif %}
-          </label>
-          <div class="mobile-lookup-wrap">
-            <i class="bi bi-telephone lookup-icon"></i>
-            <input type="tel" class="form-control" id="lookupPhone"
-                   name="phone"
-                   placeholder="0300-1234567"
-                   {% if 'patient_phone' in config.required_fields %}required{% endif %}>
-            <div class="lookup-results" id="lookupResults" style="display: none;"></div>
+          <div id="selectedPatientBox" style="display: none;">
+            <div class="selected-patient-pill">
+              <div>
+                <i class="bi bi-check-circle-fill text-success"></i>
+                <strong id="spName" class="sp-name"></strong>
+                <span class="sp-meta" id="spMeta"></span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btnChangePatient">
+                <i class="bi bi-arrow-repeat"></i> Change
+              </button>
+            </div>
           </div>
-        </div>
-        {% endif %}
 
-        {# All other patient fields #}
-        {% for f in patient_section.fields %}
-          {% if f.key != 'patient_phone' %}
+          <div class="row g-2" id="newPatientForm">
 
-            {% if f.input_type == 'textarea' %}
-              {% set col_class = 'col-12' %}
-            {% elif f.key in ['patient_name'] %}
-              {% set col_class = 'col-12 col-md-6 col-lg-4' %}
-            {% elif f.key in ['patient_email', 'patient_address'] %}
-              {% set col_class = 'col-12 col-md-6 col-lg-4' %}
-            {% elif f.key in ['patient_father_husband'] %}
-              {% set col_class = 'col-12 col-md-6 col-lg-4' %}
-            {% else %}
-              {% set col_class = 'col-6 col-md-4 col-lg-4' %}
+            {# Mobile lookup #}
+            {% if 'patient_phone' in config.visible_fields %}
+            <div class="col-12 rec-field">
+              <label for="lookupPhone">
+                {{ config.field_map.patient_phone.label }}
+                {% if 'patient_phone' in config.required_fields %}<span class="req">*</span>{% endif %}
+              </label>
+              <div class="mobile-lookup-wrap">
+                <i class="bi bi-telephone lookup-icon"></i>
+                <input type="tel" class="form-control" id="lookupPhone"
+                       name="phone"
+                       placeholder="0300-1234567"
+                       {% if 'patient_phone' in config.required_fields %}required{% endif %}>
+                <div class="lookup-results" id="lookupResults" style="display: none;"></div>
+              </div>
+            </div>
             {% endif %}
 
-            <div class="{{ col_class }} rec-field" data-field="{{ f.key }}">
-              <label for="fld_{{ f.key }}">
-                {{ f.label }}
-                {% if f.is_required %}<span class="req">*</span>{% endif %}
-              </label>
+            {# Other patient fields #}
+            {% for f in patient_section.fields %}
+              {% if f.key != 'patient_phone' %}
 
-              {% if f.input_type == 'file' %}
-                <input type="file" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control form-control-sm">
+                {% if f.input_type == 'textarea' %}
+                  {% set col_class = 'col-12' %}
+                {% elif f.key in ['patient_name', 'patient_email', 'patient_address', 'patient_father_husband'] %}
+                  {% set col_class = 'col-12' %}
+                {% else %}
+                  {% set col_class = 'col-6' %}
+                {% endif %}
 
-              {% elif f.input_type == 'textarea' %}
-                <textarea name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control" rows="2"
-                          {% if f.is_required %}required{% endif %}
-                          {% if f.default_value %}placeholder="{{ f.default_value }}"{% endif %}></textarea>
-
-              {% elif 'gender' in f.key %}
-                <select name="gender" id="fld_{{ f.key }}" class="form-select"
-                        {% if f.is_required %}required{% endif %}>
-                  <option value="">— Select —</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-
-              {% elif 'blood_group' in f.key %}
-                <select name="blood_group" id="fld_{{ f.key }}" class="form-select">
-                  <option value="">— Select —</option>
-                  {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
-                    <option value="{{ bg }}">{{ bg }}</option>
-                  {% endfor %}
-                </select>
-
-              {% elif 'marital_status' in f.key %}
-                <select name="marital_status" id="fld_{{ f.key }}" class="form-select">
-                  <option value="">— Select —</option>
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                  <option value="Divorced">Divorced</option>
-                  <option value="Widowed">Widowed</option>
-                </select>
-
-              {% elif 'age' in f.key and 'age_' not in f.key %}
-                {# ---------- AGE: number + unit dropdown ---------- #}
-                <div class="age-inline">
-                  <input type="number"
-                         name="age_value"
-                         id="ageValue"
-                         class="form-control"
-                         min="0" max="130"
-                         placeholder="0"
-                         value=""
-                         {% if f.is_required %}required{% endif %}>
-                  <select name="age_unit" id="ageUnit" class="form-select">
-                    <option value="years" selected>Year(s)</option>
-                    <option value="months">Month(s)</option>
-                    <option value="days">Day(s)</option>
-                  </select>
-                </div>
-                <input type="hidden" name="age" id="fld_{{ f.key }}" value="">
-
-              {% elif f.input_type == 'date' %}
-                <input type="date" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
-
-              {% elif f.input_type == 'datetime' %}
-                <input type="datetime-local" name="{{ f.key }}" id="fld_{{ f.key }}"
-                       class="form-control"
-                       {% if f.is_required %}required{% endif %}>
-
-              {% elif f.input_type == 'email' %}
-                <input type="email" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
-
-              {% elif f.input_type == 'tel' or 'phone' in f.key %}
-                <input type="tel" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
-
-              {% elif f.input_type == 'number' %}
-                <input type="number" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       step="1"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
-
-              {% elif f.input_type == 'decimal' %}
-                <input type="number" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       step="0.01"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
-
-              {% elif f.input_type == 'checkbox' %}
-                <div class="form-check pt-1">
-                  <input type="checkbox" name="{{ f.key }}" id="fld_{{ f.key }}"
-                         class="form-check-input" value="1"
-                         {% if f.default_value == '1' %}checked{% endif %}>
-                  <label class="form-check-label small" for="fld_{{ f.key }}">
+                <div class="{{ col_class }} rec-field" data-field="{{ f.key }}">
+                  <label for="fld_{{ f.key }}">
                     {{ f.label }}
+                    {% if f.is_required %}<span class="req">*</span>{% endif %}
                   </label>
+
+                  {% if f.input_type == 'file' %}
+                    <input type="file" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control form-control-sm">
+
+                  {% elif f.input_type == 'textarea' %}
+                    <textarea name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control" rows="2"
+                              {% if f.is_required %}required{% endif %}
+                              {% if f.default_value %}placeholder="{{ f.default_value }}"{% endif %}></textarea>
+
+                  {% elif 'gender' in f.key %}
+                    <select name="gender" id="fld_{{ f.key }}" class="form-select"
+                            {% if f.is_required %}required{% endif %}>
+                      <option value="">— Select —</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+
+                  {% elif 'blood_group' in f.key %}
+                    <select name="blood_group" id="fld_{{ f.key }}" class="form-select">
+                      <option value="">— Select —</option>
+                      {% for bg in ['A+','A-','B+','B-','AB+','AB-','O+','O-'] %}
+                        <option value="{{ bg }}">{{ bg }}</option>
+                      {% endfor %}
+                    </select>
+
+                  {% elif 'marital_status' in f.key %}
+                    <select name="marital_status" id="fld_{{ f.key }}" class="form-select">
+                      <option value="">— Select —</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                      <option value="Widowed">Widowed</option>
+                    </select>
+
+                  {% elif 'age' in f.key and 'age_' not in f.key %}
+                    <div class="age-inline">
+                      <input type="number"
+                             name="age_value"
+                             id="ageValue"
+                             class="form-control"
+                             min="0" max="130"
+                             placeholder="0"
+                             value=""
+                             {% if f.is_required %}required{% endif %}>
+                      <select name="age_unit" id="ageUnit" class="form-select">
+                        <option value="years" selected>Year(s)</option>
+                        <option value="months">Month(s)</option>
+                        <option value="days">Day(s)</option>
+                      </select>
+                    </div>
+                    <input type="hidden" name="age" id="fld_{{ f.key }}" value="">
+
+                  {% elif f.input_type == 'date' %}
+                    <input type="date" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+
+                  {% elif f.input_type == 'datetime' %}
+                    <input type="datetime-local" name="{{ f.key }}" id="fld_{{ f.key }}"
+                           class="form-control"
+                           {% if f.is_required %}required{% endif %}>
+
+                  {% elif f.input_type == 'email' %}
+                    <input type="email" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+
+                  {% elif f.input_type == 'tel' or 'phone' in f.key %}
+                    <input type="tel" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+
+                  {% elif f.input_type == 'number' %}
+                    <input type="number" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           step="1"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+
+                  {% elif f.input_type == 'decimal' %}
+                    <input type="number" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           step="0.01"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+
+                  {% elif f.input_type == 'checkbox' %}
+                    <div class="form-check pt-1">
+                      <input type="checkbox" name="{{ f.key }}" id="fld_{{ f.key }}"
+                             class="form-check-input" value="1"
+                             {% if f.default_value == '1' %}checked{% endif %}>
+                      <label class="form-check-label small" for="fld_{{ f.key }}">
+                        {{ f.label }}
+                      </label>
+                    </div>
+
+                  {% else %}
+                    <input type="text" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
+                           {% if f.is_required %}required{% endif %}
+                           {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
+                  {% endif %}
                 </div>
-
-              {% else %}
-                <input type="text" name="{{ f.key }}" id="fld_{{ f.key }}" class="form-control"
-                       {% if f.is_required %}required{% endif %}
-                       {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
               {% endif %}
-            </div>
-          {% endif %}
-        {% endfor %}
-
-        {# Referral #}
-        {% if 'referred_by' in config.visible_fields %}
-        <div class="col-12 col-md-6 col-lg-4 rec-field">
-          <label for="fld_referred_by">
-            <i class="bi bi-person-badge"></i> Referred by
-          </label>
-          <select name="referred_by" id="fld_referred_by" class="form-select">
-            <option value="">— Walk-in —</option>
-            {% for d in doctors %}
-              <option value="{{ d.id }}">Dr. {{ d.name }}</option>
             {% endfor %}
-            <option value="__external__">External / Other</option>
-          </select>
-          <input type="text" name="referred_by_external" id="externalReferrer"
-                 class="form-control mt-2" placeholder="External doctor's name"
-                 style="display: none;">
-        </div>
-        {% endif %}
 
-        {# Registration Date #}
-        {% if 'sample_date' in config.visible_fields %}
-        <div class="col-12 col-md-6 col-lg-4 rec-field">
-          <label for="fld_sample_date">
-            <i class="bi bi-calendar-event"></i> Registration Date
-          </label>
-          <input type="datetime-local" name="sample_date" id="fld_sample_date"
-                 class="form-control bg-light"
-                 value="{{ now.strftime('%Y-%m-%dT%H:%M') if now else '' }}"
-                 readonly
-                 style="cursor: not-allowed;">
-          <small class="text-muted" style="font-size: 0.7rem;">Auto-set to current time</small>
-        </div>
-        {% endif %}
+            {# Referral — typeahead #}
+            {% if 'referred_by' in config.visible_fields %}
+            <div class="col-12 rec-field">
+              <label for="referralInput">
+                <i class="bi bi-person-badge"></i> Referred by
+              </label>
+              <div class="referral-wrap">
+                <input type="text" name="referred_by" id="referralInput"
+                       class="form-control"
+                       placeholder="Type a name (or leave blank for walk-in)"
+                       autocomplete="off">
+                <div class="referral-results" id="referralResults" style="display: none;"></div>
+              </div>
+              <small class="text-muted" style="font-size: 0.7rem;">
+                Start typing — suggestions appear as you go
+              </small>
+            </div>
+            {% endif %}
 
-        {# Urgent #}
-        {% if 'urgent' in config.visible_fields %}
-        <div class="col-6 col-md-4 col-lg-4 rec-field">
-          <label>&nbsp;</label>
-          <div class="form-check pt-1">
-            <input type="checkbox" name="urgent" id="fld_urgent" class="form-check-input" value="1">
-            <label class="form-check-label" for="fld_urgent">Urgent</label>
+            {# Registration Date #}
+            {% if 'sample_date' in config.visible_fields %}
+            <div class="col-12 rec-field">
+              <label for="fld_sample_date">
+                <i class="bi bi-calendar-event"></i> Registration Date
+              </label>
+              <input type="datetime-local" name="sample_date" id="fld_sample_date"
+                     class="form-control bg-light"
+                     value="{{ now.strftime('%Y-%m-%dT%H:%M') if now else '' }}"
+                     readonly
+                     style="cursor: not-allowed;">
+            </div>
+            {% endif %}
+
+            {# Urgent #}
+            {% if 'urgent' in config.visible_fields %}
+            <div class="col-12 rec-field">
+              <div class="form-check pt-1">
+                <input type="checkbox" name="urgent" id="fld_urgent" class="form-check-input" value="1">
+                <label class="form-check-label" for="fld_urgent">Urgent</label>
+              </div>
+            </div>
+            {% endif %}
+
           </div>
+          {% endif %}
         </div>
-        {% endif %}
-
-      </div>
-    </div>
-    {% endif %}
-
-    {# ============================================================
-       SECTION 2 — TESTS
-       ============================================================ #}
-    {% set tests_section = config.sections | selectattr('key', 'equalto', 'tests') | first %}
-    {% if tests_section and tests_section.is_visible %}
-    <div class="rec-section">
-      <div class="rec-section-title">
-        <i class="bi bi-clipboard2-pulse"></i> Tests &amp; Panels
-        <span class="badge bg-secondary" id="testCountBadge">0 selected</span>
       </div>
 
-      <div class="input-group input-group-sm mb-2">
-        <span class="input-group-text bg-body"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control test-search-input" id="testSearch"
-               placeholder="Type test name or code (↑ ↓ to navigate, Enter to select)…">
-        <button class="btn btn-outline-secondary" type="button" id="clearTestSearch">
-          <i class="bi bi-x-lg"></i>
-        </button>
+      {# ============================================================
+         COLUMN 2 — TESTS
+         ============================================================ #}
+      {% set tests_section = config.sections | selectattr('key', 'equalto', 'tests') | first %}
+      <div class="rec-cell">
+        <div class="rec-cell-title">
+          <i class="bi bi-clipboard2-pulse"></i> Tests &amp; Panels
+          <span class="badge bg-secondary" id="testCountBadge">0 selected</span>
+        </div>
+        <div class="rec-cell-body">
+
+          {% if tests_section and tests_section.is_visible %}
+
+          <div class="input-group input-group-sm mb-2">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control test-search-input" id="testSearch"
+                   placeholder="Type name or code…">
+            <button class="btn btn-outline-secondary" type="button" id="clearTestSearch">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <div class="test-search-results" id="testSearchResults" style="display: none;"></div>
+
+          <ul class="selected-list mt-2" id="selectedTestsList">
+            <li class="selected-empty">
+              <i class="bi bi-inbox fs-5 d-block mb-1"></i>
+              No tests selected yet.
+            </li>
+          </ul>
+
+          {% endif %}
+        </div>
       </div>
 
-      <div class="test-search-results" id="testSearchResults" style="display: none;"></div>
+      {# ============================================================
+         COLUMN 3 — BILLING
+         ============================================================ #}
+      <div class="rec-cell">
+        <div class="rec-cell-title">
+          <i class="bi bi-calculator"></i> Billing
+        </div>
+        <div class="rec-cell-body">
 
-      <div class="mt-2">
-        <ul class="selected-list" id="selectedTestsList">
-          <li class="selected-empty">
-            <i class="bi bi-inbox fs-5 d-block mb-1"></i>
-            No tests selected yet.
-          </li>
-        </ul>
-      </div>
-    </div>
-    {% endif %}
-
-    {# ============================================================
-       SECTION 3 — BILLING
-       ============================================================ #}
-    <div class="rec-section">
-      <div class="rec-section-title">
-        <i class="bi bi-calculator"></i> Billing
-      </div>
-
-      <div class="row g-2">
-        <div class="col-12 col-lg-7">
           <div class="billing-row">
             <span class="label">Subtotal</span>
             <span class="value" id="sumSubtotal">{{ config.currency_symbol }} 0.00</span>
           </div>
 
           {% if 'discount_amount' in config.visible_fields or 'discount_percent' in config.visible_fields %}
-          <div class="discount-block">
-            {% if 'discount_percent' in config.visible_fields %}
-            <div class="discount-field">
-              <label>Discount %</label>
-              <div class="input-group input-group-sm">
-                <input type="number" name="discount_percent" id="discountPercentInput"
-                       class="form-control" step="0.01" min="0" max="100" value="0"
-                       placeholder="0">
-                <span class="input-group-text">%</span>
-              </div>
+          <div class="discount-block-clean">
+            <div class="discount-header">
+              <i class="bi bi-percent"></i> Discount
+              <span class="discount-hint">type % or amount — other updates</span>
             </div>
-            {% endif %}
 
-            {% if 'discount_amount' in config.visible_fields %}
-            <div class="discount-field">
-              <label>Discount Amount</label>
-              <div class="input-group input-group-sm">
-                <span class="input-group-text">{{ config.currency_symbol }}</span>
-                <input type="number" name="discount_amount" id="discountAmountInput"
-                       class="form-control" step="0.01" min="0" value="0"
-                       placeholder="0.00">
+            <div class="discount-inputs">
+              {% if 'discount_percent' in config.visible_fields %}
+              <div class="discount-side">
+                <label for="discountPercentInput">Percent</label>
+                <div class="input-group input-group-sm">
+                  <input type="number" name="discount_percent" id="discountPercentInput"
+                         class="form-control" step="0.01" min="0" max="100"
+                         value="0" placeholder="0">
+                  <span class="input-group-text">%</span>
+                </div>
               </div>
+              {% endif %}
+
+              {% if 'discount_amount' in config.visible_fields %}
+              <div class="discount-link" aria-hidden="true">
+                <i class="bi bi-arrow-left-right"></i>
+              </div>
+              <div class="discount-side">
+                <label for="discountAmountInput">Amount</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text">{{ config.currency_symbol }}</span>
+                  <input type="number" name="discount_amount" id="discountAmountInput"
+                         class="form-control" step="0.01" min="0"
+                         value="0" placeholder="0.00">
+                </div>
+              </div>
+              {% endif %}
             </div>
+
+            <input type="hidden" name="discount_type" id="discountType" value="amount">
+
+            {% if 'discount_reason' in config.visible_fields %}
+            <input type="text" name="discount_reason"
+                   class="form-control form-control-sm mt-2"
+                   placeholder="Reason (optional)">
             {% endif %}
           </div>
-
-          <input type="hidden" name="discount_type" id="discountType" value="amount">
-
-          {% if 'discount_reason' in config.visible_fields %}
-          <input type="text" name="discount_reason"
-                 class="form-control form-control-sm mt-2"
-                 placeholder="Reason (optional)">
-          {% endif %}
           {% endif %}
 
           <div class="billing-row" id="discountRow" style="display: none;">
             <span class="label">Discount applied</span>
             <span class="value text-danger" id="sumDiscount">−{{ config.currency_symbol }} 0.00</span>
           </div>
-        </div>
 
-        <div class="col-12 col-lg-5">
           {% if 'payment_amount' in config.visible_fields %}
-          <div class="mb-1">
-            <label class="form-label text-muted mb-1" for="paymentAmount">Amount received</label>
+          <div class="rec-field mt-2">
+            <label for="paymentAmount">Amount received</label>
             <div class="input-group input-group-sm">
               <span class="input-group-text">{{ config.currency_symbol }}</span>
               <input type="number" name="payment_amount" id="paymentAmount"
@@ -719,8 +352,8 @@
           {% endif %}
 
           {% if 'payment_method' in config.visible_fields %}
-          <div class="mb-1">
-            <label class="form-label text-muted mb-1" for="paymentMethod">Method</label>
+          <div class="rec-field">
+            <label for="paymentMethod">Method</label>
             <select name="payment_method" id="paymentMethod" class="form-select form-select-sm">
               {% for m in payment_methods %}
                 <option value="{{ m }}">{{ payment_method_labels[m] }}</option>
@@ -730,52 +363,53 @@
           {% endif %}
 
           {% if 'payment_reference' in config.visible_fields %}
-          <div class="mb-1">
-            <label class="form-label text-muted mb-1">Reference</label>
-            <input type="text" name="payment_reference"
+          <div class="rec-field">
+            <label for="paymentReference">Reference</label>
+            <input type="text" name="payment_reference" id="paymentReference"
                    class="form-control form-control-sm"
                    placeholder="Transaction ID">
           </div>
           {% endif %}
+
+          <div class="billing-total">
+            <span class="label">Total</span>
+            <span class="value" id="sumTotal">{{ config.currency_symbol }} 0.00</span>
+          </div>
+
+          <div class="balance-row">
+            <span class="label">Balance due</span>
+            <span class="value" id="sumBalance">{{ config.currency_symbol }} 0.00</span>
+          </div>
+
+          {% if 'print_patient_copy' in config.visible_fields or 'print_lab_copy' in config.visible_fields %}
+          <div class="print-options">
+            {% if 'print_patient_copy' in config.visible_fields %}
+            <label class="form-check">
+              <input type="checkbox" name="print_patient_copy" class="form-check-input" value="1" checked>
+              <span class="form-check-label">Print Patient Copy</span>
+            </label>
+            {% endif %}
+            {% if 'print_lab_copy' in config.visible_fields %}
+            <label class="form-check">
+              <input type="checkbox" name="print_lab_copy" class="form-check-input" value="1" checked>
+              <span class="form-check-label">Print Lab Copy</span>
+            </label>
+            {% endif %}
+          </div>
+          {% endif %}
+
         </div>
       </div>
 
-      <div class="billing-total">
-        <span class="label">Total</span>
-        <span class="value" id="sumTotal">{{ config.currency_symbol }} 0.00</span>
-      </div>
+    </div>{# /rec-grid #}
 
-      <div class="balance-row">
-        <span class="label">Balance due</span>
-        <span class="value" id="sumBalance">{{ config.currency_symbol }} 0.00</span>
-      </div>
-
-      {% if 'print_patient_copy' in config.visible_fields or 'print_lab_copy' in config.visible_fields %}
-      <div class="print-options">
-        {% if 'print_patient_copy' in config.visible_fields %}
-        <label class="form-check">
-          <input type="checkbox" name="print_patient_copy" class="form-check-input" value="1" checked>
-          <span class="form-check-label">Print Patient Copy</span>
-        </label>
-        {% endif %}
-        {% if 'print_lab_copy' in config.visible_fields %}
-        <label class="form-check">
-          <input type="checkbox" name="print_lab_copy" class="form-check-input" value="1" checked>
-          <span class="form-check-label">Print Lab Copy</span>
-        </label>
-        {% endif %}
-      </div>
-      {% endif %}
-
-      <div class="rec-actions">
-        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary btn-sm">
-          <i class="bi bi-x-lg"></i> Cancel
-        </a>
-        <button type="submit" class="btn btn-success btn-sm" id="submitBtn" disabled>
-          <i class="bi bi-check-lg"></i> Register Patient
-        </button>
-      </div>
-
+    <div class="rec-actions">
+      <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-x-lg"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-success btn-sm" id="submitBtn" disabled>
+        <i class="bi bi-check-lg"></i> Register Patient
+      </button>
     </div>
 
   </form>
@@ -783,536 +417,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-/* ============================================================
-   Reception page — config-driven, keyboard-navigable
-   ============================================================ */
-(function () {
-  'use strict';
-
-  const CURRENCY = "{{ config.currency_symbol }}";
-  const state = {
-    selectedPatient: null,
-    selectedTests: [],
-    highlightIndex: -1,
-  };
-
-  const $lookupPhone = document.getElementById('lookupPhone');
-  const $lookupResults = document.getElementById('lookupResults');
-  const $selectedPatientBox = document.getElementById('selectedPatientBox');
-  const $spName = document.getElementById('spName');
-  const $spMeta = document.getElementById('spMeta');
-  const $btnChangePatient = document.getElementById('btnChangePatient');
-  const $patientIdInput = document.getElementById('patientIdInput');
-  const $patientBadge = document.getElementById('patientBadge');
-  const $newPatientForm = document.getElementById('newPatientForm');
-
-  const $testSearch = document.getElementById('testSearch');
-  const $testSearchResults = document.getElementById('testSearchResults');
-  const $selectedTestsList = document.getElementById('selectedTestsList');
-  const $testCountBadge = document.getElementById('testCountBadge');
-  const $clearTestSearch = document.getElementById('clearTestSearch');
-
-  const $sumSubtotal = document.getElementById('sumSubtotal');
-  const $sumDiscount = document.getElementById('sumDiscount');
-  const $sumTotal = document.getElementById('sumTotal');
-  const $sumBalance = document.getElementById('sumBalance');
-  const $discountRow = document.getElementById('discountRow');
-  const $discountAmount = document.getElementById('discountAmountInput');
-  const $discountPercent = document.getElementById('discountPercentInput');
-  const $paymentAmount = document.getElementById('paymentAmount');
-  const $fillFullAmount = document.getElementById('fillFullAmount');
-  const $submitBtn = document.getElementById('submitBtn');
-  const $orderForm = document.getElementById('orderForm');
-  const $externalReferrer = document.getElementById('externalReferrer');
-  const $referredBySelect = document.querySelector('select[name="referred_by"]');
-
-  // Age inputs
-  const $ageValue = document.getElementById('ageValue');
-  const $ageUnit = document.getElementById('ageUnit');
-  const $ageHidden = document.getElementById('fld_patient_age');
-
-  // ---------- Round to whole rupees ----------
-  function roundMoney(n) {
-    return Math.round((Number(n) || 0));
-  }
-
-  function fmt(n) {
-    // Always show 2 decimals
-    return CURRENCY + ' ' + (Number(n) || 0).toFixed(2);
-  }
-
-  function debounce(fn, delay) {
-    let t;
-    return function (...args) {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, args), delay);
-    };
-  }
-  function hideLookup() {
-    if ($lookupResults) $lookupResults.style.display = 'none';
-  }
-
-  // ---------- Age → stored years ----------
-  function updateAgeHidden() {
-    if (!$ageHidden) return;
-    const v = parseInt($ageValue?.value || 0) || 0;
-    const unit = $ageUnit?.value || 'years';
-
-    let years = 0;
-    if (unit === 'years') years = v;
-    else if (unit === 'months') years = v / 12.0;
-    else if (unit === 'days') years = v / 365.0;
-
-    $ageHidden.value = years ? years.toFixed(2) : '';
-  }
-  [$ageValue, $ageUnit].forEach(el => {
-    if (el) el.addEventListener('input', updateAgeHidden);
-    if (el) el.addEventListener('change', updateAgeHidden);
-  });
-  updateAgeHidden();
-
-  /* ======================== PATIENT LOOKUP ======================== */
-  if ($lookupPhone) {
-    const doLookup = debounce(async function () {
-      const phone = $lookupPhone.value.trim();
-      if (phone.length < 3) {
-        hideLookup();
-        return;
-      }
-      try {
-        const resp = await fetch('/orders/api/patient-lookup?phone=' + encodeURIComponent(phone));
-        const data = await resp.json();
-        if (!Array.isArray(data) || data.length === 0) {
-          $lookupResults.innerHTML =
-            '<div class="lookup-empty">' +
-            '<i class="bi bi-person-plus fs-5 d-block mb-1"></i>' +
-            'No existing patient found.</div>';
-          $lookupResults.style.display = 'block';
-          return;
-        }
-        $lookupResults.innerHTML = '';
-        data.forEach(p => {
-          const div = document.createElement('div');
-          div.className = 'lookup-result';
-          div.innerHTML =
-            '<div class="lr-name">' + esc(p.full_name) + '</div>' +
-            '<div class="lr-meta">' +
-            '<code>' + esc(p.patient_code) + '</code>' +
-            (p.age ? ' · ' + p.age + 'y' : '') +
-            (p.gender ? ' · ' + esc(p.gender) : '') +
-            '</div>';
-          div.addEventListener('click', () => selectPatient(p));
-          $lookupResults.appendChild(div);
-        });
-        $lookupResults.style.display = 'block';
-      } catch (err) {
-        console.error('[lookup]', err);
-      }
-    }, 300);
-    $lookupPhone.addEventListener('input', doLookup);
-
-    $lookupPhone.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') hideLookup();
-    });
-  }
-
-  document.addEventListener('click', (e) => {
-    if (!$lookupResults || !$lookupPhone) return;
-    if ($lookupPhone.disabled) return;
-
-    const inWrap = $lookupPhone.parentElement.contains(e.target);
-    const inDropdown = $lookupResults.contains(e.target);
-    if (!inWrap && !inDropdown) hideLookup();
-  });
-
-  document.querySelectorAll('#newPatientForm input, #newPatientForm select, #newPatientForm textarea').forEach(el => {
-    if (el === $lookupPhone) return;
-    el.addEventListener('focus', hideLookup);
-  });
-
-  const _requiredSnapshot = new Map();
-  function disablePatientFields() {
-    if (!$newPatientForm) return;
-    $newPatientForm.querySelectorAll('input, select, textarea').forEach(el => {
-      if (!_requiredSnapshot.has(el)) _requiredSnapshot.set(el, el.required);
-      el.required = false;
-      el.disabled = true;
-    });
-  }
-  function enablePatientFields() {
-    if (!$newPatientForm) return;
-    $newPatientForm.querySelectorAll('input, select, textarea').forEach(el => {
-      el.disabled = false;
-      if (_requiredSnapshot.has(el)) el.required = _requiredSnapshot.get(el);
-    });
-  }
-
-  function selectPatient(p) {
-    state.selectedPatient = p;
-    $patientIdInput.value = p.id;
-    $patientBadge.textContent = 'Existing';
-    $patientBadge.className = 'badge bg-success';
-    $spName.textContent = p.full_name;
-    $spMeta.textContent = p.patient_code +
-      (p.age ? ' · ' + p.age + 'y' : '') +
-      (p.gender ? ' · ' + p.gender : '');
-    hideLookup();
-    $lookupPhone.disabled = true;
-    $newPatientForm.style.display = 'none';
-    $selectedPatientBox.style.display = 'block';
-
-    disablePatientFields();
-    updateBilling();
-  }
-
-  if ($btnChangePatient) {
-    $btnChangePatient.addEventListener('click', () => {
-      state.selectedPatient = null;
-      $patientIdInput.value = '';
-      $patientBadge.textContent = 'New';
-      $patientBadge.className = 'badge bg-secondary';
-      $selectedPatientBox.style.display = 'none';
-      $lookupPhone.disabled = false;
-      $lookupPhone.value = '';
-      hideLookup();
-      $newPatientForm.style.display = '';
-
-      enablePatientFields();
-      updateBilling();
-    });
-  }
-
-  /* ======================== REFERRAL ======================== */
-  if ($referredBySelect && $externalReferrer) {
-    $referredBySelect.addEventListener('change', () => {
-      if ($referredBySelect.value === '__external__') {
-        $externalReferrer.style.display = 'block';
-        $externalReferrer.name = 'referred_by';
-        $referredBySelect.removeAttribute('name');
-      } else {
-        $externalReferrer.style.display = 'none';
-        $externalReferrer.name = 'referred_by_external';
-        $referredBySelect.name = 'referred_by';
-      }
-    });
-  }
-
-  /* ======================== TEST SEARCH ======================== */
-  let currentResults = [];
-
-  const doTestSearch = debounce(async function () {
-    const q = $testSearch.value.trim();
-    if (q.length < 2) {
-      $testSearchResults.style.display = 'none';
-      currentResults = [];
-      return;
-    }
-    try {
-      const resp = await fetch('/orders/api/test-search?q=' + encodeURIComponent(q));
-      const data = await resp.json();
-      currentResults = data;
-      state.highlightIndex = data.length > 0 ? 0 : -1;
-      renderTestResults();
-    } catch (err) {
-      console.error('[test-search]', err);
-    }
-  }, 250);
-
-  function renderTestResults() {
-    if (!currentResults || currentResults.length === 0) {
-      $testSearchResults.innerHTML =
-        '<div class="test-search-hint">' +
-        '<i class="bi bi-search fs-5 d-block mb-1"></i>No tests match</div>';
-      $testSearchResults.style.display = 'block';
-      return;
-    }
-    $testSearchResults.innerHTML = '';
-    currentResults.forEach((t, idx) => {
-      const already = state.selectedTests.some(x => x.id === t.id);
-      const div = document.createElement('div');
-      div.className = 'test-search-result' +
-        (t.is_panel ? ' is-panel' : '') +
-        (idx === state.highlightIndex ? ' highlighted' : '');
-      if (already) div.style.opacity = '0.5';
-      const paramInfo = t.is_panel
-        ? '<span class="badge bg-info-subtle text-info-emphasis ms-2" style="font-size:0.68rem;">' +
-          t.parameter_count + ' params</span>'
-        : '';
-      div.innerHTML =
-        '<div class="flex-grow-1">' +
-        '<div class="tsr-name">' +
-        (t.is_panel
-          ? '<i class="bi bi-collection text-primary"></i>'
-          : '<i class="bi bi-droplet text-muted"></i>') +
-        esc(t.name) + paramInfo +
-        '</div>' +
-        '<div class="tsr-meta">' +
-        '<code>' + esc(t.code) + '</code>' +
-        (t.category ? ' · ' + esc(t.category) : '') +
-        (t.unit ? ' · ' + esc(t.unit) : '') +
-        '</div>' +
-        '</div>' +
-        '<div class="tsr-price">' + fmt(t.price) + '</div>' +
-        '<i class="bi bi-plus-circle-fill ms-2 ' +
-        (already ? 'text-secondary' : 'text-success') + '"></i>';
-      div.addEventListener('click', () => {
-        if (already) return;
-        addTest(t);
-        $testSearch.value = '';
-        $testSearchResults.style.display = 'none';
-        currentResults = [];
-        $testSearch.focus();
-      });
-      $testSearchResults.appendChild(div);
-    });
-    $testSearchResults.style.display = 'block';
-  }
-
-  function scrollHighlightIntoView() {
-    const hl = $testSearchResults.querySelector('.highlighted');
-    if (hl) hl.scrollIntoView({ block: 'nearest' });
-  }
-
-  if ($testSearch) {
-    $testSearch.addEventListener('input', doTestSearch);
-    $testSearch.addEventListener('keydown', (e) => {
-      if ($testSearchResults.style.display === 'none' || currentResults.length === 0) return;
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        state.highlightIndex = Math.min(currentResults.length - 1, state.highlightIndex + 1);
-        renderTestResults();
-        scrollHighlightIntoView();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        state.highlightIndex = Math.max(0, state.highlightIndex - 1);
-        renderTestResults();
-        scrollHighlightIntoView();
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (state.highlightIndex >= 0 && state.highlightIndex < currentResults.length) {
-          const t = currentResults[state.highlightIndex];
-          const already = state.selectedTests.some(x => x.id === t.id);
-          if (!already) {
-            addTest(t);
-            $testSearch.value = '';
-            $testSearchResults.style.display = 'none';
-            currentResults = [];
-          }
-        }
-      } else if (e.key === 'Escape') {
-        $testSearchResults.style.display = 'none';
-      }
-    });
-  }
-
-  if ($clearTestSearch) {
-    $clearTestSearch.addEventListener('click', () => {
-      $testSearch.value = '';
-      $testSearchResults.style.display = 'none';
-      currentResults = [];
-      $testSearch.focus();
-    });
-  }
-
-  document.addEventListener('click', (e) => {
-    if ($testSearchResults && !$testSearchResults.contains(e.target) && e.target !== $testSearch) {
-      $testSearchResults.style.display = 'none';
-    }
-  });
-
-  /* ======================== SELECTED TESTS ======================== */
-  function addTest(t) {
-    if (state.selectedTests.some(x => x.id === t.id)) return;
-    state.selectedTests.push({
-      id: t.id,
-      code: t.code,
-      name: t.name,
-      price: t.price,
-      is_panel: t.is_panel,
-      parameter_count: t.parameter_count || 0,
-    });
-    renderSelectedTests();
-    updateBilling();
-  }
-
-  function removeTest(id) {
-    state.selectedTests = state.selectedTests.filter(x => x.id !== id);
-    renderSelectedTests();
-    updateBilling();
-  }
-
-  function renderSelectedTests() {
-    const n = state.selectedTests.length;
-    $testCountBadge.textContent = n + ' selected';
-    if (n === 0) {
-      $selectedTestsList.innerHTML =
-        '<li class="selected-empty">' +
-        '<i class="bi bi-inbox fs-5 d-block mb-1"></i>' +
-        'No tests selected yet.</li>';
-      return;
-    }
-    $selectedTestsList.innerHTML = '';
-    state.selectedTests.forEach(t => {
-      const li = document.createElement('li');
-      li.className = 'selected-item' + (t.is_panel ? ' is-panel' : '');
-      li.innerHTML =
-        '<div>' +
-        '<div class="si-name">' +
-        (t.is_panel ? '<i class="bi bi-collection text-primary"></i> ' : '') +
-        esc(t.name) + '</div>' +
-        '<div class="si-meta">' +
-        '<code>' + esc(t.code) + '</code>' +
-        (t.is_panel && t.parameter_count
-          ? ' · Panel · ' + t.parameter_count + ' params'
-          : '') +
-        '</div></div>' +
-        '<div class="d-flex align-items-center">' +
-        '<span class="si-price">' + fmt(t.price) + '</span>' +
-        '<button type="button" class="si-remove"><i class="bi bi-x-lg"></i></button>' +
-        '</div>';
-      li.querySelector('.si-remove').addEventListener('click', () => removeTest(t.id));
-      $selectedTestsList.appendChild(li);
-    });
-  }
-
-  /* ======================== DISCOUNT ======================== */
-  [$discountAmount, $discountPercent, $paymentAmount].forEach(el => {
-    if (el) el.addEventListener('input', updateBilling);
-  });
-
-  if ($fillFullAmount) {
-    $fillFullAmount.addEventListener('click', () => {
-      if ($paymentAmount && $sumTotal) {
-        // Fill with rounded whole number
-        $paymentAmount.value = $sumTotal.dataset.value || 0;
-        updateBilling();
-      }
-    });
-  }
-
-  /* ======================== BILLING ======================== */
-  function updateBilling() {
-    const subtotal = state.selectedTests.reduce(
-      (s, t) => s + (Number(t.price) || 0), 0
-    );
-    $sumSubtotal.textContent = fmt(roundMoney(subtotal));
-
-    const pctVal = parseFloat($discountPercent?.value || 0) || 0;
-    const amtVal = parseFloat($discountAmount?.value || 0) || 0;
-
-    let discountValue = 0;
-    if (pctVal > 0) {
-      discountValue = subtotal * (pctVal / 100);
-    } else if (amtVal > 0) {
-      discountValue = amtVal;
-    }
-    if (discountValue > subtotal) discountValue = subtotal;
-
-    // Round discount to whole rupees too
-    const roundedDiscount = roundMoney(discountValue);
-
-    if (roundedDiscount > 0) {
-      $discountRow.style.display = 'flex';
-      $sumDiscount.textContent = '−' + fmt(roundedDiscount);
-    } else {
-      $discountRow.style.display = 'none';
-    }
-
-    // Compute rounded subtotal - rounded discount, then round result
-    const roundedSubtotal = roundMoney(subtotal);
-    const total = Math.max(0, roundedSubtotal - roundedDiscount);
-    $sumTotal.textContent = fmt(total);
-    $sumTotal.dataset.value = total.toFixed(2);
-
-    if ($paymentAmount && $sumBalance) {
-      const paid = Math.max(0, parseFloat($paymentAmount.value) || 0);
-      const balance = Math.max(0, total - paid);
-      $sumBalance.textContent = fmt(balance);
-      $sumBalance.classList.toggle('text-danger', balance > 0.001);
-      $sumBalance.classList.toggle('text-success', balance <= 0.001);
-    }
-
-    updateSubmitState();
-  }
-
-  function updateSubmitState() {
-    const nameEl = document.getElementById('fld_patient_name');
-    const hasPatient = !!state.selectedPatient ||
-                       (nameEl && nameEl.value.trim().length > 0);
-    const hasTests = state.selectedTests.length > 0;
-    $submitBtn.disabled = !(hasPatient && hasTests);
-  }
-
-  document.querySelectorAll('#fld_patient_name, #npFullName')
-    .forEach(el => el.addEventListener('input', updateSubmitState));
-
-  /* ======================== SUBMIT ======================== */
-  if ($orderForm) {
-    $orderForm.addEventListener('submit', (e) => {
-      // ---- test_ids ----
-      document.querySelectorAll('input[name="test_ids"][type="hidden"]').forEach(el => el.remove());
-      state.selectedTests.forEach(t => {
-        const inp = document.createElement('input');
-        inp.type = 'hidden';
-        inp.name = 'test_ids';
-        inp.value = t.id;
-        $orderForm.appendChild(inp);
-      });
-
-      // ---- discount_type: set based on which field the user filled ----
-      const pctNow = parseFloat($discountPercent?.value || 0) || 0;
-      const amtNow = parseFloat($discountAmount?.value || 0) || 0;
-      const $discountType = document.getElementById('discountType');
-      if ($discountType) {
-        if (pctNow > 0) {
-          $discountType.value = 'percent';
-          if ($discountAmount) $discountAmount.value = '0';
-        } else if (amtNow > 0) {
-          $discountType.value = 'amount';
-          if ($discountPercent) $discountPercent.value = '0';
-        } else {
-          $discountType.value = 'amount';
-        }
-      }
-
-      // ---- print preferences (sessionStorage for print page) ----
-      const printPatient = document.querySelector('input[name="print_patient_copy"]')?.checked || false;
-      const printLab = document.querySelector('input[name="print_lab_copy"]')?.checked || false;
-      try {
-        sessionStorage.setItem('labms_print_patient', printPatient ? '1' : '0');
-        sessionStorage.setItem('labms_print_lab', printLab ? '1' : '0');
-      } catch (_) {}
-
-      $submitBtn.disabled = true;
-      $submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving…';
-    });
-  }
-
-  /* ======================== UTIL ======================== */
-  function esc(s) {
-    if (s == null) return '';
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  /* ======================== INIT ======================== */
-  updateBilling();
-
-  setTimeout(function () {
-    if ($lookupPhone && !$lookupPhone.disabled) {
-      $lookupPhone.focus();
-    } else if (document.getElementById('fld_patient_name')) {
-      document.getElementById('fld_patient_name').focus();
-    } else if ($testSearch) {
-      $testSearch.focus();
-    }
-  }, 100);
-
-})();
-</script>
+<script src="{{ url_for('static', filename='js/reception.js') }}"></script>
 {% endblock %}

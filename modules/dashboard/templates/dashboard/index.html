@@ -1,359 +1,166 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Dashboard — LabMS{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-4">
+<div class="container-fluid py-5 px-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div style="max-width: 900px; margin: 0 auto;">
+
+    {# ============ WELCOME ============ #}
+    <div class="mb-5">
+      <h1 class="fw-bold mb-2" style="font-size: 2rem;">
+        Welcome back, {{ current_user.full_name }} 👋
+      </h1>
+      <p class="text-muted mb-0">
+        {{ current_user.role_label }} · {{ now.strftime('%A, %d %B %Y') if now else '' }}
+      </p>
+    </div>
+
+    {# ============ QUICK LINKS ============ #}
+    <div class="mb-5">
+      <p class="text-uppercase text-muted small fw-semibold mb-3" style="letter-spacing: 0.08em;">
+        Quick actions
+      </p>
+
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <a href="{{ url_for('orders.new_order') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-person-plus text-primary" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">New Registration</div>
+                <div class="text-muted small">Register a patient and order tests</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="{{ url_for('results.index') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-clipboard-check text-warning" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">
+                  Enter Results
+                  {% if stats.pending_results %}
+                    <span class="badge bg-warning text-dark ms-2">{{ stats.pending_results }}</span>
+                  {% endif %}
+                </div>
+                <div class="text-muted small">Pending results awaiting entry</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="{{ url_for('lab.verify_queue') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-clipboard2-check text-success" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">Verify Reports</div>
+                <div class="text-muted small">Pathologist verification queue</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="{{ url_for('billing.index') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-cash-coin text-danger" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">
+                  Cash Summary
+                  {% if stats.unpaid_orders %}
+                    <span class="badge bg-danger ms-2">{{ stats.unpaid_orders }}</span>
+                  {% endif %}
+                </div>
+                <div class="text-muted small">Payments and unpaid invoices</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="{{ url_for('orders.list_orders') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-journal-text text-secondary" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">Daily Ledger</div>
+                <div class="text-muted small">Today's registrations and history</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+        <div class="col-md-6">
+          <a href="{{ url_for('patients.list_patients') }}"
+             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-people text-info" style="font-size: 1.5rem;"></i>
+              <div>
+                <div class="fw-semibold text-body">Patient Directory</div>
+                <div class="text-muted small">All registered patients</div>
+              </div>
+            </div>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    {# ============ TODAY AT A GLANCE ============ #}
     <div>
-      <h3 class="fw-bold mb-0">Dashboard</h3>
-      <p class="text-muted small mb-0">Welcome back, {{ current_user.full_name }} 👋</p>
-    </div>
-    <div class="text-muted small">{{ current_user.role_label }}</div>
-  </div>
+      <p class="text-uppercase text-muted small fw-semibold mb-3" style="letter-spacing: 0.08em;">
+        Today at a glance
+      </p>
 
-  <!-- KPI cards -->
-  <div class="row g-3 mb-4">
-
-    <!-- Revenue today -->
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <p class="text-muted small mb-1">Revenue Today</p>
-              <h3 class="fw-bold mb-0">{{ stats.revenue_today | money }}</h3>
-              <p class="small mb-0 text-{{ 'success' if stats.revenue_change >= 0 else 'danger' }}">
-                <i class="bi bi-arrow-{{ 'up' if stats.revenue_change >= 0 else 'down' }}"></i>
-                {{ stats.revenue_change }}% vs yesterday
-              </p>
-            </div>
-            <div class="bg-success bg-opacity-10 text-success p-2 rounded">
-              <i class="bi bi-currency-dollar fs-4"></i>
-            </div>
-          </div>
+      <div class="d-flex flex-wrap gap-4 text-muted small">
+        <div>
+          <span class="fw-semibold text-body">{{ stats.revenue_today | money }}</span>
+          <span class="ms-1">revenue</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Registrations today -->
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <p class="text-muted small mb-1">Registrations Today</p>
-              <h3 class="fw-bold mb-0">{{ stats.orders_today }}</h3>
-              <p class="small mb-0 text-{{ 'success' if stats.orders_change >= 0 else 'danger' }}">
-                <i class="bi bi-arrow-{{ 'up' if stats.orders_change >= 0 else 'down' }}"></i>
-                {{ stats.orders_change }}% vs yesterday
-              </p>
-              <p class="text-muted small mb-0">Total: {{ stats.orders_total }}</p>
-            </div>
-            <div class="bg-primary bg-opacity-10 text-primary p-2 rounded">
-              <i class="bi bi-person-plus fs-4"></i>
-            </div>
-          </div>
+        <div>
+          <span class="fw-semibold text-body">{{ stats.orders_today }}</span>
+          <span class="ms-1">registrations</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Pending results -->
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <p class="text-muted small mb-1">Pending Results</p>
-              <h3 class="fw-bold mb-0 text-warning">{{ stats.pending_results }}</h3>
-              <p class="text-muted small mb-0">Registrations awaiting entry</p>
-            </div>
-            <div class="bg-warning bg-opacity-10 text-warning p-2 rounded">
-              <i class="bi bi-hourglass-split fs-4"></i>
-            </div>
-          </div>
+        <div>
+          <span class="fw-semibold text-body">{{ stats.pending_results }}</span>
+          <span class="ms-1">pending results</span>
         </div>
-      </div>
-    </div>
-
-    <!-- Unpaid invoices -->
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <p class="text-muted small mb-1">Unpaid Invoices</p>
-              <h3 class="fw-bold mb-0 text-danger">{{ stats.unpaid_orders }}</h3>
-              <p class="text-muted small mb-0">Need follow-up</p>
-            </div>
-            <div class="bg-danger bg-opacity-10 text-danger p-2 rounded">
-              <i class="bi bi-exclamation-circle fs-4"></i>
-            </div>
-          </div>
+        <div>
+          <span class="fw-semibold text-body">{{ stats.unpaid_orders }}</span>
+          <span class="ms-1">unpaid invoices</span>
         </div>
       </div>
     </div>
 
   </div>
-
-  <!-- Charts row -->
-  <div class="row g-3 mb-4">
-
-    <div class="col-lg-8">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-3">
-            <h6 class="fw-bold mb-0">Revenue — Last 14 Days</h6>
-            <span class="text-muted small">Total: {{ stats.revenue_total | money }}</span>
-          </div>
-          <div style="position: relative; height: 300px; width: 100%;">
-            <canvas id="revenueChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body">
-          <h6 class="fw-bold mb-3">Registrations by Status</h6>
-          <div style="position: relative; height: 300px; width: 100%;">
-            <canvas id="statusChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="fw-bold mb-3">Registrations — Last 14 Days</h6>
-          <div style="position: relative; height: 260px; width: 100%;">
-            <canvas id="ordersChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Top lists -->
-  <div class="row g-3 mb-4">
-
-    <div class="col-lg-6">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-header bg-white border-bottom">
-          <h6 class="fw-bold mb-0"><i class="bi bi-bar-chart"></i> Top 5 Tests</h6>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Test</th>
-                <th class="text-end">Registrations</th>
-                <th class="text-end">Revenue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for t in top_tests %}
-              <tr>
-                <td>
-                  <div class="fw-semibold">{{ t.name }}</div>
-                  <div class="text-muted small"><code>{{ t.code }}</code></div>
-                </td>
-                <td class="text-end">{{ t.count }}</td>
-                <td class="text-end fw-semibold text-success">{{ t.revenue | money }}</td>
-              </tr>
-              {% else %}
-              <tr><td colspan="3" class="text-center text-muted py-3">No data yet.</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-6">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-header bg-white border-bottom">
-          <h6 class="fw-bold mb-0"><i class="bi bi-trophy"></i> Top 5 Patients by Billing</h6>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Patient</th>
-                <th class="text-end">Registrations</th>
-                <th class="text-end">Billed</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for p in top_patients %}
-              <tr>
-                <td>
-                  <a href="{{ url_for('patients.view_patient', patient_id=p.id) }}"
-                     class="text-decoration-none fw-semibold">{{ p.name }}</a>
-                  <div class="text-muted small">{{ p.code }}</div>
-                </td>
-                <td class="text-end">{{ p.orders }}</td>
-                <td class="text-end fw-semibold text-success">{{ p.billed | money }}</td>
-              </tr>
-              {% else %}
-              <tr><td colspan="3" class="text-center text-muted py-3">No data yet.</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Pending work widget -->
-  <div class="row g-3">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-          <h6 class="fw-bold mb-0"><i class="bi bi-hourglass"></i> Pending Work</h6>
-          <a href="{{ url_for('results.index') }}" class="btn btn-sm btn-outline-primary">View all results</a>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Reg. Code</th>
-                <th>Patient</th>
-                <th>Tests</th>
-                <th>Progress</th>
-                <th class="text-end"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for o in pending_orders %}
-              {% set done = o.items|selectattr('result_value')|list|length %}
-              <tr>
-                <td><code>{{ o.order_code }}</code></td>
-                <td>{{ o.patient.full_name }}</td>
-                <td><span class="badge bg-secondary">{{ o.item_count }}</span></td>
-                <td style="min-width: 140px;">
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-success"
-                         style="width: {{ (done / o.item_count * 100) if o.item_count else 0 }}%"></div>
-                  </div>
-                  <div class="text-muted small mt-1">{{ done }}/{{ o.item_count }}</div>
-                </td>
-                <td class="text-end">
-                  <a href="{{ url_for('results.enter', order_id=o.id) }}"
-                     class="btn btn-sm btn-primary">
-                    <i class="bi bi-pencil-square"></i> Enter
-                  </a>
-                </td>
-              </tr>
-              {% else %}
-              <tr><td colspan="5" class="text-center text-muted py-3">🎉 No pending work!</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 {% endblock %}
 
-{% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-  // ---- Revenue chart ----
-  const revLabels = {{ rev_labels|tojson }};
-  const revValues = {{ rev_values|tojson }};
-
-  const revEl = document.getElementById('revenueChart');
-  if (revEl) {
-    new Chart(revEl, {
-      type: 'line',
-      data: {
-        labels: revLabels,
-        datasets: [{
-          label: 'Revenue',
-          data: revValues,
-          borderColor: '#198754',
-          backgroundColor: 'rgba(25, 135, 84, 0.1)',
-          tension: 0.35,
-          fill: true,
-          pointRadius: 3,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: ctx => Number(ctx.parsed.y).toFixed(2)
-            }
-          }
-        },
-        scales: {
-          y: { beginAtZero: true, ticks: { callback: v => v } }
-        }
-      }
-    });
+{% block head %}
+<style>
+  .dashboard-tile {
+    transition: background-color 0.12s, border-color 0.12s, transform 0.12s;
   }
-
-  // ---- Registrations chart ----
-  const ordLabels = {{ ord_labels|tojson }};
-  const ordValues = {{ ord_values|tojson }};
-
-  const ordEl = document.getElementById('ordersChart');
-  if (ordEl) {
-    new Chart(ordEl, {
-      type: 'bar',
-      data: {
-        labels: ordLabels,
-        datasets: [{
-          label: 'Registrations',
-          data: ordValues,
-          backgroundColor: '#0d6efd',
-          borderRadius: 4,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-      }
-    });
+  .dashboard-tile:hover {
+    background-color: var(--bs-tertiary-bg) !important;
+    border-color: var(--bs-primary) !important;
+    transform: translateY(-1px);
   }
-
-  // ---- Status doughnut ----
-  const statusData = {{ status_breakdown|tojson }};
-  const statusEl = document.getElementById('statusChart');
-  if (statusEl) {
-    new Chart(statusEl, {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(statusData).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
-        datasets: [{
-          data: Object.values(statusData),
-          backgroundColor: ['#ffc107', '#0dcaf0', '#198754', '#6c757d'],
-          borderWidth: 0,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } }
-      }
-    });
-  }
-
-});
-</script>
+</style>
 {% endblock %}

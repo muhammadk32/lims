@@ -99,6 +99,18 @@ def preview(order_id):
 def order_pdf(order_id):
     order = _get_order_or_404(order_id)
 
+    # Block report if balance is due
+    if order.balance_due > 0.01:
+        from flask import flash
+        flash(
+            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
+            f'Please record payment first.',
+            'warning',
+        )
+        from flask import redirect, url_for
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
+
     if not order.items:
         flash('Order has no tests — nothing to report.', 'warning')
         return redirect(url_for('orders.view_order', order_id=order.id))
@@ -121,6 +133,18 @@ def order_pdf(order_id):
 @permission_required('view_reports')
 def view_pdf(order_id):
     order = _get_order_or_404(order_id)
+
+    # Block report if balance is due
+    if order.balance_due > 0.01:
+        from flask import flash
+        flash(
+            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
+            f'Please record payment first.',
+            'warning',
+        )
+        from flask import redirect, url_for
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
     from .pdf_generator import generate_report_pdf   # ← lazy
     buffer = generate_report_pdf(order)
     return send_file(

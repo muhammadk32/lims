@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db
@@ -94,11 +94,11 @@ class AuditLog(db.Model):
 
 
 # ============================================================
-# LAB SETTINGS — Branding & Contact Info (Singleton)
+# LAB SETTINGS â€” Branding & Contact Info (Singleton)
 # ============================================================
 class LabSettings(BaseModel):
     """
-    Singleton table — only ever holds ONE row (id=1).
+    Singleton table â€” only ever holds ONE row (id=1).
     Stores branding + contact details shown across the app and printed reports.
     """
     __tablename__ = 'lab_settings'
@@ -148,7 +148,7 @@ class LabSettings(BaseModel):
 
 
 # ============================================================
-# FORM FIELD CONFIG — Reception form customization
+# FORM FIELD CONFIG â€” Reception form customization
 # ============================================================
 class FormFieldConfig(BaseModel):
     """
@@ -183,7 +183,7 @@ class FormFieldConfig(BaseModel):
 
 
 # ============================================================
-# FORM SECTION CONFIG — toggle whole sections on/off
+# FORM SECTION CONFIG â€” toggle whole sections on/off
 # ============================================================
 class FormSectionConfig(BaseModel):
     """
@@ -202,7 +202,7 @@ class FormSectionConfig(BaseModel):
     def __repr__(self):
         return f'<FormSectionConfig {self.section_key} vis={self.is_visible}>'
 # ============================================================
-# REPORT SIGNATURES — doctors/staff panel on printed reports
+# REPORT SIGNATURES â€” doctors/staff panel on printed reports
 # ============================================================
 class ReportSignature(BaseModel):
     """
@@ -228,3 +228,7 @@ class ReportSignature(BaseModel):
 
     def __repr__(self):
         return f'<ReportSignature {self.name}>'
+
+# Import Referral so it's registered with SQLAlchemy metadata
+from modules.referrals.models import Referral  # noqa: F401,E402
+

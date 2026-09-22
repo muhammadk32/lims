@@ -189,6 +189,18 @@ def view_order(order_id):
 def print_order(order_id):
     order = _get_order_or_404(order_id)
 
+    # Block report if balance is due
+    if order.balance_due > 0.01:
+        from flask import flash
+        flash(
+            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
+            f'Please record payment first.',
+            'warning',
+        )
+        from flask import redirect, url_for
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
+
     copy = request.args.get('copy', 'both').strip().lower()
     if copy not in ('patient', 'lab', 'both'):
         copy = 'both'
@@ -285,3 +297,22 @@ def send_back(order_id):
     else:
         flash(f'Report {order.order_code} sent back for correction.', 'info')
     return redirect(url_for('orders.view_order', order_id=order.id))
+
+
+
+@orders_bp.route('/api/referral-search')
+@login_required
+def api_referral_search():
+    """Return referral suggestions matching ?q=."""
+    from modules.referrals.queries import search_referrals
+    query = request.args.get('q', '').strip()
+    results = search_referrals(query)
+    return jsonify([
+        {
+            'name': r.name,
+            'clinic': r.clinic or '',
+            'phone': r.phone or '',
+            'times_used': r.times_used or 0,
+        }
+        for r in results
+    ])

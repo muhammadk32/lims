@@ -64,7 +64,7 @@ def _patient_info_table(order):
         cell('Order Code', order.order_code),
         cell('Registered On', registered_pretty),
         cell_pending('Reporting Date', reporting_value, reporting_pending),
-        cell('Doctor', order.doctor.full_name if order.doctor else '—'),
+        cell('Doctor', order.referred_by_name or (order.doctor.full_name if order.doctor else '—')),
         cell('Status', status_label),
     ]
 
@@ -95,3 +95,4 @@ def _patient_info_table(order):
         ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#e9ecef')),
     ]))
     return t
+

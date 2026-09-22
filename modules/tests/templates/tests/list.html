@@ -1,6 +1,6 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Lab Tests â€” LabMS{% endblock %}
+{% block title %}Lab Tests — LabMS{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -65,11 +65,11 @@
             <td>
               {% if t.category_ref %}
                 <span class="badge bg-info text-dark">{{ t.category_ref.name }}</span>
-              {% else %}â€”{% endif %}
+              {% else %}—{% endif %}
             </td>
             <td class="fw-semibold text-success">{{ t.price | money }}</td>
-            <td>{{ t.unit or 'â€”' }}</td>
-            <td class="text-muted small">{{ t.normal_range or 'â€”' }}</td>
+            <td>{{ t.unit or '—' }}</td>
+            <td class="text-muted small">{{ t.normal_range or '—' }}</td>
             <td class="text-end">
               <a href="{{ url_for('tests.view_test', test_id=t.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
               {% if current_user.role == 'admin' %}
@@ -84,7 +84,7 @@
           <tr>
             <td colspan="7">
               <div class="empty-state text-center py-5">
-                <div class="empty-icon mb-3">ðŸ§ª</div>
+                <div class="empty-icon mb-3">🧪</div>
                 <h5 class="fw-bold">
                   {% if q or category_id %}No matches{% else %}No tests yet{% endif %}
                 </h5>
@@ -122,7 +122,7 @@
           <a class="page-link" href="{{ url_for('tests.list_tests', page=num, q=q, category=category_id) }}">{{ num }}</a>
         </li>
         {% else %}
-        <li class="page-item disabled"><span class="page-link">â€¦</span></li>
+        <li class="page-item disabled"><span class="page-link">…</span></li>
         {% endif %}
       {% endfor %}
       <li class="page-item {% if not tests.has_next %}disabled{% endif %}">
