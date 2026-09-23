@@ -39,7 +39,20 @@ def generate_report_pdf(order) -> io.BytesIO:
     story.append(_patient_info_table(order))
     story.append(Spacer(1, 8 * mm))
 
-    results_table, abnormal_count = _results_table(order)
+    # Build previous-results map for this patient (last 2 prior visits)
+    previous_map = {}
+    date_labels = []
+    try:
+        from modules.reports.queries import build_previous_map
+        previous_map, date_labels = build_previous_map(order.patient_id, order.id, limit=2)
+    except Exception as e:
+        print(f'[pdf.generator] previous_map failed: {e}')
+
+    results_table, abnormal_count = _results_table(
+        order,
+        previous_map=previous_map,
+        date_labels=date_labels,
+    )
     story.append(results_table)
 
     story.extend(_footer_flowables(abnormal_count))

@@ -9,6 +9,14 @@
 {% block content %}
 <div class="rec-page" id="recPage" data-currency="{{ config.currency_symbol }}">
 
+  
+    </span>
+    <button type="button" class="revisit-close"
+            onclick="document.getElementById('revisitBanner').remove();">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  
+
   <div class="rec-header">
     <div>
       <h3><i class="bi bi-person-plus"></i> New Patient Registration</h3>
@@ -20,7 +28,7 @@
   </div>
 
   <form method="POST" id="orderForm" autocomplete="off" enctype="multipart/form-data">
-    <input type="hidden" name="patient_id" id="patientIdInput" value="">
+    <input type="hidden" name="patient_id" id="patientIdInput" value="{{ prefill_patient.id if prefill_patient else '' }}">
 
     <div class="rec-grid">
 
@@ -412,7 +420,26 @@
 
   </form>
 </div>
+<script>
+  window.__REVISIT_DATA = {
+    patient: {% if prefill_patient %}{
+      id: {{ prefill_patient.id }},
+      code: {{ prefill_patient.patient_code|tojson }},
+      name: {{ prefill_patient.full_name|tojson }},
+      age: {{ prefill_patient.age or 0 }},
+      gender: {{ (prefill_patient.gender or '')|tojson }},
+      phone: {{ (prefill_patient.phone or '')|tojson }},
+      email: {{ (prefill_patient.email or '')|tojson }},
+      address: {{ (prefill_patient.address or '')|tojson }},
+      blood_group: {{ (prefill_patient.blood_group or '')|tojson }}
+    }{% else %}null{% endif %},
+    tests: {{ prefill_tests|tojson }}
+  };
+</script>
 {% endblock %}
+
+
+
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/reception.js') }}"></script>

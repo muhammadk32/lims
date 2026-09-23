@@ -77,9 +77,43 @@ def list_orders():
 def new_order():
     from modules.billing.models import PaymentMethod
     from modules.form_settings.helpers import get_form_config
+    from modules.patients.models import Patient
+    from modules.orders.models import Order
 
     if request.method == 'POST':
         return _handle_new_order_post()
+
+    # ---------- Revisit prefill ----------
+    prefill_patient = None
+    prefill_tests = []
+    revisit_order = None
+    skipped_count = 0
+
+    pid = request.args.get('patient_id', type=int)
+    revisit_from = request.args.get('revisit_from', type=int)
+
+    if pid:
+        prefill_patient = Patient.query.get(pid)
+
+    if revisit_from:
+        revisit_order = Order.query.get(revisit_from)
+        if revisit_order and prefill_patient is None:
+            prefill_patient = revisit_order.patient
+
+        if revisit_order:
+            for item in revisit_order.top_level_items:
+                t = item.test
+                if not t or not t.is_active:
+                    skipped_count += 1
+                    continue
+                prefill_tests.append({
+                    'id': t.id,
+                    'code': t.code,
+                    'name': t.name,
+                    'price': t.price or 0,
+                    'is_panel': bool(t.is_panel),
+                    'parameter_count': len(t.get_parameters()) if t.is_panel else 0,
+                })
 
     return render_template(
         'orders/new.html',
@@ -88,6 +122,10 @@ def new_order():
         payment_methods=PaymentMethod.CHOICES,
         payment_method_labels=PaymentMethod.LABELS,
         now=datetime.now(),
+        prefill_patient=prefill_patient,
+        prefill_tests=prefill_tests,
+        revisit_order=revisit_order,
+        skipped_count=skipped_count,
     )
 
 

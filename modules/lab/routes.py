@@ -56,6 +56,10 @@ def verify_queue():
     items = q.get_verify_queue_items(search, date_from, date_to)
     orders = q.group_by_order(items)
 
+    # Attach the pending items to each order so the template can expand them
+    for order in orders:
+        order.pending_items = [i for i in items if i.order_id == order.id]
+
     return render_template(
         'lab/verify.html',
         items=items,

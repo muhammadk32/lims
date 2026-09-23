@@ -568,6 +568,72 @@
     });
   }
 
+  /* ======================== REVISIT_PREFILL ======================== */
+  (function prefillFromRevisit() {
+    var data = window.__REVISIT_DATA;
+    if (!data || !data.patient) return;
+
+    var p = data.patient;
+
+    var pidInput = document.getElementById('patientIdInput');
+    if (pidInput) pidInput.value = p.id;
+
+    function setField(name, value) {
+      if (value === undefined || value === null || value === '') return;
+      var el = document.querySelector('[name="' + name + '"]');
+      if (!el) el = document.getElementById('fld_' + name);
+      if (!el) return;
+      if (el.type === 'checkbox') el.checked = !!value;
+      else el.value = value;
+    }
+
+    setField('phone', p.phone);
+    setField('patient_name', p.name);
+    setField('gender', p.gender);
+    setField('patient_email', p.email);
+    setField('email', p.email);
+    setField('patient_address', p.address);
+    setField('address', p.address);
+    setField('blood_group', p.blood_group);
+
+    var ageVal = document.getElementById('ageValue');
+    var ageUnit = document.getElementById('ageUnit');
+    var ageHidden = document.getElementById('fld_patient_age');
+    if (ageVal && p.age) {
+      ageVal.value = p.age;
+      if (ageUnit) ageUnit.value = 'years';
+      if (ageHidden) ageHidden.value = p.age;
+    }
+
+    // ===== REVISIT_DIRECT_FORM =====
+    // Skip the pill entirely. Show the form pre-filled and editable.
+    var badge = document.getElementById('patientBadge');
+    if (badge) {
+      badge.textContent = 'Existing';
+      badge.className = 'badge bg-success';
+    }
+
+    // Fill fields (already done above via setField calls).
+    // Phone field: keep it filled but disabled so typeahead doesn't fight.
+    // Actually leave it enabled — allow editing.
+    var lookupPhone = document.getElementById('lookupPhone');
+    if (lookupPhone) {
+      lookupPhone.value = p.phone || '';
+      lookupPhone.disabled = false;
+    }
+
+    // Make sure newPatientForm is visible (form is default)
+    var newForm = document.getElementById('newPatientForm');
+    if (newForm) newForm.style.display = '';
+
+    // Hide the pill (in case any prior code showed it)
+    var selectedBox = document.getElementById('selectedPatientBox');
+    if (selectedBox) selectedBox.style.display = 'none';
+
+    // ===== REVISIT_NO_TESTS =====
+    // Do NOT pre-select tests on revisit. Reception picks fresh.
+  })();
+
   /* ======================== INIT ======================== */
   updateBilling();
 
