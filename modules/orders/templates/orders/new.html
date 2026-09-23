@@ -60,10 +60,8 @@
                 {% if 'patient_phone' in config.required_fields %}<span class="req">*</span>{% endif %}
               </label>
               <div class="mobile-lookup-wrap">
-                <i class="bi bi-telephone lookup-icon"></i>
                 <input type="tel" class="form-control" id="lookupPhone"
                        name="phone"
-                       placeholder="0300-1234567"
                        {% if 'patient_phone' in config.required_fields %}required{% endif %}>
                 <div class="lookup-results" id="lookupResults" style="display: none;"></div>
               </div>

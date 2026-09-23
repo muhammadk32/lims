@@ -279,3 +279,22 @@ def new_patient():
     """Redirect to reception registration — no more standalone patient creation."""
     flash('Please use Patient Registration to add a new patient.', 'info')
     return redirect(url_for('orders.new_order'))
+
+# ============================================================
+# Patient History by Phone / Name / Code
+# ============================================================
+@patients_bp.route('/history')
+@login_required
+def history_by_phone():
+    """Search patients and show all their visits."""
+    from . import queries as pq
+
+    q = request.args.get('q', '').strip()
+    patients, visits = pq.search_patients_with_visits(q=q) if q else ([], {})
+
+    return render_template(
+        'patients/history.html',
+        q=q,
+        patients=patients,
+        visits=visits,
+    )

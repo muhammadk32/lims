@@ -59,6 +59,11 @@
       </button>
       <div class="topnav-dropdown">
 
+        <a href="{{ url_for('patients.history_by_phone') }}"
+           class="dropdown-item {% if request.endpoint == 'patients.history_by_phone' %}active{% endif %}">
+          <i class="bi bi-people"></i> Patient History
+        </a>
+
         <div class="dropdown-section">Financial</div>
         <a href="{{ url_for('billing.index') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('billing.') %}active{% endif %}">
