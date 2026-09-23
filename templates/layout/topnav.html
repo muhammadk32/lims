@@ -34,12 +34,9 @@
         </a>
         <a href="{{ url_for('reports.index') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}">
-          <i class="bi bi-file-earmark-medical"></i> Reports
+          <i class="bi bi-file-earmark-medical"></i> Test Reports
         </a>
 
-        <a href="{{ url_for('analytics.index') }}" class="dropdown-item {% if request.path.startswith('/analytics') %}active{% endif %}">
-          <i class="bi bi-bar-chart-line"></i> Management Reports
-        </a>
       </div>
     </div>
 
@@ -51,12 +48,63 @@
     </a>
     {% endif %}
 
-    <!-- Cash Summary (was: Billing) -->
-    {% if current_user.role in ['admin', 'receptionist'] %}
-    <a href="{{ url_for('billing.index') }}"
-       class="topnav-link {% if request.endpoint and request.endpoint.startswith('billing.') %}active{% endif %}">
-      <i class="bi bi-cash-coin"></i><span>Cash Summary</span>
-    </a>
+    <!-- Management Reports (dropdown) -->
+    {% if current_user.role in ['admin', 'doctor', 'receptionist'] %}
+    <div class="topnav-item">
+      <button type="button" class="topnav-link
+        {% if request.path.startswith('/analytics') or (request.endpoint and request.endpoint.startswith('billing.')) %}active{% endif %}">
+        <i class="bi bi-bar-chart-line"></i>
+        <span>Reports</span>
+        <i class="bi bi-chevron-down small"></i>
+      </button>
+      <div class="topnav-dropdown">
+
+        <div class="dropdown-section">Financial</div>
+        <a href="{{ url_for('billing.index') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('billing.') %}active{% endif %}">
+          <i class="bi bi-cash-coin"></i> Cash Summary
+        </a>
+        <a href="{{ url_for('analytics.due') }}"
+           class="dropdown-item {% if request.endpoint == 'analytics.due' %}active{% endif %}">
+          <i class="bi bi-cash-stack"></i> Due Collection
+        </a>
+        <a href="{{ url_for('analytics.commissions') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('analytics.commission') %}active{% endif %}">
+          <i class="bi bi-person-badge"></i> Referral Commissions
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <div class="dropdown-section">Clinical</div>
+        <a href="{{ url_for('analytics.doctors') }}"
+           class="dropdown-item {% if request.endpoint and 'analytics.doctors' in request.endpoint %}active{% endif %}">
+          <i class="bi bi-person-vcard"></i> Doctor / Referral
+        </a>
+        <a href="{{ url_for('analytics.tests') }}"
+           class="dropdown-item {% if request.endpoint and 'analytics.tests' in request.endpoint %}active{% endif %}">
+          <i class="bi bi-clipboard2-pulse"></i> Test Volume
+        </a>
+        <a href="{{ url_for('analytics.abnormal') }}"
+           class="dropdown-item {% if request.endpoint == 'analytics.abnormal' %}active{% endif %}">
+          <i class="bi bi-exclamation-triangle"></i> Abnormal Results
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <div class="dropdown-section">Operations</div>
+        <a href="{{ url_for('analytics.daily') }}"
+           class="dropdown-item {% if request.endpoint == 'analytics.daily' %}active{% endif %}">
+          <i class="bi bi-calendar-week"></i> Daily Summary
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <a href="{{ url_for('analytics.index') }}"
+           class="dropdown-item {% if request.endpoint == 'analytics.index' %}active{% endif %}">
+          <i class="bi bi-grid"></i> All Reports
+        </a>
+      </div>
+    </div>
     {% endif %}
 
     <!-- Administration (admin only) -->
@@ -106,6 +154,11 @@
         <a href="{{ url_for('settings.report_signatures') }}"
            class="dropdown-item {% if request.endpoint == 'settings.report_signatures' %}active{% endif %}">
           <i class="bi bi-person-badge"></i> Report Signatures
+        </a>
+
+        <a href="{{ url_for('settings.referrals') }}"
+           class="dropdown-item {% if '/settings/referrals' in request.path %}active{% endif %}">
+          <i class="bi bi-person-badge"></i> Referrals &amp; Commission
         </a>
 
       </div>

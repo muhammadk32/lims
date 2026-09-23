@@ -1,4 +1,6 @@
-{% extends 'analytics/_base.html' %}
+﻿# Daily Summary: dense classical layout
+p = 'modules/analytics/templates/analytics/daily.html'
+t = """{% extends 'analytics/_base.html' %}
 {% block report_title %}Daily Summary Report{% endblock %}
 {% block excel_url %}{{ url_for('analytics.daily_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
 
@@ -54,3 +56,6 @@
   </tfoot>
 </table>
 {% endblock %}
+"""
+open(p, 'w', encoding='utf-8').write(t)
+print('OK  - daily.html updated')

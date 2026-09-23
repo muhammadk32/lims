@@ -40,6 +40,18 @@
       <div class="desc">Every abnormal result with patient, value, and reference range.</div>
     </a>
 
+    <a class="rh-card" href="{{ url_for('analytics.due') }}">
+      <span class="icon text-danger"><i class="bi bi-cash-stack"></i></span>
+      <div class="name">Due Collection</div>
+      <div class="desc">All orders with outstanding balance — oldest first. Payment removes the order.</div>
+    </a>
+
+    <a class="rh-card" href="{{ url_for('analytics.commissions') }}">
+      <span class="icon text-warning"><i class="bi bi-cash-stack"></i></span>
+      <div class="name">Referral Commissions</div>
+      <div class="desc">Earned, paid, and outstanding commission per referring doctor.</div>
+    </a>
+
     <a class="rh-card" href="{{ url_for('analytics.daily') }}">
       <span class="icon text-secondary"><i class="bi bi-calendar-week"></i></span>
       <div class="name">Daily Summary</div>

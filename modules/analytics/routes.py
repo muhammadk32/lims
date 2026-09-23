@@ -279,3 +279,167 @@ def doctor_detail_xlsx(referral_name):
     return send_file(buf, as_attachment=True,
         download_name=f'doctor_{safe_name}_{d_from:%Y%m%d}_{d_to:%Y%m%d}.xlsx',
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+# ============================================================
+# Commission Report
+# ============================================================
+@analytics_bp.route('/commissions')
+@login_required
+@permission_required('view_reports')
+def commissions():
+    d_from, d_to = _range_from_request()
+    rows, totals = q.commission_report(d_from, d_to)
+    return render_template('analytics/commissions.html',
+                           **_ctx(d_from, d_to, rows=rows, totals=totals))
+
+
+@analytics_bp.route('/commissions.xlsx')
+@login_required
+@permission_required('view_reports')
+def commissions_xlsx():
+    d_from, d_to = _range_from_request()
+    rows, totals = q.commission_report(d_from, d_to)
+
+    data = [[r['name'], r['orders'], r['billed'], r['commission'],
+             r['paid'], r['outstanding']] for r in rows]
+    headers = ['Referral', 'Orders', 'Billed', 'Commission',
+               'Paid', 'Outstanding']
+    total_row = ['TOTAL', totals['orders'], '', totals['commission'],
+                 totals['paid'], totals['outstanding']]
+    kpis = [
+        ('Referrals', totals['refs'], '0'),
+        ('Commission Earned', totals['commission'], '#,##0.00'),
+        ('Commission Paid', totals['paid'], '#,##0.00'),
+        ('Outstanding', totals['outstanding'], '#,##0.00'),
+    ]
+    buf = build_workbook(
+        'Referral Commission Report',
+        f"{d_from.strftime('%d-%b-%Y')} to {d_to.strftime('%d-%b-%Y')}",
+        kpis, headers, data,
+        widths=[28, 10, 14, 14, 14, 14],
+        number_cols=[2, 3, 4, 5, 6],
+        total_row=total_row,
+    )
+    return send_file(buf, as_attachment=True,
+        download_name=f'commissions_{d_from:%Y%m%d}_{d_to:%Y%m%d}.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+# ============================================================
+# Commission Detail — per referral
+# ============================================================
+@analytics_bp.route('/commissions/<path:referral_name>')
+@login_required
+@permission_required('view_reports')
+def commission_detail(referral_name):
+    d_from, d_to = _range_from_request()
+    rows, totals = q.commission_detail(referral_name, d_from, d_to)
+    return render_template(
+        'analytics/commission_detail.html',
+        **_ctx(d_from, d_to, rows=rows, totals=totals, referral_name=referral_name),
+    )
+
+
+@analytics_bp.route('/commissions/<path:referral_name>.xlsx')
+@login_required
+@permission_required('view_reports')
+def commission_detail_xlsx(referral_name):
+    d_from, d_to = _range_from_request()
+    rows, totals = q.commission_detail(referral_name, d_from, d_to)
+
+    data = []
+    for r in rows:
+        data.append([
+            r['date'].strftime('%d-%b-%Y %H:%M') if r['date'] else '',
+            'INV-' + r['order_code'],
+            r['patient'],
+            r['tests_list'],
+            r['total'],
+            r['discount'],
+            r['commission'],
+            'PAID' if r['commission_paid'] else 'PENDING',
+        ])
+    headers = ['Date', 'Invoice', 'Patient', 'Tests',
+               'Total', 'Discount', 'Share', 'Status']
+    total_row = ['TOTAL', '', '', '',
+                 totals['net'], totals['discount'],
+                 totals['commission'], '']
+    kpis = [
+        ('Referral', referral_name, None),
+        ('Orders', totals['orders'], '0'),
+        ('Subtotal', totals['subtotal'], '#,##0.00'),
+        ('Discount', totals['discount'], '#,##0.00'),
+        ('Net', totals['net'], '#,##0.00'),
+        ('Commission', totals['commission'], '#,##0.00'),
+        ('Outstanding', totals['outstanding'], '#,##0.00'),
+    ]
+    buf = build_workbook(
+        'Commission Detail: ' + referral_name,
+        f"{d_from.strftime('%d-%b-%Y')} to {d_to.strftime('%d-%b-%Y')}",
+        kpis, headers, data,
+        widths=[18, 14, 24, 34, 12, 12, 12, 10],
+        number_cols=[5, 6, 7],
+        total_row=total_row,
+    )
+    safe = ''.join(c for c in referral_name if c.isalnum() or c in ' -_')[:40]
+    return send_file(buf, as_attachment=True,
+        download_name=f'commission_{safe}_{d_from:%Y%m%d}_{d_to:%Y%m%d}.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+# ============================================================
+# Due Collection
+# ============================================================
+@analytics_bp.route('/due')
+@login_required
+@permission_required('view_reports')
+def due():
+    d_from, d_to = _range_from_request()
+    rows, totals = q.due_report(d_from, d_to)
+    return render_template('analytics/due.html',
+                           **_ctx(d_from, d_to, rows=rows, totals=totals))
+
+
+@analytics_bp.route('/due.xlsx')
+@login_required
+@permission_required('view_reports')
+def due_xlsx():
+    d_from, d_to = _range_from_request()
+    rows, totals = q.due_report(d_from, d_to)
+
+    data = []
+    for r in rows:
+        data.append([
+            r['date'].strftime('%d-%b-%Y') if r['date'] else '',
+            'INV-' + r['order_code'],
+            r['patient'],
+            r['patient_code'],
+            r['phone'],
+            r['referral'],
+            r['net'],
+            r['paid'],
+            r['due'],
+            r['days_old'],
+        ])
+    headers = ['Date', 'Invoice', 'Patient', 'Patient #', 'Phone',
+               'Referral', 'Net', 'Paid', 'Due', 'Days Old']
+    total_row = ['TOTAL', '', '', '', '', '',
+                 totals['net'], totals['paid'], totals['due'], '']
+    kpis = [
+        ('Due Orders', totals['count'], '0'),
+        ('Total Net', totals['net'], '#,##0.00'),
+        ('Collected', totals['paid'], '#,##0.00'),
+        ('Outstanding', totals['due'], '#,##0.00'),
+    ]
+    buf = build_workbook(
+        'Due Collection Report',
+        f"{d_from.strftime('%d-%b-%Y')} to {d_to.strftime('%d-%b-%Y')}",
+        kpis, headers, data,
+        widths=[14, 14, 22, 14, 14, 20, 12, 12, 12, 10],
+        number_cols=[7, 8, 9],
+        total_row=total_row,
+    )
+    return send_file(buf, as_attachment=True,
+        download_name=f'due_{d_from:%Y%m%d}_{d_to:%Y%m%d}.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

@@ -209,6 +209,21 @@ def create_order(patient, tests, form, user):
         db.session.flush()
         order.paid = order.is_fully_paid
 
+    # ---------- Commission (percent of final total) ----------
+    if referred_by_name:
+        try:
+            from modules.referrals.models import Referral as _Ref
+            _ref = _Ref.query.filter(_Ref.name.ilike(referred_by_name)).first()
+            if _ref and (_ref.commission_percent or 0) > 0:
+                # Commission = (Subtotal x %) - Discount   (floor at 0)
+                _pct = _ref.commission_percent or 0
+                _sub = order.subtotal or 0
+                _disc = order.discount_value or 0
+                _amt = (_sub * (_pct / 100.0)) - _disc
+                order.commission_amount = round(max(0.0, _amt), 2)
+        except Exception as _e:
+            print(f'[orders.services] commission calc failed: {_e}')
+
     # ---------- Referral suggestion cache ----------
     # Store the free-text name in the suggestions table for the typeahead.
     if referred_by_name:
@@ -352,3 +367,232 @@ def send_back_order(order, reason, user):
     log_action('correction', 'order', order.id,
                f'Sent back {order.order_code} for correction: {reason[:80]}')
     return True, None
+
+# ============================================================
+# Edit / unlock / un-cancel
+# ============================================================
+def update_order(order, form, new_test_ids, user):
+    """Update an order's patient info, tests, discount and referral.
+
+    Blocks when results exist unless the order has been unlocked by admin.
+    Removing a test is blocked when that test already has a result.
+
+    Returns (ok, error_message).
+    """
+    from modules.orders.models import OrderStatus, OrderItem
+    from modules.patients.models import Patient
+    from modules.tests.models import Test
+
+    if order.status == OrderStatus.CANCELLED:
+        return False, 'Cancelled orders cannot be edited.'
+    if order.has_any_results and not order.edit_unlocked:
+        return False, 'Results already entered. An admin must unlock the order first.'
+
+    # ---- 1. Update patient ----
+    patient = order.patient
+    if patient:
+        name = (form.get('patient_name') or '').strip()
+        if name:
+            patient.full_name = name
+        for field in ('phone', 'email', 'address', 'gender', 'blood_group'):
+            v = (form.get(f'patient_{field}') or form.get(field) or '').strip()
+            if v or v == '':
+                setattr(patient, field, v or None)
+        try:
+            age = form.get('patient_age', type=int)
+            if age is not None:
+                patient.age = age or None
+        except Exception:
+            pass
+
+    # ---- 2. Update items ----
+    current_top = list(order.top_level_items)
+    incoming = set(new_test_ids or [])
+
+    # Remove top-level items whose id is not in incoming
+    for item in current_top:
+        if item.id not in incoming:
+            # block if it has a result (or any child has a result)
+            has_result = bool((item.result_value or '').strip())
+            if not has_result and item.has_children:
+                has_result = any((c.result_value or '').strip() for c in item.children)
+            if has_result:
+                return False, f'Cannot remove "{item.test.name if item.test else item.id}" — it already has a result.'
+            db.session.delete(item)
+
+    db.session.flush()
+
+    # Add new tests that weren't already there
+    existing_test_ids = {i.test_id for i in current_top if i.id in incoming}
+    for tid in new_test_ids or []:
+        if tid in existing_test_ids:
+            continue
+        t = Test.query.get(tid)
+        if not t:
+            continue
+        if t.is_panel:
+            parent = OrderItem(order_id=order.id, test_id=t.id, price=t.price,
+                               parent_item_id=None, sort_order=0)
+            db.session.add(parent)
+            db.session.flush()
+            for idx, param in enumerate(t.get_parameters()):
+                db.session.add(OrderItem(order_id=order.id, test_id=param.id, price=0.0,
+                                         parent_item_id=parent.id, sort_order=idx))
+        else:
+            db.session.add(OrderItem(order_id=order.id, test_id=t.id, price=t.price,
+                                     parent_item_id=None, sort_order=0))
+    db.session.flush()
+
+    # ---- 3. Discount ----
+    dtype = (form.get('discount_type') or 'amount').strip()
+    if dtype not in ('amount', 'percent'):
+        dtype = 'amount'
+    order.discount_type = dtype
+    order.discount_reason = (form.get('discount_reason') or '').strip() or None
+    if dtype == 'percent':
+        try:
+            order.discount_percent = max(0.0, min(100.0, float(form.get('discount_percent') or 0)))
+            order.discount_amount = 0.0
+        except (ValueError, TypeError):
+            order.discount_percent = 0.0
+    else:
+        try:
+            order.discount_amount = round_money(float(form.get('discount_amount') or 0))
+            order.discount_percent = 0.0
+        except (ValueError, TypeError):
+            order.discount_amount = 0.0
+
+    order.recompute_total()
+
+    # ---- 4. Referral ----
+    ref_name = (form.get('referred_by') or '').strip() or None
+    if ref_name is not None:
+        try:
+            int(ref_name)
+            order.referred_by_name = None
+        except (ValueError, TypeError):
+            order.referred_by_name = ref_name
+            try:
+                upsert_referral(ref_name)
+            except Exception:
+                pass
+
+    # ---- 5. Lock again if admin had unlocked and no results now exist ----
+    if order.edit_unlocked and not order.has_any_results:
+        order.edit_unlocked = False
+        order.edit_unlocked_at = None
+        order.edit_unlocked_by_id = None
+
+    db.session.commit()
+    log_action('update', 'order', order.id,
+               f'Edited order {order.order_code}')
+    return True, None
+
+
+def unlock_order(order, user):
+    """Admin unlocks editing of an order with existing results."""
+    if not order.has_any_results:
+        return False, 'No results exist — order is already editable.'
+    order.edit_unlocked = True
+    order.edit_unlocked_at = datetime.utcnow()
+    order.edit_unlocked_by_id = user.id
+    db.session.commit()
+    log_action('unlock', 'order', order.id,
+               f'Unlocked {order.order_code} for editing (results exist)')
+    return True, None
+
+
+def lock_order(order, user):
+    order.edit_unlocked = False
+    order.edit_unlocked_at = None
+    order.edit_unlocked_by_id = None
+    db.session.commit()
+    log_action('lock', 'order', order.id,
+               f'Locked {order.order_code} again')
+    return True, None
+
+
+def un_cancel_order(order, user):
+    """Admin reverses a cancellation and reverses the refund if any was made.
+
+    Reverses the auto-refund by creating a compensating positive Payment.
+    Returns (ok, error_message, restored_amount).
+    """
+    from modules.orders.models import OrderStatus
+    from modules.billing.models import Payment, PaymentMethod
+
+    if order.status != OrderStatus.CANCELLED:
+        return False, 'Order is not cancelled.', 0.0
+
+    # Find the auto-refund payment (if any) — negative amount
+    refund_payments = [p for p in order.payments if (p.amount or 0) < -0.001]
+    refund_total = sum(abs(p.amount) for p in refund_payments)
+
+    now = datetime.utcnow()
+
+    if refund_total > 0.001:
+        # Compensating positive payment to reverse the refund
+        db.session.add(Payment(
+            order_id=order.id,
+            amount=refund_total,
+            method=PaymentMethod.CASH,
+            reference='Reversal of refund (un-cancel)',
+            notes=f'Reversing refund due to un-cancel by {user.username if user else "admin"}',
+            received_by_id=user.id if user else None,
+        ))
+
+    order.status = OrderStatus.COMPLETED
+    order.cancel_reason = None
+    order.cancelled_at = None
+    order.cancelled_by_id = None
+    order.refunded_at = None
+
+    db.session.commit()
+    log_action('un_cancel', 'order', order.id,
+               f'Un-cancelled {order.order_code} — reversed refund {refund_total:.2f}')
+    return True, None, refund_total
+
+
+def recalculate_commissions(date_from=None, date_to=None):
+    """Recalculate commission for existing orders.
+
+    Uses each order's current referred_by_name and the referral's CURRENT
+    commission %. Returns (updated_count, total_amount).
+
+    If date range given, only touches orders in that range.
+    """
+    from modules.orders.models import Order, OrderStatus
+    from modules.referrals.models import Referral
+    from sqlalchemy import func as _f
+
+    query = Order.query.filter(Order.status != OrderStatus.CANCELLED)
+    if date_from:
+        query = query.filter(_f.date(Order.created_at) >= date_from)
+    if date_to:
+        query = query.filter(_f.date(Order.created_at) <= date_to)
+
+    orders = query.all()
+
+    # Cache referral pcts
+    pcts = {r.name.lower(): (r.commission_percent or 0) for r in Referral.query.all()}
+
+    updated = 0
+    total = 0.0
+    for o in orders:
+        if not o.referred_by_name:
+            continue
+        pct = pcts.get(o.referred_by_name.lower())
+        if not pct:
+            continue
+        _sub = o.subtotal or 0
+        _disc = o.discount_value or 0
+        new_amount = round(max(0.0, (_sub * (pct / 100.0)) - _disc), 2)
+        if abs((o.commission_amount or 0) - new_amount) > 0.001:
+            o.commission_amount = new_amount
+            updated += 1
+            total += new_amount
+
+    db.session.commit()
+    log_action('recalc', 'order', 0,
+               f'Recalculated commission for {updated} orders — total {total:.2f}')
+    return updated, round(total, 2)

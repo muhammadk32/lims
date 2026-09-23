@@ -1,0 +1,55 @@
+{% extends 'analytics/_base.html' %}
+{% block report_title %}Referral Commission Report{% endblock %}
+{% block excel_url %}{{ url_for('analytics.commissions_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
+
+{% block report_body %}
+<table class="an-kpi">
+  <tr>
+    <td><div class="an-kpi-label">Referrals</div><div class="an-kpi-value">{{ totals.refs }}</div></td>
+    <td><div class="an-kpi-label">Orders</div><div class="an-kpi-value">{{ totals.orders }}</div></td>
+    <td><div class="an-kpi-label">Commission Earned</div><div class="an-kpi-value">{{ totals.commission | money }}</div></td>
+    <td><div class="an-kpi-label">Paid</div><div class="an-kpi-value text-success">{{ totals.paid | money }}</div></td>
+    <td><div class="an-kpi-label">Outstanding</div><div class="an-kpi-value text-danger">{{ totals.outstanding | money }}</div></td>
+  </tr>
+</table>
+
+<table class="an-table">
+  <thead>
+    <tr>
+      <th>Referral</th>
+      <th class="num">Orders</th>
+      <th class="num">Billed</th>
+      <th class="num">Commission</th>
+      <th class="num">Paid</th>
+      <th class="num">Outstanding</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="fw-semibold"><a href="/analytics/commissions/{{ r.name }}" class="text-decoration-none">{{ r.name }}</a></td>
+      <td class="num">{{ r.orders }}</td>
+      <td class="num">{{ r.billed | money }}</td>
+      <td class="num fw-semibold">{{ r.commission | money }}</td>
+      <td class="num text-success">{{ r.paid | money }}</td>
+      <td class="num text-danger">{{ r.outstanding | money }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="an-empty">
+      No commission data in this range.
+      Set commission % in <a href="/settings/referrals">Settings &rarr; Referrals</a>.
+    </td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>TOTAL</td>
+      <td class="num">{{ totals.orders }}</td>
+      <td></td>
+      <td class="num">{{ totals.commission | money }}</td>
+      <td class="num">{{ totals.paid | money }}</td>
+      <td class="num">{{ totals.outstanding | money }}</td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}

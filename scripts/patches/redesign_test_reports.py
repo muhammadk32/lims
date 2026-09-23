@@ -1,4 +1,9 @@
-{% extends 'base.html' %}
+﻿# Rename Reports page to "Test Reports" + dense classical layout
+p = 'modules/reports/templates/reports/list.html'
+s = open(p, encoding='utf-8').read()
+
+# Replace the entire template
+new = """{% extends 'base.html' %}
 {% block title %}Test Reports - LabMS{% endblock %}
 
 {% block head %}
@@ -9,7 +14,7 @@
 .tr-page {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 10px 18px 30px;
+  padding: 16px 24px 40px;
   font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 0.82rem;
   color: #212529;
@@ -21,8 +26,8 @@
   justify-content: space-between;
   align-items: flex-end;
   border-bottom: 2px solid #212529;
-  padding-bottom: 5px;
-  margin-bottom: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -48,11 +53,11 @@
 .tr-filter {
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  padding: 6px 10px;
-  margin-bottom: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1.6fr 1.2fr 1.2fr 1fr auto;
-  gap: 8px;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 10px;
   align-items: end;
 }
 .tr-field label {
@@ -67,12 +72,11 @@
 .tr-field input,
 .tr-field select {
   width: 100%;
-  padding: 3px 8px;
+  padding: 6px 9px;
   border: 1px solid #6c757d;
   border-radius: 0;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   background: #fff;
-  height: 28px;
 }
 .tr-field input:focus,
 .tr-field select:focus {
@@ -83,8 +87,8 @@
 /* Buttons */
 .tr-btn {
   display: inline-block;
-  padding: 4px 12px;
-  font-size: 0.74rem;
+  padding: 6px 14px;
+  font-size: 0.78rem;
   font-weight: 600;
   border: 1px solid #212529;
   background: #fff;
@@ -109,11 +113,11 @@
 .tr-table thead th {
   background: #212529;
   color: #fff;
-  font-size: 0.64rem;
+  font-size: 0.66rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 10px;
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
   text-align: left;
   border: 1px solid #212529;
   white-space: nowrap;
@@ -121,7 +125,7 @@
 .tr-table thead th.center { text-align: center; }
 .tr-table thead th.end { text-align: right; }
 .tr-table tbody td {
-  padding: 3px 10px;
+  padding: 8px 12px;
   border: 1px solid #6c757d;
   vertical-align: middle;
 }
@@ -152,8 +156,8 @@
 /* Badges */
 .tr-badge {
   display: inline-block;
-  padding: 1px 6px;
-  font-size: 0.64rem;
+  padding: 2px 8px;
+  font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   border-radius: 0;
@@ -173,8 +177,8 @@
 }
 .tr-icon-btn {
   display: inline-block;
-  padding: 2px 7px;
-  font-size: 0.74rem;
+  padding: 4px 9px;
+  font-size: 0.78rem;
   border: 1px solid #6c757d;
   background: #fff;
   color: #212529;
@@ -194,7 +198,7 @@
 /* Empty */
 .tr-empty {
   text-align: center;
-  padding: 24px 16px;
+  padding: 40px 20px;
   color: #6c757d;
   font-style: italic;
   border: 1.5px solid #212529;
@@ -227,27 +231,9 @@
   {# Filters #}
   <form method="GET" class="tr-filter">
     <div class="tr-field">
-      <label>From</label>
-      <input type="date" name="date_from" value="{{ date_from or '' }}">
-    </div>
-    <div class="tr-field">
-      <label>To</label>
-      <input type="date" name="date_to" value="{{ date_to or today }}">
-    </div>
-    <div class="tr-field">
       <label>Search</label>
       <input type="text" name="q" value="{{ q }}"
              placeholder="Lab # or patient name...">
-    </div>
-    <div class="tr-field">
-      <label>Mobile #</label>
-      <input type="tel" name="phone" value="{{ phone or '' }}"
-             placeholder="0300-1234567">
-    </div>
-    <div class="tr-field">
-      <label>Test</label>
-      <input type="text" name="test" value="{{ test or '' }}"
-             placeholder="Test name or code">
     </div>
     <div class="tr-field">
       <label>Status</label>
@@ -340,3 +326,7 @@
 
 </div>
 {% endblock %}
+"""
+
+open(p, 'w', encoding='utf-8').write(new)
+print('OK  - Test Reports page rewritten (dense classical)')

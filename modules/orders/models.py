@@ -55,6 +55,17 @@ class Order(BaseModel):
 
     correction_note = db.Column(db.Text, nullable=True)
 
+    # ---- Referral commission (snapshot at order creation) ----
+    commission_amount = db.Column(db.Float, nullable=False, default=0.0)
+    commission_paid = db.Column(db.Boolean, nullable=False, default=False)
+    commission_paid_at = db.Column(db.DateTime, nullable=True)
+
+    # ---- Edit lock (admin must unlock if results exist) ----
+    edit_unlocked = db.Column(db.Boolean, nullable=False, default=False)
+    edit_unlocked_at = db.Column(db.DateTime, nullable=True)
+    edit_unlocked_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    edit_unlocked_by = db.relationship('User', foreign_keys=[edit_unlocked_by_id])
+
     # ---- Cancellation + auto-refund ----
     cancel_reason = db.Column(db.String(255), nullable=True)
     cancelled_at = db.Column(db.DateTime, nullable=True)
@@ -184,6 +195,17 @@ class Order(BaseModel):
     @property
     def needs_correction(self):
         return self.status == OrderStatus.CORRECTION
+
+    @property
+    def has_any_results(self):
+        """True if any item (top or child) has a result value."""
+        return any((i.result_value or '').strip() for i in self.items)
+
+    @property
+    def is_editable(self):
+        """Not cancelled and (no results yet or admin has unlocked)."""
+        return (self.status != OrderStatus.CANCELLED
+                and (not self.has_any_results or self.edit_unlocked))
 
     @property
     def status_label(self):

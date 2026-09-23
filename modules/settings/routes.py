@@ -248,3 +248,131 @@ def report_signature_move(sig_id, direction):
         db.session.commit()
 
     return redirect(url_for('settings.report_signatures'))
+
+# ============================================================
+# Referrals + Commission
+# ============================================================
+@settings_bp.route('/referrals')
+@login_required
+def referrals():
+    """List all referrals with inline commission editor."""
+    from modules.referrals.models import Referral
+    from flask import request as _rq
+
+    q_search = _rq.args.get('q', '').strip()
+    query = Referral.query
+    if q_search:
+        query = query.filter(Referral.name.ilike(f'%{q_search}%'))
+    rows = query.order_by(Referral.name.asc()).all()
+
+    return render_template(
+        'settings/referrals.html',
+        rows=rows,
+        q_search=q_search,
+    )
+
+
+@settings_bp.route('/referrals/<int:rid>/commission', methods=['POST'])
+@login_required
+def referral_commission(rid):
+    """Update one referral's commission percent."""
+    from modules.referrals.models import Referral
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+
+    ref = Referral.query.get_or_404(rid)
+    try:
+        pct = float(_rq.form.get('commission_percent', 0))
+    except (ValueError, TypeError):
+        pct = 0.0
+    pct = max(0.0, min(100.0, pct))
+    ref.commission_percent = pct
+    db.session.commit()
+    flash(f'Commission updated for {ref.name}: {pct:.1f}%', 'success')
+    return redirect(url_for('settings.referrals'))
+
+
+@settings_bp.route('/referrals/<int:rid>/delete', methods=['POST'])
+@login_required
+def referral_delete(rid):
+    """Remove a referral suggestion (safe — orders keep their referred_by_name)."""
+    from modules.referrals.models import Referral
+    from extensions import db
+    from flask import flash, redirect, url_for
+
+    ref = Referral.query.get_or_404(rid)
+    name = ref.name
+    db.session.delete(ref)
+    db.session.commit()
+    flash(f'Referral "{name}" removed from suggestions.', 'info')
+    return redirect(url_for('settings.referrals'))
+
+
+@settings_bp.route('/referrals/create', methods=['POST'])
+@login_required
+def referral_create():
+    """Add a new referral. Available in the registration typeahead immediately."""
+    from modules.referrals.models import Referral
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+    from sqlalchemy import func
+
+    name = (_rq.form.get('name') or '').strip()
+    clinic = (_rq.form.get('clinic') or '').strip()
+    phone = (_rq.form.get('phone') or '').strip()
+    try:
+        pct = float(_rq.form.get('commission_percent', 0) or 0)
+    except (ValueError, TypeError):
+        pct = 0.0
+    pct = max(0.0, min(100.0, pct))
+
+    if not name:
+        flash('Referral name is required.', 'warning')
+        return redirect(url_for('settings.referrals'))
+
+    existing = Referral.query.filter(
+        func.lower(Referral.name) == name.lower()
+    ).first()
+    if existing:
+        flash(f'Referral "{name}" already exists.', 'warning')
+        return redirect(url_for('settings.referrals'))
+
+    ref = Referral(
+        name=name,
+        clinic=clinic or None,
+        phone=phone or None,
+        times_used=0,
+        commission_percent=pct,
+    )
+    db.session.add(ref)
+    db.session.commit()
+    flash(f'Referral "{name}" added. It will appear in the registration form.', 'success')
+    return redirect(url_for('settings.referrals'))
+
+
+@settings_bp.route('/referrals/recalculate', methods=['POST'])
+@login_required
+def referrals_recalculate():
+    """Backfill commission on existing orders using current referral %."""
+    from datetime import datetime as _dt
+    from flask import flash, redirect, url_for
+
+    d_from_str = request.form.get('date_from', '').strip()
+    d_to_str = request.form.get('date_to', '').strip()
+    d_from = d_to = None
+    try:
+        if d_from_str:
+            d_from = _dt.strptime(d_from_str, '%Y-%m-%d').date()
+        if d_to_str:
+            d_to = _dt.strptime(d_to_str, '%Y-%m-%d').date()
+    except (ValueError, TypeError):
+        pass
+
+    from modules.orders.services import recalculate_commissions
+    updated, total = recalculate_commissions(d_from, d_to)
+    flash(
+        f'Recalculated commission for {updated} order(s). '
+        f'Total commission: {total:.2f}.',
+        'success',
+    )
+    return redirect(url_for('settings.referrals'))

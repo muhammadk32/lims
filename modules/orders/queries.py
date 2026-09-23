@@ -146,7 +146,7 @@ def lookup_patients(phone='', query='', limit=10):
     if not phone and not query:
         return []
 
-    pat_q = Patient.query.filter(Patient.is_active_flag == True)  # noqa: E712
+    pat_q = Patient.query.filter(Patient.is_active == True)  # noqa: E712
 
     if phone:
         pat_q = pat_q.filter(Patient.phone.ilike(f'%{phone}%'))

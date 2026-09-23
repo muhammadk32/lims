@@ -13,6 +13,9 @@ class Referral(BaseModel):
     clinic = db.Column(db.String(120), nullable=True)
     phone = db.Column(db.String(30), nullable=True)
 
+    # Commission percent (0-100). E.g. 20.0 = 20%% of final total.
+    commission_percent = db.Column(db.Float, nullable=False, default=0.0)
+
     # Usage counters — help rank suggestions
     times_used = db.Column(db.Integer, nullable=False, default=1)
     last_used_at = db.Column(db.DateTime, nullable=True)

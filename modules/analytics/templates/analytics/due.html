@@ -1,0 +1,71 @@
+{% extends 'analytics/_base.html' %}
+{% block report_title %}Due Collection Report{% endblock %}
+{% block excel_url %}{{ url_for('analytics.due_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
+
+{% block report_body %}
+
+<table class="an-kpi">
+  <tr>
+    <td><div class="an-kpi-label">Due Orders</div><div class="an-kpi-value text-danger">{{ totals.count }}</div></td>
+    <td><div class="an-kpi-label">Total Net</div><div class="an-kpi-value">{{ totals.net | money }}</div></td>
+    <td><div class="an-kpi-label">Collected</div><div class="an-kpi-value text-success">{{ totals.paid | money }}</div></td>
+    <td><div class="an-kpi-label">Outstanding</div><div class="an-kpi-value text-danger">{{ totals.due | money }}</div></td>
+  </tr>
+</table>
+
+<table class="an-table">
+  <thead>
+    <tr>
+      <th style="width: 110px;">Date</th>
+      <th style="width: 110px;">Invoice #</th>
+      <th style="width: 18%;">Patient Name</th>
+      <th style="width: 14%;">Phone</th>
+      <th>Referral</th>
+      <th class="num" style="width: 90px;">Net</th>
+      <th class="num" style="width: 90px;">Paid</th>
+      <th class="num" style="width: 90px;">Due</th>
+      <th class="text-center" style="width: 70px;">Age</th>
+      <th class="text-end" style="width: 130px;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="muted">{{ r.date | localtime('%d/%m/%y %H:%M') }}</td>
+      <td><a href="/orders/{{ r.order_id }}" class="text-decoration-none"><code>INV-{{ r.order_code }}</code></a></td>
+      <td class="fw-semibold">{{ r.patient }}</td>
+      <td class="muted">{{ r.phone }}</td>
+      <td class="muted" style="font-size:0.76rem;">{{ r.referral }}</td>
+      <td class="num">{{ r.net | money }}</td>
+      <td class="num text-success">{{ r.paid | money }}</td>
+      <td class="num fw-bold text-danger">{{ r.due | money }}</td>
+      <td class="text-center muted" style="font-size:0.75rem;">
+        {{ r.days_old }}d
+      </td>
+      <td class="text-end">
+        <a href="{{ url_for('billing.invoice', order_id=r.order_id) }}"
+           class="btn btn-sm btn-success" style="font-size:0.72rem;">
+          <i class="bi bi-cash-coin"></i> Receive
+        </a>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="10" class="an-empty">
+      <i class="bi bi-check2-circle fs-3 d-block mb-2 text-success"></i>
+      No outstanding balances in this range.
+    </td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="5" style="text-align:right; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; padding-right:12px; border-top:2px solid #212529;">
+        TOTAL
+      </td>
+      <td class="num" style="font-weight:700; border-top:2px solid #212529;">{{ totals.net | money }}</td>
+      <td class="num" style="font-weight:700; border-top:2px solid #212529;">{{ totals.paid | money }}</td>
+      <td class="num" style="font-weight:700; border-top:2px solid #212529;">{{ totals.due | money }}</td>
+      <td colspan="2" style="border-top:2px solid #212529;"></td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}

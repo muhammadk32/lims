@@ -262,3 +262,181 @@ def doctor_detail_report(referral_name, date_from, date_to):
         'due': round(sum(r['due'] for r in rows), 2),
     }
     return rows, totals
+
+
+# ============================================================
+# 6. Commission Report
+# ============================================================
+def commission_report(date_from, date_to):
+    from modules.orders.models import Order, OrderStatus
+    d_from, d_to = _parse_range(date_from, date_to)
+
+    orders = (Order.query
+        .filter(func.date(Order.created_at) >= d_from)
+        .filter(func.date(Order.created_at) <= d_to)
+        .filter(Order.status != OrderStatus.CANCELLED)
+        .all())
+
+    buckets = {}
+    for o in orders:
+        if not (o.commission_amount or 0):
+            continue
+        name = o.referred_by_name or (o.doctor.full_name if o.doctor else 'Walk-in')
+        if name not in buckets:
+            buckets[name] = {
+                'name': name, 'orders': 0,
+                'billed': 0.0, 'commission': 0.0,
+                'paid': 0.0, 'outstanding': 0.0,
+            }
+        b = buckets[name]
+        b['orders'] += 1
+        b['billed'] += o.final_total or 0
+        b['commission'] += o.commission_amount or 0
+        if o.commission_paid:
+            b['paid'] += o.commission_amount or 0
+        else:
+            b['outstanding'] += o.commission_amount or 0
+
+    rows = sorted(buckets.values(), key=lambda r: r['commission'], reverse=True)
+    for r in rows:
+        for k in ('billed', 'commission', 'paid', 'outstanding'):
+            r[k] = round(r[k], 2)
+
+    totals = {
+        'refs': len(rows),
+        'orders': sum(r['orders'] for r in rows),
+        'commission': round(sum(r['commission'] for r in rows), 2),
+        'paid': round(sum(r['paid'] for r in rows), 2),
+        'outstanding': round(sum(r['outstanding'] for r in rows), 2),
+    }
+    return rows, totals
+
+
+# ============================================================
+# 7. Commission Detail — per-order breakdown for one referral
+# ============================================================
+def commission_detail(referral_name, date_from, date_to):
+    """Per-order commission breakdown for one referral.
+
+    Commission = (Subtotal - Discount) x Commission % = Final Total x %
+    """
+    from modules.orders.models import Order, OrderStatus
+    d_from, d_to = _parse_range(date_from, date_to)
+
+    orders = (Order.query
+        .filter(func.date(Order.created_at) >= d_from)
+        .filter(func.date(Order.created_at) <= d_to)
+        .filter(Order.status != OrderStatus.CANCELLED)
+        .order_by(Order.id.desc())
+        .all())
+
+    matched = []
+    for o in orders:
+        name = o.referred_by_name or (o.doctor.full_name if o.doctor else 'Walk-in')
+        if name == referral_name and (o.commission_amount or 0) > 0:
+            matched.append(o)
+
+    rows = []
+    for o in matched:
+        subtotal = round(o.subtotal or 0, 2)
+        discount = round(o.discount_value or 0, 2)
+        net = round(o.final_total or 0, 2)
+        # Show the referral's CURRENT % (not derived from amount, since
+        # the formula subtracts discount so back-calc would be misleading)
+        pct = 0.0
+        try:
+            from modules.referrals.models import Referral as _Ref
+            _name = o.referred_by_name or (o.doctor.full_name if o.doctor else None)
+            if _name:
+                _r = _Ref.query.filter(_Ref.name.ilike(_name)).first()
+                if _r:
+                    pct = float(_r.commission_percent or 0)
+        except Exception:
+            pass
+        test_names = ', '.join(
+            (i.test.name if i.test else '?')
+            for i in o.top_level_items
+        )
+        rows.append({
+            'order_id': o.id,
+            'order_code': o.order_code,
+            'date': o.created_at,
+            'patient': o.patient.full_name,
+            'patient_code': o.patient.patient_code,
+            'tests_list': test_names,
+            'tests': o.item_count or 0,
+            'total': net,
+            'subtotal': subtotal,
+            'discount': discount,
+            'net': net,
+            'commission_pct': pct,
+            'commission': round(o.commission_amount or 0, 2),
+            'commission_paid': bool(o.commission_paid),
+            'commission_paid_at': o.commission_paid_at,
+        })
+
+    totals = {
+        'orders': len(rows),
+        'subtotal': round(sum(r['subtotal'] for r in rows), 2),
+        'discount': round(sum(r['discount'] for r in rows), 2),
+        'net': round(sum(r['net'] for r in rows), 2),
+        'commission': round(sum(r['commission'] for r in rows), 2),
+        'paid': round(sum(r['commission'] for r in rows if r['commission_paid']), 2),
+        'outstanding': round(sum(r['commission'] for r in rows if not r['commission_paid']), 2),
+    }
+    return rows, totals
+
+
+# ============================================================
+# 8. Due Collection — all orders with outstanding balance
+# ============================================================
+def due_report(date_from, date_to):
+    """Return (orders_rows, totals) for orders with balance_due > 0.
+
+    Orders fall off this list automatically once fully paid.
+    """
+    from modules.orders.models import Order, OrderStatus
+    d_from, d_to = _parse_range(date_from, date_to)
+
+    orders = (Order.query
+        .filter(func.date(Order.created_at) >= d_from)
+        .filter(func.date(Order.created_at) <= d_to)
+        .filter(Order.status != OrderStatus.CANCELLED)
+        .order_by(Order.id.asc())
+        .all())
+
+    rows = []
+    for o in orders:
+        due = round(o.balance_due or 0, 2)
+        if due <= 0.01:
+            continue
+        days_old = 0
+        try:
+            if o.created_at:
+                from datetime import date as _d
+                days_old = (_d.today() - o.created_at.date()).days
+        except Exception:
+            pass
+        rows.append({
+            'order_id': o.id,
+            'order_code': o.order_code,
+            'date': o.created_at,
+            'patient': o.patient.full_name,
+            'patient_code': o.patient.patient_code,
+            'phone': o.patient.phone or '-',
+            'referral': o.referred_by_name or (o.doctor.full_name if o.doctor else '-'),
+            'net': round(o.final_total or 0, 2),
+            'paid': round(o.paid_amount or 0, 2),
+            'due': due,
+            'days_old': days_old,
+        })
+
+    rows.sort(key=lambda r: r['days_old'], reverse=True)
+
+    totals = {
+        'count': len(rows),
+        'net': round(sum(r['net'] for r in rows), 2),
+        'paid': round(sum(r['paid'] for r in rows), 2),
+        'due': round(sum(r['due'] for r in rows), 2),
+    }
+    return rows, totals

@@ -9,6 +9,7 @@ from flask import (
 )
 from flask_login import login_required
 from extensions import db
+from sqlalchemy import func
 from core.decorators import permission_required
 from . import reports_bp
 
@@ -37,6 +38,24 @@ def index():
 
     status = request.args.get('status', 'approved').strip()
     q = request.args.get('q', '').strip()
+    phone = request.args.get('phone', '').strip()
+    test = request.args.get('test', '').strip()
+    from datetime import datetime as _dt, date as _d
+
+    today = _d.today()
+    date_from_str = request.args.get('date_from', '').strip() or today.strftime('%Y-%m-%d')
+    date_to_str = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
+
+    date_from = None
+    date_to = None
+    try:
+        date_from = _dt.strptime(date_from_str, '%Y-%m-%d').date()
+    except (ValueError, TypeError):
+        date_from = today
+    try:
+        date_to = _dt.strptime(date_to_str, '%Y-%m-%d').date()
+    except (ValueError, TypeError):
+        date_to = today
 
     query = Order.query
 
@@ -45,12 +64,17 @@ def index():
     elif status in OrderStatus.CHOICES:
         query = query.filter(Order.status == status)
     else:
-        # Default fallback: approved only
         query = query.filter(Order.status == OrderStatus.APPROVED)
 
+    if date_from:
+        query = query.filter(func.date(Order.created_at) >= date_from)
+    if date_to:
+        query = query.filter(func.date(Order.created_at) <= date_to)
+
+    from modules.patients.models import Patient   # ← lazy
+    from sqlalchemy import or_
+
     if q:
-        from modules.patients.models import Patient   # ← lazy
-        from sqlalchemy import or_
         like = f'%{q}%'
         query = query.join(Patient).filter(
             or_(
@@ -60,9 +84,26 @@ def index():
             )
         )
 
+    if phone:
+        if 'patients' not in [str(m).lower() for m in query.column_descriptions]:
+            query = query.join(Patient, Order.patient_id == Patient.id, isouter=True)
+        query = query.filter(Patient.phone.ilike(f'%{phone}%'))
+
+    if test:
+        from modules.orders.models import OrderItem
+        from modules.tests.models import Test
+        query = (query
+                 .join(OrderItem, OrderItem.order_id == Order.id)
+                 .join(Test, Test.id == OrderItem.test_id)
+                 .filter(or_(
+                     Test.name.ilike(f'%{test}%'),
+                     Test.code.ilike(f'%{test}%'),
+                 ))
+                 .distinct())
+
     orders = query.order_by(Order.id.desc()).limit(100).all()
 
-    return render_template('reports/list.html', orders=orders, status=status, q=q)
+    return render_template('reports/list.html', orders=orders, status=status, q=q, phone=phone, test=test, date_from=date_from_str, date_to=date_to_str, today=today.strftime('%Y-%m-%d'))
 
 
 # ---------- HTML Preview ----------

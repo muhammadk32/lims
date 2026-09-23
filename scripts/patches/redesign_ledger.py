@@ -1,4 +1,6 @@
-{% extends 'base.html' %}
+﻿# Daily Ledger — full dense classical redesign
+p = 'modules/orders/templates/orders/list.html'
+t = """{% extends 'base.html' %}
 {% block title %}Daily Ledger — LabMS{% endblock %}
 
 {% block head %}
@@ -556,10 +558,14 @@ function openCancelModal(event, orderId, orderCode, patientName, paidAmount) {
   var form = document.getElementById('cancelOrderForm');
   form.action = '/orders/' + orderId + '/cancel';
   document.getElementById('cancelOrderLabel').textContent = 'Lab # ' + orderCode + ' — ' + patientName;
-  var cur = '{{ config.currency_symbol if config else "Rs" }}';
+  var cur = '{{ config.currency_symbol if config else \"Rs\" }}';
   document.getElementById('cancelRefundAmount').textContent = cur + ' ' + Number(paidAmount || 0).toFixed(2);
   var modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
   modal.show();
 }
 </script>
 {% endblock %}
+"""
+
+open(p, 'w', encoding='utf-8').write(t)
+print('OK  - list.html rewritten (dense classical)')

@@ -1,4 +1,6 @@
-{% extends 'base.html' %}
+﻿# Pending Results — dense classical redesign
+p = 'modules/results/templates/results/index.html'
+t = """{% extends 'base.html' %}
 {% block title %}Pending Results — LabMS{% endblock %}
 
 {% block head %}
@@ -488,3 +490,7 @@
 })();
 </script>
 {% endblock %}
+"""
+
+open(p, 'w', encoding='utf-8').write(t)
+print('OK  - results index.html rewritten (dense classical)')

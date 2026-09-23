@@ -44,7 +44,7 @@
       <td class="num">{{ r.billed | money }}</td>
       <td class="num text-success">{{ r.collected | money }}</td>
       <td class="num text-danger">{% if r.due > 0 %}{{ r.due | money }}{% else %}—{% endif %}</td>
-    </tr>
+          </tr>
     {% else %}
     <tr><td colspan="11" class="an-empty">No orders for this referral in this date range.</td></tr>
     {% endfor %}
@@ -55,7 +55,7 @@
       <td class="num">{{ totals.billed | money }}</td>
       <td class="num">{{ totals.collected | money }}</td>
       <td class="num">{{ totals.due | money }}</td>
-    </tr>
+          </tr>
   </tfoot>
 </table>
 {% endblock %}

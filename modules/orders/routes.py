@@ -336,3 +336,131 @@ def api_referral_search():
         }
         for r in results
     ])
+
+# ============================================================
+# Edit / Unlock / Un-cancel
+# ============================================================
+@orders_bp.route('/<int:order_id>/edit', methods=['GET', 'POST'])
+@login_required
+@permission_required('update_order_status')
+def edit_order(order_id):
+    """Edit order: patient info, tests, discount, referral."""
+    from modules.orders.models import OrderStatus
+    order = _get_order_or_404(order_id)
+
+    if order.status == OrderStatus.CANCELLED:
+        flash('Cancelled orders cannot be edited.', 'warning')
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
+    if order.has_any_results and not order.edit_unlocked:
+        flash('Results already entered. Ask an admin to unlock this order first.', 'warning')
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
+    if request.method == 'POST':
+        new_test_ids = request.form.getlist('test_ids', type=int)
+        ok, error = svc.update_order(order, request.form, new_test_ids, current_user)
+        if not ok:
+            flash(error, 'warning')
+            return redirect(url_for('orders.edit_order', order_id=order.id))
+        flash(f'Order {order.order_code} updated.', 'success')
+        return redirect(url_for('orders.view_order', order_id=order.id))
+
+    return render_template('orders/edit.html', order=order, config={
+        'currency_symbol': request.args.get('_', '') or '',
+    })
+
+
+@orders_bp.route('/<int:order_id>/unlock', methods=['POST'])
+@login_required
+@permission_required('update_order_status')
+def unlock_order(order_id):
+    if not (current_user.is_authenticated and current_user.role == 'admin'):
+        flash('Only admins can unlock orders.', 'danger')
+        return redirect(url_for('orders.view_order', order_id=order_id))
+    order = _get_order_or_404(order_id)
+    ok, error = svc.unlock_order(order, current_user)
+    flash(error if not ok else f'Order {order.order_code} unlocked for editing.',
+          'warning' if not ok else 'info')
+    return redirect(url_for('orders.view_order', order_id=order.id))
+
+
+@orders_bp.route('/<int:order_id>/lock', methods=['POST'])
+@login_required
+@permission_required('update_order_status')
+def lock_order(order_id):
+    order = _get_order_or_404(order_id)
+    svc.lock_order(order, current_user)
+    flash(f'Order {order.order_code} locked again.', 'info')
+    return redirect(url_for('orders.view_order', order_id=order.id))
+
+
+@orders_bp.route('/<int:order_id>/un-cancel', methods=['POST'])
+@login_required
+@permission_required('update_order_status')
+def un_cancel_order(order_id):
+    if not (current_user.is_authenticated and current_user.role == 'admin'):
+        flash('Only admins can un-cancel orders.', 'danger')
+        return redirect(url_for('orders.view_order', order_id=order_id))
+    order = _get_order_or_404(order_id)
+    ok, error, restored = svc.un_cancel_order(order, current_user)
+    if not ok:
+        flash(error, 'warning')
+    else:
+        msg = f'Order {order.order_code} restored to COMPLETED.'
+        if restored > 0:
+            msg += f' Reversed refund: {restored:.2f}.'
+        flash(msg, 'success')
+    return redirect(url_for('orders.view_order', order_id=order.id))
+
+
+@orders_bp.route('/api/patient-last-order')
+@login_required
+def api_patient_last_order():
+    """Return the most recent completed/approved order for a patient.
+
+    Includes: order code, date, and tests (only active ones).
+    Skips archived tests silently.
+    """
+    from modules.orders.models import Order, OrderItem, OrderStatus
+    from modules.tests.models import Test
+
+    patient_id = request.args.get('patient_id', type=int)
+    if not patient_id:
+        return jsonify({'ok': False, 'error': 'patient_id required'}), 400
+
+    # Most recent order that has results (completed or approved)
+    order = (Order.query
+             .filter(Order.patient_id == patient_id)
+             .filter(Order.status.in_([OrderStatus.COMPLETED, OrderStatus.APPROVED]))
+             .order_by(Order.id.desc())
+             .first())
+
+    if not order:
+        return jsonify({'ok': True, 'found': False})
+
+    # Collect top-level tests (active only)
+    items_out = []
+    skipped = 0
+    for item in order.top_level_items:
+        t = item.test
+        if not t or not t.is_active:
+            skipped += 1
+            continue
+        items_out.append({
+            'id': t.id,
+            'code': t.code,
+            'name': t.name,
+            'price': t.price or 0,
+            'is_panel': bool(t.is_panel),
+            'parameter_count': len(t.get_parameters()) if t.is_panel else 0,
+        })
+
+    return jsonify({
+        'ok': True,
+        'found': True,
+        'order_id': order.id,
+        'order_code': order.order_code,
+        'created_at': order.created_at.strftime('%d-%b-%Y') if order.created_at else '',
+        'tests': items_out,
+        'skipped': skipped,
+    })
