@@ -283,8 +283,11 @@
     {% set patient_visits = visits.get(p.id, []) %}
     <div class="ph-card">
 
-      <div class="ph-card-header">
+      <div class="ph-card-header" onclick="togglePatient({{ p.id }})"
+           style="cursor: pointer; user-select: none;">
         <div>
+          <i class="bi bi-chevron-right ph-chevron" id="chev-{{ p.id }}"
+             style="transition: transform 0.15s; display: inline-block; width: 14px;"></i>
           <span class="pname">{{ p.full_name }}</span>
           <span class="pmeta">
             · {{ p.patient_code }}
@@ -298,6 +301,7 @@
         </span>
       </div>
 
+      <div class="ph-visits" id="visits-{{ p.id }}" style="display: none;">
       {% if patient_visits %}
       <table class="ph-table">
         <thead>
@@ -377,6 +381,7 @@
         No visits recorded yet.
       </div>
       {% endif %}
+      </div>
 
     </div>
     {% endfor %}
@@ -384,4 +389,28 @@
   {% endif %}
 
 </div>
+
+
+{% block scripts %}
+<script>
+function togglePatient(pid) {
+  var visits = document.getElementById('visits-' + pid);
+  var chev = document.getElementById('chev-' + pid);
+  if (!visits) return;
+  var open = visits.style.display !== 'none';
+  visits.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+}
+
+// Auto-expand if only one patient in results
+document.addEventListener('DOMContentLoaded', function () {
+  var cards = document.querySelectorAll('.ph-visits');
+  if (cards.length === 1) {
+    var id = cards[0].id.replace('visits-', '');
+    togglePatient(id);
+  }
+});
+</script>
+{% endblock %}
+
 {% endblock %}
