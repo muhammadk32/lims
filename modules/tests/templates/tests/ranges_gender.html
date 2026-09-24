@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% block title %}Setup Gender Reference Values ? {{ test.name }}{% endblock %}
+
+{% block head %}
+<style>
+.rg-page { max-width: 1100px; margin: 0 auto; padding: 12px 20px 40px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.rg-header { display: flex; justify-content: space-between; align-items: flex-end;
+             border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 14px; }
+.rg-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.rg-sub { font-size: 0.8rem; color: #6c757d; margin-top: 2px; font-weight: 600; }
+
+.rg-form { background: #fff; border: 1.5px solid #212529; padding: 14px 18px; }
+.rg-row { display: grid; grid-template-columns: 130px 1fr 160px; gap: 10px 18px;
+          align-items: center; margin-bottom: 10px; }
+.rg-row .lbl { font-size: 0.74rem; font-weight: 700; color: #495057;
+               text-transform: uppercase; letter-spacing: 0.03em; text-align: right; }
+.rg-input, .rg-select {
+    width: 100%; height: 26px; padding: 2px 6px;
+    border: 1px solid #adb5bd; border-radius: 0;
+    font-size: 0.8rem; background: #fff; font-family: inherit;
+}
+.rg-input:focus, .rg-select:focus { outline: none; border-color: #198754; }
+.rg-inline { display: flex; gap: 8px; }
+.rg-inline .rg-input { flex: 1; }
+.rg-inline .rg-select { width: 110px; flex: none; }
+
+.rg-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+
+.rg-notes-label { font-size: 0.74rem; font-weight: 700; color: #495057;
+                  text-transform: uppercase; letter-spacing: 0.03em; text-align: right;
+                  padding-top: 4px; }
+.rg-notes-box { border: 1px solid #adb5bd; background: #fff; min-height: 180px; }
+
+.rg-actions { margin-top: 14px; padding-left: 148px; display: flex; gap: 8px; }
+.rg-btn {
+  display: inline-block; padding: 4px 16px; font-size: 0.78rem; font-weight: 600;
+  border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; cursor: pointer; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.rg-btn:hover { background: #f1f3f5; }
+.rg-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.rg-btn-primary:hover { background: #146c43; }
+.rg-btn-danger { background: #fff; border-color: #dc3545; color: #dc3545; }
+.rg-btn-danger:hover { background: #dc3545; color: #fff; }
+
+.rg-hint { margin-top: 6px; padding-left: 148px; font-size: 0.72rem; color: #6c757d;
+           font-family: Consolas, Monaco, monospace; }
+
+/* Saved list */
+.rg-list-title { margin-top: 22px; margin-bottom: 6px; font-size: 0.9rem;
+                 font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.rg-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
+            font-size: 0.78rem; background: #fff; }
+.rg-table thead th { background: #e9ecef; font-size: 0.62rem; font-weight: 700;
+                     text-transform: uppercase; letter-spacing: 0.05em;
+                     padding: 4px 8px; text-align: left; border: 1px solid #adb5bd; }
+.rg-table tbody td { padding: 4px 8px; border: 1px solid #dee2e6; vertical-align: middle; }
+.rg-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.rg-table .num { text-align: right; font-family: Consolas, Monaco, monospace; }
+.rg-empty { text-align: center; padding: 26px; color: #6c757d; font-style: italic;
+            border: 1.5px solid #212529; border-top: none; background: #fafbfc; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.tinymce) {
+    tinymce.init({
+      selector: '#rg-notes',
+      height: 220,
+      menubar: false,
+      plugins: 'lists link',
+      toolbar: 'undo redo | bold italic underline | bullist numlist | link | removeformat',
+      branding: false,
+    });
+  }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="rg-page">
+
+  <div class="rg-header">
+    <div>
+      <h1 class="rg-title">Setup Gender Reference Values</h1>
+      <div class="rg-sub">{{ test.name }} ({{ test.code }})</div>
+    </div>
+    <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rg-btn">Back</a>
+  </div>
+
+  <form method="post" class="rg-form"
+        action="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}">
+
+    <div class="rg-row">
+      <div class="lbl">Gender:</div>
+      <div>
+        <select name="gender_display" class="rg-select" style="width: 220px;"
+                onchange="window.location='{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='__g__') }}'.replace('__g__', this.value);">
+          {% for g, label in [('male','Male'), ('female','Female'), ('any','Other')] %}
+          <option value="{{ g }}" {% if g == gender %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="rg-two-col">
+      <div class="rg-row">
+        <div class="lbl">Max Age:</div>
+        <div class="rg-inline">
+          <input type="number" name="age_max_value" class="rg-input" value="0">
+          <select name="age_max_unit" class="rg-select">
+            <option value="days">Days</option>
+            <option value="months">Months</option>
+            <option value="years" selected>Years</option>
+          </select>
+        </div>
+      </div>
+      <div class="rg-row">
+        <div class="lbl">Mini Age:</div>
+        <div class="rg-inline">
+          <input type="number" name="age_min_value" class="rg-input" value="0">
+          <select name="age_min_unit" class="rg-select">
+            <option value="days">Days</option>
+            <option value="months">Months</option>
+            <option value="years" selected>Years</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rg-row">
+        <div class="lbl">Max Value:</div>
+        <input type="text" name="value_max" class="rg-input">
+      </div>
+      <div class="rg-row">
+        <div class="lbl">Mini Value:</div>
+        <input type="text" name="value_min" class="rg-input">
+      </div>
+
+      <div class="rg-row">
+        <div class="lbl">Critical Max Value:</div>
+        <input type="text" name="crit_max" class="rg-input" value="0">
+      </div>
+      <div class="rg-row">
+        <div class="lbl">Critical Min Value:</div>
+        <input type="text" name="crit_min" class="rg-input" value="0">
+      </div>
+    </div>
+
+    <div class="rg-row" style="grid-template-columns: 130px 1fr;">
+      <div class="lbl">Other Value:</div>
+      <textarea id="rg-notes" name="notes"></textarea>
+    </div>
+
+    <div class="rg-actions">
+      <button type="submit" class="rg-btn rg-btn-primary">Add</button>
+      <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rg-btn">Back</a>
+    </div>
+    <div class="rg-hint">*Less Than = 0.19, Greater Than &amp; More Than = 99999</div>
+  </form>
+
+  <div class="rg-list-title">{{ gender|capitalize }} ranges ({{ rows|length }})</div>
+
+  {% if rows %}
+  <table class="rg-table">
+    <thead>
+      <tr>
+        <th style="width: 160px;">Age bracket</th>
+        <th class="num" style="width: 160px;">Value</th>
+        <th style="width: 200px;">Critical</th>
+        <th>Notes</th>
+        <th class="center" style="width: 70px;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>
+          {% if r.age_min_days is not none or r.age_max_days is not none %}
+            {{ r.age_min_days or 0 }} ? {{ r.age_max_days or '?' }} days
+          {% else %}
+            {{ r.age_min_years if r.age_min_years is not none else 0 }} ?
+            {{ r.age_max_years if r.age_max_years is not none else '?' }} years
+          {% endif %}
+        </td>
+        <td class="num">{{ r.range_text }}</td>
+        <td>{{ r.critical_value or '?' }}</td>
+        <td>{{ (r.notes or '')|striptags|truncate(80) or '?' }}</td>
+        <td class="center">
+          <form method="post"
+                action="{{ url_for('tests.delete_range_row', range_id=r.id) }}"
+                onsubmit="return confirm('Remove this range?');"
+                style="display:inline;">
+            <button class="rg-btn rg-btn-danger" style="padding: 2px 8px; font-size: 0.7rem;">?</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="rg-empty">No ranges yet for {{ gender }}. Use the form above to add one.</div>
+  {% endif %}
+
+</div>
+{% endblock %}

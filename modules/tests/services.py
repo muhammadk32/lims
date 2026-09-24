@@ -80,3 +80,101 @@ def save_ranges(test, form, user):
         f'Ranges saved: +{created} -{deleted}'
     )
     return created, updated, deleted
+
+# ============================================================
+# Per-gender reference value row (ADAM-style Add flow)
+# ============================================================
+def _int_or_none_loose(s):
+    s = (s or "").strip()
+    if not s:
+        return None
+    try:
+        return int(float(s))
+    except (TypeError, ValueError):
+        return None
+
+
+def _float_or_none(s):
+    try:
+        return float(str(s).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _build_range_text(vmin, vmax):
+    lo = _float_or_none(vmin)
+    hi = _float_or_none(vmax)
+    if lo is None and hi is None:
+        return ""
+    if lo is None:
+        return f"< {hi}"
+    if hi is None:
+        return f"> {lo}"
+    return f"{lo} - {hi}"
+
+
+def _build_critical(cmin, cmax):
+    parts = []
+    if _float_or_none(cmin):
+        parts.append(f"< {_float_or_none(cmin)}")
+    if _float_or_none(cmax):
+        parts.append(f"> {_float_or_none(cmax)}")
+    return " or ".join(parts) or None
+
+
+def add_range_row(test, gender, form, user):
+    """Insert one reference-range row from the ADAM-style form.
+
+    Form fields:
+        age_max_value + age_max_unit   ('days'|'months'|'years')
+        age_min_value + age_min_unit
+        value_max, value_min
+        crit_max, crit_min
+        notes   (HTML from rich editor)
+    """
+    gender = (gender or "any").lower()
+
+    def _age_to_cols(value_key, unit_key):
+        v = _int_or_none_loose(form.get(value_key))
+        u = (form.get(unit_key) or "years").strip().lower()
+        if v is None:
+            return None, None
+        if u == "days":
+            return v, None           # (min_days, min_years) or (max_days, max_years)
+        if u == "months":
+            return v * 30, None
+        return None, v               # years
+
+    max_days, max_years = _age_to_cols("age_max_value", "age_max_unit")
+    min_days, min_years = _age_to_cols("age_min_value", "age_min_unit")
+
+    row = TestReferenceRange(
+        test_id=test.id,
+        gender=gender,
+        age_min_days=min_days,
+        age_max_days=max_days,
+        age_min_years=min_years,
+        age_max_years=max_years,
+        range_text=_build_range_text(form.get("value_min"), form.get("value_max")),
+        critical_value=_build_critical(form.get("crit_min"), form.get("crit_max")),
+        notes=(form.get("notes") or "").strip() or None,
+        unit=(form.get("unit") or "").strip() or None,
+        sort_order=0,
+        is_active=True,
+    )
+    db.session.add(row)
+    db.session.commit()
+    log_action("create", "test_reference_range", row.id,
+               f"Added {gender} range for test {test.id}: {row.range_text}")
+    return row
+
+
+def delete_range_row(range_id, user):
+    row = TestReferenceRange.query.get(range_id)
+    if not row:
+        return False
+    row.is_active = False
+    db.session.commit()
+    log_action("delete", "test_reference_range", row.id,
+               f"Removed range {row.range_text}")
+    return True

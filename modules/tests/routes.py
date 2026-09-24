@@ -416,3 +416,41 @@ def save_reference_ranges(test_id):
     flash('Reference ranges: ' + (', '.join(parts) or 'no change'), 'success')
     return redirect(url_for('tests.view_test', test_id=test.id))
 
+# ============================================================
+# Setup Gender Reference Values (ADAM-style)
+# ============================================================
+@tests_bp.route("/<int:test_id>/ranges/<gender>", methods=["GET", "POST"])
+@login_required
+@permission_required("manage_tests")
+def edit_ranges_gender(test_id, gender):
+    test = _get_test_or_404(test_id)
+    gender = (gender or "any").lower()
+    if gender not in ("male", "female", "any"):
+        abort(404)
+
+    if request.method == "POST":
+        svc.add_range_row(test, gender, request.form, current_user)
+        flash("Reference value added.", "success")
+        return redirect(url_for("tests.edit_ranges_gender",
+                                test_id=test.id, gender=gender))
+
+    rows = [r for r in (test.reference_ranges or [])
+            if r.is_active and (r.gender or "any").lower() == gender]
+
+    return render_template(
+        "tests/ranges_gender.html",
+        test=test, gender=gender, rows=rows,
+    )
+
+
+@tests_bp.route("/ranges/<int:range_id>/delete", methods=["POST"])
+@login_required
+@permission_required("manage_tests")
+def delete_range_row(range_id):
+    from .models import TestReferenceRange
+    r = TestReferenceRange.query.get_or_404(range_id)
+    test_id, gender = r.test_id, r.gender or "any"
+    svc.delete_range_row(range_id, current_user)
+    flash("Reference value removed.", "info")
+    return redirect(url_for("tests.edit_ranges_gender",
+                            test_id=test_id, gender=gender))

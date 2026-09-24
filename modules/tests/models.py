@@ -218,6 +218,9 @@ class TestReferenceRange(BaseModel):
     # Optional critical value threshold (free text, e.g. "< 7.0 or > 20.0")
     critical_value = db.Column(db.String(120), nullable=True)
 
+    # Free-text notes (rendered as HTML from the rich editor)
+    notes = db.Column(db.Text, nullable=True)
+
     sort_order = db.Column(db.Integer, nullable=False, default=0)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
 
