@@ -6,6 +6,7 @@ from sqlalchemy import or_
 from extensions import db
 from . import tests_bp
 from .models import Test, TestCategory, TestReferenceRange
+from . import services as svc
 from core.decorators import permission_required
 from core.audit import log_action
 
@@ -396,43 +397,22 @@ list_tests = index
 # ===== Phase 2: reference ranges save =====
 
 
-@tests_bp.route('/tests/<int:test_id>/ranges', methods=['POST'])
+@tests_bp.route('/<int:test_id>/ranges', methods=['GET', 'POST'])
+@login_required
+@permission_required('manage_tests')
 def save_reference_ranges(test_id):
-    # admin-only guard - adjust to your auth pattern
-    # from flask_login import current_user
-    # if not getattr(current_user, 'is_admin', False):
-    #     abort(403)
+    """Save male / female / other reference ranges for one test."""
+    test = _get_test_or_404(test_id)
 
-    test = Test.query.get_or_404(test_id)
+    if request.method == 'GET':
+        return render_template('tests/edit_ranges.html', test=test)
 
-    genders   = request.form.getlist('gender[]')
-    age_mins  = request.form.getlist('age_min[]')
-    age_maxs  = request.form.getlist('age_max[]')
-    ranges    = request.form.getlist('range_text[]')
-    units     = request.form.getlist('unit[]')
-    crits     = request.form.getlist('critical_value[]')
-    orders    = request.form.getlist('sort_order[]')
+    created, updated, deleted = svc.save_ranges(test, request.form, current_user)
 
-    def _int_or_none(s):
-        s = (s or '').strip()
-        return int(s) if s.isdigit() else None
+    parts = []
+    if created: parts.append(f'{created} added')
+    if updated: parts.append(f'{updated} updated')
+    if deleted: parts.append(f'{deleted} removed')
+    flash('Reference ranges: ' + (', '.join(parts) or 'no change'), 'success')
+    return redirect(url_for('tests.view_test', test_id=test.id))
 
-    TestReferenceRange.query.filter_by(test_id=test.id).delete()
-    for i, rng_text in enumerate(ranges):
-        rng_text = (rng_text or '').strip()
-        if not rng_text:
-            continue
-        db.session.add(TestReferenceRange(
-            test_id        = test.id,
-            gender         = (genders[i] if i < len(genders) else 'any') or 'any',
-            age_min_years  = _int_or_none(age_mins[i] if i < len(age_mins) else ''),
-            age_max_years  = _int_or_none(age_maxs[i] if i < len(age_maxs) else ''),
-            range_text     = rng_text,
-            unit           = (units[i] if i < len(units) else '').strip() or None,
-            critical_value = (crits[i] if i < len(crits) else '').strip() or None,
-            sort_order     = _int_or_none(orders[i] if i < len(orders) else '') or 0,
-            is_active      = True,
-        ))
-    db.session.commit()
-    flash('Reference ranges saved.', 'success')
-    return redirect(url_for('tests.test_view', test_id=test.id))

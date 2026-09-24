@@ -1,4 +1,4 @@
-"""
+﻿"""
 Lab Test models.
 - TestCategory: groups tests (Hematology, Biochemistry, etc.)
 - Test:         a single lab test OR a panel (container of parameters)
@@ -51,8 +51,8 @@ class Test(BaseModel):
     A lab test offered by the lab.
 
     Can be:
-      - A standalone test (is_panel=False) — has its own unit + range
-      - A panel (is_panel=True) — contains child tests via PanelParameter
+      - A standalone test (is_panel=False) â€” has its own unit + range
+      - A panel (is_panel=True) â€” contains child tests via PanelParameter
     """
     __tablename__ = 'tests'
 
@@ -127,11 +127,11 @@ class Test(BaseModel):
 
     def __repr__(self):
         kind = 'PANEL' if self.is_panel else 'TEST'
-        return f'<Test {self.code} ({kind}) — {self.name}>'
+        return f'<Test {self.code} ({kind}) â€” {self.name}>'
 
 
 # ============================================================
-# PANEL PARAMETER (junction: panel ↔ child test)
+# PANEL PARAMETER (junction: panel â†” child test)
 # ============================================================
 class PanelParameter(db.Model):
     """
@@ -181,7 +181,7 @@ class PanelParameter(db.Model):
         return f'<PanelParameter panel={self.panel_id} test={self.test_id} order={self.sort_order}>'
 
 # ============================================================
-# TestReferenceRange — multi-range normal values per test
+# TestReferenceRange â€” multi-range normal values per test
 # ============================================================
 class TestReferenceRange(BaseModel):
     """A single reference range for a test, keyed by gender + age bracket.
@@ -204,6 +204,10 @@ class TestReferenceRange(BaseModel):
     # Age bracket in years (nullable = no bound)
     age_min_years = db.Column(db.Integer, nullable=True)
     age_max_years = db.Column(db.Integer, nullable=True)
+
+    # Sub-year bracket in days (for neonates). Takes priority over years when age < 1.
+    age_min_days = db.Column(db.Integer, nullable=True)
+    age_max_days = db.Column(db.Integer, nullable=True)
 
     # The range string (e.g. "13.5 - 17.5")
     range_text = db.Column(db.String(120), nullable=False)
@@ -229,3 +233,4 @@ class TestReferenceRange(BaseModel):
 
     def __repr__(self):
         return f'<RefRange test={self.test_id} {self.gender} {self.range_text}>'
+

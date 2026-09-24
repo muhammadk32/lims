@@ -12,6 +12,10 @@ class Patient(BaseModel):
     # Personal info
     full_name = db.Column(db.String(120), nullable=False, index=True)
     age = db.Column(db.Integer, nullable=True)
+
+    # Age as entered (preserve unit for neonates)
+    age_value = db.Column(db.Integer, nullable=True)
+    age_unit  = db.Column(db.String(10), nullable=True)
     date_of_birth = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)   # Male / Female / Other
 

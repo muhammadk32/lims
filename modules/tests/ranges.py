@@ -59,6 +59,28 @@ def patient_age_years(patient):
     return None
 
 
+
+def patient_age_days(patient):
+    """Return patient age in days, preferring age_value/age_unit, then DOB."""
+    if patient is None:
+        return None
+    v = getattr(patient, 'age_value', None)
+    u = getattr(patient, 'age_unit', None)
+    if v is not None and u:
+        mult = {'days': 1, 'weeks': 7, 'months': 30, 'years': 365}.get(u)
+        if mult:
+            return int(v) * mult
+    dob = getattr(patient, PATIENT_DOB_FIELD, None)
+    if not dob:
+        return None
+    if isinstance(dob, str):
+        try:
+            dob = date.fromisoformat(dob[:10])
+        except ValueError:
+            return None
+    return (date.today() - dob).days
+
+
 def patient_gender(patient):
     if patient is None:
         return 'any'
@@ -76,6 +98,18 @@ def _age_ok(rng, age):
         return False
     return True
 
+
+
+def _days_ok(rng, days):
+    if rng.age_min_days is None and rng.age_max_days is None:
+        return False
+    if days is None:
+        return False
+    if rng.age_min_days is not None and days < rng.age_min_days:
+        return False
+    if rng.age_max_days is not None and days > rng.age_max_days:
+        return False
+    return True
 
 def pick_range(test, gender, age):
     """
@@ -108,6 +142,46 @@ def pick_range(test, gender, age):
     for want_gender in gender_order:
         for r in rows:
             if _norm_gender(r.gender) == want_gender and not bounded(r):
+                return r
+
+    return None
+
+
+def pick_range_for_patient(test, patient):
+    """Day-aware wrapper: prefers day-based ranges when patient has DOB and is under 1y."""
+    if test is None or patient is None:
+        return None
+    g = patient_gender(patient)
+    years = patient_age_years(patient)
+    days = patient_age_days(patient)
+
+    rows = [r for r in getattr(test, 'reference_ranges', []) if r.is_active]
+    if not rows:
+        return None
+    rows.sort(key=lambda r: (r.sort_order or 0, r.id or 0))
+
+    def bounded_years(r):
+        return r.age_min_years is not None or r.age_max_years is not None
+
+    gender_order = [g] if g == 'any' else [g, 'any']
+
+    # 1. day-based ranges (only if under 1y)
+    if years is not None and years < 1 and days is not None:
+        for want in gender_order:
+            for r in rows:
+                if _norm_gender(r.gender) == want and _days_ok(r, days):
+                    return r
+
+    # 2. year-based bounded
+    for want in gender_order:
+        for r in rows:
+            if _norm_gender(r.gender) == want and bounded_years(r) and _age_ok(r, years):
+                return r
+
+    # 3. year-based unbounded
+    for want in gender_order:
+        for r in rows:
+            if _norm_gender(r.gender) == want and not bounded_years(r):
                 return r
 
     return None
@@ -187,12 +261,17 @@ def resolve_range_for_order(test, order):
     One-call helper for templates and PDF builders.
     Returns the range string for the order's patient.
     Falls back to test.normal_range if no matching reference range.
+    Day-aware: prefers day-based ranges for patients under 1 year with a DOB.
     """
     if test is None:
         return ''
     if order is None:
         return getattr(test, 'normal_range', '') or ''
     patient = getattr(order, 'patient', None)
+    r = pick_range_for_patient(test, patient)
+    if r and r.range_text:
+        return r.range_text
+    # fallback: legacy gender+age lookup, then test.normal_range
     g = patient_gender(patient)
     a = patient_age_years(patient)
     return resolve_range_text(test, g, a)
@@ -220,3 +299,4 @@ def critical_for_order(test, value, order):
     """Return True if the value crosses a critical threshold."""
     _, is_crit = evaluate_for_order(test, value, order)
     return is_crit
+

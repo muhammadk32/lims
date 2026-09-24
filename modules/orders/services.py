@@ -27,6 +27,8 @@ def create_patient(form):
     """
     from modules.patients.models import Patient
 
+    age_value, age_unit = _parse_age(form)
+
     full_name = (
         form.get('patient_name')
         or form.get('full_name')
@@ -57,6 +59,8 @@ def create_patient(form):
         patient_code=generate_patient_code(),
         full_name=full_name,
         age=int(round(age_val)) if age_val else None,
+        age_value=age_value,
+        age_unit=age_unit,
         date_of_birth=parse_date(form.get('date_of_birth')),
         gender=(form.get('gender') or form.get('patient_gender') or '').strip() or None,
         phone=(form.get('phone') or form.get('patient_phone') or '').strip() or None,
@@ -596,3 +600,27 @@ def recalculate_commissions(date_from=None, date_to=None):
     log_action('recalc', 'order', 0,
                f'Recalculated commission for {updated} orders — total {total:.2f}')
     return updated, round(total, 2)
+
+
+_UNIT_ALIASES = {'d':'days','day':'days','days':'days','w':'weeks','week':'weeks','weeks':'weeks','m':'months','mo':'months','month':'months','months':'months','y':'years','yr':'years','year':'years','years':'years'}
+
+def _parse_age(form):
+    v = form.get('age_value', type=int)
+    u = (form.get('age_unit') or '').strip().lower()
+    u = _UNIT_ALIASES.get(u, 'years')
+    if v is not None and v >= 0:
+        return v, u
+    a = form.get('age', type=float)
+    if a:
+        return int(round(a)), 'years'
+    y = form.get('age_years', type=int) or 0
+    m = form.get('age_months', type=int) or 0
+    d = form.get('age_days', type=int) or 0
+    if d and not y and not m: return d, 'days'
+    if m and not y: return m, 'months'
+    if y: return y, 'years'
+    return None, None
+
+def _to_years(value, unit):
+    if value is None: return None
+    return {'days':value/365.0,'weeks':value/52.0,'months':value/12.0,'years':float(value)}.get(unit or 'years', float(value))

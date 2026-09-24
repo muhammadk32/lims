@@ -1,0 +1,282 @@
+﻿{% extends 'base.html' %}
+{% block title %}Reference Ranges — {{ test.code }} · LabMS{% endblock %}
+
+{% block head %}
+<style>
+/* ============================================================
+   Reference Ranges — dense classical layout (matches tests/list.html)
+   ============================================================ */
+.rr-page {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 10px 20px 30px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.82rem;
+  color: #212529;
+}
+.rr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #212529;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rr-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.rr-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.rr-actions { display: flex; gap: 6px; }
+
+/* Section bar (like test_settings/formats.html) */
+.rr-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #212529;
+  color: #fff;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rr-section-actions { display: flex; gap: 6px; }
+
+/* Buttons (copied from .lt-btn) */
+.rr-btn {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border: 1px solid #212529;
+  background: #fff;
+  color: #212529;
+  text-decoration: none;
+  border-radius: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  height: 28px;
+  line-height: 1.6;
+}
+.rr-btn:hover { background: #f1f3f5; color: #212529; }
+.rr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.rr-btn-primary:hover { background: #146c43; color: #fff; }
+.rr-btn-danger { background: #fff; border-color: #dc3545; color: #dc3545; }
+.rr-btn-danger:hover { background: #dc3545; color: #fff; }
+.rr-btn-sm {
+  height: 22px;
+  padding: 1px 10px;
+  font-size: 0.68rem;
+}
+.rr-section .rr-btn {
+  border-color: #fff;
+  background: transparent;
+  color: #fff;
+}
+.rr-section .rr-btn:hover { background: #495057; color: #fff; }
+.rr-section .rr-btn-primary { background: #198754; border-color: #198754; }
+.rr-section .rr-btn-primary:hover { background: #146c43; }
+
+/* Table (matches .lt-table/.tf-table) */
+.rr-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #212529;
+  border-top: none;
+  font-size: 0.78rem;
+  background: #fff;
+}
+.rr-table thead th {
+  background: #e9ecef;
+  color: #212529;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  text-align: left;
+  border: 1px solid #adb5bd;
+  white-space: nowrap;
+}
+.rr-table thead th.center { text-align: center; }
+.rr-table tbody td {
+  padding: 3px 6px;
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+.rr-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.rr-table tbody tr:hover { background: #f1f3f5; }
+
+/* Dense inline inputs inside the grid */
+.rr-input,
+.rr-select {
+  width: 100%;
+  padding: 2px 6px;
+  border: 1px solid #adb5bd;
+  border-radius: 0;
+  font-size: 0.78rem;
+  background: #fff;
+  height: 24px;
+  font-family: inherit;
+  color: #212529;
+}
+.rr-select { padding: 0 4px; }
+.rr-input:focus,
+.rr-select:focus { outline: none; border-color: #198754; }
+
+.rr-input.num {
+  text-align: right;
+  font-family: Consolas, Monaco, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.rr-input.mono {
+  font-family: Consolas, Monaco, monospace;
+}
+
+/* Row remove button */
+.rr-x {
+  display: inline-block;
+  padding: 1px 7px;
+  font-size: 0.72rem;
+  border: 1px solid #dc3545;
+  background: #fff;
+  color: #dc3545;
+  cursor: pointer;
+  border-radius: 0;
+  line-height: 1.3;
+}
+.rr-x:hover { background: #dc3545; color: #fff; }
+
+/* Hint strip */
+.rr-hint {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: #6c757d;
+  font-family: Consolas, Monaco, monospace;
+}
+
+@media (max-width: 900px) {
+  .rr-table { font-size: 0.72rem; }
+  .rr-table thead th,
+  .rr-table tbody td { padding: 3px 4px; }
+  .rr-input, .rr-select { font-size: 0.72rem; height: 22px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rr-page">
+
+  {# Header #}
+  <div class="rr-header">
+    <div>
+      <h1 class="rr-title">
+        <i class="bi bi-rulers"></i> Reference Ranges
+      </h1>
+      <div class="rr-subtitle">
+        <code>{{ test.code }}</code> &middot; {{ test.name }}
+        {% if test.category_ref %} &middot; {{ test.category_ref.name }}{% endif %}
+      </div>
+    </div>
+    <div class="rr-actions">
+      <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rr-btn">
+        <i class="bi bi-arrow-left"></i> Back to Test
+      </a>
+      <a href="{{ url_for('tests.edit_test', test_id=test.id) }}" class="rr-btn">
+        <i class="bi bi-pencil"></i> Edit Test Details
+      </a>
+    </div>
+  </div>
+
+  {# Section bar #}
+  <form method="POST"
+        action="{{ url_for('tests.save_reference_ranges', test_id=test.id) }}"
+        id="rr-form">
+    <div class="rr-section">
+      <span>Ranges ({{ (test.reference_ranges or [])|selectattr('is_active')|list|length }} active)</span>
+      <div class="rr-section-actions">
+        <button type="button" class="rr-btn rr-btn-sm" onclick="addRow()">
+          <i class="bi bi-plus-lg"></i> Add Row
+        </button>
+        <button type="submit" class="rr-btn rr-btn-sm rr-btn-primary">
+          <i class="bi bi-check-lg"></i> Save Ranges
+        </button>
+      </div>
+    </div>
+
+    <table class="rr-table">
+      <thead>
+        <tr>
+          <th style="width:110px;">Gender</th>
+          <th class="num" style="width:80px;">Age min</th>
+          <th class="num" style="width:80px;">Age max</th>
+          <th>Range text</th>
+          <th style="width:80px;">Unit</th>
+          <th style="width:180px;">Critical</th>
+          <th class="num" style="width:60px;">Order</th>
+          <th class="center" style="width:44px;"></th>
+        </tr>
+      </thead>
+      <tbody id="rr-rows">
+        {% set active = (test.reference_ranges or [])|selectattr('is_active')|list %}
+        {% if not active %}{% set active = [None] %}{% endif %}
+        {% for r in active %}
+        <tr class="rr-row">
+          <td>
+            <select name="gender[]" class="rr-select">
+              {% for g, label in [('male','Male'), ('female','Female'), ('any','Other')] %}
+              <option value="{{ g }}" {% if r and r.gender == g %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" name="age_min[]" class="rr-input num"
+                     value="{{ r.age_min_years if r and r.age_min_years is not none else '' }}"></td>
+          <td><input type="number" name="age_max[]" class="rr-input num"
+                     value="{{ r.age_max_years if r and r.age_max_years is not none else '' }}"></td>
+          <td><input type="text" name="range_text[]" class="rr-input mono"
+                     value="{{ r.range_text if r else '' }}"
+                     placeholder="e.g. 13.5 - 17.5"></td>
+          <td><input type="text" name="unit[]" class="rr-input"
+                     value="{{ r.unit if r and r.unit else '' }}"></td>
+          <td><input type="text" name="critical_value[]" class="rr-input mono"
+                     value="{{ r.critical_value if r and r.critical_value else '' }}"
+                     placeholder="e.g. < 7.0 or > 20.0"></td>
+          <td><input type="number" name="sort_order[]" class="rr-input num"
+                     value="{{ r.sort_order if r else 0 }}"></td>
+          <td class="center">
+            <button type="button" class="rr-x" onclick="this.closest('tr').remove();"
+                    title="Remove row">&times;</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="rr-hint">
+      &rarr; Blank <em>Range text</em> removes that row on save.
+      &rarr; Use <strong>Other</strong> for unspecified gender or fallback.
+      &rarr; Bounded ranges (age min/max set) take priority over unbounded.
+    </div>
+  </form>
+
+</div>
+
+<script>
+function addRow() {
+  const tbody = document.getElementById('rr-rows');
+  const clone = tbody.querySelector('tr.rr-row').cloneNode(true);
+  clone.querySelectorAll('input').forEach(function(i){ i.value = ''; });
+  clone.querySelector('select').value = 'any';
+  clone.querySelector('input[name="sort_order[]"]').value = '0';
+  tbody.appendChild(clone);
+}
+</script>
+{% endblock %}

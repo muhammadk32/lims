@@ -86,7 +86,12 @@
           <div class="d-flex justify-content-end gap-2">
             <a href="{{ url_for('tests.list_tests') }}" class="btn btn-outline-secondary">Cancel</a>
             
-{% include 'tests/_reference_ranges.html' %}
+{% if test %}
+            <a href="{{ url_for('tests.save_reference_ranges', test_id=test.id) }}"
+               class="btn btn-outline-primary">
+              <i class="bi bi-rulers"></i> Reference Ranges →
+            </a>
+            {% endif %}
 <button type="submit" class="btn btn-primary">
               <i class="bi bi-check-lg"></i> {{ 'Update' if test else 'Save' }} Test
             </button>
