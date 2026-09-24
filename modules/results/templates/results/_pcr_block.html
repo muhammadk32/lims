@@ -1,0 +1,61 @@
+{# Renders the ADAM-style PCR block as a full-width <div> #}
+<div class="pcr-block" data-item="{{ item.id }}">
+  <div class="pcr-block-hd">
+    <i class="bi bi-clipboard2-pulse"></i>
+    <strong>{{ item.test.name }}</strong>
+    <span class="text-muted small ms-2">{{ item.test.code }}</span>
+  </div>
+
+  <div class="pcr-inline-grid">
+    <div class="pcr-row">
+      <span class="pcr-lbl">Result Type:</span>
+      <select name="pcr_result_type_{{ item.id }}" class="pcr-input pcr-result-type">
+        <option value="">- Select -</option>
+        {% for v in ['Not Detected','Detected','Detected & Quantified','Equivocal','Invalid'] %}
+        <option value="{{ v }}" {% if r and r.result_type == v %}selected{% endif %}>{{ v }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="pcr-row">
+      <span class="pcr-lbl">Specimen:</span>
+      <input type="text" name="pcr_specimen_{{ item.id }}" class="pcr-input"
+             value="{{ r.specimen if r else '' }}" placeholder="e.g. Clotted sample / Serum">
+    </div>
+    <div class="pcr-row">
+      <span class="pcr-lbl">Result:</span>
+      <input type="text" name="pcr_result_value_{{ item.id }}" class="pcr-input pcr-result-value"
+             value="{{ r.value if r else (item.result_value or '') }}" placeholder="Auto-filled">
+    </div>
+    <div class="pcr-row">
+      <span class="pcr-lbl">Viral Load/Type:</span>
+      <input type="text" name="pcr_viral_load_{{ item.id }}" class="pcr-input"
+             value="{{ r.viral_load_type if r else '' }}" placeholder="e.g. 2,450 IU/mL">
+    </div>
+    <div class="pcr-row">
+      <span class="pcr-lbl">No Of Repeat:</span>
+      <input type="number" name="pcr_no_of_repeat_{{ item.id }}" class="pcr-input"
+             value="{{ r.no_of_repeat if r and r.no_of_repeat is not none else 0 }}" min="0">
+    </div>
+  </div>
+
+  <div class="pcr-tabs">
+    <div class="pcr-tab active" data-item="{{ item.id }}" data-pane="method">Method</div>
+    <div class="pcr-tab" data-item="{{ item.id }}" data-pane="suggestion">Suggestion</div>
+    <div class="pcr-tab" data-item="{{ item.id }}" data-pane="interpretation">Interpretation</div>
+    <div class="pcr-tab" data-item="{{ item.id }}" data-pane="comments">Comments</div>
+  </div>
+  <div class="pcr-tab-body" data-item="{{ item.id }}">
+    <div class="pcr-pane active" data-item="{{ item.id }}" data-pane="method">
+      <textarea name="pcr_method_html_{{ item.id }}" class="pcr-editor">{{ r.method_html if r else '' }}</textarea>
+    </div>
+    <div class="pcr-pane" data-item="{{ item.id }}" data-pane="suggestion">
+      <textarea name="pcr_suggestion_html_{{ item.id }}" class="pcr-editor">{{ r.suggestion_html if r else '' }}</textarea>
+    </div>
+    <div class="pcr-pane" data-item="{{ item.id }}" data-pane="interpretation">
+      <textarea name="pcr_interpretation_html_{{ item.id }}" class="pcr-editor">{{ r.interpretation_html if r else '' }}</textarea>
+    </div>
+    <div class="pcr-pane" data-item="{{ item.id }}" data-pane="comments">
+      <textarea name="pcr_comments_html_{{ item.id }}" class="pcr-editor">{{ r.comments_html if r else '' }}</textarea>
+    </div>
+  </div>
+</div>

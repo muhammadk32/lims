@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Rich editors ? all four get TinyMCE
   if (window.tinymce) {
     tinymce.init({
+      license_key: 'gpl',
       init_instance_callback: function (ed) {
         // keep editors synced to their textareas on change
         ed.on('change keyup', function () { ed.save(); });

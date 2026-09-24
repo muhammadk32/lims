@@ -40,6 +40,9 @@ def save_order_results(order, form, user):
         item.result_value = value or None
         item.result_notes = notes or None
 
+    # --- 1b. Apply PCR extended fields (if any were in the form) ---
+    _save_pcr_fields(form, order)
+
     # --- 2. Detect changes ---
     something_changed = any(
         old_values.get(item.id) != item.result_value
@@ -197,3 +200,31 @@ def save_pcr_result(item, form, user):
 
     db.session.commit()
     return r
+
+def _save_pcr_fields(form, order):
+    """Collect any pcr_* fields for items in this order and save them."""
+    from .models import Result
+    from datetime import datetime
+
+    for item in order.top_level_items:
+        prefix = f"pcr_result_type_{item.id}"
+        if prefix not in form:
+            continue
+        r = Result.query.filter_by(order_item_id=item.id).first()
+        if r is None:
+            r = Result(order_item_id=item.id)
+            db.session.add(r)
+
+        r.result_type         = (form.get(f"pcr_result_type_{item.id}") or "").strip() or None
+        _pcr_val              = (form.get(f"pcr_result_value_{item.id}") or "").strip() or None
+        if _pcr_val:
+            r.value = _pcr_val
+            item.result_value = _pcr_val
+        r.specimen            = (form.get(f"pcr_specimen_{item.id}") or "").strip() or None
+        r.viral_load_type     = (form.get(f"pcr_viral_load_{item.id}") or "").strip() or None
+        r.no_of_repeat        = form.get(f"pcr_no_of_repeat_{item.id}", type=int)
+        r.method_html         = (form.get(f"pcr_method_html_{item.id}") or "").strip() or None
+        r.suggestion_html     = (form.get(f"pcr_suggestion_html_{item.id}") or "").strip() or None
+        r.interpretation_html = (form.get(f"pcr_interpretation_html_{item.id}") or "").strip() or None
+        r.comments_html       = (form.get(f"pcr_comments_html_{item.id}") or "").strip() or None
+        r.entered_at = datetime.utcnow()

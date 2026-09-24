@@ -1,10 +1,92 @@
-﻿<style>
-.badge-critical{background:#7f1d1d;color:#fff;font-weight:600;letter-spacing:.5px;}
-.abnormal-row.critical-row{background:#fee2e2 !important;}
-</style>
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
-{% block title %}Enter Results â€” Lab # {{ order.order_code }}{% endblock %}
+{% block title %}Enter Results â€” Lab # {{ order.order_code }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var MAP = {
+    'Not Detected':          'NEGATIVE',
+    'Detected':              'POSITIVE',
+    'Detected & Quantified': '',
+    'Equivocal':             'EQUIVOCAL',
+    'Invalid':               'INVALID'
+  };
+  document.querySelectorAll('.pcr-result-type').forEach(function (sel) {
+    var block = sel.closest('.pcr-block');
+    if (!block) return;
+    var val = block.querySelector('.pcr-result-value');
+    if (!val) return;
+    sel.addEventListener('change', function () {
+      var v = MAP[sel.value];
+      if (v !== undefined) val.value = v;
+    });
+  });
+
+  // Tab switching
+  document.querySelectorAll('.pcr-tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      var iid = t.dataset.item;
+      var pane = t.dataset.pane;
+      document.querySelectorAll('.pcr-tab[data-item="' + iid + '"]').forEach(function (x) { x.classList.remove('active'); });
+      document.querySelectorAll('.pcr-pane[data-item="' + iid + '"]').forEach(function (x) { x.classList.remove('active'); });
+      t.classList.add('active');
+      var target = document.querySelector('.pcr-pane[data-item="' + iid + '"][data-pane="' + pane + '"]');
+      if (target) target.classList.add('active');
+    });
+  });
+
+  // Save all editors before submit
+  var f = document.querySelector('form');
+  if (f) {
+    f.addEventListener('submit', function () { if (window.tinymce) tinymce.triggerSave(); });
+  }
+
+  if (window.tinymce) {
+    tinymce.init({
+      license_key: 'gpl',
+      selector: 'textarea.pcr-editor',
+      height: 200,
+      menubar: false,
+      plugins: 'lists link table code',
+      toolbar: 'undo redo | fontfamily fontsize | bold italic underline forecolor | bullist numlist | link | removeformat code',
+      branding: false,
+      init_instance_callback: function (ed) { ed.on('change keyup', function () { ed.save(); }); },
+      content_style: "body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10.5pt; }",
+    });
+  }
+});
+</script>
+
+<script>
+(function(){
+  window.__pcrWired = false;
+  function wire() {
+    if (window.__pcrWired) return;
+    var sel = document.querySelector('.pcr-result-type');
+    if (!sel) { return; }
+    window.__pcrWired = true;
+    var MAP = {
+      'Not Detected':          'NEGATIVE',
+      'Detected':              'POSITIVE',
+      'Detected & Quantified': '',
+      'Equivocal':             'EQUIVOCAL',
+      'Invalid':               'INVALID'
+    };
+    document.querySelectorAll('.pcr-result-type').forEach(function (s) {
+      s.addEventListener('change', function () {
+        var block = s.closest('.pcr-block');
+        if (!block) return;
+        var v = block.querySelector('.pcr-result-value');
+        if (!v) return;
+        var mapped = MAP[s.value];
+        if (mapped !== undefined) v.value = mapped;
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', wire);
+  window.addEventListener('load', wire);
+})();
+</script>
+{% endblock %}
 
 {% block head %}
 <style>
@@ -206,6 +288,41 @@
   padding: 30px 20px;
   color: var(--bs-secondary-color);
 }
+
+/* ---------- PCR block (full-width, below table) ---------- */
+.pcr-block { border: 1.5px solid #212529; margin-bottom: 12px; background: #fff; }
+.pcr-block-hd { background: #212529; color: #fff; padding: 5px 12px;
+                font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.pcr-block-hd .text-muted { color: #adb5bd !important; }
+.pcr-inline-grid { display: grid; grid-template-columns: 1fr 1fr;
+                   gap: 8px 32px; padding: 12px 16px 8px; }
+.pcr-row { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 10px; }
+.pcr-row .pcr-lbl { font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.05em; color: #495057; text-align: right; }
+.pcr-input { width: 100%; height: 28px; padding: 4px 8px; border: 1px solid #adb5bd;
+             border-radius: 0; font-size: 0.82rem; background: #fff;
+             font-family: inherit; box-sizing: border-box; }
+.pcr-input:focus { outline: none; border-color: #198754; box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
+.pcr-tabs { display: flex; border-bottom: 2px solid #212529; margin: 4px 16px 0; }
+.pcr-tab { padding: 5px 18px; font-size: 0.7rem; font-weight: 700;
+           text-transform: uppercase; letter-spacing: 0.04em; color: #495057;
+           background: #f8f9fa; border: 1px solid #dee2e6; border-bottom: none;
+           cursor: pointer; margin-bottom: -2px; user-select: none; }
+.pcr-tab:hover { background: #e9ecef; }
+.pcr-tab.active { background: #fff; color: #198754; border-color: #212529;
+                  border-bottom-color: #fff; padding-bottom: 6px; }
+.pcr-tab-body { position: relative; border: 1.5px solid #212529; border-top: none;
+                margin: 0 16px 12px; padding: 10px; background: #fff; min-height: 220px; }
+.pcr-pane { display: block; visibility: hidden; height: 0; overflow: hidden;
+            position: absolute; width: 100%; }
+.pcr-pane.active { visibility: visible; height: auto; overflow: visible; position: static; width: auto; }
+.pcr-tab-body .tox-tinymce { min-height: 240px !important; height: 240px !important; }
+.pcr-tab-body .tox-edit-area iframe { min-height: 180px !important; }
+
+
+/* ---------- from top block (moved) ---------- */
+.badge-critical{background:#7f1d1d;color:#fff;font-weight:600;letter-spacing:.5px;}
+.abnormal-row.critical-row{background:#fee2e2 !important;}
 </style>
 {% endblock %}
 
@@ -483,6 +600,10 @@
                 </td>
                 <td class="text-end"></td>
               </tr>
+              {% if item.test.result_format in ('pcr','pcr_quant','molecular') %}
+                {% set r = item.result if item.result is not mapping else (item.result[0] if item.result else None) %}
+                {% include 'results/_pcr_block.html' %}
+              {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -567,17 +688,122 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+
+
+
+
 <script>
-function toggleLocked() {
-  var list = document.getElementById('lockedList');
-  var chev = document.getElementById('lockedChevron');
-  if (!list) return;
-  var open = list.style.display !== 'none';
-  list.style.display = open ? 'none' : 'block';
-  if (chev) {
-    chev.classList.toggle('bi-chevron-down', open);
-    chev.classList.toggle('bi-chevron-up', !open);
+(function () {
+  function initAllEditors() {
+    if (!window.tinymce) return;
+
+    // 1. Make every pane visible so TinyMCE can compute height
+    var panes = document.querySelectorAll('.pcr-pane');
+    panes.forEach(function (p) {
+      p.style.visibility = 'visible';
+      p.style.height = 'auto';
+      p.style.overflow = 'visible';
+      p.style.position = 'static';
+    });
+
+    // 2. Init TinyMCE on all editors at once
+    tinymce.init({
+      license_key: 'gpl',
+      selector: 'textarea.pcr-editor',
+      height: 220,
+      menubar: false,
+      plugins: 'lists link table code',
+      toolbar: 'undo redo | fontfamily fontsize | bold italic underline forecolor | bullist numlist | link | removeformat code',
+      branding: false,
+      content_style: "body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10.5pt; }",
+      init_instance_callback: function (ed) {
+        ed.on('change keyup', function () { ed.save(); });
+      }
+    }).then(function () {
+      // 3. After init, hide all panes again ? only .active stays visible
+      panes.forEach(function (p) {
+        if (!p.classList.contains('active')) {
+          p.style.visibility = 'hidden';
+          p.style.height = '0';
+          p.style.overflow = 'hidden';
+          p.style.position = 'absolute';
+        }
+      });
+    });
   }
-}
+
+  function wireFormSubmit() {
+    var form = document.querySelector('form');
+    if (form && !form._pcrSyncAttached) {
+      form._pcrSyncAttached = true;
+      form.addEventListener('submit', function () {
+        if (window.tinymce) tinymce.triggerSave();
+      });
+    }
+  }
+
+  function wireTabs() {
+    document.querySelectorAll('.pcr-tab').forEach(function (t) {
+      t.addEventListener('click', function () {
+        var iid = t.dataset.item, pane = t.dataset.pane;
+        document.querySelectorAll('.pcr-tab[data-item="' + iid + '"]').forEach(function (x) { x.classList.remove('active'); });
+        document.querySelectorAll('.pcr-pane[data-item="' + iid + '"]').forEach(function (x) {
+          x.classList.remove('active');
+          // Keep TinyMCE editors mounted but hidden
+          x.style.visibility = 'hidden';
+          x.style.height = '0';
+          x.style.overflow = 'hidden';
+          x.style.position = 'absolute';
+        });
+        t.classList.add('active');
+        var target = document.querySelector('.pcr-pane[data-item="' + iid + '"][data-pane="' + pane + '"]');
+        if (target) {
+          target.classList.add('active');
+          target.style.visibility = 'visible';
+          target.style.height = 'auto';
+          target.style.overflow = 'visible';
+          target.style.position = 'static';
+        }
+      });
+    });
+  }
+
+  function wireAutoFill() {
+    var MAP = {
+      'Not Detected':          'NEGATIVE',
+      'Detected':              'POSITIVE',
+      'Detected & Quantified': '',
+      'Equivocal':             'EQUIVOCAL',
+      'Invalid':               'INVALID'
+    };
+    document.querySelectorAll('.pcr-result-type').forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        var block = sel.closest('.pcr-block');
+        if (!block) return;
+        var v = block.querySelector('.pcr-result-value');
+        if (!v) return;
+        var mapped = MAP[sel.value];
+        if (mapped !== undefined) v.value = mapped;
+      });
+    });
+  }
+
+  function boot() {
+    wireTabs();
+    wireAutoFill();
+    wireFormSubmit();
+    initAllEditors();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
 </script>
+
 {% endblock %}

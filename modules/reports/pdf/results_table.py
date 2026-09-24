@@ -66,10 +66,9 @@ def _results_table(order, previous_map=None, date_labels=None):
     def _collect_pcr_details(bucket, item, order_):
         """If this item has a Result with PCR fields, render them as
         a borderless block under the result row."""
-        r = getattr(item, 'result', None)
-        # backref may be a list (one-to-many) or a single Result
-        if isinstance(r, list):
-            r = r[0] if r else None
+        # Query Result directly (backref can be None for detached sessions)
+        from modules.results.models import Result
+        r = Result.query.filter_by(order_item_id=item.id).first()
         if r is None:
             return
         has_any = any([r.specimen, r.result_type, r.viral_load_type,
@@ -201,11 +200,12 @@ def _results_table(order, previous_map=None, date_labels=None):
                     if _crit:
                         critical_rows.append(row_idx)
 
+                child_is_pcr = (child.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
                 row = [
                     Paragraph(child.test.name, panel_sub_style),
-                    Paragraph(child.result_value or '-', cell_style),
-                    Paragraph(child.test.unit or '-', cell_style),
-                    Paragraph(_rrfo(child.test, order) or '-', cell_style),
+                    Paragraph('' if child_is_pcr else (child.result_value or '-'), cell_style),
+                    Paragraph('' if child_is_pcr else (child.test.unit or '-'), cell_style),
+                    Paragraph('' if child_is_pcr else (_rrfo(child.test, order) or '-'), cell_style),
                 ]
                 for pv in prev_values_for(child.test.name):
                     row.append(Paragraph(pv or '-', cell_prev))
@@ -220,11 +220,12 @@ def _results_table(order, previous_map=None, date_labels=None):
                 if _crit:
                     critical_rows.append(row_idx)
 
+            is_pcr = (item.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
             row = [
                 Paragraph(item.test.name, cell_bold),
-                Paragraph(item.result_value or '-', cell_style),
-                Paragraph(item.test.unit or '-', cell_style),
-                Paragraph(_rrfo(item.test, order) or '-', cell_style),
+                Paragraph('' if is_pcr else (item.result_value or '-'), cell_style),
+                Paragraph('' if is_pcr else (item.test.unit or '-'), cell_style),
+                Paragraph('' if is_pcr else (_rrfo(item.test, order) or '-'), cell_style),
             ]
             for pv in prev_values_for(item.test.name):
                 row.append(Paragraph(pv or '-', cell_prev))
