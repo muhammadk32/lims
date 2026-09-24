@@ -158,3 +158,42 @@ def get_patient_orders(patient_id):
         .order_by(Order.id.desc())
         .all()
     )
+
+# ============================================================
+# PCR-STYLE result save
+# ============================================================
+def save_pcr_result(item, form, user):
+    """Upsert the extended PCR fields on Result for one OrderItem."""
+    from .models import Result
+    from datetime import datetime
+
+    from .models import Result
+    r = Result.query.filter_by(order_item_id=item.id).first()
+    if r is None:
+        r = Result(order_item_id=item.id)
+        db.session.add(r)
+
+    def _g(k):
+        v = (form.get(k) or "").strip()
+        return v or None
+
+    r.specimen            = _g("specimen")
+    r.result_type         = _g("result_type")
+    r.viral_load_type     = _g("viral_load_type")
+    r.no_of_repeat        = form.get("no_of_repeat", type=int)
+    r.method_html         = _g("method_html")
+    r.suggestion_html     = _g("suggestion_html")
+    r.interpretation_html = _g("interpretation_html")
+    r.comments_html       = _g("comments_html")
+    r.value               = _g("value") or (item.result_value or None)
+    r.notes               = _g("notes")
+    r.entered_at          = datetime.utcnow()
+    if user is not None:
+        r.entered_by_id = getattr(user, "id", None)
+
+    # Mirror the short value up to OrderItem so the rest of the app sees it
+    item.result_value = r.value
+    item.result_notes = r.notes
+
+    db.session.commit()
+    return r

@@ -14,6 +14,16 @@ class Result(db.Model):
     )
     value = db.Column(db.String(255), nullable=True)
     notes = db.Column(db.Text, nullable=True)
+
+    # ---------- PCR-style extended fields (ADAM layout) ----------
+    specimen           = db.Column(db.String(120), nullable=True)
+    result_type        = db.Column(db.String(40),  nullable=True)
+    viral_load_type    = db.Column(db.String(80),  nullable=True)
+    no_of_repeat       = db.Column(db.Integer,     nullable=True)
+    method_html        = db.Column(db.Text,        nullable=True)
+    suggestion_html    = db.Column(db.Text,        nullable=True)
+    interpretation_html= db.Column(db.Text,        nullable=True)
+    comments_html      = db.Column(db.Text,        nullable=True)
     entered_by_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id'),

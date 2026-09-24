@@ -139,3 +139,26 @@ def patient_history(patient_id):
         orders=orders,
         check_flag=check_flag,
     )
+
+# ============================================================
+# PCR-STYLE RESULT ENTRY  (per item)
+# ============================================================
+@results_bp.route('/item/<int:item_id>/pcr', methods=['GET', 'POST'])
+@login_required
+@permission_required('enter_results')
+def enter_pcr(item_id):
+    """ADAM-style extended entry: specimen, viral load, tabs with
+    Method / Suggestion / Interpretation / Comments."""
+    item = OrderItem.query.get_or_404(item_id)
+    from .models import Result
+    r = Result.query.filter_by(order_item_id=item.id).first()
+
+    if request.method == 'POST':
+        svc.save_pcr_result(item, request.form, None)
+        flash(f'PCR details saved for {item.test.name}.', 'success')
+
+        if request.form.get('action') == 'save_conduct':
+            return redirect(url_for('results.enter', order_id=item.order_id))
+        return redirect(url_for('results.enter_pcr', item_id=item.id))
+
+    return render_template('results/enter_pcr.html', item=item, r=r)
