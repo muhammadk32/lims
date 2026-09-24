@@ -218,6 +218,8 @@
           <th style="width:110px;">Gender</th>
           <th class="num" style="width:80px;">Age min</th>
           <th class="num" style="width:80px;">Age max</th>
+          <th class="num" style="width:80px;">Age min (d)</th>
+          <th class="num" style="width:80px;">Age max (d)</th>
           <th>Range text</th>
           <th style="width:80px;">Unit</th>
           <th style="width:180px;">Critical</th>
@@ -241,6 +243,10 @@
                      value="{{ r.age_min_years if r and r.age_min_years is not none else '' }}"></td>
           <td><input type="number" name="age_max[]" class="rr-input num"
                      value="{{ r.age_max_years if r and r.age_max_years is not none else '' }}"></td>
+          <td><input type="number" name="age_min_days[]" class="rr-input num"
+                     value="{{ r.age_min_days if r and r.age_min_days is not none else '' }}"></td>
+          <td><input type="number" name="age_max_days[]" class="rr-input num"
+                     value="{{ r.age_max_days if r and r.age_max_days is not none else '' }}"></td>
           <td><input type="text" name="range_text[]" class="rr-input mono"
                      value="{{ r.range_text if r else '' }}"
                      placeholder="e.g. 13.5 - 17.5"></td>

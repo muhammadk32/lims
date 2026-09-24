@@ -35,6 +35,8 @@ def save_ranges(test, form, user):
     genders  = form.getlist('gender[]')
     age_mins = form.getlist('age_min[]')
     age_maxs = form.getlist('age_max[]')
+    age_min_ds = form.getlist('age_min_days[]')
+    age_max_ds = form.getlist('age_max_days[]')
     texts    = form.getlist('range_text[]')
     units    = form.getlist('unit[]')
     crits    = form.getlist('critical_value[]')
@@ -56,6 +58,8 @@ def save_ranges(test, form, user):
         row.gender         = (genders[i] if i < len(genders) else 'any') or 'any'
         row.age_min_years  = _int_or_none(age_mins[i] if i < len(age_mins) else '')
         row.age_max_years  = _int_or_none(age_maxs[i] if i < len(age_maxs) else '')
+        row.age_min_days   = _int_or_none(age_min_ds[i] if i < len(age_min_ds) else '')
+        row.age_max_days   = _int_or_none(age_max_ds[i] if i < len(age_max_ds) else '')
         row.range_text     = text
         row.unit           = _str_or_none(units[i] if i < len(units) else '')
         row.critical_value = _str_or_none(crits[i] if i < len(crits) else '')
