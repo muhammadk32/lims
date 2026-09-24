@@ -63,6 +63,58 @@ def _results_table(order, previous_map=None, date_labels=None):
         textColor=colors.HexColor('#212529'), leftIndent=10,
     )
 
+    def _collect_pcr_details(bucket, item, order_):
+        """If this item has a Result with PCR fields, render them as
+        a borderless block under the result row."""
+        r = getattr(item, 'result', None)
+        # backref may be a list (one-to-many) or a single Result
+        if isinstance(r, list):
+            r = r[0] if r else None
+        if r is None:
+            return
+        has_any = any([r.specimen, r.result_type, r.viral_load_type,
+                       r.interpretation_html, r.method_html,
+                       r.suggestion_html, r.comments_html])
+        if not has_any:
+            return
+
+        import re as _re
+        def _clean(html):
+            if not html:
+                return ''
+            txt = _re.sub(r'<[^>]+>', ' ', html)
+            txt = _re.sub(r'&nbsp;', ' ', txt)
+            txt = _re.sub(r'\s+', ' ', txt).strip()
+            return txt
+
+        inner = []
+        if r.specimen:
+            inner.append(f'<b>SPECIMEN:</b> {r.specimen}')
+        if r.result_type or r.value:
+            inner.append(f'<b>RESULT:</b> {r.result_type or r.value}')
+        if r.viral_load_type:
+            inner.append(f'<b>VIRAL LOAD:</b> {r.viral_load_type}')
+
+        blocks = [
+            ('Interpretation', _clean(r.interpretation_html)),
+            ('Methodologies',  _clean(r.method_html)),
+            ('Suggestions',    _clean(r.suggestion_html)),
+            ('Comments',       _clean(r.comments_html)),
+        ]
+        for label, body in blocks:
+            if body:
+                inner.append(f'<br/><b><u>{label}:</u></b><br/>{body}')
+
+        if not inner:
+            return
+        html = '<br/>'.join(inner)
+        pcr_style = ParagraphStyle(
+            'PCRDetail', parent=styles['Normal'], fontSize=7.5,
+            textColor=colors.HexColor('#212529'), leftIndent=8, spaceBefore=4,
+            spaceAfter=6, leading=10,
+        )
+        bucket.append(Paragraph(html, pcr_style))
+
     def _collect_note(bucket, test, order_):
         """Append (test_name, note) as a Paragraph to the notes bucket."""
         try:
@@ -160,6 +212,7 @@ def _results_table(order, previous_map=None, date_labels=None):
                 data.append(row)
                 row_idx += 1
                 _collect_note(notes_flowables, child.test, order)
+                _collect_pcr_details(notes_flowables, child, order)
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
             if flag == 'abnormal':
@@ -178,6 +231,7 @@ def _results_table(order, previous_map=None, date_labels=None):
             data.append(row)
             row_idx += 1
             _collect_note(notes_flowables, item.test, order)
+            _collect_pcr_details(notes_flowables, item, order)
 
     # Column widths
     if n_prev > 0:

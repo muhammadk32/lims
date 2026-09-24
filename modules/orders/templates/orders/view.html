@@ -185,6 +185,15 @@
         <i class="bi bi-pencil-square"></i> Enter Results
       </a>
 
+      {% set pcr_items = order.top_level_items | selectattr('test.result_format', 'equalto', 'pcr') | list %}
+      {% if pcr_items %}
+      <a href="{{ url_for('results.enter_pcr', item_id=pcr_items[0].id) }}"
+         class="btn btn-sm btn-outline-info">
+        <i class="bi bi-clipboard2-pulse"></i> PCR Details
+        {% if pcr_items | length > 1 %}<span class="badge bg-info text-dark ms-1">{{ pcr_items | length }}</span>{% endif %}
+      </a>
+      {% endif %}
+
       {% if current_user.role in ['admin', 'doctor'] %}
       <button type="button"
               class="btn btn-sm btn-success"
