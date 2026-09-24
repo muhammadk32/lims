@@ -1,4 +1,4 @@
-"""Entry point — assembles the PDF from header, patient box, results, footer."""
+﻿"""Entry point — assembles the PDF from header, patient box, results, footer."""
 import io
 
 from reportlab.lib.pagesizes import A4
@@ -48,7 +48,7 @@ def generate_report_pdf(order) -> io.BytesIO:
     except Exception as e:
         print(f'[pdf.generator] previous_map failed: {e}')
 
-    results_table, abnormal_count, critical_count = _results_table(
+    results_table, abnormal_count = _results_table(
         order,
         previous_map=previous_map,
         date_labels=date_labels,

@@ -207,16 +207,3 @@ def evaluate_for_order(test, value, order):
         return ('unknown', False)
     patient = getattr(order, 'patient', None)
     return evaluate(test, value, patient_gender(patient), patient_age_years(patient))
-
-
-# ===== Phase 4: combined flag helpers =====
-def flag_for_order(test, value, order):
-    """Return 'normal' | 'abnormal' | 'unknown'."""
-    flag, _ = evaluate_for_order(test, value, order)
-    return flag
-
-
-def critical_for_order(test, value, order):
-    """Return True if the value crosses a critical threshold."""
-    _, is_crit = evaluate_for_order(test, value, order)
-    return is_crit

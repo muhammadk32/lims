@@ -28,6 +28,13 @@ def create_app(config_name=None):
     @app.template_global()
     def rng(test, order):
         return _rrfo(test, order)
+
+    # ===== Phase 4: critical-aware flag helper =====
+    from modules.tests.ranges import evaluate_for_order as _efo
+    @app.template_global()
+    def eval_test(test, value, order):
+        """Return (flag, is_critical). flag: 'normal'|'abnormal'|'unknown'"""
+        return _efo(test, value, order)
     app.config.from_object(config_map[config_name])
 
     # ---------- Logging ----------

@@ -1,8 +1,4 @@
-﻿<style>
-.badge-critical{background:#7f1d1d;color:#fff;font-weight:600;letter-spacing:.5px;}
-.abnormal-row.critical-row{background:#fee2e2 !important;}
-</style>
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}Preview â€” {{ order.order_code }}{% endblock %}
 
@@ -183,7 +179,7 @@
                   {% if flag == 'normal' %}
                     <span class="badge bg-success">Normal</span>
                   {% elif flag == 'abnormal' %}
-                    `<span class="badge bg-danger">Abnormal</span>{% if _crit is defined and _crit %} <span class="badge badge-critical">CRITICAL</span>{% endif %}
+                    <span class="badge bg-danger">Abnormal</span>
                   {% else %}
                     <span class="text-muted">â€”</span>
                   {% endif %}
@@ -204,7 +200,7 @@
                 {% if flag == 'normal' %}
                   <span class="badge bg-success">Normal</span>
                 {% elif flag == 'abnormal' %}
-                  `<span class="badge bg-danger">Abnormal</span>{% if _crit is defined and _crit %} <span class="badge badge-critical">CRITICAL</span>{% endif %}
+                  <span class="badge bg-danger">Abnormal</span>
                 {% else %}
                   <span class="text-muted">â€”</span>
                 {% endif %}

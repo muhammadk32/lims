@@ -1,10 +1,6 @@
-"""Results table — grouped by panel, with abnormal highlighting."""
+﻿"""Results table — grouped by panel, with abnormal highlighting."""
 from reportlab.lib import colors
-from modules.tests.ranges import (
-    resolve_range_for_order as _rrfo,
-    critical_for_order as _cfo,
-    evaluate_for_order as _efo,
-)
+from modules.tests.ranges import (resolve_range_for_order as _rrfo, critical_for_order as _cfo, evaluate_for_order as _efo)
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Table, TableStyle
@@ -25,8 +21,7 @@ def _results_table(order, previous_map=None, date_labels=None):
     """Results table with panel grouping + previous results columns.
 
     previous_map: {test_name_lower: [(date, value), ...]}
-    date_labels:  [datetime, datetime]  -- for column headers
-    Returns (Table, abnormal_count, critical_count).
+    date_labels:  [datetime, datetime]  — for column headers
     """
     previous_map = previous_map or {}
     date_labels = date_labels or []
@@ -61,7 +56,7 @@ def _results_table(order, previous_map=None, date_labels=None):
         try:
             return d.strftime('%d-%b-%y')
         except Exception:
-            return '-'
+            return '—'
 
     # Header row
     header_cells = [
@@ -75,10 +70,13 @@ def _results_table(order, previous_map=None, date_labels=None):
     data = [header_cells]
 
     abnormal_rows = []
+
+
     critical_rows = []
     row_idx = 1
 
     def prev_values_for(name):
+        """Return [v1, v2] list of previous values in order, padded with None."""
         priors = previous_map.get((name or '').lower(), [])
         out = []
         for i in range(n_prev):
@@ -91,7 +89,7 @@ def _results_table(order, previous_map=None, date_labels=None):
     for item in order.top_level_items:
         if item.has_children:
             panel_cells = [
-                Paragraph('> ' + item.test.name, panel_header_style),
+                Paragraph(f'▸ {item.test.name}', panel_header_style),
                 Paragraph('', cell_style),
                 Paragraph('', cell_style),
                 Paragraph('', cell_style),
@@ -102,40 +100,49 @@ def _results_table(order, previous_map=None, date_labels=None):
 
             for child in item.children:
                 flag, _crit = _efo(child.test, child.result_value, order)
+                flag_text = ('CRITICAL' if _crit else {
+                    'normal': 'Normal', 'abnormal': 'Abnormal', 'unknown': '—'
+                }.get(flag, '—'))
+                flag_text = {
+                    'normal': 'Normal',
+                    'abnormal': 'Abnormal',
+                    'unknown': '—',
+                }.get(flag, '—')
                 if flag == 'abnormal':
                     abnormal_rows.append(row_idx)
-                    if _crit:
-                        critical_rows.append(row_idx)
 
                 row = [
                     Paragraph(child.test.name, panel_sub_style),
-                    Paragraph(child.result_value or '-', cell_style),
-                    Paragraph(child.test.unit or '-', cell_style),
-                    Paragraph(_rrfo(child.test, order) or '-', cell_style),
+                    Paragraph(child.result_value or '—', cell_style),
+                    Paragraph(child.test.unit or '—', cell_style),
+                    Paragraph(_rrfo(child.test, order) or '—', cell_style),
                 ]
                 for pv in prev_values_for(child.test.name):
-                    row.append(Paragraph(pv or '-', cell_prev))
+                    row.append(Paragraph(pv or '—', cell_prev))
                 data.append(row)
                 row_idx += 1
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
+            flag_text = {
+                'normal': 'Normal',
+                'abnormal': 'Abnormal',
+                'unknown': '—',
+            }.get(flag, '—')
             if flag == 'abnormal':
                 abnormal_rows.append(row_idx)
-                if _crit:
-                    critical_rows.append(row_idx)
 
             row = [
                 Paragraph(item.test.name, cell_bold),
-                Paragraph(item.result_value or '-', cell_style),
-                Paragraph(item.test.unit or '-', cell_style),
-                Paragraph(_rrfo(item.test, order) or '-', cell_style),
+                Paragraph(item.result_value or '—', cell_style),
+                Paragraph(item.test.unit or '—', cell_style),
+                Paragraph(_rrfo(item.test, order) or '—', cell_style),
             ]
             for pv in prev_values_for(item.test.name):
-                row.append(Paragraph(pv or '-', cell_prev))
+                row.append(Paragraph(pv or '—', cell_prev))
             data.append(row)
             row_idx += 1
 
-    # Column widths
+    # Column widths — adapt to presence of previous columns
     if n_prev > 0:
         col_widths = [55 * mm, 22 * mm, 18 * mm, 35 * mm]
         col_widths += [22 * mm] * n_prev
@@ -158,23 +165,18 @@ def _results_table(order, previous_map=None, date_labels=None):
         ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
     ]
 
-    # Panel header rows (blue)
     for i, row in enumerate(data):
         if i == 0:
             continue
         cell0 = row[0]
-        if hasattr(cell0, 'text') and cell0.text.startswith('>'):
+        if hasattr(cell0, 'text') and cell0.text.startswith('▸'):
             style.append(('BACKGROUND', (0, i), (-1, i), colors.HexColor('#dbeafe')))
 
-    # Abnormal rows (light pink)
-    for r in abnormal_rows:
-        style.append(('BACKGROUND', (0, r), (-1, r), colors.HexColor('#f8d7da')))
-        style.append(('TEXTCOLOR', (1, r), (1, r), colors.HexColor('#b02a37')))
-
-    # Critical rows (darker pink - applied after, wins)
-    for r in critical_rows:
-        style.append(('BACKGROUND', (0, r), (-1, r), colors.HexColor('#f5b7b1')))
-        style.append(('TEXTCOLOR', (1, r), (1, r), colors.HexColor('#7f1d1d')))
+    for row_idx_ab in abnormal_rows:
+        style.append(('BACKGROUND', (0, row_idx_ab), (-1, row_idx_ab), colors.HexColor('#f8d7da')))
+        style.append(('TEXTCOLOR', (1, row_idx_ab), (1, row_idx_ab), colors.HexColor('#b02a37')))
 
     t.setStyle(TableStyle(style))
     return t, len(abnormal_rows), len(critical_rows)
+
+
