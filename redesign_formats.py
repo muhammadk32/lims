@@ -1,4 +1,11 @@
-{% extends "test_settings/base.html" %}
+﻿# Lab Test Settings — Formats page: dense classical layout
+p = 'templates/test_settings/formats.html'
+import os
+
+if not os.path.exists(p):
+    print('ERR - formats.html not found at', p)
+else:
+    t = '''{% extends "test_settings/base.html" %}
 {% block title %}Test Formats - Lab Test Settings{% endblock %}
 
 {% block settings_content %}
@@ -368,3 +375,7 @@ function updateFormat(testId, newFormat) {
 }
 </script>
 {% endblock %}
+'''
+    with open(p, 'w', encoding='utf-8') as f:
+        f.write(t)
+    print('OK  - formats.html rewritten (dense classical)')

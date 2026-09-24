@@ -1,4 +1,7 @@
-{% extends 'base.html' %}
+﻿# Lab Tests (catalog) — dense classical layout
+p = 'modules/tests/templates/tests/list.html'
+
+t = """{% extends 'base.html' %}
 {% block title %}Lab Tests - LabMS{% endblock %}
 
 {% block head %}
@@ -344,3 +347,8 @@
   </div>
 </div>
 {% endblock %}
+"""
+
+with open(p, 'w', encoding='utf-8') as f:
+    f.write(t)
+print('OK  - tests/list.html rewritten (dense classical)')

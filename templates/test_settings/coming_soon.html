@@ -1,66 +1,239 @@
 {% extends "test_settings/base.html" %}
-
-{% block title %}{{ tab_name or 'Coming Soon' }} · Lab Test Settings{% endblock %}
+{% block title %}Units & Reference Ranges - Lab Test Settings{% endblock %}
 
 {% block settings_content %}
 
-  <div class="card border-0 shadow-sm">
-    <div class="card-body text-center py-5 px-4">
+<style>
+.ts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid #212529;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ts-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.ts-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.ts-count {
+  font-size: 0.76rem;
+  color: #6c757d;
+  font-family: Consolas, Monaco, monospace;
+}
+.ts-btn {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border: 1px solid #212529;
+  background: #fff;
+  color: #212529;
+  text-decoration: none;
+  border-radius: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  height: 28px;
+  line-height: 1.6;
+}
+.ts-btn:hover { background: #f1f3f5; color: #212529; }
+.ts-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.ts-btn-primary:hover { background: #146c43; color: #fff; }
+.ts-btn-danger { background: #fff; border-color: #dc3545; color: #dc3545; }
+.ts-btn-danger:hover { background: #dc3545; color: #fff; }
 
-      <div class="coming-soon-icon mx-auto mb-4">
-        <i class="bi {{ tab_icon or 'bi-tools' }}"></i>
-      </div>
+/* KPI strip */
+.ts-kpi {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #212529;
+  margin-bottom: 10px;
+}
+.ts-kpi td {
+  border: 1px solid #6c757d;
+  padding: 8px 14px;
+  background: #f8f9fa;
+}
+.ts-kpi-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6c757d;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.ts-kpi-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: Consolas, Monaco, monospace;
+}
 
-      <h3 class="mb-2">{{ tab_name or 'Coming Soon' }}</h3>
+/* Section header */
+.ts-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #212529;
+  color: #fff;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 10px;
+}
 
-      <p class="text-muted mb-4 mx-auto" style="max-width: 520px;">
-        {{ description or 'This tab is under construction.' }}
-      </p>
+/* Table */
+.ts-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #212529;
+  border-top: none;
+  font-size: 0.78rem;
+  background: #fff;
+}
+.ts-table thead th {
+  background: #e9ecef;
+  color: #212529;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  text-align: left;
+  border: 1px solid #adb5bd;
+  white-space: nowrap;
+}
+.ts-table thead th.center { text-align: center; }
+.ts-table thead th.end { text-align: right; }
+.ts-table tbody td {
+  padding: 4px 8px;
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+.ts-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.ts-table tbody tr:hover { background: #f1f3f5; }
+.ts-table code {
+  font-size: 0.72rem;
+  font-family: Consolas, Monaco, monospace;
+  padding: 0 3px;
+  background: #f1f3f5;
+  border: 1px solid #dee2e6;
+}
+.ts-table .name { font-weight: 700; font-size: 0.82rem; }
+.ts-table .muted { color: #6c757d; font-size: 0.72rem; }
+.ts-table .num {
+  text-align: right;
+  font-family: Consolas, Monaco, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.ts-table .center { text-align: center; }
 
-      <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill
-                  bg-primary-subtle text-primary border border-primary-subtle">
-        <i class="bi bi-hourglass-split"></i>
-        <span class="small fw-semibold">Coming in a future update</span>
-      </div>
+/* Badges */
+.ts-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-radius: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+.ts-badge-grey { background: #e9ecef; color: #495057; }
+.ts-badge-cyan { background: #0dcaf0; color: #055160; }
+.ts-badge-green { background: #198754; }
 
-      <hr class="my-5 mx-auto" style="max-width: 200px;">
+/* Row actions */
+.ts-actions { display: inline-flex; gap: 3px; }
+.ts-icon-btn {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 0.72rem;
+  border: 1px solid #6c757d;
+  background: #fff;
+  color: #212529;
+  text-decoration: none;
+  border-radius: 0;
+  cursor: pointer;
+  line-height: 1.3;
+}
+.ts-icon-btn:hover { background: #f1f3f5; color: #212529; }
+.ts-icon-btn-danger { border-color: #dc3545; color: #dc3545; }
+.ts-icon-btn-danger:hover { background: #dc3545; color: #fff; }
 
-      <div class="text-start mx-auto" style="max-width: 520px;">
-        <div class="small text-muted text-uppercase fw-semibold mb-2">
-          What's already available
-        </div>
-        <ul class="list-unstyled small mb-0">
-          <li class="mb-1">
-            <i class="bi bi-check-circle-fill text-success me-2"></i>
-            <strong>Formats</strong> — Configure how each test's results are displayed
-          </li>
-          <li class="mb-1">
-            <i class="bi bi-check-circle-fill text-success me-2"></i>
-            <strong>Categories</strong> — (coming soon)
-          </li>
-          <li class="mb-1">
-            <i class="bi bi-check-circle-fill text-success me-2"></i>
-            <strong>Units &amp; Ranges</strong> — (coming soon)
-          </li>
-          <li class="mb-1">
-            <i class="bi bi-check-circle-fill text-success me-2"></i>
-            <strong>Panels</strong> — (coming soon)
-          </li>
-          <li>
-            <i class="bi bi-check-circle-fill text-success me-2"></i>
-            <strong>Bulk Actions</strong> — (coming soon)
-          </li>
-        </ul>
-      </div>
+/* Empty */
+.ts-empty {
+  text-align: center;
+  padding: 30px 16px;
+  color: #6c757d;
+  font-style: italic;
+  border: 1.5px solid #212529;
+  border-top: none;
+  background: #fafbfc;
+}
 
-      <div class="mt-5">
-        <a href="{{ url_for('test_settings.formats') }}"
-           class="btn btn-primary">
-          <i class="bi bi-arrow-left"></i> Go to Formats
-        </a>
-      </div>
+/* Stub page (Units, Bulk) */
+.ts-stub {
+  border: 1.5px solid #212529;
+  padding: 40px 20px;
+  text-align: center;
+  background: #f8f9fa;
+}
+.ts-stub-icon {
+  font-size: 2.5rem;
+  color: #198754;
+  display: block;
+  margin-bottom: 12px;
+}
+.ts-stub-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+.ts-stub-text {
+  color: #6c757d;
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+}
+.ts-stub-badge {
+  display: inline-block;
+  background: #e7f1ff;
+  border: 1px solid #0d6efd;
+  color: #084298;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+</style>
 
-    </div>
+
+<div class="ts-header">
+  <div>
+    <h1 class="ts-title"><i class="bi bi-rulers"></i> Units &amp; Reference Ranges</h1>
+    <div class="ts-subtitle">Manage units (mg/dL, mmol/L, ...) and age/gender-specific ranges</div>
   </div>
+</div>
 
+<div class="ts-stub">
+  <i class="bi bi-rulers ts-stub-icon"></i>
+  <div class="ts-stub-title">Units &amp; Reference Ranges</div>
+  <div class="ts-stub-text">
+    Manage units (mg/dL, mmol/L, ...) and age/gender-specific reference ranges.
+  </div>
+  <div class="ts-stub-badge">
+    <i class="bi bi-hourglass-split"></i> Coming in a future update
+  </div>
+</div>
 {% endblock %}

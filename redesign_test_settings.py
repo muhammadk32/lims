@@ -1,8 +1,12 @@
-{% extends "test_settings/base.html" %}
-{% block title %}Panels - Lab Test Settings{% endblock %}
+﻿# Test Settings — Categories + Units + Panels + Bulk: dense classical
+import os
 
-{% block settings_content %}
+SETTINGS_DIR = 'templates/test_settings'
 
+# ============================================================
+# Shared style block (reused across the 4 pages)
+# ============================================================
+SHARED_STYLE = '''
 <style>
 .ts-header {
   display: flex;
@@ -217,7 +221,152 @@
   letter-spacing: 0.04em;
 }
 </style>
+'''
 
+# ============================================================
+# 1. Categories page
+# ============================================================
+cat_tpl = '''{% extends "test_settings/base.html" %}
+{% block title %}Categories - Lab Test Settings{% endblock %}
+
+{% block settings_content %}
+''' + SHARED_STYLE + '''
+
+<div class="ts-header">
+  <div>
+    <h1 class="ts-title"><i class="bi bi-tags"></i> Categories</h1>
+    <div class="ts-subtitle">Group tests by department - Hematology, Biochemistry, etc.</div>
+  </div>
+  <div class="ts-count">{{ categories|length }} categor{{ 'y' if categories|length == 1 else 'ies' }}</div>
+</div>
+
+<table class="ts-kpi">
+  <tr>
+    <td><div class="ts-kpi-label">Categories</div><div class="ts-kpi-value">{{ categories|length }}</div></td>
+    <td><div class="ts-kpi-label">Uncategorized Tests</div><div class="ts-kpi-value">{{ uncategorized }}</div></td>
+    <td style="text-align:right;">
+      <button class="ts-btn ts-btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+        <i class="bi bi-plus-lg"></i> New Category
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div class="ts-section">
+  <span>All Categories</span>
+  <span style="font-weight:400; text-transform:none; letter-spacing:0; opacity:0.85; font-size:0.7rem;">
+    Click a row to edit - Delete disabled if category has tests
+  </span>
+</div>
+
+{% if categories %}
+<table class="ts-table">
+  <thead>
+    <tr>
+      <th class="center" style="width: 50px;">#</th>
+      <th style="width: 280px;">Name</th>
+      <th>Description</th>
+      <th class="center" style="width: 100px;">Tests</th>
+      <th class="center" style="width: 110px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in categories %}
+    <tr data-cat-id="{{ c.id }}"
+        data-cat-name="{{ c.name|e }}"
+        data-cat-desc="{{ (c.description or '')|e }}">
+      <td class="center muted">{{ loop.index }}</td>
+      <td class="name"><i class="bi bi-circle-fill" style="color:#198754; font-size:0.5rem;"></i> {{ c.name }}</td>
+      <td class="muted">{{ c.description or '—' }}</td>
+      <td class="center">
+        {% set count = test_counts.get(c.id, 0) %}
+        <span class="ts-badge {% if count %}ts-badge-cyan{% else %}ts-badge-grey{% endif %}">
+          {{ count }} test{{ 's' if count != 1 }}
+        </span>
+      </td>
+      <td class="center">
+        <div class="ts-actions">
+          <button class="ts-icon-btn btn-edit-cat" data-id="{{ c.id }}"
+                  data-name="{{ c.name|e }}" data-desc="{{ (c.description or '')|e }}" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="ts-icon-btn ts-icon-btn-danger btn-del-cat"
+                  data-id="{{ c.id }}" data-name="{{ c.name|e }}"
+                  {% if count > 0 %}disabled title="Cannot delete - has tests"{% endif %}>
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="ts-empty">
+  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+  No categories yet. Click "New Category" to add one.
+</div>
+{% endif %}
+
+{# Modal #}
+<div class="modal fade" id="addCategoryModal">
+  <div class="modal-dialog">
+    <form id="catForm" method="POST">
+      <div class="modal-content" style="border-radius:0;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="catModalTitle">New Test Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="catError" class="alert alert-danger d-none"></div>
+          <input type="hidden" id="catId">
+          <div class="mb-2">
+            <label class="form-label small">Name</label>
+            <input type="text" id="catName" name="name" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Description</label>
+            <textarea id="catDescription" name="description" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="catSaveBtn">
+            <span id="catSaveText">Create</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/test_settings.js') }}"></script>
+<script>
+  TestSettings.initCategories({
+    csrf: "{{ csrf_token() if csrf_token is defined else '' }}",
+    endpoints: {
+      create: "{{ url_for('test_settings.category_create') }}",
+      update: "{{ url_for('test_settings.category_update', cat_id=0) }}",
+      delete: "{{ url_for('test_settings.category_delete', cat_id=0) }}"
+    }
+  });
+</script>
+{% endblock %}
+'''
+
+with open(os.path.join(SETTINGS_DIR, 'categories.html'), 'w', encoding='utf-8') as f:
+    f.write(cat_tpl)
+print('OK  - categories.html rewritten')
+
+
+# ============================================================
+# 2. Panels page
+# ============================================================
+panels_tpl = '''{% extends "test_settings/base.html" %}
+{% block title %}Panels - Lab Test Settings{% endblock %}
+
+{% block settings_content %}
+''' + SHARED_STYLE + '''
 
 <div class="ts-header">
   <div>
@@ -332,3 +481,57 @@
   });
 </script>
 {% endblock %}
+'''
+
+with open(os.path.join(SETTINGS_DIR, 'panels.html'), 'w', encoding='utf-8') as f:
+    f.write(panels_tpl)
+print('OK  - panels.html rewritten')
+
+
+# ============================================================
+# 3. Units page (stub)
+# ============================================================
+units_tpl = '''{% extends "test_settings/base.html" %}
+{% block title %}Units & Reference Ranges - Lab Test Settings{% endblock %}
+
+{% block settings_content %}
+''' + SHARED_STYLE + '''
+
+<div class="ts-header">
+  <div>
+    <h1 class="ts-title"><i class="bi bi-rulers"></i> Units &amp; Reference Ranges</h1>
+    <div class="ts-subtitle">Manage units (mg/dL, mmol/L, ...) and age/gender-specific ranges</div>
+  </div>
+</div>
+
+<div class="ts-stub">
+  <i class="bi bi-rulers ts-stub-icon"></i>
+  <div class="ts-stub-title">Units &amp; Reference Ranges</div>
+  <div class="ts-stub-text">
+    Manage units (mg/dL, mmol/L, ...) and age/gender-specific reference ranges.
+  </div>
+  <div class="ts-stub-badge">
+    <i class="bi bi-hourglass-split"></i> Coming in a future update
+  </div>
+</div>
+{% endblock %}
+'''
+
+with open(os.path.join(SETTINGS_DIR, 'coming_soon.html'), 'w', encoding='utf-8') as f:
+    f.write(units_tpl)
+print('OK  - coming_soon.html rewritten (Units/Bulk stub)')
+
+
+# ============================================================
+# 4. Bulk Actions page (uses same coming_soon.html)
+# ============================================================
+# The bulk route renders coming_soon.html too — already covered above.
+
+print()
+print('=' * 55)
+print('Done. Restart Flask and check:')
+print('  /settings/tests/categories')
+print('  /settings/tests/units')
+print('  /settings/tests/panels')
+print('  /settings/tests/bulk')
+print('=' * 55)
