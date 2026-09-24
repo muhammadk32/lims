@@ -79,11 +79,11 @@ def _age_ok(rng, age):
 
 def pick_range(test, gender, age):
     """
-    Priority (bounded beats unbounded, at every gender tier):
+    Priority:
       1. exact gender + bounded age
-      2. 'any'    gender + bounded age
-      3. exact gender + unbounded
-      4. 'any'    gender + unbounded
+      2. exact gender + unbounded age
+      3. 'any' gender + bounded age
+      4. 'any' gender + unbounded age
     """
     if test is None:
         return None
@@ -98,19 +98,15 @@ def pick_range(test, gender, age):
 
     gender_order = [g] if g == 'any' else [g, 'any']
 
-    # Pass 1: bounded-age ranges (exact gender first, then 'any')
     for want_gender in gender_order:
         for r in rows:
             if _norm_gender(r.gender) == want_gender and bounded(r) and _age_ok(r, age):
                 return r
-
-    # Pass 2: unbounded ranges (exact gender first, then 'any')
-    for want_gender in gender_order:
         for r in rows:
             if _norm_gender(r.gender) == want_gender and not bounded(r):
                 return r
-
     return None
+
 
 def resolve_range_text(test, gender, age):
     r = pick_range(test, gender, age)
@@ -178,32 +174,4 @@ def evaluate(test, value, gender, age):
 
 def evaluate_patient(test, value, patient):
     """Convenience: pass a Patient object directly."""
-    return evaluate(test, value, patient_gender(patient), patient_age_years(patient))
-
-
-# ===== Phase 3: consumer helpers =====
-def resolve_range_for_order(test, order):
-    """
-    One-call helper for templates and PDF builders.
-    Returns the range string for the order's patient.
-    Falls back to test.normal_range if no matching reference range.
-    """
-    if test is None:
-        return ''
-    if order is None:
-        return getattr(test, 'normal_range', '') or ''
-    patient = getattr(order, 'patient', None)
-    g = patient_gender(patient)
-    a = patient_age_years(patient)
-    return resolve_range_text(test, g, a)
-
-
-def evaluate_for_order(test, value, order):
-    """
-    Same as evaluate(), but takes an order instead of (gender, age).
-    Returns (flag, is_critical).
-    """
-    if test is None or order is None:
-        return ('unknown', False)
-    patient = getattr(order, 'patient', None)
     return evaluate(test, value, patient_gender(patient), patient_age_years(patient))

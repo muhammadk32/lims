@@ -1,15 +1,10 @@
 ﻿"""Results table — grouped by panel, with abnormal highlighting."""
 from reportlab.lib import colors
-from modules.tests.ranges import resolve_range_for_order as _rrfo
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from modules.tests.ranges import resolve_range_for_order as _rrfo
 from reportlab.lib.units import mm
-from modules.tests.ranges import resolve_range_for_order as _rrfo
 from reportlab.platypus import Paragraph, Table, TableStyle
-from modules.tests.ranges import resolve_range_for_order as _rrfo
 
 from .branding import _get_lab, _hex
-from modules.tests.ranges import resolve_range_for_order as _rrfo
 
 
 def _flag_result(normal_range, result_value):
@@ -113,7 +108,7 @@ def _results_table(order, previous_map=None, date_labels=None):
                     Paragraph(child.test.name, panel_sub_style),
                     Paragraph(child.result_value or '—', cell_style),
                     Paragraph(child.test.unit or '—', cell_style),
-                    Paragraph(_rrfo(child.test, order) or '—', cell_style),
+                    Paragraph(child.test.normal_range or '—', cell_style),
                 ]
                 for pv in prev_values_for(child.test.name):
                     row.append(Paragraph(pv or '—', cell_prev))
@@ -133,7 +128,7 @@ def _results_table(order, previous_map=None, date_labels=None):
                 Paragraph(item.test.name, cell_bold),
                 Paragraph(item.result_value or '—', cell_style),
                 Paragraph(item.test.unit or '—', cell_style),
-                Paragraph(_rrfo(item.test, order) or '—', cell_style),
+                Paragraph(item.test.normal_range or '—', cell_style),
             ]
             for pv in prev_values_for(item.test.name):
                 row.append(Paragraph(pv or '—', cell_prev))

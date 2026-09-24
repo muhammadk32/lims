@@ -1,6 +1,6 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Enter Results â€” {{ order.order_code }}{% endblock %}
+{% block title %}Enter Results — {{ order.order_code }}{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -19,7 +19,7 @@
           <h4 class="fw-bold mb-1">Enter Results</h4>
           <p class="text-muted small mb-0">
             Order <code>{{ order.order_code }}</code>
-            Â· {{ order.patient.full_name }} ({{ order.patient.patient_code }})
+            · {{ order.patient.full_name }} ({{ order.patient.patient_code }})
           </p>
         </div>
         <div class="d-flex gap-2">
@@ -77,8 +77,8 @@
                 <div class="fw-semibold">{{ item.test.name }}</div>
                 <div class="text-muted small"><code>{{ item.test.code }}</code></div>
               </td>
-              <td class="text-muted small">{{ rng(item.test, order) or '—' }}</td>
-              <td class="text-muted small">{{ item.test.unit or 'â€”' }}</td>
+              <td class="text-muted small">{{ item.test.normal_range or '—' }}</td>
+              <td class="text-muted small">{{ item.test.unit or '—' }}</td>
               <td>
                 <input
                   type="text"

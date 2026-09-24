@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Report â€” Lab # {{ order.order_code }}</title>
+<title>Report — Lab # {{ order.order_code }}</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 @page { size: A4; margin: 12mm; }
@@ -198,7 +198,7 @@ table.rep-table tr.child td.test-name {
 
 {# ============ SCREEN-ONLY ACTION BAR ============ #}
 <div class="print-bar">
-  <button onclick="window.print()">ðŸ–¨ï¸ Print</button>
+  <button onclick="window.print()">🖨️ Print</button>
   <a class="btn-close-bar"
      href="{{ url_for('results.enter', order_id=order.id) }}">Close</a>
 </div>
@@ -218,10 +218,10 @@ table.rep-table tr.child td.test-name {
       <div class="contact">
         {% set parts = [] %}
         {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
-        {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
-        {% if branding.email   %}{% set _ = parts.append('âœ‰ ' ~ branding.email) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('✉ ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' Â· ') }}
+        {{ parts | join(' · ') }}
       </div>
     </div>
   </div>
@@ -239,11 +239,11 @@ table.rep-table tr.child td.test-name {
     </div>
     <div class="row"><span class="key">Age / Gender:</span>
       <span class="val">
-        {{ order.patient.compute_age() or 'â€”' }} / {{ order.patient.gender or 'â€”' }}
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
       </span>
     </div>
     <div class="row"><span class="key">Phone:</span>
-      <span class="val">{{ order.patient.phone or 'â€”' }}</span>
+      <span class="val">{{ order.patient.phone or '—' }}</span>
     </div>
     <div class="row"><span class="key">Registered On:</span>
       <span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span>
@@ -287,13 +287,13 @@ table.rep-table tr.child td.test-name {
             <tr class="child">
               <td class="test-name">{{ child.test.name }}</td>
               <td class="result-val">
-                {% if child.result_value %}{{ child.result_value }}{% else %}â€”{% endif %}
+                {% if child.result_value %}{{ child.result_value }}{% else %}—{% endif %}
                 {% if child.result_notes %}
                   <div class="notes">{{ child.result_notes }}</div>
                 {% endif %}
               </td>
-              <td class="unit">{{ child.test.unit or 'â€”' }}</td>
-              <td class="range">{{ rng(child.test, order) or '—' }}</td>
+              <td class="unit">{{ child.test.unit or '—' }}</td>
+              <td class="range">{{ child.test.normal_range or '—' }}</td>
             </tr>
           {% endfor %}
         {% else %}
@@ -301,13 +301,13 @@ table.rep-table tr.child td.test-name {
           <tr>
             <td class="test-name">{{ item.test.name }}</td>
             <td class="result-val">
-              {% if item.result_value %}{{ item.result_value }}{% else %}â€”{% endif %}
+              {% if item.result_value %}{{ item.result_value }}{% else %}—{% endif %}
               {% if item.result_notes %}
                 <div class="notes">{{ item.result_notes }}</div>
               {% endif %}
             </td>
-            <td class="unit">{{ item.test.unit or 'â€”' }}</td>
-            <td class="range">{{ rng(item.test, order) or '—' }}</td>
+            <td class="unit">{{ item.test.unit or '—' }}</td>
+            <td class="range">{{ item.test.normal_range or '—' }}</td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -320,7 +320,7 @@ table.rep-table tr.child td.test-name {
   {# ============ FOOTER ============ #}
   <div class="rep-footer">
     <div class="left">
-      Online Reporting: {{ branding.website or branding.email or 'â€”' }}
+      Online Reporting: {{ branding.website or branding.email or '—' }}
     </div>
     <div class="right">
       Lab #: {{ order.order_code }}

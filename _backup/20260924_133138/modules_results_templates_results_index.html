@@ -1,10 +1,10 @@
-﻿{% extends 'base.html' %}
-{% block title %}Pending Results â€” LabMS{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Pending Results — LabMS{% endblock %}
 
 {% block head %}
 <style>
 /* ============================================================
-   Pending Results â€” dense classical ledger layout
+   Pending Results — dense classical ledger layout
    ============================================================ */
 .pr-page {
   max-width: 1500px;
@@ -411,8 +411,8 @@
                   <div class="pr-test-line child">
                     <span class="test-icon"><i class="bi bi-arrow-return-right"></i></span>
                     <span class="test-name">{{ child.test.name }}</span>
-                    <span class="test-range">{{ rng(child.test, order) or '—' }}</span>
-                    <span class="test-unit">{{ child.test.unit or 'â€”' }}</span>
+                    <span class="test-range">{{ child.test.normal_range or '—' }}</span>
+                    <span class="test-unit">{{ child.test.unit or '—' }}</span>
                     <span class="test-status">Pending</span>
                   </div>
                   {% endif %}
@@ -421,8 +421,8 @@
                 <div class="pr-test-line">
                   <span class="test-icon"><i class="bi bi-droplet"></i></span>
                   <span class="test-name">{{ item.test.name }}</span>
-                  <span class="test-range">{{ rng(item.test, order) or '—' }}</span>
-                  <span class="test-unit">{{ item.test.unit or 'â€”' }}</span>
+                  <span class="test-range">{{ item.test.normal_range or '—' }}</span>
+                  <span class="test-unit">{{ item.test.unit or '—' }}</span>
                   <span class="test-status">Pending</span>
                 </div>
               {% endif %}
@@ -437,7 +437,7 @@
   <div class="pr-empty">
     <i class="bi bi-check2-circle fs-3 d-block mb-2 text-success"></i>
     <div class="fw-semibold">No pending results</div>
-    <div class="small">All caught up. ðŸŽ‰</div>
+    <div class="small">All caught up. 🎉</div>
   </div>
   {% endif %}
 

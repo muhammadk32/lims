@@ -1,11 +1,11 @@
-﻿from flask import (
+from flask import (
     render_template, request, redirect, url_for, flash, abort
 )
 from flask_login import login_required, current_user
 from sqlalchemy import or_
 from extensions import db
 from . import tests_bp
-from .models import Test, TestCategory, TestReferenceRange
+from .models import Test, TestCategory
 from core.decorators import permission_required
 from core.audit import log_action
 
@@ -34,19 +34,19 @@ def _get_or_create_category(name):
 
 
 # ============================================================
-# Unified Lab Test Settings â€” all tabs on one page
+# Unified Lab Test Settings — all tabs on one page
 # ============================================================
 @tests_bp.route('/')
 @login_required
 def index():
     """Lab Test Settings hub with tab dispatch.
 
-    ?tab=catalog    â†’ test catalog (default)
-    ?tab=formats    â†’ test result formats
-    ?tab=categories â†’ test categories
-    ?tab=panels     â†’ test panels
-    ?tab=units      â†’ units stub
-    ?tab=bulk       â†’ bulk stub
+    ?tab=catalog    → test catalog (default)
+    ?tab=formats    → test result formats
+    ?tab=categories → test categories
+    ?tab=panels     → test panels
+    ?tab=units      → units stub
+    ?tab=bulk       → bulk stub
     """
     from datetime import datetime as _dt
     from modules.tests import (
@@ -180,7 +180,7 @@ def index():
 @tests_bp.route('/old')
 @login_required
 def _old_list_redirect():
-    """Legacy /tests/old â€” redirects to unified index."""
+    """Legacy /tests/old — redirects to unified index."""
     return redirect(url_for('tests.index'))
 
 
@@ -188,7 +188,7 @@ def _old_list_redirect():
 @tests_bp.route('/_legacy_list')
 @login_required
 def list_tests():
-    """Alias for tests.index â€” kept so old url_for() calls keep working."""
+    """Alias for tests.index — kept so old url_for() calls keep working."""
     return redirect(url_for('tests.index', **request.args))
     q = request.args.get('q', '').strip()
     category_id = request.args.get('category', type=int)
@@ -202,7 +202,7 @@ def list_tests():
         query = query.filter(Test.is_active == True)          # noqa: E712
     elif status_filter == 'inactive':
         query = query.filter(Test.is_active == False)         # noqa: E712
-    # 'all' â†’ no filter
+    # 'all' → no filter
 
     if q:
         like = f'%{q}%'
@@ -268,7 +268,7 @@ def new_test():
         db.session.add(test)
         db.session.commit()
 
-        log_action('create', 'test', test.id, f'Created test {test.code} â€” {test.name}')
+        log_action('create', 'test', test.id, f'Created test {test.code} — {test.name}')
 
         flash(f'Test "{test.name}" created.', 'success')
         return redirect(url_for('tests.list_tests'))
@@ -327,7 +327,7 @@ def edit_test(test_id):
         flash('Test updated.', 'success')
         return redirect(url_for('tests.view_test', test_id=test.id))
 
-    return render_template('tests/form.html', test=test, categories=categories, form={}, ranges=test.reference_ranges or [])
+    return render_template('tests/form.html', test=test, categories=categories, form={})
 
 
 # ---------- Archive ----------
@@ -391,48 +391,3 @@ def toggle_active(test_id):
 
 # Compatibility: expose `list_tests` name mapped to the same view
 list_tests = index
-
-
-# ===== Phase 2: reference ranges save =====
-
-
-@tests_bp.route('/tests/<int:test_id>/ranges', methods=['POST'])
-def save_reference_ranges(test_id):
-    # admin-only guard - adjust to your auth pattern
-    # from flask_login import current_user
-    # if not getattr(current_user, 'is_admin', False):
-    #     abort(403)
-
-    test = Test.query.get_or_404(test_id)
-
-    genders   = request.form.getlist('gender[]')
-    age_mins  = request.form.getlist('age_min[]')
-    age_maxs  = request.form.getlist('age_max[]')
-    ranges    = request.form.getlist('range_text[]')
-    units     = request.form.getlist('unit[]')
-    crits     = request.form.getlist('critical_value[]')
-    orders    = request.form.getlist('sort_order[]')
-
-    def _int_or_none(s):
-        s = (s or '').strip()
-        return int(s) if s.isdigit() else None
-
-    TestReferenceRange.query.filter_by(test_id=test.id).delete()
-    for i, rng_text in enumerate(ranges):
-        rng_text = (rng_text or '').strip()
-        if not rng_text:
-            continue
-        db.session.add(TestReferenceRange(
-            test_id        = test.id,
-            gender         = (genders[i] if i < len(genders) else 'any') or 'any',
-            age_min_years  = _int_or_none(age_mins[i] if i < len(age_mins) else ''),
-            age_max_years  = _int_or_none(age_maxs[i] if i < len(age_maxs) else ''),
-            range_text     = rng_text,
-            unit           = (units[i] if i < len(units) else '').strip() or None,
-            critical_value = (crits[i] if i < len(crits) else '').strip() or None,
-            sort_order     = _int_or_none(orders[i] if i < len(orders) else '') or 0,
-            is_active      = True,
-        ))
-    db.session.commit()
-    flash('Reference ranges saved.', 'success')
-    return redirect(url_for('tests.test_view', test_id=test.id))

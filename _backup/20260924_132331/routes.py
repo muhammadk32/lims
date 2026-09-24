@@ -327,7 +327,7 @@ def edit_test(test_id):
         flash('Test updated.', 'success')
         return redirect(url_for('tests.view_test', test_id=test.id))
 
-    return render_template('tests/form.html', test=test, categories=categories, form={}, ranges=test.reference_ranges or [])
+    return render_template('tests/form.html', test=test, categories=categories, form={})
 
 
 # ---------- Archive ----------

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ test.name }} — LabMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <div class="mb-3">
+    <a href="{{ url_for('tests.list_tests') }}" class="text-decoration-none small">
+      <i class="bi bi-arrow-left"></i> Back to Tests
+    </a>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+          <h3 class="fw-bold mb-1">{{ test.name }}</h3>
+          <p class="text-muted small mb-0">
+            <code>{{ test.code }}</code>
+            {% if test.category_ref %} · {{ test.category_ref.name }}{% endif %}
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('tests.edit_test', test_id=test.id) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-pencil"></i> Edit
+          </a>
+          <form method="POST" action="{{ url_for('tests.delete_test', test_id=test.id) }}" onsubmit="return confirm('Archive this test?');">
+            <button class="btn btn-outline-danger"><i class="bi bi-trash"></i> Archive</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Price</p>
+          <p class="fw-semibold text-success fs-5">{{ test.price | money }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Unit</p>
+          <p class="fw-semibold">{{ test.unit or '—' }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Normal Range</p>
+          <p class="fw-semibold">{{ test.normal_range or '—' }}</p>
+        </div>
+        <div class="col-md-3">
+          <p class="text-muted small mb-1">Turnaround</p>
+          <p class="fw-semibold">{{ test.turnaround_hours }} hours</p>
+        </div>
+        {% if test.description %}
+        <div class="col-12">
+          <p class="text-muted small mb-1">Description</p>
+          <p class="fw-semibold">{{ test.description }}</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+  {# ============ REFERENCE RANGES (Phase 1 read-only) ============ #}
+  {% if ranges %}
+  <div class="card border-0 shadow-sm mt-3">
+    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+      <h6 class="fw-bold mb-0">
+        <i class="bi bi-sliders2"></i> Reference Ranges
+        <span class="badge bg-secondary ms-2">{{ ranges|length }}</span>
+      </h6>
+      <span class="text-muted small">Matched by patient gender &amp; age at report time</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 110px;">Gender</th>
+            <th style="width: 140px;">Age Bracket</th>
+            <th>Range</th>
+            <th style="width: 90px;">Unit</th>
+            <th>Critical Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in ranges %}
+          <tr>
+            <td><span class="badge bg-info text-dark">{{ r.gender|capitalize }}</span></td>
+            <td class="text-muted small">
+              {% if r.age_min_years is not none and r.age_max_years is not none %}
+                {{ r.age_min_years }} – {{ r.age_max_years }} yrs
+              {% elif r.age_min_years is not none %}
+                ≥ {{ r.age_min_years }} yrs
+              {% elif r.age_max_years is not none %}
+                ≤ {{ r.age_max_years }} yrs
+              {% else %}
+                Any age
+              {% endif %}
+            </td>
+            <td class="fw-semibold">{{ r.range_text }}</td>
+            <td class="text-muted">{{ r.unit or test.unit or '—' }}</td>
+            <td>
+              {% if r.critical_value %}
+                <span class="text-danger fw-semibold">{{ r.critical_value }}</span>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer bg-white border-top">
+      <span class="text-muted small">
+        <i class="bi bi-info-circle"></i>
+        If a test has no ranges matching the patient's gender/age, the universal range applies:
+        <strong>{{ test.normal_range or '—' }}</strong>
+      </span>
+    </div>
+  </div>
+  {% endif %}
+
+{% endblock %}

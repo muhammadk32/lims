@@ -179,31 +179,3 @@ def evaluate(test, value, gender, age):
 def evaluate_patient(test, value, patient):
     """Convenience: pass a Patient object directly."""
     return evaluate(test, value, patient_gender(patient), patient_age_years(patient))
-
-
-# ===== Phase 3: consumer helpers =====
-def resolve_range_for_order(test, order):
-    """
-    One-call helper for templates and PDF builders.
-    Returns the range string for the order's patient.
-    Falls back to test.normal_range if no matching reference range.
-    """
-    if test is None:
-        return ''
-    if order is None:
-        return getattr(test, 'normal_range', '') or ''
-    patient = getattr(order, 'patient', None)
-    g = patient_gender(patient)
-    a = patient_age_years(patient)
-    return resolve_range_text(test, g, a)
-
-
-def evaluate_for_order(test, value, order):
-    """
-    Same as evaluate(), but takes an order instead of (gender, age).
-    Returns (flag, is_critical).
-    """
-    if test is None or order is None:
-        return ('unknown', False)
-    patient = getattr(order, 'patient', None)
-    return evaluate(test, value, patient_gender(patient), patient_age_years(patient))

@@ -1,0 +1,77 @@
+﻿{# templates/tests/_reference_ranges.html #}
+{# Expects: test, ranges (list of TestReferenceRange) #}
+<div class="card mt-3" id="reference-ranges-card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <strong>Reference Ranges</strong>
+    <button type="button" class="btn btn-sm btn-outline-primary" id="add-range-btn">+ Add Range</button>
+  </div>
+  <div class="card-body p-0">
+    <form method="POST" action="{{ url_for('tests.save_reference_ranges', test_id=test.id) }}" id="ranges-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token is defined else '' }}">
+      <table class="table table-sm mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width:110px">Gender</th>
+            <th style="width:80px">Age min</th>
+            <th style="width:80px">Age max</th>
+            <th>Range</th>
+            <th style="width:80px">Unit</th>
+            <th>Critical</th>
+            <th style="width:60px">Order</th>
+            <th style="width:50px"></th>
+          </tr>
+        </thead>
+        <tbody id="ranges-tbody">
+        {% for r in ranges %}
+          <tr class="range-row">
+            <td>
+              <select name="gender[]" class="form-select form-select-sm">
+                {% for g in ['any','male','female'] %}
+                  <option value="{{ g }}" {% if r.gender == g %}selected{% endif %}>{{ g|capitalize }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td><input type="number" name="age_min[]" class="form-control form-control-sm" value="{{ r.age_min_years if r.age_min_years is not none else '' }}" min="0"></td>
+            <td><input type="number" name="age_max[]" class="form-control form-control-sm" value="{{ r.age_max_years if r.age_max_years is not none else '' }}" min="0"></td>
+            <td><input type="text"   name="range_text[]" class="form-control form-control-sm" value="{{ r.range_text }}" required></td>
+            <td><input type="text"   name="unit[]" class="form-control form-control-sm" value="{{ r.unit or '' }}"></td>
+            <td><input type="text"   name="critical_value[]" class="form-control form-control-sm" value="{{ r.critical_value or '' }}" placeholder="< 7.0 or > 20.0"></td>
+            <td><input type="number" name="sort_order[]" class="form-control form-control-sm" value="{{ r.sort_order or 0 }}"></td>
+            <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row">&times;</button></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <small class="text-muted">If no ranges are set, the universal range ({{ test.normal_range or '—' }}) applies.</small>
+        <button type="submit" class="btn btn-sm btn-primary">Save Ranges</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  const tbody = document.getElementById('ranges-tbody');
+  const tpl = () => {
+    const tr = document.createElement('tr');
+    tr.className = 'range-row';
+    tr.innerHTML = `
+      <td><select name="gender[]" class="form-select form-select-sm">
+        <option value="any">Any</option><option value="male">Male</option><option value="female">Female</option>
+      </select></td>
+      <td><input type="number" name="age_min[]" class="form-control form-control-sm" min="0"></td>
+      <td><input type="number" name="age_max[]" class="form-control form-control-sm" min="0"></td>
+      <td><input type="text"   name="range_text[]" class="form-control form-control-sm" required></td>
+      <td><input type="text"   name="unit[]" class="form-control form-control-sm"></td>
+      <td><input type="text"   name="critical_value[]" class="form-control form-control-sm" placeholder="< 7.0 or > 20.0"></td>
+      <td><input type="number" name="sort_order[]" class="form-control form-control-sm" value="0"></td>
+      <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row">&times;</button></td>`;
+    return tr;
+  };
+  document.getElementById('add-range-btn').addEventListener('click', () => tbody.appendChild(tpl()));
+  tbody.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-row')) e.target.closest('tr').remove();
+  });
+})();
+</script>

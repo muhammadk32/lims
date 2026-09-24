@@ -1,4 +1,4 @@
-﻿"""Application entry point.
+"""Application entry point.
 
 Factory + wiring only. Everything else lives in `core/`.
 """
@@ -21,13 +21,6 @@ def create_app(config_name=None):
     config_name = config_name or os.getenv('FLASK_ENV', 'development')
 
     app = Flask(__name__)
-
-
-    # ===== Phase 3: reference ranges Jinja helper =====
-    from modules.tests.ranges import resolve_range_for_order as _rrfo
-    @app.template_global()
-    def rng(test, order):
-        return _rrfo(test, order)
     app.config.from_object(config_map[config_name])
 
     # ---------- Logging ----------
@@ -101,7 +94,7 @@ def _dev_bootstrap():
         if created_tests or created_categories:
             print(f'Seeded {created_tests} tests and {created_categories} categories.')
         else:
-            print('Test catalog already populated â€” skipping seed.')
+            print('Test catalog already populated — skipping seed.')
 
 
 if __name__ == '__main__':
