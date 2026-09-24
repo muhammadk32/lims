@@ -179,3 +179,53 @@ class PanelParameter(db.Model):
 
     def __repr__(self):
         return f'<PanelParameter panel={self.panel_id} test={self.test_id} order={self.sort_order}>'
+
+# ============================================================
+# TestReferenceRange — multi-range normal values per test
+# ============================================================
+class TestReferenceRange(BaseModel):
+    """A single reference range for a test, keyed by gender + age bracket.
+
+    Ranges are matched at report time using the patient's gender and age.
+    If a test has no ranges, the older Test.normal_range column is used.
+    """
+    __tablename__ = 'test_reference_ranges'
+
+    test_id = db.Column(
+        db.Integer,
+        db.ForeignKey('tests.id', ondelete='CASCADE'),
+        nullable=False,
+        index=True,
+    )
+
+    # 'male' | 'female' | 'any'
+    gender = db.Column(db.String(10), nullable=False, default='any')
+
+    # Age bracket in years (nullable = no bound)
+    age_min_years = db.Column(db.Integer, nullable=True)
+    age_max_years = db.Column(db.Integer, nullable=True)
+
+    # The range string (e.g. "13.5 - 17.5")
+    range_text = db.Column(db.String(120), nullable=False)
+
+    # Optional per-range unit override
+    unit = db.Column(db.String(30), nullable=True)
+
+    # Optional critical value threshold (free text, e.g. "< 7.0 or > 20.0")
+    critical_value = db.Column(db.String(120), nullable=True)
+
+    sort_order = db.Column(db.Integer, nullable=False, default=0)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+    # Relationship back to Test
+    test = db.relationship(
+        'Test',
+        backref=db.backref(
+            'reference_ranges',
+            cascade='all, delete-orphan',
+            order_by='TestReferenceRange.sort_order',
+        ),
+    )
+
+    def __repr__(self):
+        return f'<RefRange test={self.test_id} {self.gender} {self.range_text}>'

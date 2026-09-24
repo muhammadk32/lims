@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Lab Test Settings · {{ branding.lab_name }}{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/test_settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="lts-page">
+
+  {# ============ PAGE HEADER ============ #}
+  <div class="lts-page-header">
+    <div>
+      <h1 class="lts-page-title"><i class="bi bi-sliders2"></i> Lab Test Settings</h1>
+      <div class="lts-page-subtitle">Configure how tests behave, appear, and print across the system</div>
+    </div>
+    <div class="lts-page-meta">{{ now.strftime('%d-%b-%Y %I:%M %p') if now else '' }}</div>
+  </div>
+
+  {# ============ TABS ============ #}
+  <div class="lts-tabs">
+    <a href="{{ url_for('tests.index', tab='catalog') }}"
+       class="lts-tab {% if tab == 'catalog' %}active{% endif %}">
+      <i class="bi bi-clipboard2-pulse"></i> Catalog
+    </a>
+    <a href="{{ url_for('tests.index', tab='formats') }}"
+       class="lts-tab {% if tab == 'formats' %}active{% endif %}">
+      <i class="bi bi-sliders2"></i> Formats
+    </a>
+    <a href="{{ url_for('tests.index', tab='categories') }}"
+       class="lts-tab {% if tab == 'categories' %}active{% endif %}">
+      <i class="bi bi-tags"></i> Categories
+    </a>
+    <a href="{{ url_for('tests.index', tab='panels') }}"
+       class="lts-tab {% if tab == 'panels' %}active{% endif %}">
+      <i class="bi bi-collection"></i> Panels
+    </a>
+    <a href="{{ url_for('tests.index', tab='units') }}"
+       class="lts-tab {% if tab == 'units' %}active{% endif %}">
+      <i class="bi bi-rulers"></i> Units &amp; Ranges
+    </a>
+    <a href="{{ url_for('tests.index', tab='bulk') }}"
+       class="lts-tab {% if tab == 'bulk' %}active{% endif %}">
+      <i class="bi bi-upload"></i> Bulk Actions
+    </a>
+  </div>
+
+  {# ============ TAB CONTENT ============ #}
+  <div class="lts-content">
+    {% if tab == 'formats' %}
+      {% include 'test_settings/_formats.html' %}
+    {% elif tab == 'categories' %}
+      {% include 'test_settings/_categories.html' %}
+    {% elif tab == 'panels' %}
+      {% include 'test_settings/_panels.html' %}
+    {% elif tab == 'units' %}
+      {% include 'test_settings/_units.html' %}
+    {% elif tab == 'bulk' %}
+      {% include 'test_settings/_bulk.html' %}
+    {% else %}
+      {% include 'test_settings/_catalog.html' %}
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/test_settings.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,166 @@
+
+{# ============ CATALOG TAB ============ #}
+<div class="lt-header">
+  <div>
+    <h2 class="lt-title"><i class="bi bi-clipboard2-pulse"></i> Lab Tests</h2>
+    <div class="lt-subtitle">Test catalog offered by the laboratory</div>
+  </div>
+  <div class="lt-actions">
+    {% if current_user.role == 'admin' %}
+    <button class="lt-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+      <i class="bi bi-tags"></i> New Category
+    </button>
+    <a href="{{ url_for('tests.new_test') }}" class="lt-btn lt-btn-primary">
+      <i class="bi bi-plus-lg"></i> Add Test
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+<form method="GET" action="{{ url_for('tests.index', tab='catalog') }}" class="lt-filter">
+  <div class="lt-field">
+    <label>Search</label>
+    <input type="text" name="q" value="{{ q }}" placeholder="Search by name or code...">
+  </div>
+  <div class="lt-field">
+    <label>Category</label>
+    <select name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+      <option value="{{ c.id }}" {% if category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="lt-field">
+    <label>Status</label>
+    <select name="status">
+      <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active only</option>
+      <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Paused only</option>
+      <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
+    </select>
+  </div>
+  <div class="lt-field">
+    <button type="submit" class="lt-btn lt-btn-primary">
+      <i class="bi bi-funnel"></i> Filter
+    </button>
+    {% if q or category_id %}
+    <a href="{{ url_for('tests.index', tab='catalog') }}" class="lt-btn lt-btn-clear ms-1">
+      <i class="bi bi-x-lg"></i>
+    </a>
+    {% endif %}
+  </div>
+</form>
+
+{% if tests.items %}
+<table class="lt-table">
+  <thead>
+    <tr>
+      <th style="width: 90px;">Code</th>
+      <th>Name</th>
+      <th style="width: 140px;">Category</th>
+      <th class="num" style="width: 90px;">Price</th>
+      <th style="width: 90px;">Unit</th>
+      <th style="width: 120px;">Normal Range</th>
+      <th class="center" style="width: 130px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in tests.items %}
+    <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
+      <td><code>{{ t.code }}</code></td>
+      <td class="name">
+        {{ t.name }}
+        {% if not t.is_active %}<span class="lt-badge-paused">Paused</span>{% endif %}
+      </td>
+      <td>
+        {% if t.category_ref %}
+          <span class="lt-badge lt-badge-cat">{{ t.category_ref.name }}</span>
+        {% else %}
+          <span class="muted">—</span>
+        {% endif %}
+      </td>
+      <td class="num price">{{ t.price | money }}</td>
+      <td>{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
+      <td class="muted">{% if t.normal_range %}{{ t.normal_range }}{% else %}—{% endif %}</td>
+      <td class="center">
+        <div class="lt-actions-col">
+          <a href="{{ url_for('tests.view_test', test_id=t.id) }}" class="lt-icon-btn lt-icon-btn-view" title="View">
+            <i class="bi bi-eye"></i>
+          </a>
+          {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('tests.edit_test', test_id=t.id) }}" class="lt-icon-btn lt-icon-btn-edit" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <form method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}" class="d-inline">
+            {% if t.is_active %}
+            <button class="lt-icon-btn lt-icon-btn-pause" title="Pause (hide from registration)">
+              <i class="bi bi-pause-fill"></i>
+            </button>
+            {% else %}
+            <button class="lt-icon-btn lt-icon-btn-resume" title="Resume (show in registration)">
+              <i class="bi bi-play-fill"></i>
+            </button>
+            {% endif %}
+          </form>
+          <form method="POST" action="{{ url_for('tests.delete_test', test_id=t.id) }}" class="d-inline"
+                onsubmit="return confirm('Archive this test?');">
+            <button class="lt-icon-btn lt-icon-btn-danger" title="Archive">
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if tests.pages > 1 %}
+<div style="margin-top:10px; display:flex; justify-content:center;">
+  <ul class="pagination" style="font-size:0.78rem; margin:0;">
+    <li class="page-item {% if not tests.has_prev %}disabled{% endif %}">
+      <a class="page-link" href="{{ url_for('tests.index', tab='catalog', page=tests.prev_num, q=q, category=category_id, status=status_filter) }}">Previous</a>
+    </li>
+    {% for num in tests.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if num %}
+      <li class="page-item {% if num == tests.page %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('tests.index', tab='catalog', page=num, q=q, category=category_id, status=status_filter) }}">{{ num }}</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">…</span></li>
+      {% endif %}
+    {% endfor %}
+    <li class="page-item {% if not tests.has_next %}disabled{% endif %}">
+      <a class="page-link" href="{{ url_for('tests.index', tab='catalog', page=tests.next_num, q=q, category=category_id, status=status_filter) }}">Next</a>
+    </li>
+  </ul>
+</div>
+{% endif %}
+
+{% else %}
+<div class="lt-empty">
+  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+  {% if q or category_id %}No tests match the filters.{% else %}No tests yet.{% endif %}
+</div>
+{% endif %}
+
+{# Add Category modal #}
+<div class="modal fade" id="addCategoryModal">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('tests.add_category') }}">
+      <div class="modal-content" style="border-radius:0;">
+        <div class="modal-header">
+          <h5 class="modal-title">New Test Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="name" class="form-control" placeholder="e.g. Hematology" required>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

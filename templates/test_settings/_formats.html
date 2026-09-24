@@ -1,0 +1,127 @@
+
+{# ============ FORMATS TAB ============ #}
+<div class="tf-header">
+  <div>
+    <h2 class="tf-title"><i class="bi bi-sliders2"></i> Test Formats</h2>
+    <div class="tf-subtitle">Configure how tests behave, appear, and print</div>
+  </div>
+  <div class="tf-count">{{ tests|length }} test{{ 's' if tests|length != 1 }}</div>
+</div>
+
+<form method="GET" action="{{ url_for('tests.index', tab='formats') }}" class="tf-filter">
+  <div class="tf-field">
+    <label>Search</label>
+    <input type="text" name="q" value="{{ q or '' }}" placeholder="Search by code or name...">
+  </div>
+  <div class="tf-field">
+    <label>Format</label>
+    <select name="format">
+      <option value="">All formats</option>
+      {% for key, label in result_formats %}
+      <option value="{{ key }}" {% if fmt_filter == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="tf-field">
+    <label>Category</label>
+    <select name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+      <option value="{{ c.id }}" {% if cat_filter == c.id|string %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="tf-field">
+    <button type="submit" class="tf-btn tf-btn-primary">
+      <i class="bi bi-search"></i> Filter
+    </button>
+  </div>
+</form>
+
+<div class="tf-section">
+  <span>Tests &amp; Panels ({{ tests|length }} shown)</span>
+  <div class="tf-section-actions">
+    <a href="{{ url_for('tests.new_test') }}" class="tf-btn tf-btn-primary">
+      <i class="bi bi-plus-lg"></i> New Test
+    </a>
+    <a href="{{ url_for('test_settings.panel_new') }}" class="tf-btn">
+      <i class="bi bi-plus-lg"></i> New Panel
+    </a>
+  </div>
+</div>
+
+{% if tests %}
+<table class="tf-table">
+  <thead>
+    <tr>
+      <th style="width: 90px;">Code</th>
+      <th>Test Name</th>
+      <th style="width: 140px;">Category</th>
+      <th style="width: 90px;">Unit</th>
+      <th style="width: 110px;">Normal Range</th>
+      <th style="width: 220px;">Result Format</th>
+      <th class="center" style="width: 90px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in tests %}
+    <tr data-test-id="{{ t.id }}">
+      <td><code>{{ t.code }}</code></td>
+      <td>
+        <div class="name">
+          {% if t.is_panel %}<i class="bi bi-collection text-primary"></i> {% endif %}
+          {{ t.name }}
+        </div>
+        {% if t.is_panel %}<div class="sub">Panel</div>{% endif %}
+      </td>
+      <td>
+        {% if t.category_ref %}
+          <span class="tf-badge tf-badge-cat">{{ t.category_ref.name }}</span>
+        {% else %}
+          <span class="muted">—</span>
+        {% endif %}
+      </td>
+      <td>{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
+      <td>{% if t.normal_range %}{{ t.normal_range }}{% else %}<span class="muted">—</span>{% endif %}</td>
+      <td>
+        <select class="tf-format-select" onchange="updateFormat({{ t.id }}, this.value);">
+          {% for key, label in result_formats %}
+          <option value="{{ key }}" {% if t.result_format == key %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td class="center">
+        <div class="tf-actions">
+          <a href="{{ url_for('tests.view_test', test_id=t.id) }}" class="tf-icon-btn" title="View">
+            <i class="bi bi-eye"></i>
+          </a>
+          <a href="{{ url_for('tests.edit_test', test_id=t.id) }}" class="tf-icon-btn" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="tf-empty">
+  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+  {% if q or fmt_filter or cat_filter %}No tests match the filters.{% else %}No tests yet.{% endif %}
+</div>
+{% endif %}
+
+<script>
+function updateFormat(testId, newFormat) {
+  fetch('/settings/tests/formats/' + testId + '/update', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ result_format: newFormat })
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    if (!data.ok) { alert(data.error || 'Update failed'); }
+  })
+  .catch(function (err) { console.error(err); });
+}
+</script>

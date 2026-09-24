@@ -1,0 +1,114 @@
+
+{# ============ PANELS TAB ============ #}
+<div class="ts-header">
+  <div>
+    <h2 class="ts-title"><i class="bi bi-collection"></i> Panels</h2>
+    <div class="ts-subtitle">Bundle multiple tests under one price - CBC, LFT, RFT</div>
+  </div>
+  <div class="ts-count">{{ panels|length }} panel{{ 's' if panels|length != 1 }}</div>
+</div>
+
+<table class="ts-kpi">
+  <tr>
+    <td><div class="ts-kpi-label">Total Panels</div><div class="ts-kpi-value">{{ total_panels }}</div></td>
+    <td colspan="2" style="padding: 4px 10px;">
+      <form method="GET" action="{{ url_for('tests.index', tab='panels') }}"
+            style="display:flex; gap:6px; align-items:center;">
+        <input type="text" name="q" class="form-control form-control-sm"
+               placeholder="Search panels..." value="{{ request.args.get('q','') }}"
+               style="border-radius:0; font-size:0.82rem;">
+        <button type="submit" class="ts-btn"><i class="bi bi-search"></i></button>
+      </form>
+    </td>
+    <td style="text-align:right;">
+      <a href="{{ url_for('test_settings.panel_new') }}" class="ts-btn ts-btn-primary">
+        <i class="bi bi-plus-lg"></i> New Panel
+      </a>
+    </td>
+  </tr>
+</table>
+
+<div class="ts-section">
+  <span>All Panels</span>
+  <span style="font-weight:400; text-transform:none; letter-spacing:0; opacity:0.85; font-size:0.7rem;">
+    Only the panel price is charged - parameters are free
+  </span>
+</div>
+
+{% if panels %}
+<table class="ts-table">
+  <thead>
+    <tr>
+      <th class="center" style="width: 50px;">#</th>
+      <th style="width: 110px;">Code</th>
+      <th>Panel Name</th>
+      <th style="width: 160px;">Category</th>
+      <th class="center" style="width: 100px;">Parameters</th>
+      <th class="end" style="width: 100px;">Price</th>
+      <th class="center" style="width: 130px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in panels %}
+    <tr data-panel-id="{{ p.id }}">
+      <td class="center muted">{{ loop.index }}</td>
+      <td><code>{{ p.code }}</code></td>
+      <td>
+        <div class="name"><i class="bi bi-collection text-primary"></i> {{ p.name }}</div>
+        {% if p.description %}
+        <div class="muted" style="font-size:0.68rem;">{{ p.description|truncate(80) }}</div>
+        {% endif %}
+      </td>
+      <td>
+        {% if p.category_ref %}
+          <span class="ts-badge ts-badge-cyan">{{ p.category_ref.name }}</span>
+        {% else %}
+          <span class="muted">—</span>
+        {% endif %}
+      </td>
+      <td class="center">
+        {% set pc = param_counts.get(p.id, 0) %}
+        <span class="ts-badge {% if pc > 0 %}ts-badge-cyan{% else %}ts-badge-grey{% endif %}">
+          {{ pc }}
+        </span>
+      </td>
+      <td class="num">{{ p.price | money }}</td>
+      <td class="center">
+        <div class="ts-actions">
+          <a href="{{ url_for('test_settings.panel_edit', panel_id=p.id) }}" class="ts-icon-btn" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <button type="button" class="ts-icon-btn ts-icon-btn-danger btn-delete-panel" title="Delete">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="ts-empty">
+  <i class="bi bi-collection fs-3 d-block mb-2"></i>
+  <div class="fw-semibold">No panels yet</div>
+  <div class="small mb-3">Panels bundle several tests under one price - e.g. CBC, LFT, RFT.</div>
+  <a href="{{ url_for('test_settings.panel_new') }}" class="ts-btn ts-btn-primary">
+    <i class="bi bi-plus-lg"></i> Create Your First Panel
+  </a>
+</div>
+{% endif %}
+
+<div class="test-settings-toast" id="settingsToast" aria-live="polite">
+  <span class="toast-message"></span>
+</div>
+
+<script>
+  if (typeof TestSettings !== 'undefined') {
+    TestSettings.initPanels({
+      csrf: "{{ csrf_token() if csrf_token is defined else '' }}",
+      endpoints: {
+        delete: "{{ url_for('test_settings.panel_delete', panel_id=0) }}"
+      }
+    });
+  }
+</script>

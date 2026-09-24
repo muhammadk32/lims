@@ -34,6 +34,16 @@ def _guard():
 # ============================================================
 # Root
 # ============================================================
+# ============================================================
+# Redirect helper — old routes now live inside tests.index
+# ============================================================
+def _redirect_to_index(tab):
+    from flask import redirect, url_for, request
+    args = {k: v for k, v in request.args.items()}
+    args['tab'] = tab
+    return redirect(url_for('tests.index', **args))
+
+
 @test_settings_bp.route('/')
 def index():
     return redirect(url_for('test_settings.formats'))
@@ -44,28 +54,7 @@ def index():
 # ============================================================
 @test_settings_bp.route('/formats')
 def formats():
-    search = request.args.get('q', '').strip()
-    fmt_filter = request.args.get('format', '').strip()
-    cat_filter = request.args.get('category', '').strip()
-
-    if fmt_filter and fmt_filter not in RESULT_FORMAT_KEYS:
-        fmt_filter = ''
-
-    tests = q.list_formats(q=search, fmt_filter=fmt_filter, cat_filter=cat_filter)
-
-    return render_template(
-        'test_settings/formats.html',
-        active_tab='formats',
-        tests=tests,
-        categories=q.list_categories(),
-        result_formats=RESULT_FORMATS,
-        format_counts=format_counts(),
-        format_meta=format_meta,
-        stats=catalog_stats(),
-        q=search,
-        fmt_filter=fmt_filter,
-        cat_filter=cat_filter,
-    )
+    return _redirect_to_index('formats')
 
 
 @test_settings_bp.route('/formats/<int:test_id>/update', methods=['POST'])
@@ -87,16 +76,7 @@ def format_update(test_id):
 # ============================================================
 @test_settings_bp.route('/categories')
 def categories():
-    cats, counts, uncategorized = q.list_categories_with_counts()
-
-    return render_template(
-        'test_settings/categories.html',
-        active_tab='categories',
-        categories=cats,
-        test_counts=counts,
-        uncategorized=uncategorized,
-        total_categories=len(cats),
-    )
+    return _redirect_to_index('categories')
 
 
 @test_settings_bp.route('/categories/create', methods=['POST'])
@@ -147,34 +127,12 @@ def category_delete(cat_id):
 # ============================================================
 @test_settings_bp.route('/units')
 def units():
-    return render_template(
-        'test_settings/coming_soon.html',
-        active_tab='units',
-        tab_name='Units & Reference Ranges',
-        tab_icon='bi-rulers',
-        description='Manage units (mg/dL, mmol/L, ...) and age/gender-specific reference ranges.',
-    )
+    return _redirect_to_index('units')
 
 
-# ============================================================
-# Tab 4 — Panels
-# ============================================================
 @test_settings_bp.route('/panels')
 def panels():
-    """List all panels with their parameter counts."""
-    search = request.args.get('q', '').strip()
-
-    panels = q.list_panels(q=search)
-
-    return render_template(
-        'test_settings/panels.html',
-        active_tab='panels',
-        panels=panels,
-        param_counts=q.param_counts_by_panel(),
-        categories=q.list_categories(),
-        standalone_tests=q.list_standalone_tests(),
-        total_panels=len(panels),
-    )
+    return _redirect_to_index('panels')
 
 
 @test_settings_bp.route('/panels/new', methods=['GET'])
@@ -262,10 +220,6 @@ def panel_delete(panel_id):
 # ============================================================
 @test_settings_bp.route('/bulk')
 def bulk():
-    return render_template(
-        'test_settings/coming_soon.html',
-        active_tab='bulk',
-        tab_name='Bulk Actions',
-        tab_icon='bi-upload',
-        description='Import from Excel/CSV, export the catalog, run cleanup tools.',
-    )
+    return _redirect_to_index('bulk')
+
+

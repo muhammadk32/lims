@@ -16,13 +16,13 @@
         <i class="bi bi-chevron-down small"></i>
       </button>
       <div class="topnav-dropdown">
-        {# â”€â”€â”€ Patient Registration (opens the FORM) â”€â”€â”€ #}
+        {# Patient Registration (opens the FORM) #}
         <a href="{{ url_for('orders.new_order') }}"
            class="dropdown-item {% if request.endpoint == 'orders.new_order' %}active{% endif %}">
           <i class="bi bi-person-plus"></i> Patient Registration
         </a>
 
-        {# â”€â”€â”€ Daily Ledger (opens the LIST) â”€â”€â”€ #}
+        {# Daily Ledger (opens the LIST) #}
         <a href="{{ url_for('orders.list_orders') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('orders.') and request.endpoint != 'orders.new_order' %}active{% endif %}">
           <i class="bi bi-journal-text"></i> Daily Ledger
@@ -116,7 +116,7 @@
     {% if current_user.role == 'admin' %}
     <div class="topnav-item">
       <button type="button" class="topnav-link
-        {% if request.endpoint and (request.endpoint.startswith('users.') or request.endpoint.startswith('audit.') or request.endpoint.startswith('settings.') or request.endpoint.startswith('test_settings.') or request.endpoint.startswith('form_settings.') or request.endpoint.startswith('patients.')) %}active{% endif %}">
+        {% if request.endpoint and (request.endpoint.startswith('users.') or request.endpoint.startswith('audit.') or request.endpoint.startswith('settings.') or request.endpoint.startswith('form_settings.') or request.endpoint.startswith('patients.')) %}active{% endif %}">
         <i class="bi bi-shield-check"></i>
         <span>Administration</span>
         <i class="bi bi-chevron-down small"></i>
@@ -141,11 +141,6 @@
 
         <div class="dropdown-section">Configuration</div>
 
-        <a href="{{ url_for('test_settings.formats') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('test_settings.') %}active{% endif %}">
-          <i class="bi bi-sliders2"></i> Lab Test Settings
-        </a>
-
         <a href="{{ url_for('form_settings.index') }}"
            class="dropdown-item {% if request.endpoint and request.endpoint.startswith('form_settings.') %}active{% endif %}">
           <i class="bi bi-ui-checks"></i> Reception Form
@@ -168,6 +163,14 @@
 
       </div>
     </div>
+    {% endif %}
+
+    <!-- Lab Test Settings (top-level, admin only) -->
+    {% if current_user.role == 'admin' %}
+    <a href="{{ url_for('tests.list_tests') }}"
+       class="topnav-link {% if request.path.startswith('/settings/tests') %}active{% endif %}">
+      <i class="bi bi-sliders2"></i><span>Lab Test Settings</span>
+    </a>
     {% endif %}
 
   </div>

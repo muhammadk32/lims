@@ -41,7 +41,7 @@
   padding: 8px 10px;
   margin-bottom: 8px;
   display: grid;
-  grid-template-columns: 2fr 1.4fr auto;
+  grid-template-columns: 2fr 1.3fr 1.2fr auto;
   gap: 8px;
   align-items: end;
 }
@@ -188,6 +188,62 @@
   .lt-table thead th,
   .lt-table tbody td { padding: 3px 5px; }
 }
+
+.lt-row-paused { opacity: 0.6; }
+.lt-row-paused td { background: #f8f9fa !important; }
+.lt-badge-paused {
+  background: #6c757d; color: #fff;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 1px 6px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-left: 6px;
+}
+.lt-icon-btn-pause { border-color: #ffc107; color: #664d03; }
+.lt-icon-btn-pause:hover { background: #ffc107; color: #664d03; }
+.lt-icon-btn-resume { border-color: #198754; color: #198754; }
+.lt-icon-btn-resume:hover { background: #198754; color: #fff; }
+
+/* ============================================================
+   Lab Test Settings tab strip (shown on catalog page)
+   ============================================================ */
+.lts-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #212529;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.lts-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #495057;
+  text-decoration: none;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+  margin-bottom: -2px;
+  background: #f8f9fa;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.lts-tab:hover {
+  background: #e9ecef;
+  color: #212529;
+}
+.lts-tab.active {
+  background: #fff;
+  color: #198754;
+  border-color: #212529;
+  border-bottom-color: #fff;
+  margin-bottom: -2px;
+  padding-bottom: 8px;
+}
+.lts-tab i { font-size: 0.9rem; }
 </style>
 {% endblock %}
 
@@ -211,6 +267,31 @@
     </div>
   </div>
 
+  {# ============ Settings Tab Strip ============ #}
+  {% if current_user.role == 'admin' %}
+  <div class="lts-tabs">
+    <a href="{{ url_for('tests.list_tests') }}"
+       class="lts-tab active">
+      <i class="bi bi-clipboard2-pulse"></i> Catalog
+    </a>
+    <a href="{{ url_for('test_settings.formats') }}" class="lts-tab">
+      <i class="bi bi-sliders2"></i> Formats
+    </a>
+    <a href="{{ url_for('test_settings.categories') }}" class="lts-tab">
+      <i class="bi bi-tags"></i> Categories
+    </a>
+    <a href="{{ url_for('test_settings.panels') }}" class="lts-tab">
+      <i class="bi bi-collection"></i> Panels
+    </a>
+    <a href="{{ url_for('test_settings.units') }}" class="lts-tab">
+      <i class="bi bi-rulers"></i> Units &amp; Ranges
+    </a>
+    <a href="{{ url_for('test_settings.bulk') }}" class="lts-tab">
+      <i class="bi bi-upload"></i> Bulk
+    </a>
+  </div>
+  {% endif %}
+
   {# Filter strip #}
   <form method="GET" action="{{ url_for('tests.list_tests') }}" class="lt-filter">
     <div class="lt-field">
@@ -224,6 +305,14 @@
         {% for c in categories %}
         <option value="{{ c.id }}" {% if category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
         {% endfor %}
+      </select>
+    </div>
+    <div class="lt-field">
+      <label>Status</label>
+      <select name="status">
+        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active only</option>
+        <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Paused only</option>
+        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
       </select>
     </div>
     <div class="lt-field">
@@ -254,9 +343,14 @@
     </thead>
     <tbody>
       {% for t in tests.items %}
-      <tr>
+      <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
         <td><code>{{ t.code }}</code></td>
-        <td class="name">{{ t.name }}</td>
+        <td class="name">
+          {{ t.name }}
+          {% if not t.is_active %}
+            <span class="lt-badge-paused">Paused</span>
+          {% endif %}
+        </td>
         <td>
           {% if t.category_ref %}
             <span class="lt-badge lt-badge-cat">{{ t.category_ref.name }}</span>
@@ -278,6 +372,18 @@
                class="lt-icon-btn lt-icon-btn-edit" title="Edit">
               <i class="bi bi-pencil"></i>
             </a>
+            <form method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}"
+                  class="d-inline">
+              {% if t.is_active %}
+              <button class="lt-icon-btn lt-icon-btn-pause" title="Pause (hide from registration)">
+                <i class="bi bi-pause-fill"></i>
+              </button>
+              {% else %}
+              <button class="lt-icon-btn lt-icon-btn-resume" title="Resume (show in registration)">
+                <i class="bi bi-play-fill"></i>
+              </button>
+              {% endif %}
+            </form>
             <form method="POST" action="{{ url_for('tests.delete_test', test_id=t.id) }}"
                   class="d-inline" onsubmit="return confirm('Archive this test?');">
               <button class="lt-icon-btn lt-icon-btn-danger" title="Archive">
