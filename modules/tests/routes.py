@@ -58,7 +58,7 @@ def index():
     )
 
     tab = request.args.get('tab', 'catalog').strip().lower()
-    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'units', 'bulk')
+    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'units', 'bulk', 'previews')
     if tab not in valid_tabs:
         tab = 'catalog'
 
@@ -437,9 +437,15 @@ def edit_ranges_gender(test_id, gender):
     rows = [r for r in (test.reference_ranges or [])
             if r.is_active and (r.gender or "any").lower() == gender]
 
+    editing = None
+    edit_id = request.args.get("edit", type=int)
+    if edit_id:
+        from .models import TestReferenceRange
+        editing = TestReferenceRange.query.get(edit_id)
+
     return render_template(
         "tests/ranges_gender.html",
-        test=test, gender=gender, rows=rows,
+        test=test, gender=gender, rows=rows, editing=editing,
     )
 
 
@@ -452,5 +458,17 @@ def delete_range_row(range_id):
     test_id, gender = r.test_id, r.gender or "any"
     svc.delete_range_row(range_id, current_user)
     flash("Reference value removed.", "info")
+    return redirect(url_for("tests.edit_ranges_gender",
+                            test_id=test_id, gender=gender))
+
+@tests_bp.route("/ranges/<int:range_id>/update", methods=["POST"])
+@login_required
+@permission_required("manage_tests")
+def update_range(range_id):
+    from .models import TestReferenceRange
+    r = TestReferenceRange.query.get_or_404(range_id)
+    test_id, gender = r.test_id, r.gender or "any"
+    svc.update_range_row(range_id, request.form, current_user)
+    flash("Reference value updated.", "success")
     return redirect(url_for("tests.edit_ranges_gender",
                             test_id=test_id, gender=gender))

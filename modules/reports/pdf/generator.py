@@ -48,12 +48,14 @@ def generate_report_pdf(order) -> io.BytesIO:
     except Exception as e:
         print(f'[pdf.generator] previous_map failed: {e}')
 
-    results_table, abnormal_count, critical_count = _results_table(
+    results_table, _notes_flow, abnormal_count, critical_count = _results_table(
         order,
         previous_map=previous_map,
         date_labels=date_labels,
     )
     story.append(results_table)
+    for _p in _notes_flow:
+        story.append(_p)
 
     story.extend(_footer_flowables(abnormal_count))
 

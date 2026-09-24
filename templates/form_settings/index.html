@@ -1,211 +1,159 @@
 {% extends "base.html" %}
-
-{% block title %}Reception Form Settings · {{ branding.lab_name }}{% endblock %}
+{% block title %}Reception Form Settings ? {{ branding.lab_name }}{% endblock %}
 
 {% block head %}
 <style>
 /* ============================================================
-   Reception Form Settings — single compact block
+   Reception Form Settings ? dense classical layout
    ============================================================ */
-
 .fs-page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-top: 16px;
-  padding-bottom: 60px;
+  max-width: 1500px; margin: 0 auto; padding: 10px 20px 30px;
+  font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529;
 }
 
-/* ---------- Header (super compact) ---------- */
+/* ---------- Header ---------- */
 .fs-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 2px solid #212529; padding-bottom: 5px;
+  margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
 }
 .fs-top h3 {
-  font-weight: 700;
-  margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.15rem; font-weight: 700; margin: 0;
+  text-transform: uppercase; letter-spacing: 0.02em;
 }
-.fs-top .presets {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.fs-top .subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+
+.fs-top .presets { display: flex; align-items: center; gap: 6px; }
+.fs-top .presets .lbl {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #6c757d; margin-right: 2px;
 }
 .fs-top .presets button {
-  padding: 3px 10px;
-  font-size: 0.78rem;
-  border: 1px solid var(--bs-border-color);
-  border-radius: 5px;
-  background: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  cursor: pointer;
-  transition: all 0.12s;
+  padding: 4px 12px; font-size: 0.74rem; font-weight: 600;
+  border: 1px solid #212529; background: #fff; color: #212529;
+  cursor: pointer; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  height: 28px; line-height: 1.6;
 }
-.fs-top .presets button:hover {
-  background: var(--brand-primary, var(--bs-primary));
-  border-color: var(--brand-primary, var(--bs-primary));
-  color: #fff;
-}
+.fs-top .presets button:hover { background: #f1f3f5; }
 .fs-top .stats {
-  font-size: 0.78rem;
-  color: var(--bs-secondary-color);
+  font-size: 0.76rem; color: #6c757d;
+  display: flex; align-items: center; gap: 8px;
+  font-family: Consolas, Monaco, monospace;
 }
+.fs-top .stats .preview-btn {
+  display: inline-block; padding: 4px 12px; font-size: 0.74rem; font-weight: 600;
+  border: 1px solid #0d6efd; background: #fff; color: #0d6efd;
+  text-decoration: none; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 28px; line-height: 1.6;
+}
+.fs-top .stats .preview-btn:hover { background: #0d6efd; color: #fff; }
 
-/* ---------- ONE master block ---------- */
+/* ---------- Master block ---------- */
 .fs-block {
-  background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 10px;
-  overflow: hidden;
+  border: 1.5px solid #212529; background: #fff; overflow: hidden;
 }
 
-/* Section header (inside the block) */
+/* Section header */
 .fs-sec {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 14px;
-  background: var(--bs-tertiary-bg);
-  border-bottom: 1px solid var(--bs-border-color);
-  cursor: pointer;
-  user-select: none;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 12px; background: #212529; color: #fff;
+  cursor: pointer; user-select: none;
 }
-.fs-sec:hover {
-  background: color-mix(in srgb, var(--bs-tertiary-bg) 90%, var(--bs-primary));
-}
-.fs-sec .left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.fs-sec:hover { background: #343a40; }
+.fs-sec .left { display: flex; align-items: center; gap: 10px; }
 .fs-sec .title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--bs-body-color);
-  margin: 0;
-}
-.fs-sec .title i {
-  color: var(--brand-primary, var(--bs-primary));
-  font-size: 0.85rem;
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #fff; margin: 0;
 }
 .fs-sec .badge {
-  font-size: 0.68rem;
-  font-weight: 500;
-  padding: 2px 7px;
+  display: inline-block; padding: 1px 6px; font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  background: #495057; color: #fff;
 }
+.fs-sec .chev { color: #adb5bd; font-size: 0.85rem; }
+
+/* Section switch ? keep round, but smaller */
+.fs-sec .form-check.form-switch { min-height: auto; margin: 0; padding-left: 2.2em; }
 .fs-sec .form-check-input {
-  margin: 0;
-  cursor: pointer;
-  width: 2em;
-  height: 1.1em;
+  cursor: pointer; width: 2em; height: 1.05em; margin-top: 0; border-radius: 1em;
 }
 
 /* ---------- Fields grid ---------- */
 .fs-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-bottom: 1px solid var(--bs-border-color);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1.5px solid #212529;
 }
-.fs-grid:last-child {
-  border-bottom: none;
-}
+.fs-grid:last-child { border-bottom: none; }
 
 .fs-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-right: 1px solid var(--bs-border-color-translucent);
-  border-bottom: 1px solid var(--bs-border-color-translucent);
-  font-size: 0.84rem;
-  min-height: 36px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.78rem; min-height: 32px; background: #fff;
 }
 .fs-item:nth-child(4n) { border-right: none; }
+.fs-item:nth-child(even) { background: #fbfcfd; }
 
 .fs-item .name {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
-  min-width: 0;
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-weight: 500; min-width: 0; color: #212529;
 }
-.fs-item .name.req::after {
-  content: ' *';
-  color: var(--bs-danger);
-}
+.fs-item .name.req::after { content: ' *'; color: #dc3545; font-weight: 700; }
 
-.fs-item .vis-toggle {
-  flex-shrink: 0;
-}
+/* Per-field visible toggle ? keep round, smaller */
+.fs-item .vis-toggle { flex-shrink: 0; }
+.fs-item .vis-toggle.form-check { padding-left: 2.2em; min-height: auto; margin: 0; }
 .fs-item .vis-toggle .form-check-input {
-  margin: 0;
-  cursor: pointer;
-  width: 1.9em;
-  height: 1.05em;
-}
-.fs-item .req-check {
-  margin: 0;
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  flex-shrink: 0;
+  margin: 0; cursor: pointer; width: 1.9em; height: 1.05em; border-radius: 1em;
 }
 
-.fs-item.not-visible {
-  opacity: 0.45;
+/* Per-field required ? square checkbox, compact */
+.fs-item .req-check {
+  margin: 0; width: 15px; height: 15px; cursor: pointer;
+  flex-shrink: 0; border-radius: 0; accent-color: #198754;
 }
-.fs-item.not-visible .req-check {
-  cursor: not-allowed;
-}
+.fs-item.not-visible { opacity: 0.4; }
+.fs-item.not-visible .req-check { cursor: not-allowed; }
 
 /* ---------- Sticky action bar ---------- */
 .fs-actions {
-  position: sticky;
-  bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  margin-top: 12px;
-  font-size: 0.8rem;
+  position: sticky; bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 8px 14px; background: #fff;
+  border: 1.5px solid #212529;
+  margin-top: 12px; font-size: 0.78rem;
 }
 .fs-actions .info {
-  color: var(--bs-secondary-color);
+  color: #6c757d; font-family: Consolas, Monaco, monospace; font-size: 0.74rem;
 }
+.fs-actions .info i { color: #0d6efd; }
+.fs-actions .save-btn {
+  display: inline-block; padding: 5px 16px; font-size: 0.78rem; font-weight: 700;
+  border: 1px solid #198754; background: #198754; color: #fff; cursor: pointer;
+  border-radius: 0; text-transform: uppercase; letter-spacing: 0.04em;
+  height: 30px; line-height: 1.6;
+}
+.fs-actions .save-btn:hover { background: #146c43; }
 
-.fs-reset {
-  text-align: center;
-  margin-top: 10px;
-}
+/* ---------- Reset ---------- */
+.fs-reset { text-align: center; margin-top: 10px; }
 .fs-reset button {
-  background: transparent;
-  border: none;
-  color: var(--bs-danger);
-  font-size: 0.78rem;
-  cursor: pointer;
-  text-decoration: underline;
+  background: transparent; border: none; color: #dc3545;
+  font-size: 0.74rem; cursor: pointer; text-decoration: underline;
+  text-transform: uppercase; letter-spacing: 0.03em;
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1199.98px) {
   .fs-grid { grid-template-columns: repeat(3, 1fr); }
-  .fs-item:nth-child(4n) { border-right: 1px solid var(--bs-border-color-translucent); }
+  .fs-item:nth-child(4n) { border-right: 1px solid #dee2e6; }
   .fs-item:nth-child(3n) { border-right: none; }
 }
 @media (max-width: 767.98px) {
   .fs-grid { grid-template-columns: repeat(2, 1fr); }
-  .fs-item:nth-child(3n) { border-right: 1px solid var(--bs-border-color-translucent); }
+  .fs-item:nth-child(3n) { border-right: 1px solid #dee2e6; }
   .fs-item:nth-child(2n) { border-right: none; }
 }
 @media (max-width: 479.98px) {
@@ -218,14 +166,17 @@
 {% block content %}
 <div class="fs-page">
 
-  {# ============ COMPACT TOP ROW ============ #}
+  {# ============ HEADER ============ #}
   <div class="fs-top">
-    <h3><i class="bi bi-ui-checks"></i> Reception Form Settings</h3>
+    <div>
+      <h3><i class="bi bi-ui-checks"></i> Reception Form Settings</h3>
+      <div class="subtitle">Control which fields appear on the registration form</div>
+    </div>
 
     <div class="presets">
-      <span class="text-muted me-1" style="font-size:0.78rem;">Presets:</span>
+      <span class="lbl">Presets:</span>
       {% for p in preset_list %}
-      <form method="POST" class="d-inline"
+      <form method="POST" style="display:inline;"
             action="{{ url_for('form_settings.apply_preset', preset_key=p.key) }}"
             onsubmit="return confirm('Apply the {{ p.label }} preset? This will reset all field configurations.');">
         <button type="submit" title="{{ p.description }}">{{ p.label }}</button>
@@ -234,9 +185,8 @@
     </div>
 
     <div class="stats">
-      {{ stats.visible }} of {{ stats.total }} visible · {{ stats.required }} required
-      <a href="{{ url_for('orders.new_order') }}" target="_blank"
-         class="btn btn-outline-primary btn-sm ms-2" style="font-size:0.75rem;">
+      <span>{{ stats.visible }} / {{ stats.total }} visible &nbsp;?&nbsp; {{ stats.required }} required</span>
+      <a href="{{ url_for('orders.new_order') }}" target="_blank" class="preview-btn">
         <i class="bi bi-eye"></i> Preview
       </a>
     </div>
@@ -247,10 +197,10 @@
     <div class="fs-block">
 
       {% for section in sections %}
-        {# ---- Section header (inside the block) ---- #}
+        {# ---- Section header ---- #}
         <div class="fs-sec" data-section="{{ section.key }}">
           <div class="left">
-            <div class="form-check form-switch" style="margin:0;">
+            <div class="form-check form-switch">
               <input class="form-check-input section-toggle"
                      type="checkbox"
                      name="section_visible"
@@ -258,14 +208,10 @@
                      id="sec_{{ section.key }}"
                      {% if section.is_visible %}checked{% endif %}>
             </div>
-            <span class="title">
-              <i class="bi bi-folder"></i> {{ section.label }}
-            </span>
-            <span class="badge bg-secondary">
-              {{ section.visible_count }}/{{ section.field_count }}
-            </span>
+            <span class="title"><i class="bi bi-folder"></i> {{ section.label }}</span>
+            <span class="badge">{{ section.visible_count }}/{{ section.field_count }}</span>
           </div>
-          <i class="bi bi-chevron-down small text-muted"></i>
+          <i class="bi bi-chevron-down chev"></i>
         </div>
 
         {# ---- Fields grid ---- #}
@@ -313,7 +259,7 @@
         <i class="bi bi-info-circle"></i>
         Changes take effect immediately after saving.
       </span>
-      <button type="submit" class="btn btn-primary btn-sm">
+      <button type="submit" class="save-btn">
         <i class="bi bi-check-lg"></i> Save Settings
       </button>
     </div>
@@ -339,7 +285,6 @@
 (function () {
   'use strict';
 
-  // Row state sync (Visible → Req enabled/disabled)
   function updateRowState(row) {
     const visible = row.querySelector('.field-visible');
     const required = row.querySelector('.field-required');
@@ -349,7 +294,6 @@
     row.classList.toggle('not-visible', !visible.checked);
     required.disabled = !visible.checked;
     if (!visible.checked) required.checked = false;
-
     nameEl.classList.toggle('req', required.checked);
   }
 
@@ -364,13 +308,10 @@
       updateRowState(row);
     });
   });
-
   document.querySelectorAll('.fs-item').forEach(updateRowState);
 
-  // Section toggle dims its grid
   document.querySelectorAll('.section-toggle').forEach(cb => {
     const apply = () => {
-      const sec = cb.closest('.fs-sec');
       const key = cb.value;
       const grid = document.querySelector('.fs-grid[data-grid="' + key + '"]');
       if (grid) {
@@ -382,7 +323,6 @@
     apply();
   });
 
-  // Collapse section when clicking the header
   document.querySelectorAll('.fs-sec').forEach(h => {
     h.addEventListener('click', (e) => {
       if (e.target.closest('.form-check')) return;
@@ -392,10 +332,10 @@
       if (!grid) return;
       if (grid.style.display === 'none') {
         grid.style.display = '';
-        if (icon) icon.className = 'bi bi-chevron-down small text-muted';
+        if (icon) icon.className = 'bi bi-chevron-down chev';
       } else {
         grid.style.display = 'none';
-        if (icon) icon.className = 'bi bi-chevron-right small text-muted';
+        if (icon) icon.className = 'bi bi-chevron-right chev';
       }
     });
   });

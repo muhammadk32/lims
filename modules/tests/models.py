@@ -209,6 +209,12 @@ class TestReferenceRange(BaseModel):
     age_min_days = db.Column(db.Integer, nullable=True)
     age_max_days = db.Column(db.Integer, nullable=True)
 
+    # Unit-aware bounds (as entered by user)
+    age_min_value = db.Column(db.Integer, nullable=True)
+    age_min_unit  = db.Column(db.String(10), nullable=True)   # days|weeks|months|years
+    age_max_value = db.Column(db.Integer, nullable=True)
+    age_max_unit  = db.Column(db.String(10), nullable=True)
+
     # The range string (e.g. "13.5 - 17.5")
     range_text = db.Column(db.String(120), nullable=False)
 

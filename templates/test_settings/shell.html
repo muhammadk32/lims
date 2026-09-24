@@ -44,6 +44,10 @@
        class="lts-tab {% if tab == 'bulk' %}active{% endif %}">
       <i class="bi bi-upload"></i> Bulk Actions
     </a>
+    <a href="{{ url_for('tests.index', tab='previews') }}"
+       class="lts-tab {% if tab == 'previews' %}active{% endif %}">
+      <i class="bi bi-eye"></i> Previews
+    </a>
   </div>
 
   {# ============ TAB CONTENT ============ #}
@@ -58,6 +62,8 @@
       {% include 'test_settings/_units.html' %}
     {% elif tab == 'bulk' %}
       {% include 'test_settings/_bulk.html' %}
+    {% elif tab == 'previews' %}
+    {% include 'test_settings/_format_previews.html' %}
     {% else %}
       {% include 'test_settings/_catalog.html' %}
     {% endif %}

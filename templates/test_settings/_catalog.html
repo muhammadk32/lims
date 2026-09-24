@@ -60,7 +60,7 @@
       <th style="width: 140px;">Category</th>
       <th class="num" style="width: 90px;">Price</th>
       <th style="width: 90px;">Unit</th>
-      <th style="width: 120px;">Normal Range</th>
+      <th class="center" style="width: 70px;">Status</th>
       <th class="center" style="width: 130px;">Actions</th>
     </tr>
   </thead>
@@ -81,7 +81,13 @@
       </td>
       <td class="num price">{{ t.price | money }}</td>
       <td>{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
-      <td class="muted">{% if t.normal_range %}{{ t.normal_range }}{% else %}—{% endif %}</td>
+      <td class="center">
+        {% if t.is_active %}
+          <span class="lt-badge" style="background:#198754;color:#fff;">A</span>
+        {% else %}
+          <span class="lt-badge" style="background:#6c757d;color:#fff;">I</span>
+        {% endif %}
+      </td>
       <td class="center">
         <div class="lt-actions-col">
           <a href="{{ url_for('tests.view_test', test_id=t.id) }}" class="lt-icon-btn lt-icon-btn-view" title="View">

@@ -123,38 +123,19 @@ def _build_critical(cmin, cmax):
 
 
 def add_range_row(test, gender, form, user):
-    """Insert one reference-range row from the ADAM-style form.
-
-    Form fields:
-        age_max_value + age_max_unit   ('days'|'months'|'years')
-        age_min_value + age_min_unit
-        value_max, value_min
-        crit_max, crit_min
-        notes   (HTML from rich editor)
-    """
+    """Insert one reference-range row from the ADAM-style form."""
     gender = (gender or "any").lower()
 
-    def _age_to_cols(value_key, unit_key):
-        v = _int_or_none_loose(form.get(value_key))
-        u = (form.get(unit_key) or "years").strip().lower()
-        if v is None:
-            return None, None
-        if u == "days":
-            return v, None           # (min_days, min_years) or (max_days, max_years)
-        if u == "months":
-            return v * 30, None
-        return None, v               # years
-
-    max_days, max_years = _age_to_cols("age_max_value", "age_max_unit")
-    min_days, min_years = _age_to_cols("age_min_value", "age_min_unit")
+    def _v(k):   return _int_or_none_loose(form.get(k))
+    def _u(k):   return (form.get(k) or "years").strip().lower()
 
     row = TestReferenceRange(
         test_id=test.id,
         gender=gender,
-        age_min_days=min_days,
-        age_max_days=max_days,
-        age_min_years=min_years,
-        age_max_years=max_years,
+        age_min_value=_v("age_min_value"),
+        age_min_unit=_u("age_min_unit"),
+        age_max_value=_v("age_max_value"),
+        age_max_unit=_u("age_max_unit"),
         range_text=_build_range_text(form.get("value_min"), form.get("value_max")),
         critical_value=_build_critical(form.get("crit_min"), form.get("crit_max")),
         notes=(form.get("notes") or "").strip() or None,
@@ -166,6 +147,26 @@ def add_range_row(test, gender, form, user):
     db.session.commit()
     log_action("create", "test_reference_range", row.id,
                f"Added {gender} range for test {test.id}: {row.range_text}")
+    return row
+
+
+def update_range_row(range_id, form, user):
+    row = TestReferenceRange.query.get(range_id)
+    if not row:
+        return None
+
+    def _v(k):   return _int_or_none_loose(form.get(k))
+    def _u(k):   return (form.get(k) or "years").strip().lower()
+
+    row.age_min_value = _v("age_min_value")
+    row.age_min_unit  = _u("age_min_unit")
+    row.age_max_value = _v("age_max_value")
+    row.age_max_unit  = _u("age_max_unit")
+    row.range_text     = _build_range_text(form.get("value_min"), form.get("value_max"))
+    row.critical_value = _build_critical(form.get("crit_min"), form.get("crit_max"))
+    row.notes          = (form.get("notes") or "").strip() or None
+    db.session.commit()
+    log_action("update", "test_reference_range", row.id, f"Updated range {row.range_text}")
     return row
 
 

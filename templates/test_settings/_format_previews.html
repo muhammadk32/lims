@@ -1,0 +1,194 @@
+{# ============ FORMAT PREVIEWS TAB ============ #}
+<div class="fp-header">
+  <div>
+    <h2 class="fp-title"><i class="bi bi-eye"></i> Format Previews</h2>
+    <div class="fp-subtitle">Sample output for each result format ? pick which ones to keep</div>
+  </div>
+  <button onclick="window.print()" class="fp-btn fp-btn-primary">
+    <i class="bi bi-printer"></i> Print / Save as PDF
+  </button>
+</div>
+
+<div class="fp-grid">
+
+  {# 1. NUMERIC #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>1. Numeric</span><span class="fp-tag">most common</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Test</span><span>Aspartate Aminotransferase (AST)</span></div>
+      <div class="fp-row"><span class="fp-lbl">Value</span><span class="fp-mono">28.00</span></div>
+      <div class="fp-row"><span class="fp-lbl">Unit</span><span>U/L</span></div>
+      <div class="fp-row"><span class="fp-lbl">Range</span><span class="fp-mono">10 ? 40</span></div>
+      <div class="fp-row"><span class="fp-lbl">Flag</span><span class="fp-pill fp-ok">Normal</span></div>
+    </div>
+    <div class="fp-card-ft">Input: <code>&lt;input type=number&gt;</code> ? Validation: numeric + range check</div>
+  </div>
+
+  {# 2. QUALITATIVE #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>2. Qualitative (Positive / Negative)</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Test</span><span>HIV 1 &amp; 2 Antibodies</span></div>
+      <div class="fp-row"><span class="fp-lbl">Result</span><span class="fp-pill fp-neg">Negative</span></div>
+      <div class="fp-row"><span class="fp-lbl">Method</span><span>ELISA</span></div>
+      <div class="fp-row"><span class="fp-lbl">Range</span><span>Negative</span></div>
+    </div>
+    <div class="fp-card-ft">Input: <code>radio: Positive / Negative / Borderline</code></div>
+  </div>
+
+  {# 3. SEMI-QUANTITATIVE #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>3. Semi-quantitative</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Test</span><span>Urine Protein</span></div>
+      <div class="fp-row"><span class="fp-lbl">Result</span><span class="fp-pill fp-warn">Trace</span></div>
+      <div class="fp-row"><span class="fp-lbl">Scale</span><span>Nil ? Trace ? 1+ ? 2+ ? 3+ ? 4+</span></div>
+    </div>
+    <div class="fp-card-ft">Input: <code>dropdown of 6 fixed values</code></div>
+  </div>
+
+  {# 4. TITRE #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>4. Titre (dilution)</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Test</span><span>Widal ? O antigen</span></div>
+      <div class="fp-row"><span class="fp-lbl">Result</span><span class="fp-mono fp-pill fp-abn">1:160</span></div>
+      <div class="fp-row"><span class="fp-lbl">Range</span><span class="fp-mono">&lt; 1:80</span></div>
+    </div>
+    <div class="fp-card-ft">Input: <code>dropdown 1:20 / 1:40 / 1:80 / 1:160 / 1:320 / 1:640</code></div>
+  </div>
+
+  {# 5. PCR / MOLECULAR #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>5. PCR / Molecular</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Test</span><span>HCV RNA (Quantitative)</span></div>
+      <div class="fp-row"><span class="fp-lbl">Detected</span><span class="fp-pill fp-abn">Detected</span></div>
+      <div class="fp-row"><span class="fp-lbl">Value</span><span class="fp-mono">2,450 IU/mL</span></div>
+      <div class="fp-row"><span class="fp-lbl">Range</span><span>&lt; 15 IU/mL (Not detected)</span></div>
+    </div>
+    <div class="fp-card-ft">Input: <code>radio (Detected/Not detected) + number + unit</code></div>
+  </div>
+
+  {# 6. HISTOPATHOLOGY #}
+  <div class="fp-card">
+    <div class="fp-card-hd"><span>6. Histopathology / Narrative</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Specimen</span><span>Liver biopsy</span></div>
+      <div class="fp-narrative">
+        <b>Microscopic:</b> Sections show liver parenchyma with mild periportal
+        lymphocytic infiltrate. No granuloma. No malignancy.
+        <br><b>Impression:</b> Mild chronic hepatitis.
+      </div>
+    </div>
+    <div class="fp-card-ft">Input: <code>&lt;textarea&gt;</code> ? free narrative</div>
+  </div>
+
+  {# 7. CULTURE & SENSITIVITY #}
+  <div class="fp-card fp-wide">
+    <div class="fp-card-hd"><span>7. Culture &amp; Sensitivity</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Organism</span><span>Escherichia coli</span></div>
+      <table class="fp-ast">
+        <thead><tr><th>Antibiotic</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Imipenem</td>     <td><span class="fp-pill fp-ok">Sensitive</span></td></tr>
+          <tr><td>Amikacin</td>     <td><span class="fp-pill fp-ok">Sensitive</span></td></tr>
+          <tr><td>Ceftriaxone</td>  <td><span class="fp-pill fp-warn">Intermediate</span></td></tr>
+          <tr><td>Ampicillin</td>   <td><span class="fp-pill fp-abn">Resistant</span></td></tr>
+          <tr><td>Ciprofloxacin</td><td><span class="fp-pill fp-abn">Resistant</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fp-card-ft">Input: <code>organism text + per-antibiotic 3-way dropdown</code></div>
+  </div>
+
+  {# 8. MICROSCOPY #}
+  <div class="fp-card fp-wide">
+    <div class="fp-card-hd"><span>8. Microscopy / Text Fields</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-row"><span class="fp-lbl">Specimen</span><span>Urine</span></div>
+      <table class="fp-ast">
+        <thead><tr><th>Parameter</th><th>Result</th><th>Ref</th></tr></thead>
+        <tbody>
+          <tr><td>Pus cells</td>    <td class="fp-mono">8 /HPF</td>  <td class="fp-mono">0 ? 5</td></tr>
+          <tr><td>RBCs</td>         <td class="fp-mono">2 /HPF</td>  <td class="fp-mono">0 ? 2</td></tr>
+          <tr><td>Epithelial cells</td><td class="fp-mono">Few</td>  <td class="fp-mono">?</td></tr>
+          <tr><td>Casts</td>        <td class="fp-mono">Nil</td>      <td class="fp-mono">Nil</td></tr>
+          <tr><td>Crystals</td>     <td class="fp-mono">Calcium oxalate</td><td class="fp-mono">?</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fp-card-ft">Input: <code>table of fixed rows, free text per row</code></div>
+  </div>
+
+  {# 9. PANEL #}
+  <div class="fp-card fp-wide">
+    <div class="fp-card-hd"><span>9. Panel (grouped children)</span></div>
+    <div class="fp-card-bd">
+      <div class="fp-panel-hd">? Lipid Profile Fasting</div>
+      <table class="fp-ast">
+        <tbody>
+          <tr><td>Total Cholesterol</td>  <td class="fp-mono">185</td>  <td>mg/dL</td> <td class="fp-mono">&lt; 200</td></tr>
+          <tr><td>HDL Cholesterol</td>    <td class="fp-mono">42</td>   <td>mg/dL</td> <td class="fp-mono">&gt; 40</td></tr>
+          <tr><td>LDL Cholesterol</td>    <td class="fp-mono">115</td>  <td>mg/dL</td> <td class="fp-mono">&lt; 100</td></tr>
+          <tr><td>Triglycerides</td>      <td class="fp-mono">180</td>  <td>mg/dL</td> <td class="fp-mono">&lt; 150</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="fp-card-ft">Input: each child entered separately; PDF renders under one panel heading</div>
+  </div>
+
+</div>
+
+<style>
+.fp-header { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid #212529; padding-bottom:5px; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+.fp-title { font-size:1.15rem; font-weight:700; margin:0; text-transform:uppercase; letter-spacing:0.02em; }
+.fp-subtitle { font-size:0.76rem; color:#6c757d; margin-top:2px; }
+.fp-btn { display:inline-block; padding:4px 12px; font-size:0.74rem; font-weight:600;
+  border:1px solid #212529; background:#fff; color:#212529; cursor:pointer;
+  border-radius:0; text-transform:uppercase; letter-spacing:0.03em; height:28px; line-height:1.6; }
+.fp-btn:hover { background:#f1f3f5; }
+.fp-btn-primary { background:#198754; border-color:#198754; color:#fff; }
+.fp-btn-primary:hover { background:#146c43; }
+
+.fp-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; }
+.fp-wide { grid-column:span 2; }
+@media (max-width: 900px) { .fp-grid { grid-template-columns:1fr; } .fp-wide { grid-column:span 1; } }
+
+.fp-card { border:1.5px solid #212529; background:#fff; }
+.fp-card-hd { background:#212529; color:#fff; padding:5px 12px; font-size:0.72rem;
+  font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+  display:flex; justify-content:space-between; align-items:center; }
+.fp-tag { background:#198754; padding:1px 6px; font-size:0.6rem; letter-spacing:0.04em; }
+.fp-card-bd { padding:8px 12px; font-size:0.78rem; }
+.fp-row { display:grid; grid-template-columns:120px 1fr; gap:10px; padding:3px 0;
+  border-bottom:1px solid #f1f3f5; align-items:center; }
+.fp-row:last-child { border-bottom:none; }
+.fp-lbl { font-size:0.62rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.06em; color:#6c757d; }
+.fp-mono { font-family:Consolas, Monaco, monospace; font-variant-numeric:tabular-nums; }
+.fp-narrative { padding:6px 0; font-size:0.78rem; line-height:1.5; color:#212529; }
+.fp-narrative b { color:#198754; }
+
+.fp-pill { display:inline-block; padding:1px 8px; font-size:0.62rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.05em; }
+.fp-ok    { background:#d1e7dd; color:#0f5132; }
+.fp-warn  { background:#fff3cd; color:#664d03; }
+.fp-abn   { background:#f8d7da; color:#842029; }
+.fp-neg   { background:#cff4fc; color:#055160; }
+
+.fp-ast { width:100%; border-collapse:collapse; margin-top:6px; font-size:0.75rem; }
+.fp-ast thead th { background:#e9ecef; font-size:0.6rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.05em; padding:3px 8px;
+  text-align:left; border:1px solid #adb5bd; }
+.fp-ast tbody td { padding:3px 8px; border:1px solid #dee2e6; }
+.fp-panel-hd { background:#212529; color:#fff; padding:4px 10px;
+  font-size:0.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.05em; margin-bottom:4px; }
+
+.fp-card-ft { background:#f8f9fa; border-top:1px solid #dee2e6; padding:5px 12px;
+  font-size:0.68rem; color:#6c757d; font-family:Consolas, Monaco, monospace; }
+.fp-card-ft code { background:#fff; border:1px solid #dee2e6; padding:0 4px; color:#0d6efd; }
+</style>

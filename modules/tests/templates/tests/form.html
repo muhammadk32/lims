@@ -87,7 +87,7 @@
             <a href="{{ url_for('tests.list_tests') }}" class="btn btn-outline-secondary">Cancel</a>
             
 {% if test %}
-            <a href="{{ url_for('tests.save_reference_ranges', test_id=test.id) }}"
+            <a href="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='male') }}"
                class="btn btn-outline-primary">
               <i class="bi bi-rulers"></i> Reference Ranges →
             </a>

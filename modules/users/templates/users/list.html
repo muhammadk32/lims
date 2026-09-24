@@ -1,148 +1,277 @@
 {% extends 'base.html' %}
+{% block title %}Users ? LabMS{% endblock %}
 
-{% block title %}Users — LabMS{% endblock %}
+{% block head %}
+<style>
+/* ============================================================
+   Users - dense classical layout
+   ============================================================ */
+.us-page {
+  max-width: 1500px; margin: 0 auto; padding: 10px 20px 30px;
+  font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529;
+}
+.us-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 2px solid #212529; padding-bottom: 5px;
+  margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
+}
+.us-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.us-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.us-actions { display: flex; gap: 6px; }
+
+/* Buttons */
+.us-btn {
+  display: inline-block; padding: 4px 12px; font-size: 0.74rem; font-weight: 600;
+  border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; border-radius: 0; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 28px; line-height: 1.6;
+}
+.us-btn:hover { background: #f1f3f5; color: #212529; }
+.us-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.us-btn-primary:hover { background: #146c43; color: #fff; }
+.us-btn-clear { background: #fff; border-color: #dc3545; color: #dc3545; }
+.us-btn-clear:hover { background: #dc3545; color: #fff; }
+
+/* Filter strip */
+.us-filter {
+  background: #f8f9fa; border: 1px solid #dee2e6;
+  padding: 8px 10px; margin-bottom: 8px;
+  display: grid; grid-template-columns: 2fr 1.2fr auto;
+  gap: 8px; align-items: end;
+}
+.us-field label {
+  display: block; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #6c757d; margin-bottom: 2px;
+}
+.us-field input, .us-field select {
+  width: 100%; padding: 3px 8px; border: 1px solid #6c757d;
+  border-radius: 0; font-size: 0.82rem; background: #fff; height: 28px;
+}
+.us-field input:focus, .us-field select:focus { outline: none; border-color: #198754; }
+.us-filter-actions { display: flex; gap: 6px; }
+
+/* Table */
+.us-table {
+  width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
+  font-size: 0.78rem; background: #fff;
+}
+.us-table thead th {
+  background: #212529; color: #fff; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 4px 8px; text-align: left; border: 1px solid #212529; white-space: nowrap;
+}
+.us-table thead th.end { text-align: right; }
+.us-table tbody td {
+  padding: 3px 8px; border: 1px solid #dee2e6; vertical-align: middle;
+}
+.us-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.us-table tbody tr:hover { background: #f1f3f5; }
+.us-table .end { text-align: right; }
+.us-table code {
+  font-size: 0.72rem; font-family: Consolas, Monaco, monospace;
+  padding: 0 4px; background: #f1f3f5; border: 1px solid #dee2e6;
+}
+.us-table .name { font-weight: 700; font-size: 0.82rem; }
+.us-table .muted { color: #6c757d; font-size: 0.74rem; }
+
+/* Role badges */
+.us-role {
+  display: inline-block; padding: 1px 7px;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
+  text-transform: uppercase; color: #fff; border-radius: 0; white-space: nowrap;
+}
+.us-role-admin         { background: #dc3545; }
+.us-role-doctor        { background: #0d6efd; }
+.us-role-technician    { background: #198754; }
+.us-role-receptionist  { background: #0dcaf0; color: #055160; }
+.us-role-other         { background: #6c757d; }
+
+/* Status badges */
+.us-status {
+  display: inline-block; padding: 1px 7px;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
+  text-transform: uppercase; color: #fff; border-radius: 0;
+}
+.us-status-active   { background: #198754; }
+.us-status-inactive { background: #6c757d; }
+
+/* "you" badge */
+.us-you {
+  display: inline-block; padding: 0 5px; margin-left: 6px;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; background: #0dcaf0; color: #055160;
+}
+
+/* Action buttons */
+.us-actions-cell { display: inline-flex; gap: 3px; }
+.us-icon-btn {
+  display: inline-block; padding: 2px 7px; font-size: 0.72rem;
+  border: 1px solid #6c757d; background: #fff; color: #212529;
+  text-decoration: none; border-radius: 0; cursor: pointer; line-height: 1.3;
+}
+.us-icon-btn:hover { background: #f1f3f5; }
+.us-icon-btn-edit  { border-color: #6c757d; color: #495057; }
+.us-icon-btn-edit:hover  { background: #495057; color: #fff; }
+.us-icon-btn-key   { border-color: #ffc107; color: #664d03; }
+.us-icon-btn-key:hover   { background: #ffc107; color: #664d03; }
+.us-icon-btn-pause { border-color: #6c757d; color: #495057; }
+.us-icon-btn-pause:hover { background: #495057; color: #fff; }
+.us-icon-btn-play  { border-color: #198754; color: #198754; }
+.us-icon-btn-play:hover  { background: #198754; color: #fff; }
+
+/* Empty */
+.us-empty {
+  text-align: center; padding: 40px 20px; color: #6c757d;
+  font-style: italic; border: 1.5px solid #212529; border-top: none; background: #fafbfc;
+}
+
+@media (max-width: 900px) {
+  .us-filter { grid-template-columns: 1fr; }
+  .us-table { font-size: 0.72rem; }
+  .us-table thead th, .us-table tbody td { padding: 3px 5px; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<div class="us-page">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  {# ============ HEADER ============ #}
+  <div class="us-header">
     <div>
-      <h3 class="fw-bold mb-0"><i class="bi bi-person-badge"></i> Users</h3>
-      <p class="text-muted small mb-0">Manage system users and their roles</p>
+      <h1 class="us-title"><i class="bi bi-person-badge"></i> Users</h1>
+      <div class="us-subtitle">Manage system users and their roles</div>
     </div>
-    <a href="{{ url_for('users.new_user') }}" class="btn btn-primary">
-      <i class="bi bi-person-plus"></i> Add User
-    </a>
+    <div class="us-actions">
+      <a href="{{ url_for('users.new_user') }}" class="us-btn us-btn-primary">
+        <i class="bi bi-person-plus"></i> Add User
+      </a>
+    </div>
   </div>
 
-  <!-- Filters -->
-  <form method="GET" class="row g-2 mb-3">
-    <div class="col-md-7">
-      <input type="text" name="q" value="{{ q }}" class="form-control"
-             placeholder="Search by username, name, or email...">
+  {# ============ FILTERS ============ #}
+  <form method="GET" class="us-filter">
+    <div class="us-field">
+      <label>Search</label>
+      <input type="text" name="q" value="{{ q }}"
+             placeholder="Username, name, or email...">
     </div>
-    <div class="col-md-3">
-      <select name="role" class="form-select">
+    <div class="us-field">
+      <label>Role</label>
+      <select name="role">
         <option value="">All roles</option>
         {% for r in roles %}
-        <option value="{{ r }}" {% if role_filter == r %}selected{% endif %}>
-          {{ role_labels[r] }}
-        </option>
+        <option value="{{ r }}" {% if role_filter == r %}selected{% endif %}>{{ role_labels[r] }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="col-md-2 d-flex gap-2">
-      <button class="btn btn-outline-primary flex-fill"><i class="bi bi-funnel"></i></button>
+    <div class="us-filter-actions">
+      <button class="us-btn us-btn-primary" type="submit">
+        <i class="bi bi-funnel"></i> Filter
+      </button>
       {% if q or role_filter %}
-      <a href="{{ url_for('users.list_users') }}" class="btn btn-outline-danger"><i class="bi bi-x-lg"></i></a>
+      <a href="{{ url_for('users.list_users') }}" class="us-btn us-btn-clear">
+        <i class="bi bi-x-lg"></i>
+      </a>
       {% endif %}
     </div>
   </form>
 
-  <div class="card border-0 shadow-sm">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>Username</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Last Login</th>
-            <th class="text-end">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for u in users %}
-          <tr>
-            <td>
-              <code>{{ u.username }}</code>
-              {% if u.id == current_user.id %}
-                <span class="badge bg-info text-dark ms-1">you</span>
-              {% endif %}
-            </td>
-            <td class="fw-semibold">{{ u.full_name }}</td>
-            <td class="text-muted small">{{ u.email or '—' }}</td>
-            <td>
-              {% set role_badge = {
-                'admin': 'danger',
-                'doctor': 'primary',
-                'technician': 'success',
-                'receptionist': 'info'
-              } %}
-              <span class="badge bg-{{ role_badge.get(u.role, 'secondary') }}">
-                {{ u.role_label }}
-              </span>
-            </td>
-            <td>
-              {% if u.is_active_flag %}
-                <span class="badge bg-success">Active</span>
-              {% else %}
-                <span class="badge bg-secondary">Inactive</span>
-              {% endif %}
-            </td>
-            <td class="text-muted small">
-              {{ u.last_login | localtime if u.last_login else 'never' }}
-            </td>
-            <td class="text-end">
-              <a href="{{ url_for('users.edit_user', user_id=u.id) }}"
-                 class="btn btn-sm btn-outline-secondary" title="Edit">
-                <i class="bi bi-pencil"></i>
-              </a>
-
-              <button class="btn btn-sm btn-outline-warning"
-                      data-bs-toggle="modal" data-bs-target="#resetModal{{ u.id }}"
-                      title="Reset password">
-                <i class="bi bi-key"></i>
-              </button>
-
-              {% if u.id != current_user.id %}
-              <form method="POST"
-                    action="{{ url_for('users.toggle_active', user_id=u.id) }}"
-                    class="d-inline">
-                <button class="btn btn-sm btn-outline-{{ 'secondary' if u.is_active_flag else 'success' }}"
-                        title="{{ 'Deactivate' if u.is_active_flag else 'Activate' }}"
-                        onclick="return confirm('{{ 'Deactivate' if u.is_active_flag else 'Activate' }} {{ u.username }}?');">
-                  <i class="bi bi-{{ 'pause-circle' if u.is_active_flag else 'play-circle' }}"></i>
-                </button>
-              </form>
-              {% endif %}
-            </td>
-          </tr>
-
-          <!-- Reset password modal -->
-          <div class="modal fade" id="resetModal{{ u.id }}">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <form method="POST" action="{{ url_for('users.reset_password', user_id=u.id) }}">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Reset Password — {{ u.username }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <label class="form-label">New password</label>
-                    <input type="password" name="new_password" class="form-control"
-                           minlength="6" required>
-                    <div class="form-text">Minimum 6 characters.</div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-warning"><i class="bi bi-key"></i> Reset</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+  {# ============ TABLE ============ #}
+  {% if users %}
+  <table class="us-table">
+    <thead>
+      <tr>
+        <th style="width: 180px;">Username</th>
+        <th>Full Name</th>
+        <th style="width: 220px;">Email</th>
+        <th style="width: 140px;">Role</th>
+        <th style="width: 90px;">Status</th>
+        <th style="width: 160px;">Last Login</th>
+        <th class="end" style="width: 130px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>
+          <code>{{ u.username }}</code>
+          {% if u.id == current_user.id %}<span class="us-you">you</span>{% endif %}
+        </td>
+        <td class="name">{{ u.full_name }}</td>
+        <td class="muted">{{ u.email or '?' }}</td>
+        <td>
+          <span class="us-role us-role-{{ u.role }}">{{ u.role_label }}</span>
+        </td>
+        <td>
+          {% if u.is_active_flag %}
+            <span class="us-status us-status-active">Active</span>
           {% else %}
-          <tr>
-            <td colspan="7" class="text-center text-muted py-4">No users found.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+            <span class="us-status us-status-inactive">Inactive</span>
+          {% endif %}
+        </td>
+        <td class="muted">
+          {{ u.last_login | localtime if u.last_login else 'never' }}
+        </td>
+        <td class="end">
+          <div class="us-actions-cell">
+            <a href="{{ url_for('users.edit_user', user_id=u.id) }}"
+               class="us-icon-btn us-icon-btn-edit" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <button class="us-icon-btn us-icon-btn-key"
+                    data-bs-toggle="modal" data-bs-target="#resetModal{{ u.id }}"
+                    title="Reset password">
+              <i class="bi bi-key"></i>
+            </button>
+            {% if u.id != current_user.id %}
+            <form method="POST" action="{{ url_for('users.toggle_active', user_id=u.id) }}"
+                  style="display:inline;"
+                  onsubmit="return confirm('{{ 'Deactivate' if u.is_active_flag else 'Activate' }} {{ u.username }}?');">
+              <button class="us-icon-btn {{ 'us-icon-btn-pause' if u.is_active_flag else 'us-icon-btn-play' }}"
+                      title="{{ 'Deactivate' if u.is_active_flag else 'Activate' }}">
+                <i class="bi bi-{{ 'pause-circle' if u.is_active_flag else 'play-circle' }}"></i>
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+
+      {# Reset password modal (kept outside <td> flow ? Bootstrap moves it) #}
+      <div class="modal fade" id="resetModal{{ u.id }}">
+        <div class="modal-dialog">
+          <div class="modal-content" style="border-radius:0;">
+            <form method="POST" action="{{ url_for('users.reset_password', user_id=u.id) }}">
+              <div class="modal-header">
+                <h5 class="modal-title">Reset Password ? {{ u.username }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <label class="form-label">New password</label>
+                <input type="password" name="new_password" class="form-control"
+                       minlength="6" required>
+                <div class="form-text">Minimum 6 characters.</div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-warning"><i class="bi bi-key"></i> Reset</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="us-empty">
+    <i class="bi bi-people fs-3 d-block mb-2"></i>
+    No users found.
   </div>
+  {% endif %}
 
 </div>
 {% endblock %}

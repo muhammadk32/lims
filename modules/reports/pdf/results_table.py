@@ -1,9 +1,11 @@
 """Results table — grouped by panel, with abnormal highlighting."""
+import re
 from reportlab.lib import colors
 from modules.tests.ranges import (
     resolve_range_for_order as _rrfo,
     critical_for_order as _cfo,
     evaluate_for_order as _efo,
+    pick_range_for_patient as _prfp,
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
@@ -26,7 +28,7 @@ def _results_table(order, previous_map=None, date_labels=None):
 
     previous_map: {test_name_lower: [(date, value), ...]}
     date_labels:  [datetime, datetime]  -- for column headers
-    Returns (Table, abnormal_count, critical_count).
+    Returns (Table, notes_flowables, abnormal_count, critical_count).
     """
     previous_map = previous_map or {}
     date_labels = date_labels or []
@@ -52,10 +54,48 @@ def _results_table(order, previous_map=None, date_labels=None):
         'PanelHdr', parent=styles['Normal'], fontSize=9,
         fontName='Helvetica-Bold', textColor=colors.HexColor('#1e40af'),
     )
+    notes_style = ParagraphStyle(
+        'RangeNotes', parent=styles['Normal'], fontSize=7.5,
+        textColor=colors.HexColor('#495057'), leftIndent=10, spaceBefore=2,
+    )
     panel_sub_style = ParagraphStyle(
         'PanelSub', parent=styles['Normal'], fontSize=8.5,
         textColor=colors.HexColor('#212529'), leftIndent=10,
     )
+
+    def _collect_note(bucket, test, order_):
+        """Append (test_name, note) as a Paragraph to the notes bucket."""
+        try:
+            rng = _prfp(test, getattr(order_, 'patient', None))
+        except Exception:
+            rng = None
+        notes = getattr(rng, 'notes', None) if rng else None
+        if not notes:
+            return
+        plain = re.sub(r'<[^>]+>', ' ', notes)
+        plain = re.sub(r'\s+', ' ', plain).strip()
+        if not plain:
+            return
+        html = f'<b>{test.name}:</b> {plain}'
+        bucket.append(Paragraph(html, notes_style))
+
+    def _append_notes_row(test, order_, n_cols):
+        """Return a notes row (as list) if the matching range has notes, else None."""
+        try:
+            rng = _prfp(test, getattr(order_, 'patient', None))
+        except Exception:
+            rng = None
+        notes = getattr(rng, 'notes', None) if rng else None
+        if not notes:
+            return None
+        # strip HTML tags for PDF (reportlab can't render HTML)
+        import re as _re
+        plain = _re.sub(r'<[^>]+>', ' ', notes)
+        plain = _re.sub(r'\s+', ' ', plain).strip()
+        if not plain:
+            return None
+        blank = Paragraph('', cell_style)
+        return [blank] + [Paragraph(plain, notes_style)] + [blank] * (n_cols - 2)
 
     def fmt_date(d):
         try:
@@ -74,6 +114,8 @@ def _results_table(order, previous_map=None, date_labels=None):
         header_cells.append(Paragraph(fmt_date(d), header_style))
     data = [header_cells]
 
+    notes_flowables = []
+    notes_row_indices = []
     abnormal_rows = []
     critical_rows = []
     row_idx = 1
@@ -117,6 +159,7 @@ def _results_table(order, previous_map=None, date_labels=None):
                     row.append(Paragraph(pv or '-', cell_prev))
                 data.append(row)
                 row_idx += 1
+                _collect_note(notes_flowables, child.test, order)
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
             if flag == 'abnormal':
@@ -134,6 +177,7 @@ def _results_table(order, previous_map=None, date_labels=None):
                 row.append(Paragraph(pv or '-', cell_prev))
             data.append(row)
             row_idx += 1
+            _collect_note(notes_flowables, item.test, order)
 
     # Column widths
     if n_prev > 0:
@@ -176,5 +220,15 @@ def _results_table(order, previous_map=None, date_labels=None):
         style.append(('BACKGROUND', (0, r), (-1, r), colors.HexColor('#f5b7b1')))
         style.append(('TEXTCOLOR', (1, r), (1, r), colors.HexColor('#7f1d1d')))
 
+    # Strip grid + padding from notes rows so they read as prose
+    for r in notes_row_indices:
+        style.append(('LINEABOVE',   (0, r), (-1, r), 0, colors.white))
+        style.append(('LINEBELOW',   (0, r), (-1, r), 0, colors.white))
+        style.append(('LINEBEFORE',  (0, r), (0, r),  0, colors.white))
+        style.append(('LINEAFTER',   (-1, r), (-1, r), 0, colors.white))
+        style.append(('BACKGROUND',  (0, r), (-1, r), colors.white))
+        style.append(('TOPPADDING',  (0, r), (-1, r), 2))
+        style.append(('BOTTOMPADDING', (0, r), (-1, r), 6))
+
     t.setStyle(TableStyle(style))
-    return t, len(abnormal_rows), len(critical_rows)
+    return t, notes_flowables, len(abnormal_rows), len(critical_rows)

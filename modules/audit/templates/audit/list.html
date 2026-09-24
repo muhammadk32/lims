@@ -1,108 +1,235 @@
 {% extends 'base.html' %}
+{% block title %}Audit Log ? LabMS{% endblock %}
 
-{% block title %}Audit Log — LabMS{% endblock %}
+{% block head %}
+<style>
+/* ============================================================
+   Audit Log - dense classical layout
+   ============================================================ */
+.au-page {
+  max-width: 1600px; margin: 0 auto; padding: 10px 20px 30px;
+  font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529;
+}
+.au-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 2px solid #212529; padding-bottom: 5px;
+  margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
+}
+.au-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.au-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.au-count {
+  font-size: 0.76rem; color: #6c757d;
+  font-family: Consolas, Monaco, monospace;
+}
+
+/* Buttons */
+.au-btn {
+  display: inline-block; padding: 4px 12px; font-size: 0.74rem; font-weight: 600;
+  border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; border-radius: 0; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 28px; line-height: 1.6;
+}
+.au-btn:hover { background: #f1f3f5; color: #212529; }
+.au-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.au-btn-primary:hover { background: #146c43; color: #fff; }
+.au-btn-clear { background: #fff; border-color: #dc3545; color: #dc3545; }
+.au-btn-clear:hover { background: #dc3545; color: #fff; }
+
+/* Filter strip */
+.au-filter {
+  background: #f8f9fa; border: 1px solid #dee2e6;
+  padding: 8px 10px; margin-bottom: 8px;
+  display: grid; grid-template-columns: 2fr 1.2fr 1.2fr auto;
+  gap: 8px; align-items: end;
+}
+.au-field label {
+  display: block; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #6c757d; margin-bottom: 2px;
+}
+.au-field input, .au-field select {
+  width: 100%; padding: 3px 8px; border: 1px solid #6c757d;
+  border-radius: 0; font-size: 0.82rem; background: #fff; height: 28px;
+}
+.au-field input:focus, .au-field select:focus { outline: none; border-color: #198754; }
+.au-filter-actions { display: flex; gap: 6px; }
+
+/* Table */
+.au-table {
+  width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
+  font-size: 0.76rem; background: #fff;
+}
+.au-table thead th {
+  background: #212529; color: #fff; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 4px 8px; text-align: left; border: 1px solid #212529; white-space: nowrap;
+}
+.au-table thead th.end { text-align: right; }
+.au-table tbody td {
+  padding: 3px 8px; border: 1px solid #dee2e6; vertical-align: middle;
+}
+.au-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.au-table tbody tr:hover { background: #f1f3f5; }
+.au-table .end { text-align: right; }
+.au-table .when {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.72rem; color: #495057; white-space: nowrap;
+}
+.au-table .summary { font-size: 0.76rem; }
+.au-table .ip {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.72rem; color: #6c757d;
+}
+.au-table code {
+  font-size: 0.72rem; font-family: Consolas, Monaco, monospace;
+  padding: 0 4px; background: #f1f3f5; border: 1px solid #dee2e6;
+}
+.au-table .entity-id {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.72rem; color: #6c757d; margin-left: 3px;
+}
+
+/* User chip */
+.au-user {
+  display: inline-block; padding: 1px 7px;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.03em;
+  font-family: Consolas, Monaco, monospace;
+  background: #e7f1ff; color: #0a58ca; border: 1px solid #b6d4fe;
+}
+
+/* Action chips */
+.au-action {
+  display: inline-block; padding: 1px 7px;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #fff; border-radius: 0; white-space: nowrap;
+}
+.au-action-create  { background: #198754; }
+.au-action-update  { background: #0d6efd; }
+.au-action-delete  { background: #dc3545; }
+.au-action-login   { background: #0dcaf0; color: #055160; }
+.au-action-logout  { background: #6c757d; }
+.au-action-payment { background: #ffc107; color: #664d03; }
+.au-action-result  { background: #198754; }
+.au-action-status  { background: #0dcaf0; color: #055160; }
+.au-action-other   { background: #6c757d; }
+
+/* Empty */
+.au-empty {
+  text-align: center; padding: 40px 20px; color: #6c757d;
+  font-style: italic; border: 1.5px solid #212529; border-top: none; background: #fafbfc;
+}
+
+/* Pagination */
+.au-pagination { display: flex; justify-content: center; margin-top: 10px; }
+.au-pagination .pagination { font-size: 0.78rem; margin: 0; }
+.au-pagination .page-link { border-radius: 0; color: #212529; }
+.au-pagination .page-item.active .page-link {
+  background: #212529; border-color: #212529; color: #fff;
+}
+
+@media (max-width: 900px) {
+  .au-filter { grid-template-columns: 1fr; }
+  .au-table { font-size: 0.7rem; }
+  .au-table thead th, .au-table tbody td { padding: 3px 5px; }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<div class="au-page">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  {# ============ HEADER ============ #}
+  <div class="au-header">
     <div>
-      <h3 class="fw-bold mb-0"><i class="bi bi-shield-check"></i> Audit Log</h3>
-      <p class="text-muted small mb-0">Every action recorded for compliance and debugging</p>
+      <h1 class="au-title"><i class="bi bi-shield-check"></i> Audit Log</h1>
+      <div class="au-subtitle">Every action recorded for compliance and debugging</div>
+    </div>
+    <div class="au-count">
+      {{ logs.total }} entr{{ 'y' if logs.total == 1 else 'ies' }}
+      &nbsp;?&nbsp; page {{ logs.page }} / {{ logs.pages }}
     </div>
   </div>
 
-  <!-- Filters -->
-  <form method="GET" class="row g-2 mb-3">
-    <div class="col-md-5">
-      <input type="text" name="q" value="{{ q }}" class="form-control"
-             placeholder="Search by username or summary...">
+  {# ============ FILTERS ============ #}
+  <form method="GET" class="au-filter">
+    <div class="au-field">
+      <label>Search</label>
+      <input type="text" name="q" value="{{ q }}"
+             placeholder="Username or summary...">
     </div>
-    <div class="col-md-3">
-      <select name="action" class="form-select">
+    <div class="au-field">
+      <label>Action</label>
+      <select name="action">
         <option value="">All actions</option>
         {% for a in actions %}
         <option value="{{ a }}" {% if action == a %}selected{% endif %}>{{ a }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="col-md-2">
-      <select name="entity" class="form-select">
+    <div class="au-field">
+      <label>Entity</label>
+      <select name="entity">
         <option value="">All entities</option>
         {% for e in entities %}
         <option value="{{ e }}" {% if entity == e %}selected{% endif %}>{{ e }}</option>
         {% endfor %}
       </select>
     </div>
-    <div class="col-md-2 d-flex gap-2">
-      <button class="btn btn-outline-primary flex-fill"><i class="bi bi-funnel"></i></button>
+    <div class="au-filter-actions">
+      <button class="au-btn au-btn-primary" type="submit">
+        <i class="bi bi-funnel"></i> Filter
+      </button>
       {% if q or action or entity %}
-      <a href="{{ url_for('audit.index') }}" class="btn btn-outline-danger"><i class="bi bi-x-lg"></i></a>
+      <a href="{{ url_for('audit.index') }}" class="au-btn au-btn-clear">
+        <i class="bi bi-x-lg"></i>
+      </a>
       {% endif %}
     </div>
   </form>
 
-  <div class="card border-0 shadow-sm">
-    <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>When</th>
-            <th>User</th>
-            <th>Action</th>
-            <th>Entity</th>
-            <th>Summary</th>
-            <th>IP</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for log in logs.items %}
-          <tr>
-            <td class="text-muted small text-nowrap">
-              {{ log.created_at | localtime('%Y-%m-%d %H:%M:%S') }}
-            </td>
-            <td>
-              {% if log.username %}
-                <span class="badge bg-primary-subtle text-primary border border-primary">{{ log.username }}</span>
-              {% else %}
-                <span class="text-muted">—</span>
-              {% endif %}
-            </td>
-            <td>
-              {% set badge = {
-                'create': 'success',
-                'update': 'primary',
-                'delete': 'danger',
-                'login': 'info',
-                'logout': 'secondary',
-                'payment': 'warning',
-                'result': 'success',
-                'status': 'info',
-              } %}
-              <span class="badge bg-{{ badge.get(log.action, 'secondary') }} text-dark">
-                {{ log.action }}
-              </span>
-            </td>
-            <td>
-              <code>{{ log.entity }}</code>
-              {% if log.entity_id %}<span class="text-muted">#{{ log.entity_id }}</span>{% endif %}
-            </td>
-            <td class="small">{{ log.summary or '' }}</td>
-            <td class="text-muted small">{{ log.ip_address or '—' }}</td>
-          </tr>
+  {# ============ TABLE ============ #}
+  {% if logs.items %}
+  <table class="au-table">
+    <thead>
+      <tr>
+        <th style="width: 150px;">When</th>
+        <th style="width: 110px;">User</th>
+        <th style="width: 100px;">Action</th>
+        <th style="width: 200px;">Entity</th>
+        <th>Summary</th>
+        <th class="end" style="width: 100px;">IP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs.items %}
+      <tr>
+        <td class="when">{{ log.created_at | localtime('%Y-%m-%d %H:%M:%S') }}</td>
+        <td>
+          {% if log.username %}
+            <span class="au-user">{{ log.username }}</span>
           {% else %}
-          <tr>
-            <td colspan="6" class="text-center text-muted py-4">No audit entries yet.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+            <span class="ip">?</span>
+          {% endif %}
+        </td>
+        <td>
+          <span class="au-action au-action-{{ log.action if log.action in ['create','update','delete','login','logout','payment','result','status'] else 'other' }}">
+            {{ log.action }}
+          </span>
+        </td>
+        <td>
+          <code>{{ log.entity }}</code>{% if log.entity_id %}<span class="entity-id">#{{ log.entity_id }}</span>{% endif %}
+        </td>
+        <td class="summary">{{ log.summary or '' }}</td>
+        <td class="end ip">{{ log.ip_address or '?' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
   {% if logs.pages > 1 %}
-  <nav class="mt-3">
-    <ul class="pagination justify-content-center">
+  <nav class="au-pagination">
+    <ul class="pagination pagination-sm">
       <li class="page-item {% if not logs.has_prev %}disabled{% endif %}">
         <a class="page-link" href="{{ url_for('audit.index', page=logs.prev_num, q=q, action=action, entity=entity) }}">Previous</a>
       </li>
@@ -112,6 +239,13 @@
       </li>
     </ul>
   </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="au-empty">
+    <i class="bi bi-shield-check fs-3 d-block mb-2"></i>
+    No audit entries yet.
+  </div>
   {% endif %}
 
 </div>
