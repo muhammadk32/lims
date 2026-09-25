@@ -54,6 +54,15 @@ def list_orders():
         date_from=date_from, date_to=date_to,
     )
 
+    from datetime import timedelta
+    from calendar import monthrange
+
+    today_d   = date.today()
+    yesterday = (today_d - timedelta(days=1)).isoformat()
+    last7     = (today_d - timedelta(days=6)).isoformat()   # last 7 days inclusive of today
+    last30    = (today_d - timedelta(days=29)).isoformat()
+    month_start = today_d.replace(day=1).isoformat()
+
     return render_template(
         'orders/list.html',
         orders=orders,
@@ -64,7 +73,11 @@ def list_orders():
         date_from=date_from_str,
         date_to=date_to_str,
         stats=stats,
-        today=today.strftime('%Y-%m-%d'),
+        today=today_d.isoformat(),
+        yesterday=yesterday,
+        last7=last7,
+        last30=last30,
+        month_start=month_start,
     )
 
 
