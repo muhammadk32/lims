@@ -180,4 +180,28 @@ def enter_item(item_id):
             return redirect(url_for('results.enter', order_id=item.order_id))
         return redirect(url_for('results.enter_item', item_id=item.id))
 
-    return render_template('results/enter_item.html', item=item, order=item.order)
+    # Load culture master lists if this test uses them
+    antibiotics = []
+    bacteria    = []
+    fmt = (item.test.result_format or '').lower()
+    if fmt in ('culture', 'culture_sensitivity'):
+        from core.models import Antibiotic, Bacterium
+        from core.models import CultureAntibiotic
+        antibiotics = Antibiotic.query.filter_by(is_active=True).order_by(
+            Antibiotic.group.asc(), Antibiotic.sort_order.asc()).all()
+        bacteria = Bacterium.query.filter_by(is_active=True).order_by(
+            Bacterium.sort_order.asc()).all()
+
+        # Load any saved per-antibiotic rows into a dict {ab_id: row}
+        saved_rows = CultureAntibiotic.query.filter_by(order_item_id=item.id).all()
+    else:
+        saved_rows = []
+
+    return render_template(
+        'results/enter_item.html',
+        item=item,
+        order=item.order,
+        antibiotics=antibiotics,
+        bacteria=bacteria,
+        saved_ab_rows={r.antibiotic_id: r for r in saved_rows},
+    )

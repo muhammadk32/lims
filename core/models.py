@@ -256,3 +256,46 @@ class Antibiotic(BaseModel):
 
     def __repr__(self):
         return f'<Antibiotic {self.short_name or self.name} ({self.group})>'
+
+# ============================================================
+# Bacteria master list (used by Culture & Sensitivity tests)
+# ============================================================
+class Bacterium(BaseModel):
+    __tablename__ = 'bacteria'
+
+    name       = db.Column(db.String(120), nullable=False, index=True)
+    short_name = db.Column(db.String(30),  nullable=True)
+    sort_order = db.Column(db.Integer,    default=0, nullable=False)
+    is_active  = db.Column(db.Boolean,    default=True, nullable=False)
+
+    def __repr__(self):
+        return f'<Bacterium {self.name}>'
+
+# ============================================================
+# CultureAntibiotic ? one row per (order_item, antibiotic)
+# ============================================================
+class CultureAntibiotic(BaseModel):
+    __tablename__ = 'culture_antibiotics'
+
+    order_item_id = db.Column(
+        db.Integer,
+        db.ForeignKey('order_items.id', ondelete='CASCADE'),
+        nullable=False, index=True,
+    )
+    antibiotic_id = db.Column(
+        db.Integer,
+        db.ForeignKey('antibiotics.id'),
+        nullable=False, index=True,
+    )
+    # MIC values for 3 dilution levels
+    mic_1 = db.Column(db.String(20), nullable=True)
+    s_1   = db.Column(db.String(4),  nullable=True)   # S / I / R
+    mic_2 = db.Column(db.String(20), nullable=True)
+    s_2   = db.Column(db.String(4),  nullable=True)
+    mic_3 = db.Column(db.String(20), nullable=True)
+    s_3   = db.Column(db.String(4),  nullable=True)
+
+    antibiotic = db.relationship('Antibiotic', backref='culture_rows')
+
+    def __repr__(self):
+        return f'<CultureAntibiotic item={self.order_item_id} ab={self.antibiotic_id}>'

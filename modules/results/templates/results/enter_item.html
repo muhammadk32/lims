@@ -178,7 +178,17 @@
           {% endif %}
         </tbody>
       </table>
-    </div></form>
+    </div>
+
+    {# ============ FORMAT-SPECIFIC DETAIL BLOCKS ============ #}
+    {% set fmt = (item.test.result_format or '').lower() %}
+    {% if fmt in ('culture', 'culture_sensitivity') %}
+      {% include 'results/_culture_block.html' %}
+    {% elif fmt in ('microscopy', 'microscopy_text', 'text_fields') %}
+      {% include 'results/_microscopy_block.html' %}
+    {% endif %}
+
+    </form>
 
 </div>
 {% endblock %}

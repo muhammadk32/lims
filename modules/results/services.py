@@ -305,3 +305,87 @@ def save_item_result(item, form, user):
     log_action('result', 'order_item', item.id,
                f'Entered result for {item.test.code} ({item.test.name})')
     return item
+
+# ============================================================
+# Culture fields save (used by /results/item/<id>)
+# ============================================================
+def save_culture_fields(item, form, user):
+    """Save all culture_* fields on the item's Result plus
+    the CultureAntibiotic grid rows."""
+    from .models import Result
+    from core.models import CultureAntibiotic
+    from datetime import datetime
+
+    r = Result.query.filter_by(order_item_id=item.id).first()
+    if r is None:
+        r = Result(order_item_id=item.id)
+        db.session.add(r)
+
+    def _g(k):
+        v = form.get(k)
+        return (v or '').strip() or None
+
+    # Single-value fields
+    r.culture_specimen      = _g(f'culture_specimen_{item.id}')
+    r.culture_no_sensitive  = _g(f'culture_no_sensitive_{item.id}')
+    r.culture_phage_name    = _g(f'culture_phage_name_{item.id}')
+    r.culture_pus_only      = _g(f'culture_pus_only_{item.id}')
+    r.culture_growth_1      = _g(f'culture_growth_1_{item.id}')
+    r.culture_growth_2      = _g(f'culture_growth_2_{item.id}')
+    r.culture_growth_3      = _g(f'culture_growth_3_{item.id}')
+    r.culture_colony_1      = _g(f'culture_colony_1_{item.id}')
+    r.culture_colony_2      = _g(f'culture_colony_2_{item.id}')
+    r.culture_colony_3      = _g(f'culture_colony_3_{item.id}')
+    r.culture_micro_text    = _g(f'culture_microscopy_text_{item.id}')
+    r.culture_micro_note    = _g(f'culture_microscopy_note_{item.id}')
+    r.culture_direct_text   = _g(f'culture_direct_text_{item.id}')
+    r.culture_direct_note   = _g(f'culture_direct_note_{item.id}')
+    r.culture_zn_text       = _g(f'culture_zn_text_{item.id}')
+    r.culture_zn_note       = _g(f'culture_zn_note_{item.id}')
+    r.culture_gram_text     = _g(f'culture_gram_text_{item.id}')
+    r.culture_gram_note     = _g(f'culture_gram_note_{item.id}')
+    r.culture_comments_dd   = _g(f'culture_comments_dd_{item.id}')
+    r.culture_comments_txt  = _g(f'culture_comments_txt_{item.id}')
+
+    # Bacteria ? multi-select
+    bacteria_ids = form.getlist(f'culture_bacteria_{item.id}')
+    r.culture_bacteria_ids = ','.join(bacteria_ids) if bacteria_ids else None
+
+    r.entered_at = datetime.utcnow()
+    if user is not None:
+        r.entered_by_id = getattr(user, 'id', None)
+
+    # Antibiotic grid ? scan all form keys with pattern ca_*_<item>_<ab>
+    prefix = f'_{item.id}_'
+    ab_values = {}   # {ab_id: {'mic_1': ..., 's_1': ..., ...}}
+    for key in form:
+        if not key.startswith('ca_'):
+            continue
+        # key like ca_mic_1_1303_5  or ca_s_2_1303_5
+        try:
+            field, rest = key.split('_', 2)[0] + '_' + key.split('_', 2)[1], key.split('_', 2)[2]
+            # rest looks like "1303_5"
+            item_part, ab_part = rest.split('_', 1)
+            if int(item_part) != item.id:
+                continue
+            ab_id = int(ab_part)
+        except (ValueError, IndexError):
+            continue
+
+        # field is 'ca_mic_1', 'ca_s_1', etc
+        val = (form.get(key) or '').strip() or None
+        ab_values.setdefault(ab_id, {})[field.replace('ca_', '')] = val
+
+    for ab_id, vals in ab_values.items():
+        row = CultureAntibiotic.query.filter_by(
+            order_item_id=item.id, antibiotic_id=ab_id).first()
+        if row is None:
+            row = CultureAntibiotic(order_item_id=item.id, antibiotic_id=ab_id)
+            db.session.add(row)
+        for k in ('mic_1','s_1','mic_2','s_2','mic_3','s_3'):
+            setattr(row, k, vals.get(k))
+
+    # also save the short "value" so the item counts as filled
+    item.result_value = r.culture_specimen or 'Culture'
+    db.session.commit()
+    return r

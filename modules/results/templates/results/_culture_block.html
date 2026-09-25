@@ -1,4 +1,4 @@
-{# Culture & Sensitivity block ?organism text + S/I/R per antibiotic #}
+{# Culture & Sensitivity ? ADAM-style entry form #}
 <div class="cul-block" data-item="{{ item.id }}">
   <div class="cul-block-hd">
     <i class="bi bi-bug"></i>
@@ -6,41 +6,231 @@
     <span class="text-muted small ms-2">{{ item.test.code }}</span>
   </div>
 
-  <div class="cul-row">
-    <span class="cul-lbl">Organism:</span>
-    <input type="text" name="culture_organism_{{ item.id }}"
-           value="{{ item.result_organism if item.result_organism else '' }}"
-           class="cul-input" placeholder="e.g. Escherichia coli">
+  {# ============ TABS ============ #}
+  <div class="cul-tabs">
+    <div class="cul-tab active" data-cul-tab="culture">Culture</div>
+    <div class="cul-tab" data-cul-tab="growth">Culture Growth</div>
+    <div class="cul-tab" data-cul-tab="comments">Comments</div>
   </div>
 
-  <table class="cul-table">
-    <thead>
-      <tr>
-        <th style="width:260px;">Antibiotic</th>
-        <th style="width:180px;">Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% set abx = [
-        'Imipenem', 'Meropenem', 'Amikacin', 'Gentamicin',
-        'Ceftriaxone', 'Cefotaxime', 'Ciprofloxacin',
-        'Levofloxacin', 'Ampicillin', 'Amoxicillin-Clavulanate',
-        'Piperacillin-Tazobactam', 'Trimethoprim-Sulfamethoxazole',
-        'Nitrofurantoin', 'Colistin'
-      ] %}
-      {% for ab in abx %}
-      <tr>
-        <td>{{ ab }}</td>
-        <td>
-          <select name="culture_abx_{{ item.id }}_{{ loop.index }}" class="cul-select">
-            <option value="">?</option>
-            <option value="S">Sensitive (S)</option>
-            <option value="I">Intermediate (I)</option>
-            <option value="R">Resistant (R)</option>
-          </select>
-        </td>
-      </tr>
+  {% set r = item.result %}
+  {% if r and r is sequence and r is not string and r is not mapping %}
+    {% set r = r[0] if r|length > 0 else None %}
+  {% endif %}
+
+  {# ============ CULTURE TAB ============ #}
+  <div class="cul-pane active" data-cul-pane="culture">
+    <div class="cul-grid">
+      <div class="cul-row">
+        <span class="cul-lbl">Specimen:</span>
+        <input type="text" name="culture_specimen_{{ item.id }}" class="cul-input"
+               value="{{ r.culture_specimen if r else '' }}"
+               placeholder="e.g. Urine">
+      </div>
+      <div class="cul-row">
+        <span class="cul-lbl">No. Of Sensitive:</span>
+        <select name="culture_no_sensitive_{{ item.id }}" class="cul-select">
+          {% for v in ['No Sensitive','1 Sensitive','2 Sensitive','3 Sensitive','4 Sensitive','5+ Sensitive'] %}
+          <option value="{{ v }}" {% if r and r.culture_no_sensitive == v %}selected{% endif %}>{{ v }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="cul-row cul-row-full">
+        <span class="cul-lbl">Bacteria:</span>
+        <select name="culture_bacteria_{{ item.id }}" class="cul-input" multiple size="8">
+          {% set saved = (r.culture_bacteria_ids.split(',') if r and r.culture_bacteria_ids else []) %}
+          {% for b in bacteria %}
+          <option value="{{ b.id }}" {% if b.id|string in saved %}selected{% endif %}>
+            {{ b.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="cul-row cul-row-full">
+        <span class="cul-lbl">Phage Name:</span>
+        <textarea name="culture_phage_name_{{ item.id }}" class="cul-textarea" rows="3"
+                  placeholder="Direct Microscopy: Z.N / Fluorescent stain...">{{ r.culture_phage_name if r else '' }}</textarea>
+      </div>
+
+      <div class="cul-row">
+        <span class="cul-lbl">PUS C/S Only:</span>
+        <select name="culture_pus_only_{{ item.id }}" class="cul-select">
+          <option value="">Please Select</option>
+          {% for v in ['Yes','No'] %}
+          <option value="{{ v }}" {% if r and r.culture_pus_only == v %}selected{% endif %}>{{ v }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div></div>
+
+      <div class="cul-row cul-row-full">
+        <span class="cul-lbl">Culture Growth 1:</span>
+        <textarea name="culture_growth_1_{{ item.id }}" class="cul-textarea" rows="2">{{ r.culture_growth_1 if r else '' }}</textarea>
+      </div>
+      <div class="cul-row cul-row-full">
+        <span class="cul-lbl">Culture Growth 2:</span>
+        <textarea name="culture_growth_2_{{ item.id }}" class="cul-textarea" rows="2">{{ r.culture_growth_2 if r else '' }}</textarea>
+      </div>
+      <div class="cul-row cul-row-full">
+        <span class="cul-lbl">Culture Growth 3:</span>
+        <textarea name="culture_growth_3_{{ item.id }}" class="cul-textarea" rows="2">{{ r.culture_growth_3 if r else '' }}</textarea>
+      </div>
+
+      {% for i in [1, 2, 3] %}
+      <div class="cul-row">
+        <span class="cul-lbl">Colony Count {{ i }}:</span>
+        <select name="culture_colony_{{ i }}_{{ item.id }}" class="cul-select">
+          <option value="">Please Select</option>
+          {% for v in ['No growth','Scanty','1+','2+','3+','Heavy','> 10^5 CFU/mL','< 10^4 CFU/mL'] %}
+          <option value="{{ v }}"
+            {% set key = 'culture_colony_' ~ i %}
+            {% if r and r[key] == v %}selected{% endif %}>{{ v }}</option>
+          {% endfor %}
+        </select>
+      </div>
       {% endfor %}
-    </tbody>
-  </table>
+    </div>
+  </div>
+
+  {# ============ CULTURE GROWTH TAB ============ #}
+  <div class="cul-pane" data-cul-pane="growth">
+    {% for f in [
+      ('microscopy', 'Microscopy',  r.culture_micro_text  if r else '', r.culture_micro_note  if r else ''),
+      ('direct',     'Direct',      r.culture_direct_text if r else '', r.culture_direct_note if r else ''),
+      ('zn',         'Z.N Stain',   r.culture_zn_text     if r else '', r.culture_zn_note     if r else ''),
+      ('gram',       'Gram Stain',  r.culture_gram_text   if r else '', r.culture_gram_note   if r else ''),
+    ] %}
+    <div class="cul-gr-row">
+      <div class="cul-row">
+        <span class="cul-lbl">{{ f[1] }}:</span>
+        <input type="text" name="culture_{{ f[0] }}_text_{{ item.id }}" class="cul-input"
+               value="{{ f[2] }}">
+      </div>
+      <textarea name="culture_{{ f[0] }}_note_{{ item.id }}" class="cul-textarea" rows="3"
+                placeholder="{{ f[1] }} details...">{{ f[3] }}</textarea>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ============ COMMENTS TAB ============ #}
+  <div class="cul-pane" data-cul-pane="comments">
+    <div class="cul-row">
+      <span class="cul-lbl">Comments:</span>
+      <select name="culture_comments_dd_{{ item.id }}" class="cul-select">
+        <option value="">Please Select</option>
+        {% for v in ['Final report','Preliminary report','Provisional report','Repeat advised'] %}
+        <option value="{{ v }}" {% if r and r.culture_comments_dd == v %}selected{% endif %}>{{ v }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <textarea name="culture_comments_txt_{{ item.id }}" class="cul-textarea" rows="10"
+              placeholder="Free-text comments...">{{ r.culture_comments_txt if r else '' }}</textarea>
+  </div>
+
+  {# ============ BOTTOM: ANTIBIOTIC GRID (always visible) ============ #}
+  <div class="cul-ast-hd">Antibiotic Sensitivity</div>
+  <div class="cul-ast-wrap">
+    <table class="cul-ast">
+      <thead>
+        <tr>
+          <th style="width:160px;">Group Name</th>
+          <th style="width:200px;">Medicine Name</th>
+          <th style="width:70px;">Short</th>
+          <th>MIC-I</th><th style="width:60px;">S-I</th>
+          <th>MIC-II</th><th style="width:60px;">S-II</th>
+          <th>MIC-III</th><th style="width:60px;">S-III</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ab in antibiotics %}
+        {% set row = saved_ab_rows.get(ab.id) %}
+        <tr>
+          <td class="cul-ast-group">{{ ab.group or '\u2014' }}</td>
+          <td class="cul-ast-med">{{ ab.name }}</td>
+          <td class="cul-ast-short">{{ ab.short_name or '' }}</td>
+          <td><input type="text" name="ca_mic_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+                     value="{{ row.mic_1 if row and row.mic_1 else '' }}"></td>
+          <td>
+            <select name="ca_s_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
+              <option value="{{ k }}" {% if row and row.s_1 == k %}selected{% endif %}>{{ v }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="text" name="ca_mic_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+                     value="{{ row.mic_2 if row and row.mic_2 else '' }}"></td>
+          <td>
+            <select name="ca_s_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
+              <option value="{{ k }}" {% if row and row.s_2 == k %}selected{% endif %}>{{ v }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="text" name="ca_mic_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+                     value="{{ row.mic_3 if row and row.mic_3 else '' }}"></td>
+          <td>
+            <select name="ca_s_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
+              <option value="{{ k }}" {% if row and row.s_3 == k %}selected{% endif %}>{{ v }}</option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<style>
+.cul-tabs { display:flex; border-bottom:2px solid #212529; margin: 0 12px; }
+.cul-tab { padding:5px 18px; font-size:0.7rem; font-weight:700; text-transform:uppercase;
+           letter-spacing:0.04em; color:#495057; background:#f8f9fa;
+           border:1px solid #dee2e6; border-bottom:none; cursor:pointer;
+           margin-bottom:-2px; user-select:none; }
+.cul-tab:hover { background:#e9ecef; }
+.cul-tab.active { background:#fff; color:#198754; border-color:#212529;
+                  border-bottom-color:#fff; padding-bottom:6px; }
+.cul-pane { display:none; padding:12px; }
+.cul-pane.active { display:block; }
+
+.cul-grid { display:grid; grid-template-columns: 1fr 1fr; gap:8px 32px; }
+.cul-row { display:grid; grid-template-columns: 150px 1fr; align-items:center; gap:10px; }
+.cul-row-full { grid-column: 1 / -1; align-items: start; }
+.cul-row .cul-lbl { font-size:0.68rem; font-weight:700; text-transform:uppercase;
+                    letter-spacing:0.05em; color:#495057; text-align:right; }
+.cul-input, .cul-select, .cul-textarea {
+  width:100%; padding:4px 8px; border:1px solid #adb5bd; border-radius:4px;
+  font-size:0.82rem; background:#fff; font-family:inherit; box-sizing:border-box;
+}
+.cul-input, .cul-select { height:28px; }
+.cul-textarea { min-height:60px; resize:vertical; }
+.cul-input:focus, .cul-select:focus, .cul-textarea:focus {
+  outline:none; border-color:#198754; box-shadow:0 0 0 2px rgba(25,135,84,0.12);
+}
+select[multiple].cul-input { height:auto; padding:4px; }
+
+.cul-gr-row { margin-bottom: 12px; }
+.cul-gr-row .cul-row { margin-bottom: 6px; }
+
+.cul-ast-hd { background:#212529; color:#fff; padding:5px 12px; font-size:0.72rem;
+              font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+              margin-top: 10px; }
+.cul-ast-wrap { max-height:420px; overflow-y:auto; border:1px solid #adb5bd; }
+.cul-ast { width:100%; border-collapse:collapse; font-size:0.74rem; }
+.cul-ast thead th { background:#e9ecef; position:sticky; top:0; z-index:1;
+  font-size:0.6rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.05em; padding:3px 6px; border:1px solid #adb5bd; text-align:left; }
+.cul-ast tbody td { padding:2px 6px; border:1px solid #dee2e6; vertical-align:middle; }
+.cul-ast tbody tr:nth-child(even) { background:#fbfcfd; }
+.cul-ast-group { font-size:0.68rem; color:#495057; text-transform:uppercase;
+                 letter-spacing:0.03em; }
+.cul-ast-med { font-weight:600; }
+.cul-ast-short { font-family:Consolas, Monaco, monospace; font-weight:700; color:#0d6efd; }
+.cul-ast-input { width:100%; height:22px; padding:1px 4px; border:1px solid #adb5bd;
+                 border-radius:3px; font-size:0.72rem; font-family:Consolas, Monaco, monospace; }
+.cul-ast-select { width:100%; height:22px; padding:1px 4px; border:1px solid #adb5bd;
+                  border-radius:3px; font-size:0.72rem; font-weight:700; }
+</style>
