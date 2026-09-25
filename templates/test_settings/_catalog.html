@@ -17,7 +17,8 @@
   </div>
 </div>
 
-<form method="GET" action="{{ url_for('tests.index', tab='catalog') }}" class="lt-filter">
+<form method="GET" action="{{ url_for('tests.index') }}" class="lt-filter">
+  <input type="hidden" name="tab" value="catalog">
   <div class="lt-field">
     <label>Search</label>
     <input type="text" name="q" value="{{ q }}" placeholder="Search by name or code...">

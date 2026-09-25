@@ -8,7 +8,8 @@
   <div class="tf-count">{{ tests|length }} test{{ 's' if tests|length != 1 }}</div>
 </div>
 
-<form method="GET" action="{{ url_for('tests.index', tab='formats') }}" class="tf-filter">
+<form method="GET" action="{{ url_for('tests.index') }}" class="tf-filter">
+  <input type="hidden" name="tab" value="formats">
   <div class="tf-field">
     <label>Search</label>
     <input type="text" name="q" value="{{ q or '' }}" placeholder="Search by code or name...">
