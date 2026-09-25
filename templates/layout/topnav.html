@@ -165,13 +165,52 @@
     </div>
     {% endif %}
 
-    <!-- Lab Test Settings (top-level, admin only) -->
+    <!-- Lab Test Settings (top-level dropdown, admin only) -->
     {% if current_user.role == 'admin' %}
-    <a href="{{ url_for('tests.list_tests') }}"
-       class="topnav-link {% if request.path.startswith('/settings/tests') %}active{% endif %}">
-      <i class="bi bi-sliders2"></i><span>Lab Test Settings</span>
-    </a>
+    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','units','bulk','previews'] or request.path.startswith('/settings/tests') %}
+    <div class="dropdown d-inline-block">
+      <a href="#" class="topnav-link {% if lts_active %}active{% endif %} dropdown-toggle"
+         data-bs-toggle="dropdown" aria-expanded="false" role="button">
+        <i class="bi bi-sliders2"></i><span>Lab Test Settings</span>
+      </a>
+      <ul class="dropdown-menu lts-nav-menu">
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='catalog') }}"><i class="bi bi-clipboard2-pulse"></i> Catalog</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='formats') }}"><i class="bi bi-sliders2"></i> Formats</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='panels') }}"><i class="bi bi-collection"></i> Panels</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='units') }}"><i class="bi bi-rulers"></i> Units &amp; Ranges</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='bulk') }}"><i class="bi bi-upload"></i> Bulk Actions</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='previews') }}"><i class="bi bi-eye"></i> Previews</a></li>
+      </ul>
+    </div>
     {% endif %}
 
   </div>
+
+<style>
+.lts-nav-menu {
+  border-radius: 0;
+  border: 1.5px solid #212529;
+  min-width: 220px;
+  font-size: 0.82rem;
+  padding: 4px 0;
+  margin-top: 4px;
+}
+.lts-nav-menu .dropdown-item {
+  padding: 6px 14px;
+  color: #212529;
+}
+.lts-nav-menu .dropdown-item:hover {
+  background: #212529;
+  color: #fff;
+}
+.lts-nav-menu .dropdown-item i {
+  width: 20px;
+  margin-right: 6px;
+  color: #198754;
+}
+.lts-nav-menu .dropdown-item:hover i { color: #fff; }
+.topnav-link.dropdown-toggle::after { margin-left: 4px; }
+</style>
+
 </nav>

@@ -126,6 +126,16 @@ class LabSettings(BaseModel):
     # --- Currency ---
     currency_symbol = db.Column(db.String(10), nullable=False, default='Rs')
 
+    # --- PDF header layout ---
+    # 'centered' (default) | 'left' | 'split'
+    header_style = db.Column(db.String(20), nullable=False, default='centered')
+
+    # --- Report header detail ---
+    header_logo_size    = db.Column(db.String(10), nullable=False, default='medium')  # small/medium/large
+    header_show_divider = db.Column(db.Boolean,    nullable=False, default=True)
+    header_divider_color= db.Column(db.String(20), nullable=True)   # None = use primary_color
+    header_show_contact = db.Column(db.Boolean,    nullable=False, default=True)
+
     # ---------- Helpers ----------
     @classmethod
     def get(cls):

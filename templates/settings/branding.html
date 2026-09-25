@@ -57,6 +57,41 @@
                 {{ form.primary_color.label(class="form-label fw-semibold") }}
                 <div class="d-flex gap-2">
                   {{ form.primary_color(class="form-control form-control-color", type="color") }}
+
+
+                </div>
+              </div>
+
+              <div class="col-12">
+                {{ form.header_style.label(class="form-label fw-semibold") }}
+                {{ form.header_style(class="form-select") }}
+                <small class="text-muted">
+                  Choose how the logo and lab name appear at the top of printed reports and invoices.
+                </small>
+              </div>
+
+              <div class="col-md-4">
+                {{ form.header_logo_size.label(class="form-label fw-semibold") }}
+                {{ form.header_logo_size(class="form-select") }}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Divider line</label>
+                <div class="form-check">
+                  {{ form.header_show_divider(class="form-check-input") }}
+                  <label class="form-check-label">Show divider under header</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                {{ form.header_divider_color.label(class="form-label fw-semibold") }}
+                <div class="d-flex gap-2">
+                  {{ form.header_divider_color(class="form-control form-control-color", type="color") }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-check">
+                  {{ form.header_show_contact(class="form-check-input") }}
+                  <label class="form-check-label fw-semibold">Show contact info in header</label>
                 </div>
               </div>
 

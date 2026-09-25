@@ -49,6 +49,11 @@ def branding():
         settings.license_no = form.license_no.data or ''
         settings.footer_note = form.footer_note.data or ''
         settings.primary_color = (form.primary_color.data or '#0d6efd').strip()
+        settings.header_style = (form.header_style.data or 'centered').strip()
+        settings.header_logo_size    = (form.header_logo_size.data or 'medium').strip()
+        settings.header_show_divider = bool(form.header_show_divider.data)
+        settings.header_divider_color= (form.header_divider_color.data or '').strip() or None
+        settings.header_show_contact = bool(form.header_show_contact.data)
 
         # --- Logo upload ---
         file = request.files.get('logo')

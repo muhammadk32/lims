@@ -25,6 +25,11 @@ _DEFAULT_LAB = {
     'primary_color': '#0d6efd',
     'footer_note': '',
     'currency_symbol': 'Rs',
+    'header_style': 'centered',
+    'header_logo_size': 'medium',
+    'header_show_divider': True,
+    'header_divider_color': None,
+    'header_show_contact': True,
 }
 
 
@@ -57,6 +62,11 @@ def _lab_dict_from_settings(s):
         'primary_color': s.primary_color or '#0d6efd',
         'footer_note': s.footer_note or '',
         'currency_symbol': getattr(s, 'currency_symbol', None) or 'Rs',
+        'header_style':  getattr(s, 'header_style', None) or 'centered',
+        'header_logo_size':    getattr(s, 'header_logo_size',    None) or 'medium',
+        'header_show_divider': bool(getattr(s, 'header_show_divider', True)),
+        'header_divider_color':getattr(s, 'header_divider_color',None),
+        'header_show_contact': bool(getattr(s, 'header_show_contact', True)),
     }
 
 

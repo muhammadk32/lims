@@ -377,6 +377,7 @@
         <td class="center">
           <input type="checkbox" class="lv-mini-checkbox item-check"
                  value="{{ order.id }}"
+                 data-items="{{ order.pending_items | map(attribute='id') | join(',') }}"
                  onchange="updateBulkCount();">
         </td>
         <td>
@@ -543,8 +544,14 @@
   };
 
   window.bulkApprove = function () {
-    var ids = Array.from(document.querySelectorAll('.item-check:checked')).map(function (c) { return c.value; });
-    if (!ids.length) { alert('Select at least one order.'); return; }
+    var ids = [];
+    document.querySelectorAll('.item-check:checked').forEach(function (c) {
+      var raw = (c.dataset.items || '').trim();
+      if (raw) {
+        raw.split(',').forEach(function (x) { if (x) ids.push(x.trim()); });
+      }
+    });
+    if (!ids.length) { alert('Select at least one order with pending items.'); return; }
     if (!confirm('Approve all pending items in the selected order(s)?')) return;
 
     var form = document.createElement('form');

@@ -35,8 +35,13 @@ def save_order_results(order, form, user):
 
     # --- 1. Apply submitted values ---
     for item in order.items:
-        value = form.get(f'result_value_{item.id}', '').strip()
-        notes = form.get(f'result_notes_{item.id}', '').strip()
+        key_v = f'result_value_{item.id}'
+        key_n = f'result_notes_{item.id}'
+        # SKIP items not present in the form ? prevents wiping previously-saved values
+        if key_v not in form:
+            continue
+        value = form.get(key_v, '').strip()
+        notes = form.get(key_n, '').strip()
         item.result_value = value or None
         item.result_notes = notes or None
 
