@@ -398,8 +398,8 @@ function togglePatient(pid) {
   var chev = document.getElementById('chev-' + pid);
   if (!visits) return;
   var open = visits.style.display !== 'none';
-  visits.style.display = open ? 'none' : 'block';
-  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+  visits.style.display = open ?'none' : 'block';
+  if (chev) chev.style.transform = open ?'rotate(0deg)' : 'rotate(90deg)';
 }
 
 // Auto-expand if only one patient in results

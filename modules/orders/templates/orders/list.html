@@ -471,7 +471,7 @@
               {% if o.status == 'cancelled' and current_user.role == 'admin' %}
               <li>
                 <form method="POST" action="{{ url_for('orders.un_cancel_order', order_id=o.id) }}" class="d-inline"
-                      onsubmit="return confirm('Restore this cancelled order? Any refund will be reversed.');">
+                      onsubmit="return confirm('Restore this cancelled order?Any refund will be reversed.');">
                   <button type="submit" class="dropdown-item text-success">
                     <i class="bi bi-arrow-counterclockwise"></i> Un-cancel Order
                   </button>

@@ -282,7 +282,7 @@ if ($ts) {
         data.forEach(t => {
           const div = document.createElement('div');
           div.className = 'eo-search-result';
-          div.innerHTML = '<div><strong>' + t.name + '</strong><div style="font-size:0.72rem;color:#6c757d;">' + t.code + (t.is_panel ? ' · Panel' : '') + '</div></div><div class="price">' + (t.price || 0) + '</div>';
+          div.innerHTML = '<div><strong>' + t.name + '</strong><div style="font-size:0.72rem;color:#6c757d;">' + t.code + (t.is_panel ?' · Panel' : '') + '</div></div><div class="price">' + (t.price || 0) + '</div>';
           div.addEventListener('click', () => addTestRow(t));
           $tsr.appendChild(div);
         });
@@ -308,7 +308,7 @@ function addTestRow(t) {
   row.innerHTML =
     '<div>' +
       '<input type="hidden" name="test_ids" value="' + t.id + '" class="test-id-input">' +
-      '<div class="name">' + t.name + (t.is_panel ? ' <span class="code">(Panel)</span>' : '') + '</div>' +
+      '<div class="name">' + t.name + (t.is_panel ?' <span class="code">(Panel)</span>' : '') + '</div>' +
       '<div class="code">' + t.code + ' · ' + (t.price || 0) + '</div>' +
     '</div>' +
     '<button type="button" class="remove" onclick="removeTest(this)">Remove</button>';

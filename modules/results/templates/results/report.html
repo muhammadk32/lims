@@ -6,7 +6,7 @@
 .abnormal-row.critical-row{background:#fee2e2 !important;}
 </style>
 <meta charset="UTF-8">
-<title>Report â€” Lab # {{ order.order_code }}</title>
+<title>Report — Lab # {{ order.order_code }}</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 @page { size: A4; margin: 12mm; }
@@ -243,11 +243,11 @@ table.rep-table tr.child td.test-name {
     </div>
     <div class="row"><span class="key">Age / Gender:</span>
       <span class="val">
-        {{ order.patient.compute_age() or 'â€”' }} / {{ order.patient.gender or 'â€”' }}
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
       </span>
     </div>
     <div class="row"><span class="key">Phone:</span>
-      <span class="val">{{ order.patient.phone or 'â€”' }}</span>
+      <span class="val">{{ order.patient.phone or '—' }}</span>
     </div>
     <div class="row"><span class="key">Registered On:</span>
       <span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span>
@@ -291,12 +291,12 @@ table.rep-table tr.child td.test-name {
             <tr class="child">
               <td class="test-name">{{ child.test.name }}</td>
               <td class="result-val">
-                {% if child.result_value %}{{ child.result_value }}{% else %}â€”{% endif %}
+                {% if child.result_value %}{{ child.result_value }}{% else %}—{% endif %}
                 {% if child.result_notes %}
                   <div class="notes">{{ child.result_notes }}</div>
                 {% endif %}
               </td>
-              <td class="unit">{{ child.test.unit or 'â€”' }}</td>
+              <td class="unit">{{ child.test.unit or '—' }}</td>
               <td class="range">{{ rng(child.test, order) or '—' }}</td>
             </tr>
           {% endfor %}
@@ -305,12 +305,12 @@ table.rep-table tr.child td.test-name {
           <tr>
             <td class="test-name">{{ item.test.name }}</td>
             <td class="result-val">
-              {% if item.result_value %}{{ item.result_value }}{% else %}â€”{% endif %}
+              {% if item.result_value %}{{ item.result_value }}{% else %}—{% endif %}
               {% if item.result_notes %}
                 <div class="notes">{{ item.result_notes }}</div>
               {% endif %}
             </td>
-            <td class="unit">{{ item.test.unit or 'â€”' }}</td>
+            <td class="unit">{{ item.test.unit or '—' }}</td>
             <td class="range">{{ rng(item.test, order) or '—' }}</td>
           </tr>
         {% endif %}
@@ -324,7 +324,7 @@ table.rep-table tr.child td.test-name {
   {# ============ FOOTER ============ #}
   <div class="rep-footer">
     <div class="left">
-      Online Reporting: {{ branding.website or branding.email or 'â€”' }}
+      Online Reporting: {{ branding.website or branding.email or '—' }}
     </div>
     <div class="right">
       Lab #: {{ order.order_code }}

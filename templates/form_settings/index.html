@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Reception Form Settings ? {{ branding.lab_name }}{% endblock %}
+{% block title %}Reception Form Settings ?{{ branding.lab_name }}{% endblock %}
 
 {% block head %}
 <style>
 /* ============================================================
-   Reception Form Settings ? dense classical layout
+   Reception Form Settings ?dense classical layout
    ============================================================ */
 .fs-page {
   max-width: 1500px; margin: 0 auto; padding: 10px 20px 30px;
@@ -73,7 +73,7 @@
 }
 .fs-sec .chev { color: #adb5bd; font-size: 0.85rem; }
 
-/* Section switch ? keep round, but smaller */
+/* Section switch ?keep round, but smaller */
 .fs-sec .form-check.form-switch { min-height: auto; margin: 0; padding-left: 2.2em; }
 .fs-sec .form-check-input {
   cursor: pointer; width: 2em; height: 1.05em; margin-top: 0; border-radius: 1em;
@@ -102,14 +102,14 @@
 }
 .fs-item .name.req::after { content: ' *'; color: #dc3545; font-weight: 700; }
 
-/* Per-field visible toggle ? keep round, smaller */
+/* Per-field visible toggle ?keep round, smaller */
 .fs-item .vis-toggle { flex-shrink: 0; }
 .fs-item .vis-toggle.form-check { padding-left: 2.2em; min-height: auto; margin: 0; }
 .fs-item .vis-toggle .form-check-input {
   margin: 0; cursor: pointer; width: 1.9em; height: 1.05em; border-radius: 1em;
 }
 
-/* Per-field required ? square checkbox, compact */
+/* Per-field required ?square checkbox, compact */
 .fs-item .req-check {
   margin: 0; width: 15px; height: 15px; cursor: pointer;
   flex-shrink: 0; border-radius: 0; accent-color: #198754;
@@ -178,7 +178,7 @@
       {% for p in preset_list %}
       <form method="POST" style="display:inline;"
             action="{{ url_for('form_settings.apply_preset', preset_key=p.key) }}"
-            onsubmit="return confirm('Apply the {{ p.label }} preset? This will reset all field configurations.');">
+            onsubmit="return confirm('Apply the {{ p.label }} preset?This will reset all field configurations.');">
         <button type="submit" title="{{ p.description }}">{{ p.label }}</button>
       </form>
       {% endfor %}
@@ -270,7 +270,7 @@
   <div class="fs-reset">
     <form method="POST"
           action="{{ url_for('form_settings.reset_defaults') }}"
-          onsubmit="return confirm('Reset all fields to catalog defaults? This will lose your customizations.');">
+          onsubmit="return confirm('Reset all fields to catalog defaults?This will lose your customizations.');">
       <button type="submit">
         <i class="bi bi-arrow-counterclockwise"></i> Reset to Catalog Defaults
       </button>
@@ -315,8 +315,8 @@
       const key = cb.value;
       const grid = document.querySelector('.fs-grid[data-grid="' + key + '"]');
       if (grid) {
-        grid.style.opacity = cb.checked ? '1' : '0.4';
-        grid.style.pointerEvents = cb.checked ? '' : 'none';
+        grid.style.opacity = cb.checked ?'1' : '0.4';
+        grid.style.pointerEvents = cb.checked ?'' : 'none';
       }
     };
     cb.addEventListener('change', apply);

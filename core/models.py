@@ -94,11 +94,11 @@ class AuditLog(db.Model):
 
 
 # ============================================================
-# LAB SETTINGS â€” Branding & Contact Info (Singleton)
+# LAB SETTINGS — Branding & Contact Info (Singleton)
 # ============================================================
 class LabSettings(BaseModel):
     """
-    Singleton table â€” only ever holds ONE row (id=1).
+    Singleton table — only ever holds ONE row (id=1).
     Stores branding + contact details shown across the app and printed reports.
     """
     __tablename__ = 'lab_settings'
@@ -158,7 +158,7 @@ class LabSettings(BaseModel):
 
 
 # ============================================================
-# FORM FIELD CONFIG â€” Reception form customization
+# FORM FIELD CONFIG — Reception form customization
 # ============================================================
 class FormFieldConfig(BaseModel):
     """
@@ -193,7 +193,7 @@ class FormFieldConfig(BaseModel):
 
 
 # ============================================================
-# FORM SECTION CONFIG â€” toggle whole sections on/off
+# FORM SECTION CONFIG — toggle whole sections on/off
 # ============================================================
 class FormSectionConfig(BaseModel):
     """
@@ -212,7 +212,7 @@ class FormSectionConfig(BaseModel):
     def __repr__(self):
         return f'<FormSectionConfig {self.section_key} vis={self.is_visible}>'
 # ============================================================
-# REPORT SIGNATURES â€” doctors/staff panel on printed reports
+# REPORT SIGNATURES — doctors/staff panel on printed reports
 # ============================================================
 class ReportSignature(BaseModel):
     """
@@ -242,3 +242,17 @@ class ReportSignature(BaseModel):
 # Import Referral so it's registered with SQLAlchemy metadata
 from modules.referrals.models import Referral  # noqa: F401,E402
 
+# ============================================================
+# Antibiotic master list (used by Culture & Sensitivity tests)
+# ============================================================
+class Antibiotic(BaseModel):
+    __tablename__ = 'antibiotics'
+
+    name       = db.Column(db.String(100), nullable=False, index=True)
+    short_name = db.Column(db.String(20),  nullable=True)
+    group      = db.Column(db.String(80),  nullable=True, index=True)
+    sort_order = db.Column(db.Integer,    default=0, nullable=False)
+    is_active  = db.Column(db.Boolean,    default=True, nullable=False)
+
+    def __repr__(self):
+        return f'<Antibiotic {self.short_name or self.name} ({self.group})>'

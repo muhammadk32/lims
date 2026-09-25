@@ -28,85 +28,80 @@ def _get_order_or_404(order_id):
 @login_required
 @permission_required('view_reports')
 def index():
-    """List approved orders with download links.
+    """List one row per top-level test (approved or pending).
 
-    Default view shows only APPROVED reports — those are final and
-    ready to be handed to the patient. `?status=all` shows every
-    non-cancelled order regardless of state.
+    Filters:
+      ?status=approved (default) | pending | all
+      ?q=       search lab # / patient name
+      ?date_from / ?date_to   YYYY-MM-DD
+      ?test=    test name/code filter
     """
-    from modules.orders.models import Order, OrderStatus   # ← lazy
-
-    status = request.args.get('status', 'approved').strip()
-    q = request.args.get('q', '').strip()
-    phone = request.args.get('phone', '').strip()
-    test = request.args.get('test', '').strip()
+    from modules.orders.models import Order, OrderItem, OrderStatus
+    from modules.patients.models import Patient
     from datetime import datetime as _dt, date as _d
-
-    today = _d.today()
-    date_from_str = request.args.get('date_from', '').strip() or today.strftime('%Y-%m-%d')
-    date_to_str = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
-
-    date_from = None
-    date_to = None
-    try:
-        date_from = _dt.strptime(date_from_str, '%Y-%m-%d').date()
-    except (ValueError, TypeError):
-        date_from = today
-    try:
-        date_to = _dt.strptime(date_to_str, '%Y-%m-%d').date()
-    except (ValueError, TypeError):
-        date_to = today
-
-    query = Order.query
-
-    if status == 'all':
-        query = query.filter(Order.status != OrderStatus.CANCELLED)
-    elif status in OrderStatus.CHOICES:
-        query = query.filter(Order.status == status)
-    else:
-        query = query.filter(Order.status == OrderStatus.APPROVED)
-
-    if date_from:
-        query = query.filter(func.date(Order.created_at) >= date_from)
-    if date_to:
-        query = query.filter(func.date(Order.created_at) <= date_to)
-
-    from modules.patients.models import Patient   # ← lazy
     from sqlalchemy import or_
 
-    if q:
-        like = f'%{q}%'
-        query = query.join(Patient).filter(
-            or_(
+    status      = request.args.get('status', 'approved').strip()
+    q           = request.args.get('q', '').strip()
+    phone       = request.args.get('phone', '').strip()
+    test_q      = request.args.get('test', '').strip()
+    today       = _d.today()
+    date_from_s = request.args.get('date_from', '').strip() or today.strftime('%Y-%m-%d')
+    date_to_s   = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
+
+    try:    date_from = _dt.strptime(date_from_s, '%Y-%m-%d').date()
+    except (ValueError, TypeError): date_from = today
+    try:    date_to   = _dt.strptime(date_to_s,   '%Y-%m-%d').date()
+    except (ValueError, TypeError): date_to   = today
+
+    # Top-level items (no parent)
+    query = (OrderItem.query
+             .join(Order, OrderItem.order_id == Order.id)
+             .filter(OrderItem.parent_item_id.is_(None))
+             .filter(Order.status != OrderStatus.CANCELLED)
+             .filter(func.date(Order.created_at) >= date_from)
+             .filter(func.date(Order.created_at) <= date_to))
+
+    if q or phone:
+        query = query.join(Patient, Order.patient_id == Patient.id)
+        if q:
+            like = f'%{q}%'
+            query = query.filter(or_(
                 Order.order_code.ilike(like),
                 Patient.full_name.ilike(like),
                 Patient.patient_code.ilike(like),
-            )
-        )
+            ))
+        if phone:
+            query = query.filter(Patient.phone.ilike(f'%{phone}%'))
 
-    if phone:
-        if 'patients' not in [str(m).lower() for m in query.column_descriptions]:
-            query = query.join(Patient, Order.patient_id == Patient.id, isouter=True)
-        query = query.filter(Patient.phone.ilike(f'%{phone}%'))
-
-    if test:
-        from modules.orders.models import OrderItem
+    if test_q:
         from modules.tests.models import Test
-        query = (query
-                 .join(OrderItem, OrderItem.order_id == Order.id)
-                 .join(Test, Test.id == OrderItem.test_id)
-                 .filter(or_(
-                     Test.name.ilike(f'%{test}%'),
-                     Test.code.ilike(f'%{test}%'),
-                 ))
-                 .distinct())
+        query = query.join(Test, OrderItem.test_id == Test.id)
+        like = f'%{test_q}%'
+        query = query.filter(or_(Test.name.ilike(like), Test.code.ilike(like)))
 
-    orders = query.order_by(Order.id.desc()).limit(100).all()
+    items = query.order_by(OrderItem.id.desc()).all()
 
-    return render_template('reports/list.html', orders=orders, status=status, q=q, phone=phone, test=test, date_from=date_from_str, date_to=date_to_str, today=today.strftime('%Y-%m-%d'))
+    # Filter by verify status
+    if status == 'approved':
+        items = [i for i in items if i.is_verified]
+    elif status == 'pending':
+        items = [i for i in items if not i.is_verified]
+    # 'all' ? no filter
+
+    return render_template(
+        'reports/list.html',
+        items=items,
+        status=status,
+        q=q,
+        phone=phone,
+        test_q=test_q,
+        date_from=date_from_s,
+        date_to=date_to_s,
+    )
 
 
-# ---------- HTML Preview ----------
+
 @reports_bp.route('/order/<int:order_id>/preview')
 @login_required
 @permission_required('view_reports')
@@ -157,7 +152,7 @@ def order_pdf(order_id):
         return redirect(url_for('orders.view_order', order_id=order.id))
 
     from .pdf_generator import generate_report_pdf   # ← lazy
-    buffer = generate_report_pdf(order)
+    buffer = generate_report_pdf(order, item_id=item_id)
     filename = f'report_{order.order_code}.pdf'
 
     return send_file(
@@ -174,6 +169,7 @@ def order_pdf(order_id):
 @permission_required('view_reports')
 def view_pdf(order_id):
     order = _get_order_or_404(order_id)
+    item_id = request.args.get('item', type=int)
 
     # Block report if balance is due
     if order.balance_due > 0.01:

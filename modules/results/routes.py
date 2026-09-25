@@ -162,3 +162,22 @@ def enter_pcr(item_id):
         return redirect(url_for('results.enter_pcr', item_id=item.id))
 
     return render_template('results/enter_pcr.html', item=item, r=r)
+
+# ============================================================
+# PER-TEST RESULT ENTRY (ADAM style ? one test at a time)
+# ============================================================
+@results_bp.route('/item/<int:item_id>', methods=['GET', 'POST'])
+@login_required
+@permission_required('enter_results')
+def enter_item(item_id):
+    """ADAM-style single-test entry page."""
+    item = OrderItem.query.get_or_404(item_id)
+
+    if request.method == 'POST':
+        svc.save_item_result(item, request.form, None)
+        flash(f'Result saved for {item.test.name}.', 'success')
+        if request.form.get('conduct'):
+            return redirect(url_for('results.enter', order_id=item.order_id))
+        return redirect(url_for('results.enter_item', item_id=item.id))
+
+    return render_template('results/enter_item.html', item=item, order=item.order)

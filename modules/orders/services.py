@@ -240,7 +240,7 @@ def create_order(patient, tests, form, user):
 
     log_action(
         'create', 'order', order.id,
-        f'Created order {order.order_code} for {patient.full_name} â€” '
+        f'Created order {order.order_code} for {patient.full_name} — '
         f'subtotal {order.subtotal:.2f}, discount {order.discount_value:.2f}, '
         f'total {order.final_total:.2f}',
     )
@@ -339,7 +339,7 @@ def approve_order(order, user):
     if order.status not in (OrderStatus.COMPLETED, OrderStatus.CORRECTION):
         return False, 'Only completed or correction orders can be approved.'
     if not order.all_results_done:
-        return False, 'Cannot approve â€” some results are still missing.'
+        return False, 'Cannot approve — some results are still missing.'
 
     order.status = OrderStatus.APPROVED
     order.reported_at = datetime.utcnow()

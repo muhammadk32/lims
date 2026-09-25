@@ -23,7 +23,7 @@ def _flag_result(normal_range, result_value):
         return 'unknown'
 
 
-def _results_table(order, previous_map=None, date_labels=None):
+def _results_table(order, previous_map=None, date_labels=None, items_override=None):
     """Results table with panel grouping + previous results columns.
 
     previous_map: {test_name_lower: [(date, value), ...]}
@@ -181,7 +181,8 @@ def _results_table(order, previous_map=None, date_labels=None):
                 out.append(None)
         return out
 
-    for item in order.top_level_items:
+    _iter_items = items_override if items_override is not None else order.top_level_items
+    for item in _iter_items:
         if item.has_children:
             panel_cells = [
                 Paragraph('> ' + item.test.name, panel_header_style),

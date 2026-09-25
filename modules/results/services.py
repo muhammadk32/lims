@@ -47,6 +47,7 @@ def save_order_results(order, form, user):
 
     # --- 1b. Apply PCR extended fields (if any were in the form) ---
     _save_pcr_fields(form, order)
+    _save_culture_fields(form, order)
 
     # --- 2. Detect changes ---
     something_changed = any(
@@ -233,3 +234,74 @@ def _save_pcr_fields(form, order):
         r.interpretation_html = (form.get(f"pcr_interpretation_html_{item.id}") or "").strip() or None
         r.comments_html       = (form.get(f"pcr_comments_html_{item.id}") or "").strip() or None
         r.entered_at = datetime.utcnow()
+
+def _save_culture_fields(form, order):
+    """Save microscopy rows + culture organism + antibiotic results."""
+    for item in order.top_level_items:
+        fmt = (item.test.result_format or '').lower()
+
+        if fmt in ('culture', 'culture_sensitivity'):
+            org_key = f"culture_organism_{item.id}"
+            if org_key in form:
+                # stash organism in item.result_notes (append-only)
+                org = form.get(org_key, '').strip()
+                abx_rows = []
+                for k in form:
+                    if k.startswith(f"culture_abx_{item.id}_"):
+                        v = form.get(k, '').strip()
+                        if v:
+                            abx_rows.append(f"{k.rsplit('_',1)[-1]}:{v}")
+                combined = f"Organism: {org}" if org else ''
+                if abx_rows:
+                    combined += "\n" + " | ".join(abx_rows)
+                item.result_notes = combined or item.result_notes
+
+# ============================================================
+# PER-TEST save (used by /results/item/<id>)
+# ============================================================
+def save_item_result(item, form, user):
+    """Save value + notes for one OrderItem. If it's a panel,
+    iterate children and save each child's input too."""
+    from datetime import datetime
+
+    now = datetime.utcnow()
+
+    if item.has_children:
+        for child in item.children:
+            key = f'result_value_{child.id}'
+            if key not in form:
+                continue
+            child.result_value = (form.get(key) or '').strip() or None
+            child.result_notes = (form.get(f'result_notes_{child.id}') or '').strip() or None
+            if child.result_value:
+                child.correction_note = None
+                child.correction_at = None
+                child.correction_by_id = None
+    else:
+        key = f'result_value_{item.id}'
+        if key in form:
+            item.result_value = (form.get(key) or '').strip() or None
+            item.result_notes = (form.get(f'result_notes_{item.id}') or '').strip() or None
+            if item.result_value:
+                item.correction_note = None
+                item.correction_at = None
+                item.correction_by_id = None
+
+    order = item.order
+    if order.status == OrderStatus.APPROVED:
+        order.status = OrderStatus.COMPLETED
+        order.reported_at = None
+        order.reported_by_id = None
+        for top in order.top_level_items:
+            if top.is_verified:
+                top.verified_at = None
+                top.verified_by_id = None
+
+    # If everything is filled, mark completed
+    if order.all_results_done and order.status not in (OrderStatus.APPROVED, OrderStatus.CORRECTION):
+        order.status = OrderStatus.COMPLETED
+
+    db.session.commit()
+    log_action('result', 'order_item', item.id,
+               f'Entered result for {item.test.code} ({item.test.name})')
+    return item

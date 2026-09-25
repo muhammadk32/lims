@@ -12,7 +12,7 @@ from .footer import _draw_page_bottom, _footer_flowables, BOTTOM_PANEL_HEIGHT
 from .branding import _get_lab, _hex
 
 
-def generate_report_pdf(order) -> io.BytesIO:
+def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     """Generate a professional PDF report for an order."""
     lab = _get_lab()
     buffer = io.BytesIO()
@@ -48,10 +48,23 @@ def generate_report_pdf(order) -> io.BytesIO:
     except Exception as e:
         print(f'[pdf.generator] previous_map failed: {e}')
 
+    # ---- Item filter: single test print (?item=<id>) ----
+    if item_id is not None:
+        target = [t for t in order.top_level_items if t.id == item_id]
+        items_for_pdf = target or order.top_level_items
+        pending = []
+    else:
+        # ---- PARTIAL REPORT: only verified top-level items are printed ----
+        all_top    = order.top_level_items
+        verified   = [t for t in all_top if t.is_verified]
+        pending    = [t for t in all_top if not t.is_verified]
+        items_for_pdf = verified if verified else all_top
+
     results_table, _notes_flow, abnormal_count, critical_count = _results_table(
         order,
         previous_map=previous_map,
         date_labels=date_labels,
+        items_override=items_for_pdf,
     )
     story.append(results_table)
     for _p in _notes_flow:

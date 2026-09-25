@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html' %}
 
-{% block title %}Preview â€” {{ order.order_code }}{% endblock %}
+{% block title %}Preview — {{ order.order_code }}{% endblock %}
 
 {% block head %}
 <style>
@@ -125,9 +125,9 @@
         <h6>Patient Information</h6>
         <div class="row-item"><span class="label">Name</span><span class="fw-semibold">{{ order.patient.full_name }}</span></div>
         <div class="row-item"><span class="label">Code</span><span>{{ order.patient.patient_code }}</span></div>
-        <div class="row-item"><span class="label">Gender</span><span>{{ order.patient.gender or 'â€”' }}</span></div>
-        <div class="row-item"><span class="label">Age</span><span>{{ order.patient.compute_age() or 'â€”' }}</span></div>
-        <div class="row-item"><span class="label">Phone</span><span>{{ order.patient.phone or 'â€”' }}</span></div>
+        <div class="row-item"><span class="label">Gender</span><span>{{ order.patient.gender or '—' }}</span></div>
+        <div class="row-item"><span class="label">Age</span><span>{{ order.patient.compute_age() or '—' }}</span></div>
+        <div class="row-item"><span class="label">Phone</span><span>{{ order.patient.phone or '—' }}</span></div>
       </div>
 
       <div class="info-section">
@@ -135,7 +135,7 @@
         <div class="row-item"><span class="label">Order</span><span>{{ order.order_code }}</span></div>
         <div class="row-item"><span class="label">Order Date</span><span>{{ order.created_at | localtime }}</span></div>
         <div class="row-item"><span class="label">Reported On</span><span>{{ order.updated_at | localtime }}</span></div>
-        <div class="row-item"><span class="label">Doctor</span><span>{{ order.doctor.full_name if order.doctor else 'â€”' }}</span></div>
+        <div class="row-item"><span class="label">Doctor</span><span>{{ order.doctor.full_name if order.doctor else '—' }}</span></div>
         <div class="row-item"><span class="label">Status</span><span>{{ order.status|capitalize }}</span></div>
       </div>
 
@@ -172,8 +172,8 @@
               {% if flag == 'abnormal' %}{% set ns.abnormal_count = ns.abnormal_count + 1 %}{% endif %}
               <tr class="panel-child {% if flag == 'abnormal' %}abnormal-row{% endif %}">
                 <td>{{ child.test.name }}</td>
-                <td>{{ child.result_value or 'â€”' }}</td>
-                <td class="text-muted">{{ child.test.unit or 'â€”' }}</td>
+                <td>{{ child.result_value or '—' }}</td>
+                <td class="text-muted">{{ child.test.unit or '—' }}</td>
                 <td class="text-muted">{{ rng(child.test, order) or '—' }}</td>
                 <td>
                   {% if flag == 'normal' %}
@@ -181,7 +181,7 @@
                   {% elif flag == 'abnormal' %}
                     <span class="badge bg-danger">Abnormal</span>
                   {% else %}
-                    <span class="text-muted">â€”</span>
+                    <span class="text-muted">—</span>
                   {% endif %}
                 </td>
               </tr>
@@ -193,8 +193,8 @@
             {% if flag == 'abnormal' %}{% set ns.abnormal_count = ns.abnormal_count + 1 %}{% endif %}
             <tr class="{% if flag == 'abnormal' %}abnormal-row{% endif %}">
               <td class="fw-semibold">{{ item.test.name }}</td>
-              <td>{{ item.result_value or 'â€”' }}</td>
-              <td class="text-muted">{{ item.test.unit or 'â€”' }}</td>
+              <td>{{ item.result_value or '—' }}</td>
+              <td class="text-muted">{{ item.test.unit or '—' }}</td>
               <td class="text-muted">{{ rng(item.test, order) or '—' }}</td>
               <td>
                 {% if flag == 'normal' %}
@@ -202,7 +202,7 @@
                 {% elif flag == 'abnormal' %}
                   <span class="badge bg-danger">Abnormal</span>
                 {% else %}
-                  <span class="text-muted">â€”</span>
+                  <span class="text-muted">—</span>
                 {% endif %}
               </td>
             </tr>

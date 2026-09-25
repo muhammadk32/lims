@@ -51,8 +51,8 @@ class Test(BaseModel):
     A lab test offered by the lab.
 
     Can be:
-      - A standalone test (is_panel=False) â€” has its own unit + range
-      - A panel (is_panel=True) â€” contains child tests via PanelParameter
+      - A standalone test (is_panel=False) — has its own unit + range
+      - A panel (is_panel=True) — contains child tests via PanelParameter
     """
     __tablename__ = 'tests'
 
@@ -74,6 +74,9 @@ class Test(BaseModel):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
     # ---------- Panel / format fields (Phase 1) ----------
+    # Section marker inside a panel (Physical / Chemical / Microscopy?)
+    panel_section = db.Column(db.String(40), nullable=True)
+
     result_format = db.Column(
         db.String(20),
         default='numeric',
@@ -127,7 +130,7 @@ class Test(BaseModel):
 
     def __repr__(self):
         kind = 'PANEL' if self.is_panel else 'TEST'
-        return f'<Test {self.code} ({kind}) â€” {self.name}>'
+        return f'<Test {self.code} ({kind}) — {self.name}>'
 
 
 # ============================================================
@@ -181,7 +184,7 @@ class PanelParameter(db.Model):
         return f'<PanelParameter panel={self.panel_id} test={self.test_id} order={self.sort_order}>'
 
 # ============================================================
-# TestReferenceRange â€” multi-range normal values per test
+# TestReferenceRange — multi-range normal values per test
 # ============================================================
 class TestReferenceRange(BaseModel):
     """A single reference range for a test, keyed by gender + age bracket.

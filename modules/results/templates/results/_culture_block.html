@@ -1,0 +1,46 @@
+{# Culture & Sensitivity block ?organism text + S/I/R per antibiotic #}
+<div class="cul-block" data-item="{{ item.id }}">
+  <div class="cul-block-hd">
+    <i class="bi bi-bug"></i>
+    <strong>{{ item.test.name }}</strong>
+    <span class="text-muted small ms-2">{{ item.test.code }}</span>
+  </div>
+
+  <div class="cul-row">
+    <span class="cul-lbl">Organism:</span>
+    <input type="text" name="culture_organism_{{ item.id }}"
+           value="{{ item.result_organism if item.result_organism else '' }}"
+           class="cul-input" placeholder="e.g. Escherichia coli">
+  </div>
+
+  <table class="cul-table">
+    <thead>
+      <tr>
+        <th style="width:260px;">Antibiotic</th>
+        <th style="width:180px;">Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% set abx = [
+        'Imipenem', 'Meropenem', 'Amikacin', 'Gentamicin',
+        'Ceftriaxone', 'Cefotaxime', 'Ciprofloxacin',
+        'Levofloxacin', 'Ampicillin', 'Amoxicillin-Clavulanate',
+        'Piperacillin-Tazobactam', 'Trimethoprim-Sulfamethoxazole',
+        'Nitrofurantoin', 'Colistin'
+      ] %}
+      {% for ab in abx %}
+      <tr>
+        <td>{{ ab }}</td>
+        <td>
+          <select name="culture_abx_{{ item.id }}_{{ loop.index }}" class="cul-select">
+            <option value="">?</option>
+            <option value="S">Sensitive (S)</option>
+            <option value="I">Intermediate (I)</option>
+            <option value="R">Resistant (R)</option>
+          </select>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

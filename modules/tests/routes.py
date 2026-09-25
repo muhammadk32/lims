@@ -35,7 +35,7 @@ def _get_or_create_category(name):
 
 
 # ============================================================
-# Unified Lab Test Settings â€” all tabs on one page
+# Unified Lab Test Settings — all tabs on one page
 # ============================================================
 @tests_bp.route('/')
 @login_required
@@ -181,7 +181,7 @@ def index():
 @tests_bp.route('/old')
 @login_required
 def _old_list_redirect():
-    """Legacy /tests/old â€” redirects to unified index."""
+    """Legacy /tests/old — redirects to unified index."""
     return redirect(url_for('tests.index'))
 
 
@@ -189,7 +189,7 @@ def _old_list_redirect():
 @tests_bp.route('/_legacy_list')
 @login_required
 def list_tests():
-    """Alias for tests.index â€” kept so old url_for() calls keep working."""
+    """Alias for tests.index — kept so old url_for() calls keep working."""
     return redirect(url_for('tests.index', **request.args))
     q = request.args.get('q', '').strip()
     category_id = request.args.get('category', type=int)
@@ -269,7 +269,7 @@ def new_test():
         db.session.add(test)
         db.session.commit()
 
-        log_action('create', 'test', test.id, f'Created test {test.code} â€” {test.name}')
+        log_action('create', 'test', test.id, f'Created test {test.code} — {test.name}')
 
         flash(f'Test "{test.name}" created.', 'success')
         return redirect(url_for('tests.list_tests'))

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Users ? LabMS{% endblock %}
+{% block title %}Users ?LabMS{% endblock %}
 
 {% block head %}
 <style>
@@ -240,13 +240,13 @@
         </td>
       </tr>
 
-      {# Reset password modal (kept outside <td> flow ? Bootstrap moves it) #}
+      {# Reset password modal (kept outside <td> flow ?Bootstrap moves it) #}
       <div class="modal fade" id="resetModal{{ u.id }}">
         <div class="modal-dialog">
           <div class="modal-content" style="border-radius:0;">
             <form method="POST" action="{{ url_for('users.reset_password', user_id=u.id) }}">
               <div class="modal-header">
-                <h5 class="modal-title">Reset Password ? {{ u.username }}</h5>
+                <h5 class="modal-title">Reset Password ?{{ u.username }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">

@@ -1,340 +1,267 @@
 {% extends 'base.html' %}
-{% block title %}Test Reports - LabMS{% endblock %}
+{% block title %}Test Reports — LabMS
+{% endblock %}
 
 {% block head %}
 <style>
-/* ============================================================
-   Test Reports - dense classical layout
-   ============================================================ */
-.tr-page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 10px 18px 30px;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-size: 0.82rem;
-  color: #212529;
-}
+.rp-page { max-width: 1600px; margin: 0 auto; padding: 10px 20px 30px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.rp-header { display: flex; justify-content: space-between; align-items: flex-end;
+             border-bottom: 2px solid #212529; padding-bottom: 5px;
+             margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.rp-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.rp-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.rp-count { font-size: 0.76rem; color: #6c757d;
+            font-family: Consolas, Monaco, monospace; }
 
-/* Header */
-.tr-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 2px solid #212529;
-  padding-bottom: 5px;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-  gap: 8px;
+.rp-filter {
+  background: #f8f9fa; border: 1px solid #dee2e6;
+  padding: 8px 10px; margin-bottom: 8px;
+  display: grid; grid-template-columns: 1fr 1fr 1.4fr 1.2fr 1.2fr auto;
+  gap: 8px; align-items: end;
 }
-.tr-title {
-  font-size: 1.15rem;
+.rp-field label { display: block; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #6c757d; margin-bottom: 2px; }
+.rp-field input, .rp-field select {
+  width: 100%; padding: 3px 8px; border: 1px solid #6c757d;
+  border-radius: 0; font-size: 0.82rem; background: #fff; height: 28px;
+  box-sizing: border-box;
+}
+.rp-field input:focus, .rp-field select:focus { outline: none; border-color: #198754; }
+.rp-filter-actions { display: flex; gap: 6px; }
+
+.rp-btn { display: inline-block; padding: 4px 12px; font-size: 0.74rem;
+  font-weight: 600; border: 1px solid #212529; background: #fff;
+  color: #212529; text-decoration: none; cursor: pointer; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 28px;
+  line-height: 1.6; box-sizing: border-box; }
+.rp-btn:hover { background: #f1f3f5; }
+.rp-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.rp-btn-primary:hover { background: #146c43; }
+
+.rp-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
+            font-size: 0.78rem; background: #fff; table-layout: fixed; }
+.rp-table thead th {
+  background: #212529; color: #fff; font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 5px 8px; text-align: left; border: 1px solid #212529;
+  white-space: nowrap; }
+.rp-table thead th.center { text-align: center; }
+.rp-table thead th.end { text-align: right; }
+.rp-table tbody td { padding: 4px 8px; border: 1px solid #ced4da;
+                     vertical-align: middle; }
+
+/* Parent row (order) */
+.rp-table tbody tr.rp-parent-row td {
+  background: #e9ecef !important;
+  border-top: 1.5px solid #212529 !important;
+  border-bottom: 1px solid #adb5bd !important;
   font-weight: 700;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
 }
-.tr-subtitle {
+.rp-table tbody tr.rp-parent-row .lab { color: #0d6efd; }
+
+/* Child rows (tests under an order) */
+.rp-table tbody tr.rp-child-row td {
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #e9ecef;
   font-size: 0.76rem;
-  color: #6c757d;
-  margin-top: 2px;
+  color: #495057;
 }
-.tr-count {
-  font-size: 0.76rem;
-  color: #6c757d;
-  font-family: Consolas, Monaco, monospace;
-}
+.rp-table tbody tr.rp-child-row:nth-child(odd) td { background: #fbfcfd; }
+.rp-table tbody tr.rp-child-row:hover td { background: #eef6ff; }
 
-/* Filters */
-.tr-filter {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  padding: 6px 10px;
-  margin-bottom: 8px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.6fr 1.2fr 1.2fr 1fr auto;
-  gap: 8px;
-  align-items: end;
+/* Child indent marker */
+.rp-table tbody tr.rp-child-row td:nth-child(3) {
+  padding-left: 26px;
+  position: relative;
 }
-.tr-field label {
-  display: block;
-  font-size: 0.64rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #6c757d;
-  margin-bottom: 3px;
-}
-.tr-field input,
-.tr-field select {
-  width: 100%;
-  padding: 3px 8px;
-  border: 1px solid #6c757d;
-  border-radius: 0;
-  font-size: 0.82rem;
-  background: #fff;
-  height: 28px;
-}
-.tr-field input:focus,
-.tr-field select:focus {
-  outline: none;
-  border-color: #198754;
-}
-
-/* Buttons */
-.tr-btn {
-  display: inline-block;
-  padding: 4px 12px;
-  font-size: 0.74rem;
-  font-weight: 600;
-  border: 1px solid #212529;
-  background: #fff;
-  color: #212529;
-  text-decoration: none;
-  border-radius: 0;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.tr-btn:hover { background: #f1f3f5; color: #212529; }
-.tr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.tr-btn-primary:hover { background: #146c43; color: #fff; }
-
-/* Table */
-.tr-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1.5px solid #212529;
-  font-size: 0.82rem;
-}
-.tr-table thead th {
-  background: #212529;
-  color: #fff;
-  font-size: 0.64rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 10px;
-  text-align: left;
-  border: 1px solid #212529;
-  white-space: nowrap;
-}
-.tr-table thead th.center { text-align: center; }
-.tr-table thead th.end { text-align: right; }
-.tr-table tbody td {
-  padding: 3px 10px;
-  border: 1px solid #6c757d;
-  vertical-align: middle;
-}
-.tr-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.tr-table tbody tr:hover { background: #f1f3f5; }
-.tr-table .lab-link {
-  font-family: Consolas, Monaco, monospace;
-  font-weight: 600;
-  color: #0d6efd;
-  text-decoration: none;
-  font-size: 0.82rem;
-}
-.tr-table .lab-link:hover { text-decoration: underline; }
-.tr-table .patient-name { font-weight: 700; }
-.tr-table .patient-code {
+.rp-table tbody tr.rp-child-row td:nth-child(3)::before {
+  content: "\2514\2500";  /* ?? */
+  color: #adb5bd;
+  margin-right: 6px;
   font-family: Consolas, Monaco, monospace;
   font-size: 0.72rem;
-  color: #6c757d;
 }
-.tr-table .num {
-  text-align: right;
-  font-family: Consolas, Monaco, monospace;
-  font-variant-numeric: tabular-nums;
-}
-.tr-table .center { text-align: center; }
-.tr-table .muted { color: #6c757d; font-size: 0.75rem; }
+.rp-table .lab { font-family: Consolas, Monaco, monospace; font-weight: 700;
+                 font-size: 0.78rem; color: #0d6efd; }
+.rp-table .test-name { font-weight: 600; font-size: 0.82rem; }
+.rp-table .test-code { font-family: Consolas, Monaco, monospace;
+                       font-size: 0.68rem; color: #6c757d; }
+.rp-table .center { text-align: center; }
+.rp-table .num { text-align: right; font-family: Consolas, Monaco, monospace;
+                 font-size: 0.72rem; }
+.rp-badge { display: inline-block; padding: 1px 8px; font-size: 0.62rem;
+  font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #fff; border-radius: 0; }
+.rp-badge.approved { background: #198754; }
+.rp-badge.pending  { background: #ffc107; color: #664d03; }
+.rp-badge.correction { background: #dc3545; }
+.rp-icon-btn { display: inline-block; padding: 2px 8px; font-size: 0.72rem;
+  border: 1px solid #6c757d; background: #fff; color: #212529;
+  text-decoration: none; border-radius: 0; cursor: pointer;
+  line-height: 1.3; margin-left: 3px; }
+.rp-icon-btn:hover { background: #f1f3f5; }
+.rp-icon-btn-view { border-color: #0d6efd; color: #0d6efd; }
+.rp-icon-btn-view:hover { background: #0d6efd; color: #fff; }
+.rp-icon-btn-disabled { border-color: #dee2e6; color: #adb5bd; cursor: not-allowed; }
 
-/* Badges */
-.tr-badge {
-  display: inline-block;
-  padding: 1px 6px;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  border-radius: 0;
-  text-transform: uppercase;
-  color: #fff;
-}
-.tr-badge-approved { background: #198754; }
-.tr-badge-completed { background: #0dcaf0; color: #055160; }
-.tr-badge-correction { background: #ffc107; color: #664d03; }
-.tr-badge-pending { background: #6c757d; }
-.tr-badge-cancelled { background: #212529; }
+.rp-empty { text-align: center; padding: 40px 20px; color: #6c757d;
+            font-style: italic; border: 1.5px solid #212529; background: #fafbfc; }
 
-/* Row actions */
-.tr-actions {
-  display: inline-flex;
-  gap: 4px;
+.rp-expand {
+  display: inline-block; width: 22px; height: 22px; line-height: 20px;
+  text-align: center; border: 1px solid #6c757d; background: #fff;
+  color: #212529; cursor: pointer; font-weight: 700; user-select: none;
+  font-family: Consolas, Monaco, monospace; font-size: 0.85rem;
 }
-.tr-icon-btn {
-  display: inline-block;
-  padding: 2px 7px;
-  font-size: 0.74rem;
-  border: 1px solid #6c757d;
-  background: #fff;
-  color: #212529;
-  text-decoration: none;
-  border-radius: 0;
-  cursor: pointer;
-  line-height: 1;
-}
-.tr-icon-btn:hover { background: #f1f3f5; color: #212529; }
-.tr-icon-btn-download {
-  background: #dc3545;
-  color: #fff;
-  border-color: #dc3545;
-}
-.tr-icon-btn-download:hover { background: #b02a37; color: #fff; }
+.rp-expand:hover { background: #212529; color: #fff; border-color: #212529; }
+.rp-expand.open { background: #212529; color: #fff; border-color: #212529; }
 
-/* Empty */
-.tr-empty {
-  text-align: center;
-  padding: 24px 16px;
-  color: #6c757d;
-  font-style: italic;
-  border: 1.5px solid #212529;
-  background: #fafbfc;
-}
+.rp-parent-row { background: #f8f9fa !important; font-weight: 700; }
+.rp-parent-row td { border-top: 1.5px solid #212529 !important; }
+.rp-child-row { background: #fff; }
+.rp-child-row td:first-child { padding-left: 30px; }
+.rp-hidden { display: none; }
 
-/* Media */
-@media (max-width: 900px) {
-  .tr-filter { grid-template-columns: 1fr; }
-  .tr-table { font-size: 0.74rem; }
-  .tr-table thead th,
-  .tr-table tbody td { padding: 5px 7px; }
-}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="tr-page">
+<div class="rp-page">
 
-  <div class="tr-header">
+  <div class="rp-header">
     <div>
-      <h1 class="tr-title">
-        <i class="bi bi-file-earmark-medical"></i> Test Reports
-      </h1>
-      <div class="tr-subtitle">Printable lab reports for approved orders</div>
+      <h1 class="rp-title"><i class="bi bi-file-earmark-medical"></i> Test Reports</h1>
+      <div class="rp-subtitle">One row per test — approved reports can be printed immediately</div>
     </div>
-    <div class="tr-count">{{ orders|length }} report{{ 's' if orders|length != 1 }}</div>
+    <div class="rp-count">{{ items|length }} report{{ 's' if items|length != 1 }}</div>
   </div>
 
-  {# Filters #}
-  <form method="GET" class="tr-filter">
-    <div class="tr-field">
+  <form method="GET" class="rp-filter">
+    <div class="rp-field">
       <label>From</label>
-      <input type="date" name="date_from" value="{{ date_from or '' }}">
+      <input type="date" name="date_from" value="{{ date_from }}">
     </div>
-    <div class="tr-field">
+    <div class="rp-field">
       <label>To</label>
-      <input type="date" name="date_to" value="{{ date_to or today }}">
+      <input type="date" name="date_to" value="{{ date_to }}">
     </div>
-    <div class="tr-field">
+    <div class="rp-field">
       <label>Search</label>
-      <input type="text" name="q" value="{{ q }}"
-             placeholder="Lab # or patient name...">
+      <input type="text" name="q" value="{{ q or '' }}" placeholder="Lab # / patient name">
     </div>
-    <div class="tr-field">
-      <label>Mobile #</label>
-      <input type="tel" name="phone" value="{{ phone or '' }}"
-             placeholder="0300-1234567">
-    </div>
-    <div class="tr-field">
+    <div class="rp-field">
       <label>Test</label>
-      <input type="text" name="test" value="{{ test or '' }}"
-             placeholder="Test name or code">
+      <input type="text" name="test" value="{{ test_q or '' }}" placeholder="Test name or code">
     </div>
-    <div class="tr-field">
+    <div class="rp-field">
       <label>Status</label>
       <select name="status">
-        <option value="approved" {% if status == 'approved' %}selected{% endif %}>Approved (final)</option>
-        <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
-        <option value="correction" {% if status == 'correction' %}selected{% endif %}>Correction</option>
-        <option value="all" {% if status == 'all' %}selected{% endif %}>All (non-cancelled)</option>
+        <option value="approved" {% if status == 'approved' %}selected{% endif %}>Approved only</option>
+        <option value="pending"  {% if status == 'pending'  %}selected{% endif %}>Pending only</option>
+        <option value="all"      {% if status == 'all'      %}selected{% endif %}>All</option>
       </select>
     </div>
-    <div class="tr-field">
-      <button type="submit" class="tr-btn tr-btn-primary">
+    <div class="rp-filter-actions">
+      <button type="submit" class="rp-btn rp-btn-primary">
         <i class="bi bi-funnel"></i> Filter
       </button>
     </div>
   </form>
 
-  {# Table #}
-  {% if orders %}
-  <table class="tr-table">
+  {% if items %}
+  <table class="rp-table">
     <thead>
       <tr>
-        <th style="width: 100px;">Lab #</th>
-        <th>Patient</th>
-        <th class="center" style="width: 70px;">Tests</th>
-        <th class="end" style="width: 100px;">Total</th>
-        <th class="center" style="width: 110px;">Status</th>
-        <th style="width: 170px;">Reported</th>
-        <th class="end" style="width: 150px;">Actions</th>
+        <th class="center" style="width: 40px;"></th>
+        <th style="width: 110px;">Lab #</th>
+        <th style="width: 200px;">Patient</th>
+        <th>Summary</th>
+        <th style="width: 130px;">Registered</th>
+        <th class="center" style="width: 120px;">Status</th>
+        <th class="center" style="width: 80px;">View</th>
       </tr>
     </thead>
     <tbody>
-      {% for o in orders %}
-      <tr>
-        <td>
-          <a href="{{ url_for('orders.view_order', order_id=o.id) }}" class="lab-link">
-            {{ o.order_code }}
-          </a>
-        </td>
-        <td>
-          <div class="patient-name">{{ o.patient.full_name }}</div>
-          <div class="patient-code">{{ o.patient.patient_code }}</div>
-        </td>
-        <td class="center">
-          <span class="muted">{{ o.item_count }}</span>
-        </td>
-        <td class="num">{{ o.final_total | money }}</td>
-        <td class="center">
-          {% set st = o.status|lower %}
-          {% if st == 'approved' %}
-            <span class="tr-badge tr-badge-approved">Approved</span>
-          {% elif st == 'completed' %}
-            <span class="tr-badge tr-badge-completed">Completed</span>
-          {% elif st == 'correction' %}
-            <span class="tr-badge tr-badge-correction">Correction</span>
-          {% elif st == 'cancelled' %}
-            <span class="tr-badge tr-badge-cancelled">Cancelled</span>
-          {% else %}
-            <span class="tr-badge tr-badge-pending">{{ o.status|capitalize }}</span>
-          {% endif %}
-        </td>
-        <td class="muted" style="font-family: Consolas, Monaco, monospace; font-size: 0.76rem;">
-          {% if o.reported_at %}{{ o.reported_at | localtime('%d-%b-%Y %I:%M %p') }}{% else %}—{% endif %}
-        </td>
-        <td class="end">
-          <div class="tr-actions">
-            <a href="{{ url_for('reports.view_pdf', order_id=o.id) }}"
-               target="_blank"
-               class="tr-icon-btn"
-               title="Preview PDF">
+      {% set grouped = {} %}
+      {% for it in items %}
+        {% set key = it.order.id %}
+        {% if key not in grouped %}
+          {% set _ = grouped.update({key: {'order': it.order, 'items': []}}) %}
+        {% endif %}
+        {% set _ = grouped[key]['items'].append(it) %}
+      {% endfor %}
+
+      {% for oid, grp in grouped.items() %}
+        {% set o = grp['order'] %}
+        {% set approved_n = grp['items'] | selectattr('is_verified') | list | length %}
+        {% set pending_n = grp['items'] | length - approved_n %}
+
+        {# ---- Parent row: one per order ---- #}
+        <tr class="rp-parent-row">
+          <td class="center">
+            <span class="rp-expand"
+                onclick="var rows=document.querySelectorAll('.rp-children-{{ oid }}');var open=this.textContent==='−';rows.forEach(function(r){r.style.display=open?'none':'table-row';r.classList.toggle('rp-hidden',open);});this.textContent=open?'+':'−';this.classList.toggle('open',!open);">+</span>
+          </td>
+          <td class="lab">{{ o.order_code }}</td>
+          <td>
+            <div style="font-weight:600;">{{ o.patient.full_name }}</div>
+            <div class="test-code">{{ o.patient.patient_code }}</div>
+          </td>
+          <td colspan="2">
+            {{ grp['items'] | length }} test{{ 's' if grp['items']|length != 1 }}
+            {% if pending_n > 0 %}
+              <span class="rp-badge pending" style="margin-left:6px;">{{ pending_n }} pending</span>
+            {% endif %}
+            {% if approved_n > 0 %}
+              <span class="rp-badge approved" style="margin-left:6px;">{{ approved_n }} approved</span>
+            {% endif %}
+          </td>
+          <td class="num">{{ o.created_at | localtime('%d/%m/%y %H:%M') }}</td>
+          <td class="center"></td>
+        </tr>
+
+        {# ---- Child rows: one per test ---- #}
+        {% for it in grp['items'] %}
+        <tr class="rp-child-row rp-children-{{ oid }} rp-hidden">
+          <td></td>
+          <td class="test-code">{{ it.test.code }}</td>
+          <td class="test-name">{{ it.test.name }}</td>
+          <td class="num"></td>
+          <td class="num">
+            {{ it.verified_at | localtime('%d/%m/%y %H:%M') if it.verified_at else '—' }}
+          </td>
+          <td class="center">
+            {% if it.is_verified %}
+              <span class="rp-badge approved">Approved</span>
+            {% elif it.needs_correction %}
+              <span class="rp-badge correction">Correction</span>
+            {% else %}
+              <span class="rp-badge pending">Pending</span>
+            {% endif %}
+          </td>
+          <td class="center">
+            <a href="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}"
+               class="rp-icon-btn rp-icon-btn-view"
+               title="{% if it.is_verified %}View approved report{% else %}View draft{% endif %}"
+               target="_blank">
               <i class="bi bi-eye"></i>
             </a>
-            <a href="{{ url_for('reports.order_pdf', order_id=o.id) }}"
-               class="tr-icon-btn tr-icon-btn-download"
-               title="Download PDF">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
-        </td>
-      </tr>
+          </td>
+        </tr>
+        {% endfor %}
       {% endfor %}
     </tbody>
   </table>
+
   {% else %}
-  <div class="tr-empty">
+  <div class="rp-empty">
     <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-    {% if q %}No reports match "{{ q }}".{% else %}No reports yet.{% endif %}
+    <div style="font-weight:600;">No reports found</div>
+    <div>Try widening the date range or changing the status filter.</div>
   </div>
   {% endif %}
 

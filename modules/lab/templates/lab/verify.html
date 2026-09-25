@@ -500,7 +500,7 @@
   var STORAGE_KEY = 'labms_verify_expanded';
 
   function loadExpanded() {
-    try { var r = sessionStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : {}; }
+    try { var r = sessionStorage.getItem(STORAGE_KEY); return r ?JSON.parse(r) : {}; }
     catch (_) { return {}; }
   }
   function saveExpanded(s) {

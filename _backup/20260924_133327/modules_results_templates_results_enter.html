@@ -1,11 +1,11 @@
 ﻿{% extends 'base.html' %}
 
-{% block title %}Enter Results â€” Lab # {{ order.order_code }}{% endblock %}
+{% block title %}Enter Results — Lab # {{ order.order_code }}{% endblock %}
 
 {% block head %}
 <style>
 /* ============================================================
-   Enter Results â€” flat dense layout (Daily Ledger style)
+   Enter Results — flat dense layout (Daily Ledger style)
    ============================================================ */
 
 .enter-page {
@@ -249,7 +249,7 @@
     <div class="row-item">
       <span class="key">Age / Gender:</span>
       <span class="val">
-        {{ order.patient.compute_age() or 'â€”' }} / {{ order.patient.gender or 'â€”' }}
+        {{ order.patient.compute_age() or '—' }} / {{ order.patient.gender or '—' }}
       </span>
     </div>
     <div class="row-item">
@@ -267,7 +267,7 @@
     {% if order.correction_at %} on {{ order.correction_at | localtime('%d-%b-%Y %I:%M %p') }}{% endif %}:
     <div class="mt-1 ps-3 fw-semibold">{{ order.correction_note }}</div>
     <div class="mt-1 small text-muted">
-      Fix the issues above and re-save â€” the report will need re-approval.
+      Fix the issues above and re-save — the report will need re-approval.
     </div>
   </div>
   {% endif %}
@@ -289,7 +289,7 @@
   {% elif order.all_results_done %}
   <div class="alert alert-success py-2 small">
     <i class="bi bi-check-circle-fill"></i>
-    All results entered. This order is <strong>completed</strong> â€”
+    All results entered. This order is <strong>completed</strong> —
     awaiting pathologist approval.
   </div>
   {% else %}
@@ -301,9 +301,9 @@
 
   {# ============================================================
      Build the working lists in-template:
-       pending_items  â€” top-level items still needing action
-       verified_items â€” already verified (locked)
-       pending_leaves â€” flat list of leaf items to render as inputs
+       pending_items  — top-level items still needing action
+       verified_items — already verified (locked)
+       pending_leaves — flat list of leaf items to render as inputs
 
      An item is "pending" when:
        - it has no result, OR
@@ -375,8 +375,8 @@
                     <span class="badge-correction">Correction</span>
                   {% endif %}
                 </td>
-                <td class="text-muted-sm">â€”</td>
-                <td class="text-muted-sm">â€”</td>
+                <td class="text-muted-sm">—</td>
+                <td class="text-muted-sm">—</td>
                 <td class="text-muted-sm">
                   {% if item.needs_correction %}
                     Re-enter all children below
@@ -413,7 +413,7 @@
                     {% endif %}
                   </td>
                   <td class="text-muted-sm">{{ rng(child.test, order) or '—' }}</td>
-                  <td class="text-muted-sm">{{ child.test.unit or 'â€”' }}</td>
+                  <td class="text-muted-sm">{{ child.test.unit or '—' }}</td>
                   <td>
                     <input
                       type="text"
@@ -457,7 +457,7 @@
                   {% endif %}
                 </td>
                 <td class="text-muted-sm">{{ rng(item.test, order) or '—' }}</td>
-                <td class="text-muted-sm">{{ item.test.unit or 'â€”' }}</td>
+                <td class="text-muted-sm">{{ item.test.unit or '—' }}</td>
                 <td>
                   <input
                     type="text"
@@ -540,7 +540,7 @@
               <i class="bi bi-arrow-return-right"></i>
               {{ child.test.name }}
             </span>
-            <span class="value">{{ child.result_value or 'â€”' }}</span>
+            <span class="value">{{ child.result_value or '—' }}</span>
             <span class="check"></span>
           </div>
           {% endfor %}
@@ -550,7 +550,7 @@
               <i class="bi bi-droplet"></i>
               {{ top.test.name }}
             </span>
-            <span class="value">{{ top.result_value or 'â€”' }}</span>
+            <span class="value">{{ top.result_value or '—' }}</span>
             <span class="check"><i class="bi bi-check-lg"></i></span>
           </div>
         {% endif %}

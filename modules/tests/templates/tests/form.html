@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html' %}
 
-{% block title %}{{ 'Edit' if test else 'Add' }} Test â€” LabMS{% endblock %}
+{% block title %}{{ 'Edit' if test else 'Add' }} Test — LabMS{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -41,7 +41,7 @@
               <label class="form-label">Category</label>
               {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
               <select name="category_id" class="form-select">
-                <option value="">â€” Select â€”</option>
+                <option value="">— Select —</option>
                 {% for c in categories %}
                 <option value="{{ c.id }}" {% if cur_cat|string == c.id|string %}selected{% endif %}>{{ c.name }}</option>
                 {% endfor %}

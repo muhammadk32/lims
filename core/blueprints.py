@@ -1,4 +1,4 @@
-﻿"""Blueprint registration â€” kept in one place so app.py stays slim."""
+﻿"""Blueprint registration — kept in one place so app.py stays slim."""
 
 
 def register_blueprints(app):

@@ -1,6 +1,6 @@
 ﻿{% extends 'base.html' %}
 
-{% block title %}Enter Results â€” {{ order.order_code }}{% endblock %}
+{% block title %}Enter Results — {{ order.order_code }}{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
@@ -78,7 +78,7 @@
                 <div class="text-muted small"><code>{{ item.test.code }}</code></div>
               </td>
               <td class="text-muted small">{{ rng(item.test, order) or '—' }}</td>
-              <td class="text-muted small">{{ item.test.unit or 'â€”' }}</td>
+              <td class="text-muted small">{{ item.test.unit or '—' }}</td>
               <td>
                 <input
                   type="text"

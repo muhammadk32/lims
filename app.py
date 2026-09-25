@@ -108,7 +108,7 @@ def _dev_bootstrap():
         if created_tests or created_categories:
             print(f'Seeded {created_tests} tests and {created_categories} categories.')
         else:
-            print('Test catalog already populated â€” skipping seed.')
+            print('Test catalog already populated — skipping seed.')
 
 
 if __name__ == '__main__':

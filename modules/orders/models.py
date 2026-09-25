@@ -48,7 +48,7 @@ class Order(BaseModel):
     # in the Referred-by typeahead). Falls back to `doctor` when empty.
     referred_by_name = db.Column(db.String(120), nullable=True)
 
-    # Order-level approval (kept for backward compat â€” but the source of
+    # Order-level approval (kept for backward compat — but the source of
     # truth is now per-item verification)
     reported_at = db.Column(db.DateTime, nullable=True)
     reported_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -282,7 +282,7 @@ class OrderItem(BaseModel):
     verified_at = db.Column(db.DateTime, nullable=True)
     verified_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
-    # Per-item correction note (NEW) â€” pathologist sends back a specific test
+    # Per-item correction note (NEW) — pathologist sends back a specific test
     correction_note = db.Column(db.Text, nullable=True)
     correction_at = db.Column(db.DateTime, nullable=True)
     correction_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -338,7 +338,7 @@ class OrderItem(BaseModel):
     def is_verified(self):
         """True only for top-level items verified by a pathologist.
 
-        Panel children are never verified individually â€” only the
+        Panel children are never verified individually — only the
         top-level panel is. A standalone top-level test verifies itself.
         """
         if self.is_child:
@@ -354,6 +354,10 @@ class OrderItem(BaseModel):
         """
         if self.is_child:
             return False
+        if self.has_children:
+            # Panel is verifiable as soon as any child has a value.
+            # Blank children are treated as "not applicable".
+            return any(bool(c.result_value) for c in self.children)
         return self.has_result
 
     @property

@@ -161,6 +161,11 @@
           <i class="bi bi-person-badge"></i> Referrals &amp; Commission
         </a>
 
+        <a href="{{ url_for('settings.antibiotics_list') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('settings.antibiotics') %}active{% endif %}">
+          <i class="bi bi-capsule"></i> Antibiotics
+        </a>
+
       </div>
     </div>
     {% endif %}

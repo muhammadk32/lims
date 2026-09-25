@@ -381,3 +381,60 @@ def referrals_recalculate():
         'success',
     )
     return redirect(url_for('settings.referrals'))
+
+# ============================================================
+# Antibiotics admin (master list for Culture & Sensitivity)
+# ============================================================
+@settings_bp.route('/antibiotics', methods=['GET', 'POST'])
+@login_required
+def antibiotics_list():
+    if not _admin_only():
+        flash('Only administrators can manage antibiotics.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    from core.models import Antibiotic
+
+    if request.method == 'POST':
+        # add
+        name = (request.form.get('name') or '').strip()
+        short = (request.form.get('short_name') or '').strip() or None
+        grp = (request.form.get('group') or '').strip() or None
+        if name:
+            if Antibiotic.query.filter_by(name=name).first():
+                flash(f'"{name}" already exists.', 'warning')
+            else:
+                Antibiotic.query.session.add(Antibiotic(name=name, short_name=short, group=grp, sort_order=(Antibiotic.query.count() + 1), is_active=True))
+                db.session.commit()
+                flash(f'Antibiotic "{name}" added.', 'success')
+        return redirect(url_for('settings.antibiotics_list'))
+
+    items = (Antibiotic.query.order_by(Antibiotic.group.asc(), Antibiotic.sort_order.asc()).all())
+    return render_template('settings/antibiotics.html', items=items)
+
+
+@settings_bp.route('/antibiotics/<int:ab_id>/toggle', methods=['POST'])
+@login_required
+def antibiotic_toggle(ab_id):
+    if not _admin_only():
+        flash('Not allowed.', 'danger')
+        return redirect(url_for('dashboard.index'))
+    from core.models import Antibiotic
+    a = Antibiotic.query.get_or_404(ab_id)
+    a.is_active = not a.is_active
+    db.session.commit()
+    flash('Antibiotic updated.', 'success')
+    return redirect(url_for('settings.antibiotics_list'))
+
+
+@settings_bp.route('/antibiotics/<int:ab_id>/delete', methods=['POST'])
+@login_required
+def antibiotic_delete(ab_id):
+    if not _admin_only():
+        flash('Not allowed.', 'danger')
+        return redirect(url_for('dashboard.index'))
+    from core.models import Antibiotic
+    a = Antibiotic.query.get_or_404(ab_id)
+    db.session.delete(a)
+    db.session.commit()
+    flash('Antibiotic deleted.', 'info')
+    return redirect(url_for('settings.antibiotics_list'))

@@ -1,0 +1,47 @@
+{# Microscopy / Text-field block ?grouped by panel_section #}
+<div class="msc-block" data-item="{{ item.id }}">
+  <div class="msc-block-hd">
+    <i class="bi bi-droplet"></i>
+    <strong>{{ item.test.name }}</strong>
+    <span class="text-muted small ms-2">{{ item.test.code }}</span>
+  </div>
+
+  {% set children = item.children or [] %}
+  {% set sections_seen = [] %}
+
+  {% for child in children %}
+    {% set sect = child.test.panel_section or 'Results' %}
+    {% if sect not in sections_seen %}
+      {% if sections_seen %}</tbody></table>{% endif %}
+      {% set _ = sections_seen.append(sect) %}
+      <div class="msc-section-hd">{{ sect }}</div>
+      <table class="msc-table"><tbody>
+    {% endif %}
+    <tr>
+      <td class="msc-param">{{ child.test.name }}</td>
+      <td>
+        <input type="text" name="result_value_{{ child.id }}"
+               value="{{ child.result_value or '' }}"
+               class="msc-input" placeholder="Enter value">
+      </td>
+      <td class="msc-muted">{{ child.test.normal_range or (rng(child.test, order) or '?') }}</td>
+    </tr>
+  {% endfor %}
+  {% if sections_seen %}</tbody></table>{% endif %}
+
+  {# Fallback: no children configured ?show generic rows #}
+  {% if not children %}
+  <table class="msc-table"><tbody>
+    {% set rows = [('Pus cells','0-5 /HPF'), ('RBCs','0-2 /HPF'),
+                   ('Epithelial cells','Few'), ('Casts','Nil'),
+                   ('Crystals','Nil'), ('Others','')] %}
+    {% for label, ref in rows %}
+    <tr>
+      <td class="msc-param">{{ label }}</td>
+      <td><input type="text" name="msc_{{ item.id }}_{{ loop.index }}" class="msc-input" placeholder="Enter value"></td>
+      <td class="msc-muted">{{ ref }}</td>
+    </tr>
+    {% endfor %}
+  </tbody></table>
+  {% endif %}
+</div>

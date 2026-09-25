@@ -466,14 +466,14 @@
       approveBtn.disabled = (n === 0);
       if (approveCount) {
         approveCount.textContent = n;
-        approveCount.style.display = (n > 0) ? 'inline-block' : 'none';
+        approveCount.style.display = (n > 0) ?'inline-block' : 'none';
       }
     }
     if (sendBackBtn) {
       sendBackBtn.disabled = (n === 0);
       if (sendBackCount) {
         sendBackCount.textContent = n;
-        sendBackCount.style.display = (n > 0) ? 'inline-block' : 'none';
+        sendBackCount.style.display = (n > 0) ?'inline-block' : 'none';
       }
     }
 
@@ -497,7 +497,7 @@
     var checked = document.querySelectorAll('.item-check:checked');
     if (checked.length === 0) return;
     var n = checked.length;
-    if (!confirm('Approve ' + n + ' selected test' + (n === 1 ? '' : 's') + '?')) return;
+    if (!confirm('Approve ' + n + ' selected test' + (n === 1 ?'' : 's') + '?')) return;
 
     var form = document.getElementById('bulkForm');
     form.action = '{{ url_for("lab.bulk_approve") }}';

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}Enter Result — {{ item.test.name }}{% endblock %}
+
+{% block head %}
+<style>
+.ei-page { max-width: 1200px; margin: 0 auto; padding: 10px 18px 30px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+
+.ei-header { border-bottom: 2px solid #212529; padding-bottom: 5px;
+             margin-bottom: 10px; display: flex; justify-content: space-between;
+             align-items: flex-end; flex-wrap: wrap; gap: 8px; }
+.ei-title { font-size: 1.1rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.ei-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+
+.ei-band { display: grid; grid-template-columns: auto auto auto auto;
+  gap: 4px 24px; background: #f0f6ff; border: 1px solid #b6d4fe;
+  padding: 6px 12px; font-size: 0.78rem; margin-bottom: 10px; align-items: baseline; }
+.ei-band .k { font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+              letter-spacing: 0.06em; color: #0a58ca; white-space: nowrap; }
+.ei-band .v { font-weight: 600; font-family: Consolas, Monaco, monospace; white-space: nowrap; }
+.ei-band .v.name { font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; }
+
+.ei-bar { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; }
+.ei-bar .spacer { flex: 1; }
+.ei-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem; font-weight: 700;
+  border: 1px solid #212529; background: #fff; color: #212529; text-decoration: none;
+  cursor: pointer; border-radius: 6px; text-transform: uppercase;
+  letter-spacing: 0.04em; height: 28px; line-height: 1.7; }
+.ei-btn:hover { background: #f1f3f5; }
+.ei-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.ei-btn-primary:hover { background: #146c43; }
+.ei-btn-warn { background: #ffc107; border-color: #b8860b; color: #664d03; }
+.ei-btn-warn:hover { background: #e0a800; }
+.ei-btn-print { background: #0d6efd; border-color: #0d6efd; color: #fff; }
+.ei-btn-print:hover { background: #0a58ca; }
+.ei-btn-cancel { background: #fff; border-color: #dc3545; color: #dc3545; }
+.ei-btn-cancel:hover { background: #dc3545; color: #fff; }
+
+.ei-card { border: 1.5px solid #212529; background: #fff; }
+.ei-card-hd { background: #0d6efd; color: #fff; padding: 5px 12px;
+              font-size: 0.72rem; font-weight: 700;
+              text-transform: uppercase; letter-spacing: 0.05em; }
+.ei-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.ei-table thead th { background: #e9ecef; color: #212529; font-size: 0.62rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 4px 8px; text-align: left; border: 1px solid #adb5bd; }
+.ei-table tbody td { padding: 4px 8px; border: 1px solid #dee2e6; vertical-align: middle; }
+.ei-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.ei-table .name { font-weight: 600; font-size: 0.82rem; }
+.ei-table .child-name { padding-left: 24px; font-weight: 400; }
+.ei-table .ref, .ei-table .unit { font-family: Consolas, Monaco, monospace;
+                                  font-size: 0.72rem; color: #495057; }
+.ei-table .unit { text-align: center; }
+.ei-input { width: 100%; height: 26px; padding: 3px 8px; border: 1px solid #adb5bd;
+            border-radius: 4px; font-size: 0.82rem; background: #fff;
+            font-family: inherit; box-sizing: border-box; }
+.ei-input:focus { outline: none; border-color: #198754;
+                  box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
+
+.ei-actions { display: flex; justify-content: space-between; align-items: center;
+              margin-top: 12px; gap: 8px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ei-page">
+
+  <div class="ei-header">
+    <div>
+      <a href="{{ url_for('results.enter', order_id=order.id) }}"
+         style="font-size:0.72rem;color:#6c757d;text-decoration:none;">
+        <i class="bi bi-arrow-left"></i> Back to Result Entry Page
+      </a>
+      <h1 class="ei-title" style="margin-top:4px;">
+        <i class="bi bi-pencil-square"></i> {{ item.test.name }}
+      </h1>
+      <div class="ei-sub">
+        Code <b>{{ item.test.code }}</b> ·
+        Format <b>{{ item.test.result_format or 'numeric' }}</b>
+      </div>
+    </div>
+  </div>
+
+  {# ============ HEADER BAND ============ #}
+  <div class="ei-band">
+    <div><span class="k">Lab No:</span> <span class="v">{{ order.order_code }}</span></div>
+    <div><span class="k">Patient:</span> <span class="v name">{{ order.patient.full_name }}</span></div>
+    <div><span class="k">Patient No:</span> <span class="v">{{ order.patient.patient_code }}</span></div>
+    <div><span class="k">Gender/Age:</span> <span class="v">{{ order.patient.gender or '—' }} / {{ order.patient.compute_age() or '—' }}</span></div>
+  </div>
+
+  {# ============ FORM ============ #}
+  <form method="POST">
+    <div class="ei-bar">
+      <button type="submit" class="ei-btn ei-btn-primary">
+        <i class="bi bi-check-lg"></i> Save
+      </button>
+      <button type="submit" name="conduct" value="1" class="ei-btn ei-btn-warn">
+        <i class="bi bi-check2-circle"></i> Save &amp; Conduct
+      </button>
+      <button type="button" class="ei-btn ei-btn-print" onclick="window.print()">
+        <i class="bi bi-printer"></i> Print
+      </button>
+      <a href="{{ url_for('results.enter', order_id=order.id) }}" class="ei-btn ei-btn-cancel">
+        <i class="bi bi-x-lg"></i> Cancel
+      </a>
+    </div>
+
+    <div class="ei-card">
+      <div class="ei-card-hd">
+        <i class="bi bi-clipboard2-pulse"></i> Result Entry
+      </div>
+      <table class="ei-table">
+        <thead>
+          <tr>
+            <th style="width:32%;">Test Name</th>
+            <th style="width:22%;">Result</th>
+            <th style="width:22%;">Remarks</th>
+            <th style="width:10%;">Unit</th>
+            <th style="width:14%;">Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if item.has_children %}
+            {# ---- Panel: one row per child ---- #}
+            {% set current_section = namespace(name=None) %}
+            {% for child in item.children %}
+              {% set sect = child.test.panel_section %}
+              {% if sect and sect != current_section.name %}
+                {% set current_section.name = sect %}
+                <tr>
+                  <td colspan="5" style="background:#ced4da;font-size:0.66rem;
+                                         font-weight:700;text-transform:uppercase;
+                                         letter-spacing:0.08em;padding:3px 8px;
+                                         border:1px solid #adb5bd;">{{ sect }}</td>
+                </tr>
+              {% endif %}
+              <tr>
+                <td class="child-name">
+                  <i class="bi bi-arrow-return-right" style="color:#6c757d;"></i>
+                  {{ child.test.name }}
+                </td>
+                <td>
+                  <input type="text" name="result_value_{{ child.id }}"
+                         value="{{ child.result_value or '' }}"
+                         class="ei-input" placeholder="Enter value" autocomplete="off">
+                </td>
+                <td>
+                  <input type="text" name="result_notes_{{ child.id }}"
+                         value="{{ child.result_notes or '' }}"
+                         class="ei-input" placeholder="Remarks">
+                </td>
+                <td class="unit">{{ child.test.unit or '' }}</td>
+                <td class="ref">{{ rng(child.test, order) or (child.test.normal_range or '') }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            {# ---- Standalone ---- #}
+            <tr>
+              <td class="name">
+                {{ item.test.name }}
+                {% if item.test.result_format %}<div style="font-size:0.66rem;color:#6c757d;font-family:Consolas, Monaco, monospace;">{{ item.test.result_format }}</div>{% endif %}
+              </td>
+              <td>
+                <input type="text" name="result_value_{{ item.id }}"
+                       value="{{ item.result_value or '' }}"
+                       class="ei-input" placeholder="Enter value" autocomplete="off">
+              </td>
+              <td>
+                <input type="text" name="result_notes_{{ item.id }}"
+                       value="{{ item.result_notes or '' }}"
+                       class="ei-input" placeholder="Remarks">
+              </td>
+              <td class="unit">{{ item.test.unit or '' }}</td>
+              <td class="ref">{{ rng(item.test, order) or (item.test.normal_range or '') }}</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div></form>
+
+</div>
+{% endblock %}
