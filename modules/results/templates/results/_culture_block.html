@@ -29,30 +29,63 @@
       </div>
       <div class="cul-row">
         <span class="cul-lbl">No. Of Sensitive:</span>
-        <select name="culture_no_sensitive_{{ item.id }}" class="cul-select">
+        <select name="culture_no_sensitive_{{ item.id }}" class="cul-select cul-no-sensitive"
+                data-item="{{ item.id }}">
           {% for v in ['No Sensitive','1 Sensitive','2 Sensitive','3 Sensitive','4 Sensitive','5+ Sensitive'] %}
           <option value="{{ v }}" {% if r and r.culture_no_sensitive == v %}selected{% endif %}>{{ v }}</option>
           {% endfor %}
         </select>
       </div>
 
-      <div class="cul-row cul-row-full">
-        <span class="cul-lbl">Bacteria:</span>
-        <select name="culture_bacteria_{{ item.id }}" class="cul-input" multiple size="8">
-          {% set saved = (r.culture_bacteria_ids.split(',') if r and r.culture_bacteria_ids else []) %}
-          {% for b in bacteria %}
-          <option value="{{ b.id }}" {% if b.id|string in saved %}selected{% endif %}>
-            {{ b.name }}
-          </option>
-          {% endfor %}
-        </select>
+      <div class="cul-row cul-row-full" style="align-items:start; grid-column: 1 / -1; display: block;">
+        <span class="cul-lbl" style="display:block; text-align:left; margin-bottom:4px;">Bacteria:</span>
+        <div class="cul-bac-wrap" style="max-height:220px;height:220px;overflow-y:auto;overflow-x:hidden;border:1px solid #adb5bd;background:#fff;display:block;width:100%;">
+          <table class="cul-bac-table">
+            <thead>
+              <tr>
+                <th style="width:40px;" class="center">?</th>
+                <th>Name</th>
+                <th style="width:44px;" class="center col-g-1">G1</th>
+                <th style="width:44px;" class="center col-g-2">G2</th>
+                <th style="width:44px;" class="center col-g-3">G3</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% set saved = (r.culture_bacteria_ids.split(',') if r and r.culture_bacteria_ids else []) %}
+              {% for b in bacteria %}
+              <tr>
+                <td class="center">
+                  <input type="checkbox" name="culture_bacteria_{{ item.id }}"
+                         value="{{ b.id }}"
+                         class="cul-bac-check"
+                         data-name="{{ b.name }}"
+                         data-item="{{ item.id }}"
+                         {% if b.id|string in saved %}checked{% endif %}>
+                </td>
+                <td>{{ b.name }}</td>
+                <td class="center col-g-1">
+                  <input type="checkbox" class="cul-bac-g"
+                         data-item="{{ item.id }}" data-g="1"
+                         data-name="{{ b.name }}">
+                </td>
+                <td class="center col-g-2">
+                  <input type="checkbox" class="cul-bac-g"
+                         data-item="{{ item.id }}" data-g="2"
+                         data-name="{{ b.name }}">
+                </td>
+                <td class="center col-g-3">
+                  <input type="checkbox" class="cul-bac-g"
+                         data-item="{{ item.id }}" data-g="3"
+                         data-name="{{ b.name }}">
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="cul-row cul-row-full">
-        <span class="cul-lbl">Phage Name:</span>
-        <textarea name="culture_phage_name_{{ item.id }}" class="cul-textarea" rows="3"
-                  placeholder="Direct Microscopy: Z.N / Fluorescent stain...">{{ r.culture_phage_name if r else '' }}</textarea>
-      </div>
+
 
       <div class="cul-row">
         <span class="cul-lbl">PUS C/S Only:</span>
@@ -135,12 +168,15 @@
     <table class="cul-ast">
       <thead>
         <tr>
-          <th style="width:160px;">Group Name</th>
-          <th style="width:200px;">Medicine Name</th>
-          <th style="width:70px;">Short</th>
-          <th>MIC-I</th><th style="width:60px;">S-I</th>
-          <th>MIC-II</th><th style="width:60px;">S-II</th>
-          <th>MIC-III</th><th style="width:60px;">S-III</th>
+          <th style="width:130px;">Group Name</th>
+          <th style="width:150px;">Medicine Name</th>
+          <th style="width:50px;">Short</th>
+          <th class="col-mic-1" style="width:55px;">MIC-I</th>
+          <th class="col-s-1"   style="width:55px;">S-I</th>
+          <th class="col-mic-2" style="width:55px;">MIC-II</th>
+          <th class="col-s-2"   style="width:55px;">S-II</th>
+          <th class="col-mic-3" style="width:55px;">MIC-III</th>
+          <th class="col-s-3"   style="width:55px;">S-III</th>
         </tr>
       </thead>
       <tbody>
@@ -150,27 +186,27 @@
           <td class="cul-ast-group">{{ ab.group or '\u2014' }}</td>
           <td class="cul-ast-med">{{ ab.name }}</td>
           <td class="cul-ast-short">{{ ab.short_name or '' }}</td>
-          <td><input type="text" name="ca_mic_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+          <td class="col-mic-1"><input type="text" name="ca_mic_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
                      value="{{ row.mic_1 if row and row.mic_1 else '' }}"></td>
-          <td>
+          <td class="col-s-1">
             <select name="ca_s_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
               {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
               <option value="{{ k }}" {% if row and row.s_1 == k %}selected{% endif %}>{{ v }}</option>
               {% endfor %}
             </select>
           </td>
-          <td><input type="text" name="ca_mic_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+          <td class="col-mic-2"><input type="text" name="ca_mic_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
                      value="{{ row.mic_2 if row and row.mic_2 else '' }}"></td>
-          <td>
+          <td class="col-s-2">
             <select name="ca_s_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
               {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
               <option value="{{ k }}" {% if row and row.s_2 == k %}selected{% endif %}>{{ v }}</option>
               {% endfor %}
             </select>
           </td>
-          <td><input type="text" name="ca_mic_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
+          <td class="col-mic-3"><input type="text" name="ca_mic_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
                      value="{{ row.mic_3 if row and row.mic_3 else '' }}"></td>
-          <td>
+          <td class="col-s-3">
             <select name="ca_s_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
               {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
               <option value="{{ k }}" {% if row and row.s_3 == k %}selected{% endif %}>{{ v }}</option>
@@ -189,7 +225,8 @@
 .cul-tab { padding:5px 18px; font-size:0.7rem; font-weight:700; text-transform:uppercase;
            letter-spacing:0.04em; color:#495057; background:#f8f9fa;
            border:1px solid #dee2e6; border-bottom:none; cursor:pointer;
-           margin-bottom:-2px; user-select:none; }
+           margin-bottom:-2px; user-select:none;
+           border-radius:6px 6px 0 0; }
 .cul-tab:hover { background:#e9ecef; }
 .cul-tab.active { background:#fff; color:#198754; border-color:#212529;
                   border-bottom-color:#fff; padding-bottom:6px; }
@@ -216,6 +253,7 @@ select[multiple].cul-input { height:auto; padding:4px; }
 .cul-gr-row .cul-row { margin-bottom: 6px; }
 
 .cul-ast-hd { background:#212529; color:#fff; padding:5px 12px; font-size:0.72rem;
+              border-radius:6px 6px 0 0;
               font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
               margin-top: 10px; }
 .cul-ast-wrap { max-height:420px; overflow-y:auto; border:1px solid #adb5bd; }
@@ -233,4 +271,156 @@ select[multiple].cul-input { height:auto; padding:4px; }
                  border-radius:3px; font-size:0.72rem; font-family:Consolas, Monaco, monospace; }
 .cul-ast-select { width:100%; height:22px; padding:1px 4px; border:1px solid #adb5bd;
                   border-radius:3px; font-size:0.72rem; font-weight:700; }
+
+
+<style>
+.cul-ast-select { text-align: center; font-weight: 700; }
+.cul-ast-select option[value="S"] { color: #0f5132; font-weight: 700; }
+.cul-ast-select option[value="I"] { color: #664d03; font-weight: 700; }
+.cul-ast-select option[value="R"] { color: #842029; font-weight: 700; }
+
+/* Live-coloured select via data attribute */
+.cul-ast-select.s-S { background:#d1e7dd; color:#0f5132; border-color:#a3cfbb; }
+.cul-ast-select.s-I { background:#fff3cd; color:#664d03; border-color:#ffecb5; }
+.cul-ast-select.s-R { background:#f8d7da; color:#842029; border-color:#f5c2c7; }
+
+.cul-ast-input { text-align: center; }
+
+<style>
+.cul-bac-wrap { max-height: 160px; height: 160px; overflow-y: auto;
+                border: 1px solid #adb5bd; background: #fff;
+                width: 100%; resize: vertical; }
+.cul-bac-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+.cul-bac-table thead th { background: #e9ecef; position: sticky; top: 0; z-index: 1;
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 3px 6px; border: 1px solid #adb5bd;
+  text-align: left; }
+.cul-bac-table thead th.center { text-align: center; }
+.cul-bac-table tbody td { padding: 2px 6px; border: 1px solid #dee2e6;
+                          vertical-align: middle; }
+.cul-bac-table tbody tr:nth-child(even) { background: #fbfcfd; }
+.cul-bac-table tbody tr:hover { background: #eef6ff; }
+.cul-bac-check, .cul-bac-g { width: 14px; height: 14px; cursor: pointer;
+                             accent-color: #198754; }
+.cul-bac-g { accent-color: #0d6efd; }
 </style>
+
+
+<script>
+(function(){
+  function applySensitivity() {
+    document.querySelectorAll('.cul-no-sensitive').forEach(function (sel) {
+      var n = 0;
+      var v = sel.value || '';
+      if (v.indexOf('1') === 0) n = 1;
+      else if (v.indexOf('2') === 0) n = 2;
+      else if (v.indexOf('3') === 0) n = 3;
+      else if (v.indexOf('4') === 0) n = 4;
+      else if (v.indexOf('5') === 0) n = 5;
+      else n = 0;
+
+      var wrap = sel.closest('.cul-block') || document;
+      ['1','2','3'].forEach(function (level) {
+        var show = parseInt(level, 10) <= n;
+        // hide/show MIC & S columns
+        wrap.querySelectorAll('.col-mic-' + level + ', .col-s-' + level).forEach(function (cell) {
+          cell.style.display = show ? '' : 'none';
+        });
+        // hide/show the G1/G2/G3 column in the bacteria grid
+        wrap.querySelectorAll('.col-g-' + level).forEach(function (cell) {
+          cell.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', applySensitivity);
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('cul-no-sensitive')) {
+      applySensitivity();
+    }
+  });
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.classList.contains('cul-no-sensitive')) {
+      applySensitivity();
+    }
+  });
+  window.addEventListener('load', applySensitivity);
+})();
+</script>
+<script>
+(function(){
+  function paint(sel) {
+    var v = sel.value;
+    sel.classList.remove('s-S', 's-I', 's-R');
+    if (v === 'S') sel.classList.add('s-S');
+    else if (v === 'I') sel.classList.add('s-I');
+    else if (v === 'R') sel.classList.add('s-R');
+  }
+  function paintAll() {
+    document.querySelectorAll('.cul-ast-select').forEach(paint);
+  }
+  document.addEventListener('DOMContentLoaded', paintAll);
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('cul-ast-select')) paint(e.target);
+  });
+  window.addEventListener('load', paintAll);
+})();
+</script>
+<script>
+(function(){
+  function buildLine(name) {
+    // Customize this template as needed
+    return 'Isolate ' + name + ' - Heavy growth of ' + name +
+           ' obtained after 24 hours of incubation at 37?C.';
+  }
+
+  function appendLine(itemId, g, name) {
+    var ta = document.querySelector('textarea[name="culture_growth_' + g + '_' + itemId + '"]');
+    if (!ta) return;
+    var line = buildLine(name);
+    var cur = ta.value.trim();
+    if (cur.indexOf(name) !== -1) return;   // already added
+    ta.value = cur ? (cur + '\n' + line) : line;
+  }
+
+  function removeLine(itemId, g, name) {
+    var ta = document.querySelector('textarea[name="culture_growth_' + g + '_' + itemId + '"]');
+    if (!ta) return;
+    var lines = ta.value.split('\n').filter(function (l) {
+      return l.indexOf(name) === -1;
+    });
+    ta.value = lines.join('\n').replace(/\n{2,}/g, '\n').trim();
+  }
+
+  // When G1/G2/G3 checkbox changes, auto-fill or remove the matching growth textarea
+  document.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('cul-bac-g')) return;
+    var itemId = e.target.dataset.item;
+    var g      = e.target.dataset.g;
+    var name   = e.target.dataset.name;
+    if (e.target.checked) {
+      appendLine(itemId, g, name);
+      // also auto-tick the primary checkbox
+      var primary = document.querySelector('.cul-bac-check[data-item="' + itemId + '"][data-name="' + name + '"]');
+      if (primary) primary.checked = true;
+    } else {
+      removeLine(itemId, g, name);
+    }
+  });
+
+  // When the primary checkbox is unticked, clear all G ticks for that row
+  document.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('cul-bac-check')) return;
+    if (e.target.checked) return;
+    var itemId = e.target.dataset.item;
+    var name   = e.target.dataset.name;
+    document.querySelectorAll('.cul-bac-g[data-item="' + itemId + '"][data-name="' + name + '"]').forEach(function (g) {
+      if (g.checked) {
+        g.checked = false;
+        removeLine(itemId, g.dataset.g, name);
+      }
+    });
+  });
+})();
+</script>

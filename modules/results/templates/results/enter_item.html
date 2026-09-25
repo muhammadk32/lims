@@ -107,78 +107,7 @@
       </a>
     </div>
 
-    <div class="ei-card">
-      <div class="ei-card-hd">
-        <i class="bi bi-clipboard2-pulse"></i> Result Entry
-      </div>
-      <table class="ei-table">
-        <thead>
-          <tr>
-            <th style="width:32%;">Test Name</th>
-            <th style="width:22%;">Result</th>
-            <th style="width:22%;">Remarks</th>
-            <th style="width:10%;">Unit</th>
-            <th style="width:14%;">Reference</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if item.has_children %}
-            {# ---- Panel: one row per child ---- #}
-            {% set current_section = namespace(name=None) %}
-            {% for child in item.children %}
-              {% set sect = child.test.panel_section %}
-              {% if sect and sect != current_section.name %}
-                {% set current_section.name = sect %}
-                <tr>
-                  <td colspan="5" style="background:#ced4da;font-size:0.66rem;
-                                         font-weight:700;text-transform:uppercase;
-                                         letter-spacing:0.08em;padding:3px 8px;
-                                         border:1px solid #adb5bd;">{{ sect }}</td>
-                </tr>
-              {% endif %}
-              <tr>
-                <td class="child-name">
-                  <i class="bi bi-arrow-return-right" style="color:#6c757d;"></i>
-                  {{ child.test.name }}
-                </td>
-                <td>
-                  <input type="text" name="result_value_{{ child.id }}"
-                         value="{{ child.result_value or '' }}"
-                         class="ei-input" placeholder="Enter value" autocomplete="off">
-                </td>
-                <td>
-                  <input type="text" name="result_notes_{{ child.id }}"
-                         value="{{ child.result_notes or '' }}"
-                         class="ei-input" placeholder="Remarks">
-                </td>
-                <td class="unit">{{ child.test.unit or '' }}</td>
-                <td class="ref">{{ rng(child.test, order) or (child.test.normal_range or '') }}</td>
-              </tr>
-            {% endfor %}
-          {% else %}
-            {# ---- Standalone ---- #}
-            <tr>
-              <td class="name">
-                {{ item.test.name }}
-                {% if item.test.result_format %}<div style="font-size:0.66rem;color:#6c757d;font-family:Consolas, Monaco, monospace;">{{ item.test.result_format }}</div>{% endif %}
-              </td>
-              <td>
-                <input type="text" name="result_value_{{ item.id }}"
-                       value="{{ item.result_value or '' }}"
-                       class="ei-input" placeholder="Enter value" autocomplete="off">
-              </td>
-              <td>
-                <input type="text" name="result_notes_{{ item.id }}"
-                       value="{{ item.result_notes or '' }}"
-                       class="ei-input" placeholder="Remarks">
-              </td>
-              <td class="unit">{{ item.test.unit or '' }}</td>
-              <td class="ref">{{ rng(item.test, order) or (item.test.normal_range or '') }}</td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
-    </div>
+    
 
     {# ============ FORMAT-SPECIFIC DETAIL BLOCKS ============ #}
     {% set fmt = (item.test.result_format or '').lower() %}
