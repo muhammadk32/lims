@@ -39,29 +39,20 @@
 
       <div class="cul-row cul-row-full" style="align-items:start; grid-column: 1 / -1; display: block;">
         <span class="cul-lbl" style="display:block; text-align:left; margin-bottom:4px;">Bacteria:</span>
-        <div class="cul-bac-wrap" style="max-height:220px;height:220px;overflow-y:auto;overflow-x:hidden;border:1px solid #adb5bd;background:#fff;display:block;width:100%;">
+        <div class="cul-bac-wrap" style="max-height:220px;height:220px;overflow-y:auto;overflow-x:hidden;border:1px solid #adb5bd;background:#fff;display:block;width:640px;max-width:100%;">
           <table class="cul-bac-table">
             <thead>
               <tr>
-                <th style="width:40px;" class="center">?</th>
                 <th>Name</th>
-                <th style="width:44px;" class="center col-g-1">G1</th>
-                <th style="width:44px;" class="center col-g-2">G2</th>
-                <th style="width:44px;" class="center col-g-3">G3</th>
+                <th style="width:34px;" class="center col-g-1">G1</th>
+                <th style="width:34px;" class="center col-g-2">G2</th>
+                <th style="width:34px;" class="center col-g-3">G3</th>
               </tr>
             </thead>
             <tbody>
               {% set saved = (r.culture_bacteria_ids.split(',') if r and r.culture_bacteria_ids else []) %}
               {% for b in bacteria %}
               <tr>
-                <td class="center">
-                  <input type="checkbox" name="culture_bacteria_{{ item.id }}"
-                         value="{{ b.id }}"
-                         class="cul-bac-check"
-                         data-name="{{ b.name }}"
-                         data-item="{{ item.id }}"
-                         {% if b.id|string in saved %}checked{% endif %}>
-                </td>
                 <td>{{ b.name }}</td>
                 <td class="center col-g-1">
                   <input type="checkbox" class="cul-bac-g"
@@ -372,7 +363,7 @@ select[multiple].cul-input { height:auto; padding:4px; }
   function buildLine(name) {
     // Customize this template as needed
     return 'Isolate ' + name + ' - Heavy growth of ' + name +
-           ' obtained after 24 hours of incubation at 37?C.';
+           ' obtained after 24 hours of incubation at 37\u00b0C.';
   }
 
   function appendLine(itemId, g, name) {
@@ -401,26 +392,10 @@ select[multiple].cul-input { height:auto; padding:4px; }
     var name   = e.target.dataset.name;
     if (e.target.checked) {
       appendLine(itemId, g, name);
-      // also auto-tick the primary checkbox
-      var primary = document.querySelector('.cul-bac-check[data-item="' + itemId + '"][data-name="' + name + '"]');
-      if (primary) primary.checked = true;
     } else {
       removeLine(itemId, g, name);
     }
   });
-
-  // When the primary checkbox is unticked, clear all G ticks for that row
-  document.addEventListener('change', function (e) {
-    if (!e.target.classList.contains('cul-bac-check')) return;
-    if (e.target.checked) return;
-    var itemId = e.target.dataset.item;
-    var name   = e.target.dataset.name;
-    document.querySelectorAll('.cul-bac-g[data-item="' + itemId + '"][data-name="' + name + '"]').forEach(function (g) {
-      if (g.checked) {
-        g.checked = false;
-        removeLine(itemId, g.dataset.g, name);
-      }
-    });
-  });
 })();
 </script>
+
