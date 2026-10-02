@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Culture Report Labels \u2014 LabMS{% endblock %}
+
+{% block head %}
+<style>
+.cl-page { max-width: 900px; margin: 0 auto; padding: 14px 20px 40px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.cl-header { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid #212529; padding-bottom:5px; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.cl-title { font-size:1.15rem; font-weight:700; margin:0; text-transform:uppercase; letter-spacing:0.02em; }
+.cl-sub { font-size:0.76rem; color:#6c757d; margin-top:2px; }
+
+.cl-card { border:1.5px solid #212529; background:#fff; padding:14px 18px 18px; }
+.cl-row { display:grid; grid-template-columns:240px 1fr; gap:12px; align-items:center; margin-bottom:12px; }
+.cl-lbl { font-size:0.72rem; font-weight:700; text-transform:uppercase;
+          letter-spacing:0.05em; color:#495057; text-align:right; }
+.cl-input { width:100%; padding:6px 10px; border:1px solid #6c757d; border-radius:4px;
+            font-size:0.85rem; font-family:inherit; background:#fff; box-sizing:border-box; }
+.cl-input:focus { outline:none; border-color:#198754; box-shadow:0 0 0 2px rgba(25,135,84,0.12); }
+.cl-hint { font-size:0.7rem; color:#6c757d; margin-top:2px; }
+.cl-actions { margin-top:16px; padding-left:252px; display:flex; gap:8px; }
+.cl-btn { display:inline-block; padding:6px 18px; font-size:0.78rem; font-weight:700;
+  border:1px solid #212529; background:#fff; color:#212529; cursor:pointer;
+  border-radius:6px; text-transform:uppercase; letter-spacing:0.04em; text-decoration:none; }
+.cl-btn:hover { background:#f1f3f5; }
+.cl-btn-primary { background:#198754; border-color:#198754; color:#fff; }
+.cl-btn-primary:hover { background:#146c43; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cl-page">
+
+  <div class="cl-header">
+    <div>
+      <h1 class="cl-title"><i class="bi bi-tags"></i> Culture Report Labels</h1>
+      <div class="cl-sub">Text shown on the MICROBIOLOGY REPORT section of PDF reports</div>
+    </div>
+    <a href="{{ url_for('settings.branding') }}" class="cl-btn">Branding</a>
+  </div>
+
+  <form method="POST" class="cl-card">
+    <div class="cl-row">
+      <label class="cl-lbl">Report title</label>
+      <div>
+        <input type="text" name="culture_report_title" class="cl-input"
+               value="{{ settings.culture_report_title or 'MICROBIOLOGY REPORT' }}" maxlength="80">
+        <div class="cl-hint">Appears centered at the top of the culture section</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Specimen label</label>
+      <div>
+        <input type="text" name="culture_specimen_label" class="cl-input"
+               value="{{ settings.culture_specimen_label or 'SPECIMEN' }}" maxlength="40">
+        <div class="cl-hint">Shown before the specimen value (e.g. Urine)</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Culture prefix</label>
+      <div>
+        <input type="text" name="culture_prefix_label" class="cl-input"
+               value="{{ settings.culture_prefix_label or 'CULTURE' }}" maxlength="40">
+        <div class="cl-hint">Prefix for growth lines: <code>CULTURE 1:</code>, <code>CULTURE 2:</code>&hellip;</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Antibiotic header</label>
+      <div>
+        <input type="text" name="culture_antibiotic_header" class="cl-input"
+               value="{{ settings.culture_antibiotic_header or 'Antibiotic Sensitivity' }}" maxlength="80">
+        <div class="cl-hint">Header above the sensitivity grid</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Bacteria header</label>
+      <div>
+        <input type="text" name="culture_bacteria_header" class="cl-input"
+               value="{{ settings.culture_bacteria_header or 'Bacteria' }}" maxlength="80">
+        <div class="cl-hint">Header above the bacteria list on the entry form</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Legend</label>
+      <div>
+        <input type="text" name="culture_legend_text" class="cl-input"
+               value="{{ settings.culture_legend_text or 'S= Sensitive  I= Intermediate  R= Resistant' }}" maxlength="200">
+        <div class="cl-hint">Line shown under the antibiotic grid</div>
+      </div>
+    </div>
+    <div class="cl-row">
+      <label class="cl-lbl">Comments label</label>
+      <div>
+        <input type="text" name="culture_comments_label" class="cl-input"
+               value="{{ settings.culture_comments_label or 'COMMENTS' }}" maxlength="40">
+        <div class="cl-hint">Label before the comments text</div>
+      </div>
+    </div>
+
+    <div class="cl-actions">
+      <button type="submit" class="cl-btn cl-btn-primary">
+        <i class="bi bi-check-lg"></i> Save Labels
+      </button>
+      <a href="{{ url_for('settings.branding') }}" class="cl-btn">Cancel</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

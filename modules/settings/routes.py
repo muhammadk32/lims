@@ -438,3 +438,34 @@ def antibiotic_delete(ab_id):
     db.session.commit()
     flash('Antibiotic deleted.', 'info')
     return redirect(url_for('settings.antibiotics_list'))
+
+# ============================================================
+# Culture report label settings
+# ============================================================
+@settings_bp.route('/culture-labels', methods=['GET', 'POST'])
+@login_required
+def culture_labels():
+    if not _admin_only():
+        flash('Only administrators can change culture labels.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    from core.models import LabSettings
+    settings = LabSettings.get()
+    if not settings:
+        settings = LabSettings()
+        db.session.add(settings)
+        db.session.commit()
+
+    if request.method == 'POST':
+        settings.culture_report_title      = (request.form.get('culture_report_title') or '').strip() or 'MICROBIOLOGY REPORT'
+        settings.culture_specimen_label    = (request.form.get('culture_specimen_label') or '').strip() or 'SPECIMEN'
+        settings.culture_prefix_label      = (request.form.get('culture_prefix_label') or '').strip() or 'CULTURE'
+        settings.culture_legend_text       = (request.form.get('culture_legend_text') or '').strip() or 'S= Sensitive  I= Intermediate  R= Resistant'
+        settings.culture_comments_label    = (request.form.get('culture_comments_label') or '').strip() or 'COMMENTS'
+        settings.culture_antibiotic_header = (request.form.get('culture_antibiotic_header') or '').strip() or 'Antibiotic Sensitivity'
+        settings.culture_bacteria_header   = (request.form.get('culture_bacteria_header') or '').strip() or 'Bacteria'
+        db.session.commit()
+        flash('Culture report labels updated.', 'success')
+        return redirect(url_for('settings.culture_labels'))
+
+    return render_template('settings/culture_labels.html', settings=settings)

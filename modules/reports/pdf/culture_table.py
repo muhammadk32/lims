@@ -15,10 +15,40 @@ def _plain(txt):
     return txt
 
 
+def _load_culture_labels():
+    """Fetch culture label settings from LabSettings with safe fallbacks."""
+    defaults = {
+        "title":       "MICROBIOLOGY REPORT",
+        "specimen":    "SPECIMEN",
+        "culture":     "CULTURE",
+        "antibiotic":  "Antibiotic Sensitivity",
+        "bacteria":    "Bacteria",
+        "legend":      "S= Sensitive  I= Intermediate  R= Resistant",
+        "comments":    "COMMENTS",
+    }
+    try:
+        from core.models import LabSettings
+        s = LabSettings.get()
+        if not s:
+            return defaults
+        return {
+            "title":      getattr(s, "culture_report_title",      None) or defaults["title"],
+            "specimen":   getattr(s, "culture_specimen_label",    None) or defaults["specimen"],
+            "culture":    getattr(s, "culture_prefix_label",      None) or defaults["culture"],
+            "antibiotic": getattr(s, "culture_antibiotic_header", None) or defaults["antibiotic"],
+            "bacteria":   getattr(s, "culture_bacteria_header",   None) or defaults["bacteria"],
+            "legend":     getattr(s, "culture_legend_text",       None) or defaults["legend"],
+            "comments":   getattr(s, "culture_comments_label",    None) or defaults["comments"],
+        }
+    except Exception:
+        return defaults
+
+
 def _culture_block(item, result, ab_rows):
     styles = getSampleStyleSheet()
     border = colors.HexColor("#212529")
     grey_hd = colors.HexColor("#e9ecef")
+    _lbl = _load_culture_labels()
 
     title_style = ParagraphStyle("CulTitle", parent=styles["Normal"],
         fontSize=10, fontName="Helvetica-Bold", alignment=1, spaceAfter=4)
@@ -40,7 +70,7 @@ def _culture_block(item, result, ab_rows):
     out = []
 
     # Title
-    t = Table([[Paragraph("MICROBIOLOGY REPORT", title_style)]], colWidths=[100*mm])
+    t = Table([[Paragraph(_lbl["title"], title_style)]], colWidths=[100*mm])
     t.setStyle(TableStyle([
         ("BOX", (0, 0), (-1, -1), 0.8, border),
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
@@ -52,14 +82,14 @@ def _culture_block(item, result, ab_rows):
 
     # Specimen + Growth
     specimen = _plain(result.culture_specimen) or "-"
-    body_rows = [[Paragraph("<b>SPECIMEN:</b>", label_style),
+    body_rows = [[Paragraph("<b>%s:</b>" % _lbl["specimen"], label_style),
                   Paragraph(specimen, body_style)]]
     growth_lines = []
     for g in (1, 2, 3):
         txt = _plain(getattr(result, "culture_growth_%d" % g, "") or "")
         if not txt or txt.strip().lower() in ("none", "null"):
             continue
-        growth_lines.append("CULTURE %d:  %s" % (g, txt))
+        growth_lines.append("%s %d:  %s" % (_lbl["culture"], g, txt))
     if growth_lines:
         body_rows.append([Paragraph("", label_style),
                           Paragraph("<br/>".join(growth_lines), body_style)])
@@ -193,13 +223,12 @@ def _culture_block(item, result, ab_rows):
         out.append(ab_tbl)
         out.append(Spacer(1, 2*mm))
 
-    out.append(Paragraph("<b>S=</b> Sensitive  <b>I=</b> Intermediate  <b>R=</b> Resistant",
-                         note_style))
+    out.append(Paragraph(_lbl["legend"], note_style))
     out.append(Spacer(1, 3*mm))
 
     comments = _plain(result.culture_comments_txt) or ""
     if comments:
-        ct = Table([[Paragraph("<b>COMMENTS:</b>", label_style),
+        ct = Table([[Paragraph("<b>%s:</b>" % _lbl["comments"], label_style),
                      Paragraph(comments, note_style)]], colWidths=[30*mm, 140*mm])
         ct.setStyle(TableStyle([
             ("VALIGN", (0, 0), (-1, -1), "TOP"),

@@ -133,6 +133,15 @@ class LabSettings(BaseModel):
     # --- Report header detail ---
     header_logo_size    = db.Column(db.String(10), nullable=False, default='medium')  # small/medium/large
     header_show_divider = db.Column(db.Boolean,    nullable=False, default=True)
+
+    # --- Culture report labels ---
+    culture_report_title      = db.Column(db.String(80),  nullable=False, default='MICROBIOLOGY REPORT')
+    culture_specimen_label    = db.Column(db.String(40),  nullable=False, default='SPECIMEN')
+    culture_prefix_label      = db.Column(db.String(40),  nullable=False, default='CULTURE')
+    culture_legend_text       = db.Column(db.String(200), nullable=False, default='S= Sensitive  I= Intermediate  R= Resistant')
+    culture_comments_label    = db.Column(db.String(40),  nullable=False, default='COMMENTS')
+    culture_antibiotic_header = db.Column(db.String(80),  nullable=False, default='Antibiotic Sensitivity')
+    culture_bacteria_header   = db.Column(db.String(80),  nullable=False, default='Bacteria')
     header_divider_color= db.Column(db.String(20), nullable=True)   # None = use primary_color
     header_show_contact = db.Column(db.Boolean,    nullable=False, default=True)
 
