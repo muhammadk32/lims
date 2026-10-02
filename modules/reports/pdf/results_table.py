@@ -12,6 +12,7 @@ from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Table, TableStyle
 
 from .branding import _get_lab, _hex
+from .culture_table import _culture_block as _culture_flowables
 
 
 def _flag_result(normal_range, result_value):
@@ -62,6 +63,24 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         'PanelSub', parent=styles['Normal'], fontSize=8.5,
         textColor=colors.HexColor('#212529'), leftIndent=10,
     )
+
+
+    def _collect_culture(bucket, item, order_):
+        """If this item is a culture test, append the ADAM microbiology block."""
+        fmt = (item.test.result_format or '').lower()
+        if fmt not in ('culture', 'culture_sensitivity'):
+            return
+        from modules.results.models import Result
+        from core.models import CultureAntibiotic
+        r = Result.query.filter_by(order_item_id=item.id).first()
+        if not r:
+            return
+        ab_rows = CultureAntibiotic.query.filter_by(order_item_id=item.id).all()
+        try:
+            for f in _culture_flowables(item, r, ab_rows):
+                bucket.append(f)
+        except Exception as e:
+            print(f'[culture_table] failed: {e}')
 
     def _collect_pcr_details(bucket, item, order_):
         """If this item has a Result with PCR fields, render them as
@@ -214,6 +233,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                 row_idx += 1
                 _collect_note(notes_flowables, child.test, order)
                 _collect_pcr_details(notes_flowables, child, order)
+                _collect_culture(notes_flowables, child, order)
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
             if flag == 'abnormal':
@@ -234,6 +254,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             row_idx += 1
             _collect_note(notes_flowables, item.test, order)
             _collect_pcr_details(notes_flowables, item, order)
+            _collect_culture(notes_flowables, item, order)
 
     # Column widths
     if n_prev > 0:

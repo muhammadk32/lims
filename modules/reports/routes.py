@@ -183,7 +183,7 @@ def view_pdf(order_id):
         return redirect(url_for('orders.view_order', order_id=order.id))
 
     from .pdf_generator import generate_report_pdf   # ← lazy
-    buffer = generate_report_pdf(order)
+    buffer = generate_report_pdf(order, item_id=item_id)
     return send_file(
         buffer,
         mimetype='application/pdf',

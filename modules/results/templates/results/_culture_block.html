@@ -13,20 +13,36 @@
 
   {# ============ TABS ============ #}
   <div class="cul-tabs">
-    <div class="cul-tab" data-cul-tab="culture">Culture</div>
-    <div class="cul-tab active" data-cul-tab="growth">Culture Growth</div>
+    <div class="cul-tab active" data-cul-tab="culture">Culture</div>
+    <div class="cul-tab" data-cul-tab="growth">Culture Growth</div>
     <div class="cul-tab" data-cul-tab="comments">Comments</div>
   </div>
 
   {# ============ CULTURE TAB (blank) ============ #}
-  <div class="cul-pane" data-cul-pane="culture">
-    <div style="padding:20px;color:#6c757d;font-style:italic;text-align:center;">
-      All culture fields are on the <b>Culture Growth</b> tab.
+  <div class="cul-pane active" data-cul-pane="culture">
+    <div class="cul-grid">
+      
+
+      {% for f in [
+        ('microscopy', 'Microscopy',  r.culture_micro_text  if r else '', r.culture_micro_note  if r else ''),
+        ('direct',     'Direct',      r.culture_direct_text if r else '', r.culture_direct_note if r else ''),
+        ('zn',         'Z.N Stain',   r.culture_zn_text     if r else '', r.culture_zn_note     if r else ''),
+        ('gram',       'Gram Stain',  r.culture_gram_text   if r else '', r.culture_gram_note   if r else ''),
+      ] %}
+      <div class="cul-gr-row cul-row-full">
+        <div class="cul-row">
+          <span class="cul-lbl">{{ f[1] }}:</span>
+          <input type="text" name="culture_{{ f[0] }}_text_{{ item.id }}" class="cul-input" value="{{ f[2] }}">
+        </div>
+        <textarea name="culture_{{ f[0] }}_note_{{ item.id }}" class="cul-textarea" rows="3"
+                  placeholder="{{ f[1] }} details...">{{ f[3] }}</textarea>
+      </div>
+      {% endfor %}
     </div>
   </div>
 
   {# ============ CULTURE GROWTH TAB ============ #}
-  <div class="cul-pane active" data-cul-pane="growth">
+  <div class="cul-pane" data-cul-pane="growth">
 
     <div class="cul-grid">
       <div class="cul-row">
@@ -102,22 +118,6 @@
           <option value="{{ v }}" {% set key = 'culture_colony_' ~ i %}{% if r and r[key] == v %}selected{% endif %}>{{ v }}</option>
           {% endfor %}
         </select>
-      </div>
-      {% endfor %}
-
-      {% for f in [
-        ('microscopy', 'Microscopy',  r.culture_micro_text  if r else '', r.culture_micro_note  if r else ''),
-        ('direct',     'Direct',      r.culture_direct_text if r else '', r.culture_direct_note if r else ''),
-        ('zn',         'Z.N Stain',   r.culture_zn_text     if r else '', r.culture_zn_note     if r else ''),
-        ('gram',       'Gram Stain',  r.culture_gram_text   if r else '', r.culture_gram_note   if r else ''),
-      ] %}
-      <div class="cul-gr-row cul-row-full">
-        <div class="cul-row">
-          <span class="cul-lbl">{{ f[1] }}:</span>
-          <input type="text" name="culture_{{ f[0] }}_text_{{ item.id }}" class="cul-input" value="{{ f[2] }}">
-        </div>
-        <textarea name="culture_{{ f[0] }}_note_{{ item.id }}" class="cul-textarea" rows="3"
-                  placeholder="{{ f[1] }} details...">{{ f[3] }}</textarea>
       </div>
       {% endfor %}
     </div>
@@ -235,6 +235,28 @@
 .cul-ast-select.s-S { background:#d1e7dd; color:#0f5132; border-color:#a3cfbb; }
 .cul-ast-select.s-I { background:#fff3cd; color:#664d03; border-color:#ffecb5; }
 .cul-ast-select.s-R { background:#f8d7da; color:#842029; border-color:#f5c2c7; }
+
+/* Culture tab ? left-align labels */
+.cul-pane[data-cul-pane="culture"] .cul-row {
+  grid-template-columns: 110px 1fr;
+  gap: 6px 10px;
+  margin-bottom: 8px;
+}
+.cul-pane[data-cul-pane="culture"] .cul-row .cul-lbl {
+  text-align: left;
+  font-weight: 700;
+  padding-top: 6px;
+}
+.cul-pane[data-cul-pane="culture"] .cul-gr-row {
+  grid-column: 1 / -1;
+  display: block;
+  margin-bottom: 12px;
+}
+.cul-pane[data-cul-pane="culture"] .cul-grid {
+  display: block;
+  max-width: 800px;
+}
+
 </style>
 
 <script>

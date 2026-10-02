@@ -1,3 +1,4 @@
+import re
 """Business logic for results entry.
 
 No HTTP, no flash, no redirect. Pure domain operations.
@@ -261,10 +262,23 @@ def _save_culture_fields(form, order):
 # ============================================================
 def save_item_result(item, form, user):
     """Save value + notes for one OrderItem. If it's a panel,
-    iterate children and save each child's input too."""
+    iterate children and save each child's input too.
+
+    Culture-format tests also persist extended fields + antibiotic grid.
+    """
     from datetime import datetime
 
     now = datetime.utcnow()
+
+    # ---- Culture: extended fields + antibiotic grid ----
+    fmt = (item.test.result_format or '').lower()
+    if fmt in ('culture', 'culture_sensitivity'):
+        save_culture_fields(item, form, user)
+        # Mark item as ready for verification (has results)
+        if not item.result_value:
+            item.result_value = 'Culture'
+        db.session.commit()
+        return item
 
     if item.has_children:
         for child in item.children:
@@ -354,27 +368,19 @@ def save_culture_fields(item, form, user):
     r.entered_at = datetime.utcnow()
     if user is not None:
         r.entered_by_id = getattr(user, 'id', None)
-
-    # Antibiotic grid ? scan all form keys with pattern ca_*_<item>_<ab>
-    prefix = f'_{item.id}_'
-    ab_values = {}   # {ab_id: {'mic_1': ..., 's_1': ..., ...}}
+    # Antibiotic grid
+    ab_values = {}
+    pat = re.compile(r"^ca_(mic_[123]|s_[123])_(\d+)_(\d+)$")
     for key in form:
-        if not key.startswith('ca_'):
+        m = pat.match(key)
+        if not m:
             continue
-        # key like ca_mic_1_1303_5  or ca_s_2_1303_5
-        try:
-            field, rest = key.split('_', 2)[0] + '_' + key.split('_', 2)[1], key.split('_', 2)[2]
-            # rest looks like "1303_5"
-            item_part, ab_part = rest.split('_', 1)
-            if int(item_part) != item.id:
-                continue
-            ab_id = int(ab_part)
-        except (ValueError, IndexError):
+        field, item_part, ab_id = m.group(1), int(m.group(2)), int(m.group(3))
+        if item_part != item.id:
             continue
+        ab_values.setdefault(ab_id, {})[field] = (form.get(key) or "").strip() or None
 
-        # field is 'ca_mic_1', 'ca_s_1', etc
-        val = (form.get(key) or '').strip() or None
-        ab_values.setdefault(ab_id, {})[field.replace('ca_', '')] = val
+
 
     for ab_id, vals in ab_values.items():
         row = CultureAntibiotic.query.filter_by(
