@@ -3,51 +3,89 @@
 
 {% block head %}
 <style>
-.ab-page { max-width: 1400px; margin: 0 auto; padding: 12px 20px 40px;
+.ab-page { max-width: 1500px; margin: 0 auto; padding: 10px 20px 30px;
            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
-.ab-header { display:flex; justify-content:space-between; align-items:flex-end;
-  border-bottom:2px solid #212529; padding-bottom:5px; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
-.ab-title { font-size:1.15rem; font-weight:700; margin:0; text-transform:uppercase; letter-spacing:0.02em; }
-.ab-sub { font-size:0.76rem; color:#6c757d; margin-top:2px; }
-.ab-count { font-size:0.76rem; color:#6c757d; font-family:Consolas, Monaco, monospace; }
 
-.ab-add { background:#f8f9fa; border:1px solid #dee2e6; padding:10px 12px; margin-bottom:10px;
-          display:grid; grid-template-columns:2fr 1fr 1.5fr auto; gap:10px; align-items:end; }
-.ab-field label { display:block; font-size:0.62rem; font-weight:700; text-transform:uppercase;
-                  letter-spacing:0.06em; color:#6c757d; margin-bottom:2px; }
-.ab-field input { width:100%; padding:3px 8px; border:1px solid #6c757d; border-radius:4px;
-                  font-size:0.82rem; background:#fff; height:28px; box-sizing:border-box; }
-.ab-btn { display:inline-block; padding:4px 14px; font-size:0.74rem; font-weight:600;
-  border:1px solid #212529; background:#fff; color:#212529; cursor:pointer;
-  border-radius:6px; text-transform:uppercase; letter-spacing:0.03em;
-  height:28px; line-height:1.6; box-sizing:border-box; text-decoration:none; }
-.ab-btn:hover { background:#f1f3f5; }
-.ab-btn-primary { background:#198754; border-color:#198754; color:#fff; }
-.ab-btn-primary:hover { background:#146c43; }
-.ab-btn-sm { padding:2px 8px; font-size:0.68rem; height:22px; line-height:1.4; }
-.ab-btn-warn { background:#fff; border-color:#ffc107; color:#664d03; }
-.ab-btn-warn:hover { background:#ffc107; }
-.ab-btn-danger { background:#fff; border-color:#dc3545; color:#dc3545; }
-.ab-btn-danger:hover { background:#dc3545; color:#fff; }
-.ab-btn-ok { background:#fff; border-color:#198754; color:#198754; }
-.ab-btn-ok:hover { background:#198754; color:#fff; }
+.ab-header { display: flex; justify-content: space-between; align-items: flex-end;
+             border-bottom: 2px solid #212529; padding-bottom: 5px;
+             margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.ab-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.ab-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.ab-count { font-size: 0.76rem; color: #6c757d;
+            font-family: Consolas, Monaco, monospace; }
 
-.ab-table { width:100%; border-collapse:collapse; border:1.5px solid #212529;
-            font-size:0.78rem; background:#fff; table-layout:fixed; }
-.ab-table thead th { background:#212529; color:#fff; font-size:0.62rem; font-weight:700;
-  text-transform:uppercase; letter-spacing:0.05em; padding:5px 8px;
-  text-align:left; border:1px solid #212529; white-space:nowrap; }
-.ab-table thead th.center { text-align:center; }
-.ab-table tbody td { padding:3px 8px; border:1px solid #dee2e6; vertical-align:middle; }
-.ab-table tbody tr:nth-child(even) { background:#fbfcfd; }
-.ab-table .name { font-weight:600; }
-.ab-table .short { font-family:Consolas, Monaco, monospace; font-weight:700; color:#0d6efd; }
-.ab-table .group { font-size:0.72rem; color:#495057; text-transform:uppercase; letter-spacing:0.04em; }
-.ab-table .center { text-align:center; }
-.ab-badge { display:inline-block; padding:1px 7px; font-size:0.62rem; font-weight:700;
-  letter-spacing:0.04em; text-transform:uppercase; border-radius:6px; }
-.ab-badge.active   { background:#198754; color:#fff; }
-.ab-badge.inactive { background:#6c757d; color:#fff; }
+/* Add form strip */
+.ab-add { background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px 12px;
+          margin-bottom: 8px;
+          display: grid; grid-template-columns: 2fr 1fr 1.5fr auto;
+          gap: 10px; align-items: end; }
+.ab-field label { display: block; font-size: 0.62rem; font-weight: 700;
+                  text-transform: uppercase; letter-spacing: 0.06em;
+                  color: #6c757d; margin-bottom: 2px; }
+.ab-field input { width: 100%; padding: 3px 8px; border: 1px solid #6c757d;
+                  border-radius: 0; font-size: 0.82rem; background: #fff;
+                  height: 28px; box-sizing: border-box; }
+.ab-field input:focus { outline: none; border-color: #198754; }
+
+.ab-btn { display: inline-block; padding: 4px 12px; font-size: 0.74rem;
+  font-weight: 600; border: 1px solid #212529; background: #fff;
+  color: #212529; text-decoration: none; cursor: pointer; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 28px;
+  line-height: 1.6; box-sizing: border-box; }
+.ab-btn:hover { background: #f1f3f5; }
+.ab-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.ab-btn-primary:hover { background: #146c43; }
+.ab-btn-sm { padding: 2px 8px; font-size: 0.68rem; height: 22px; line-height: 1.4; }
+.ab-btn-warn { background: #fff; border-color: #ffc107; color: #664d03; }
+.ab-btn-warn:hover { background: #ffc107; }
+.ab-btn-ok { background: #fff; border-color: #198754; color: #198754; }
+.ab-btn-ok:hover { background: #198754; color: #fff; }
+.ab-btn-danger { background: #fff; border-color: #dc3545; color: #dc3545; }
+.ab-btn-danger:hover { background: #dc3545; color: #fff; }
+
+/* Table */
+.ab-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
+            font-size: 0.78rem; background: #fff; table-layout: fixed; }
+.ab-table thead th { background: #212529; color: #fff; font-size: 0.62rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 5px 8px; text-align: left; border: 1px solid #212529;
+  white-space: nowrap; }
+.ab-table thead th.center { text-align: center; }
+.ab-table tbody td { padding: 3px 8px; border: 1px solid #dee2e6;
+                     vertical-align: middle; height: 26px; }
+/* Zebra striping + hover ? follows the active theme */
+.ab-table tbody tr:nth-child(odd)  { background: var(--bs-body-bg, #ffffff); }
+.ab-table tbody tr:nth-child(even) { background: var(--bs-tertiary-bg, #f1f3f5); }
+.ab-table tbody tr:hover           { background: var(--bs-secondary-bg, #e9ecef) !important; }
+
+/* Inactive row override */
+.ab-table tbody tr.ab-inactive td { background: var(--bs-tertiary-bg, #f5f5f5) !important; opacity: 0.65; }
+.ab-table .name { font-weight: 600; }
+.ab-table .short { font-family: Consolas, Monaco, monospace; font-weight: 700;
+                   color: #0d6efd; }
+.ab-table .group { font-size: 0.72rem; color: #495057; text-transform: uppercase;
+                   letter-spacing: 0.03em; }
+.ab-table .center { text-align: center; }
+
+/* Inactive row is dimmed */
+.ab-table tbody tr.ab-inactive td { background: #f8f9fa !important; opacity: 0.7; }
+.ab-table tbody tr.ab-inactive .name,
+.ab-table tbody tr.ab-inactive .short { color: #6c757d; }
+
+/* Status badge */
+.ab-badge { display: inline-block; padding: 1px 7px; font-size: 0.62rem;
+  font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #fff; border-radius: 0; }
+.ab-badge.active   { background: #198754; }
+.ab-badge.inactive { background: #6c757d; }
+
+/* Actions */
+.ab-actions { display: inline-flex; gap: 3px; }
+
+/* Empty */
+.ab-empty { text-align: center; padding: 30px 20px; color: #6c757d;
+            font-style: italic; border: 1.5px solid #212529; background: #fafbfc; }
 </style>
 {% endblock %}
 
@@ -64,7 +102,7 @@
 
   <form method="POST" class="ab-add">
     <div class="ab-field">
-      <label>Name <span class="text-danger">*</span></label>
+      <label>Name <span style="color:#dc3545;">*</span></label>
       <input type="text" name="name" required maxlength="100" placeholder="e.g. Meropenem">
     </div>
     <div class="ab-field">
@@ -85,11 +123,11 @@
   {% if items %}
   <table class="ab-table">
     <colgroup>
-      <col style="width: 24%;">
+      <col style="width: 30%;">
       <col style="width: 10%;">
       <col style="width: 28%;">
-      <col style="width: 12%;">
-      <col style="width: 26%;">
+      <col style="width: 10%;">
+      <col style="width: 22%;">
     </colgroup>
     <thead>
       <tr>
@@ -102,7 +140,7 @@
     </thead>
     <tbody>
       {% for a in items %}
-      <tr>
+      <tr class="{% if not a.is_active %}ab-inactive{% endif %}">
         <td class="name">{{ a.name }}</td>
         <td class="short">{{ a.short_name or '\u2014' }}</td>
         <td class="group">{{ a.group or '\u2014' }}</td>
@@ -114,27 +152,29 @@
           {% endif %}
         </td>
         <td class="center">
-          <form method="POST" action="{{ url_for('settings.antibiotic_toggle', ab_id=a.id) }}"
-                style="display:inline;">
-            <button class="ab-btn ab-btn-sm {{ 'ab-btn-warn' if a.is_active else 'ab-btn-ok' }}">
-              {{ 'Deactivate' if a.is_active else 'Activate' }}
-            </button>
-          </form>
-          <form method="POST" action="{{ url_for('settings.antibiotic_delete', ab_id=a.id) }}"
-                style="display:inline;"
-                onsubmit="return confirm('Delete {{ a.name }}?');">
-            <button class="ab-btn ab-btn-sm ab-btn-danger">
-              <i class="bi bi-trash"></i>
-            </button>
-          </form>
+          <div class="ab-actions">
+            <form method="POST" action="{{ url_for('settings.antibiotic_toggle', ab_id=a.id) }}"
+                  style="display:inline;">
+              <button class="ab-btn ab-btn-sm {{ 'ab-btn-warn' if a.is_active else 'ab-btn-ok' }}">
+                {{ 'Deactivate' if a.is_active else 'Activate' }}
+              </button>
+            </form>
+            <form method="POST" action="{{ url_for('settings.antibiotic_delete', ab_id=a.id) }}"
+                  style="display:inline;"
+                  onsubmit="return confirm('Delete {{ a.name }}?');">
+              <button class="ab-btn ab-btn-sm ab-btn-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
   {% else %}
-  <div style="text-align:center;padding:40px;color:#6c757d;font-style:italic;
-              border:1.5px solid #212529;background:#fafbfc;">
+  <div class="ab-empty">
+    <i class="bi bi-capsule fs-3 d-block mb-2"></i>
     No antibiotics yet. Add the first one above.
   </div>
   {% endif %}
