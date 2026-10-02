@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Antibiotics \u2014 LabMS{% endblock %}
 
+
+
 {% block head %}
 <style>
 .ab-page { max-width: 1500px; margin: 0 auto; padding: 10px 20px 30px;
@@ -86,6 +88,19 @@
 /* Empty */
 .ab-empty { text-align: center; padding: 30px 20px; color: #6c757d;
             font-style: italic; border: 1.5px solid #212529; background: #fafbfc; }
+
+.ab-btn-edit { background: #fff; border-color: #0d6efd; color: #0d6efd; }
+.ab-btn-edit:hover { background: #0d6efd; color: #fff; }
+
+
+.ab-search { background: #f8f9fa; border: 1px solid #dee2e6;
+             padding: 8px 12px; margin-bottom: 12px;
+             display: flex; gap: 10px; align-items: end; }
+.ab-add-title { font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 0.06em; color: #6c757d;
+                margin: 6px 0 4px; padding-bottom: 3px;
+                border-bottom: 1px solid #dee2e6; }
+
 </style>
 {% endblock %}
 
@@ -100,25 +115,44 @@
     <div class="ab-count">{{ items|length }} total</div>
   </div>
 
-  <form method="POST" class="ab-add">
-    <div class="ab-field">
-      <label>Name <span style="color:#dc3545;">*</span></label>
-      <input type="text" name="name" required maxlength="100" placeholder="e.g. Meropenem">
+  {# ============ SEARCH (first) ============ #}
+  <form method="GET" class="ab-search">
+    <div class="ab-field" style="flex:1;">
+      <label>Search medicine</label>
+      <input type="text" name="q" value="{{ q or '' }}"
+             placeholder="Type name, short code, or group..." autofocus>
     </div>
-    <div class="ab-field">
-      <label>Short Name</label>
-      <input type="text" name="short_name" maxlength="20" placeholder="e.g. MEM">
-    </div>
-    <div class="ab-field">
-      <label>Group</label>
-      <input type="text" name="group" maxlength="80" placeholder="e.g. CARBAPENEMS">
-    </div>
-    <div class="ab-field">
+    <div class="ab-field" style="width:auto;">
       <button type="submit" class="ab-btn ab-btn-primary">
-        <i class="bi bi-plus-lg"></i> Add
+        <i class="bi bi-search"></i> Search
+      </button>
+      {% if q %}
+      <a href="{{ url_for('settings.antibiotics_list') }}" class="ab-btn"
+         style="background:#fff;border-color:#dc3545;color:#dc3545;">
+        <i class="bi bi-x-lg"></i> Clear
+      </a>
+      {% endif %}
+      <button type="button" class="ab-btn"
+              style="background:#0d6efd;border-color:#0d6efd;color:#fff;"
+              data-bs-toggle="modal" data-bs-target="#addAbModal">
+        <i class="bi bi-plus-lg"></i> Add Medicine
       </button>
     </div>
   </form>
+
+  {% if q and items|length == 0 %}
+  {# ---- Search no results: show "Add new" call-to-action ---- #}
+  <div class="ab-empty" style="border-color:#dc3545;">
+    <i class="bi bi-search fs-3 d-block mb-2"></i>
+    <div style="font-weight:600;font-size:1rem;color:#212529;">
+      No medicine matches "<b>{{ q }}</b>".
+    </div>
+    <div style="margin-top:6px;">Add it as a new antibiotic below.</div>
+  </div>
+  {% endif %}
+
+  {# ============ ADD NEW (below search) ============ #}
+  
 
   {% if items %}
   <table class="ab-table">
@@ -153,19 +187,25 @@
         </td>
         <td class="center">
           <div class="ab-actions">
+            <button type="button" class="ab-btn ab-btn-sm ab-btn-edit"
+                    onclick="openEdit({{ a.id }}, '{{ a.name|e }}', '{{ (a.short_name or '')|e }}', '{{ (a.group or '')|e }}')">
+              <i class="bi bi-pencil"></i> Edit
+            </button>
             <form method="POST" action="{{ url_for('settings.antibiotic_toggle', ab_id=a.id) }}"
                   style="display:inline;">
               <button class="ab-btn ab-btn-sm {{ 'ab-btn-warn' if a.is_active else 'ab-btn-ok' }}">
                 {{ 'Deactivate' if a.is_active else 'Activate' }}
               </button>
             </form>
+            {% if current_user.role == 'admin' %}
             <form method="POST" action="{{ url_for('settings.antibiotic_delete', ab_id=a.id) }}"
                   style="display:inline;"
-                  onsubmit="return confirm('Delete {{ a.name }}?');">
-              <button class="ab-btn ab-btn-sm ab-btn-danger">
+                  onsubmit="return confirm('Permanently delete {{ a.name }}? This cannot be undone.');">
+              <button class="ab-btn ab-btn-sm ab-btn-danger" title="Delete (admin only)">
                 <i class="bi bi-trash"></i>
               </button>
             </form>
+            {% endif %}
           </div>
         </td>
       </tr>
@@ -180,4 +220,236 @@
   {% endif %}
 
 </div>
+
+
+<!-- Add Antibiotic modal -->
+<div class="modal fade" id="addAbModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('settings.antibiotics_list') }}" id="addAbForm">
+      <div class="modal-content" style="border-radius:0;">
+        <div class="modal-header" style="background:#0d6efd;color:#fff;">
+          <h5 class="modal-title" style="font-size:0.95rem;font-weight:700;">
+            <i class="bi bi-plus-lg"></i> Add New Antibiotic
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin-bottom:10px;">
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#6c757d;margin-bottom:3px;">Name *</label>
+            <input type="text" name="name" id="addAbName" class="form-control" required maxlength="100" value="{{ q or '' }}" placeholder="e.g. Meropenem">
+          </div>
+          <div style="margin-bottom:10px;">
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#6c757d;margin-bottom:3px;">Short Name</label>
+            <input type="text" name="short_name" class="form-control" maxlength="20" placeholder="e.g. MEM">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;color:#6c757d;margin-bottom:3px;">Group</label>
+            <input type="text" name="group" id="addAbGroup" class="form-control" maxlength="80" list="add-group-suggestions" placeholder="Type or pick a group">
+            <datalist id="add-group-suggestions">
+              {% for g in groups %}<option value="{{ g }}">{% endfor %}
+              <option value="OTHER">
+            </datalist>
+          </div>
+          <div id="addAbWarning" style="display:none;margin-top:12px;padding:8px 10px;background:#fff3cd;border:1px solid #ffecb5;border-radius:4px;font-size:0.8rem;color:#664d03;">
+            <b>Similar existing medicine:</b>
+            <ul id="addAbSimilar" style="margin:6px 0 0 16px;padding:0;"></ul>
+            Are you sure this isn't a duplicate?
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="ab-btn" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="ab-btn ab-btn-primary">
+            <i class="bi bi-check-lg"></i> Add Antibiotic
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  var nameInput = document.getElementById('addAbName');
+  if (!nameInput) return;
+  nameInput.addEventListener('input', function () {
+    var needle = (nameInput.value || '').trim().toLowerCase();
+    var warn = document.getElementById('addAbWarning');
+    var list = document.getElementById('addAbSimilar');
+    list.innerHTML = '';
+    if (!needle) { warn.style.display = 'none'; return; }
+    var matches = [];
+    document.querySelectorAll('.ab-table tbody tr').forEach(function (row) {
+      var cell = row.querySelector('.name');
+      if (!cell) return;
+      var existing = cell.textContent.trim().toLowerCase();
+      if (existing === needle) matches.push(cell.textContent.trim() + ' - EXACT MATCH');
+      else if (existing.indexOf(needle) !== -1 || needle.indexOf(existing) !== -1) matches.push(cell.textContent.trim());
+    });
+    if (matches.length) {
+      matches.forEach(function (m) {
+        var li = document.createElement('li');
+        li.textContent = m;
+        list.appendChild(li);
+      });
+      warn.style.display = 'block';
+    } else { warn.style.display = 'none'; }
+  });
+})();
+</script>
+
+
+<!-- Edit Antibiotic modal -->
+<div class="modal fade" id="editAbModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="POST" id="editAbForm">
+      <div class="modal-content" style="border-radius:0;">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Antibiotic</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin-bottom:10px;">
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#6c757d;margin-bottom:3px;">Name</label>
+            <input type="text" name="name" id="editAbName" class="form-control" required maxlength="100">
+          </div>
+          <div style="margin-bottom:10px;">
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#6c757d;margin-bottom:3px;">Short Name</label>
+            <input type="text" name="short_name" id="editAbShort" class="form-control" maxlength="20">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#6c757d;margin-bottom:3px;">Group</label>
+            <input type="text" name="group" id="editAbGroup" class="form-control"
+                   maxlength="80" list="group-suggestions"
+                   placeholder="Type or pick a group">
+            <datalist id="group-suggestions">
+              {% for g in groups %}
+                <option value="{{ g }}">
+              {% endfor %}
+              <option value="OTHER">
+            </datalist>
+            <small style="color:#6c757d;font-size:0.68rem;">
+              Type a new group name (e.g. ANTIVIRALS) or pick an existing one.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="ab-btn" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="ab-btn ab-btn-primary">
+            <i class="bi bi-check-lg"></i> Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openEdit(id, name, short, group) {
+  document.getElementById('editAbForm').action = '/settings/antibiotics/' + id + '/edit';
+  document.getElementById('editAbName').value = name;
+  document.getElementById('editAbShort').value = short;
+  document.getElementById('editAbGroup').value = group;
+  var modal = new bootstrap.Modal(document.getElementById('editAbModal'));
+  modal.show();
+}
+</script>
+
+
+<!-- Add-new-antibiotic confirmation modal -->
+<div class="modal fade" id="confirmAddModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:0;">
+      <div class="modal-header" style="background:#fff3cd;border-bottom:1px solid #ffecb5;">
+        <h5 class="modal-title" style="font-size:0.95rem;font-weight:700;">
+          <i class="bi bi-exclamation-triangle-fill" style="color:#664d03;"></i>
+          Confirm new antibiotic
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:0.85rem;">
+          Add <b id="confirmAddName">?</b> as a new antibiotic?
+        </div>
+        <div id="confirmAddWarn" style="display:none;margin-top:10px;padding:8px 10px;
+                    background:#fff3cd;border:1px solid #ffecb5;border-radius:4px;
+                    font-size:0.8rem;color:#664d03;">
+          <b>Similar existing medicine:</b>
+          <ul id="confirmAddSimilar" style="margin:6px 0 0 16px;padding:0;"></ul>
+          <div style="margin-top:6px;">Are you sure this isn't a duplicate?</div>
+        </div>
+        <div id="confirmAddInfo" style="margin-top:10px;font-size:0.78rem;color:#6c757d;">
+          This will be saved to the Antibiotics master list.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="ab-btn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="ab-btn ab-btn-primary" onclick="submitAddAb()">
+          <i class="bi bi-check-lg"></i> Yes, add it
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var _addAbPending = false;
+
+function confirmAddAb(e) {
+  if (_addAbPending) return true;   // second pass ? let it submit
+  e.preventDefault();
+
+  var form = document.getElementById('addAbForm');
+  var name  = (form.querySelector('[name="name"]').value || '').trim();
+  var short = (form.querySelector('[name="short_name"]').value || '').trim();
+  var group = (form.querySelector('[name="group"]').value || '').trim();
+
+  if (!name) {
+    alert('Enter a name first.');
+    return false;
+  }
+
+  // Show the name in the modal
+  document.getElementById('confirmAddName').textContent = name;
+
+  // Look for similar existing antibiotics already rendered in the table
+  var similar = [];
+  var needle = name.toLowerCase();
+  document.querySelectorAll('.ab-table tbody tr').forEach(function (row) {
+    var cell = row.querySelector('.name');
+    if (!cell) return;
+    var existing = cell.textContent.trim().toLowerCase();
+    // simple fuzzy: substring or first 4 letters match
+    if (existing === needle) {
+      similar.push(cell.textContent.trim() + ' ? EXACT MATCH');
+    } else if (existing.indexOf(needle) !== -1 || needle.indexOf(existing) !== -1 ||
+               (existing.length > 4 && existing.substring(0, 4) === needle.substring(0, 4))) {
+      similar.push(cell.textContent.trim());
+    }
+  });
+
+  var warnBox = document.getElementById('confirmAddWarn');
+  var listEl  = document.getElementById('confirmAddSimilar');
+  listEl.innerHTML = '';
+  if (similar.length > 0) {
+    similar.forEach(function (s) {
+      var li = document.createElement('li');
+      li.textContent = s;
+      listEl.appendChild(li);
+    });
+    warnBox.style.display = 'block';
+  } else {
+    warnBox.style.display = 'none';
+  }
+
+  var modal = new bootstrap.Modal(document.getElementById('confirmAddModal'));
+  modal.show();
+  return false;
+}
+
+function submitAddAb() {
+  _addAbPending = true;
+  document.getElementById('addAbForm').submit();
+}
+</script>
+
 {% endblock %}

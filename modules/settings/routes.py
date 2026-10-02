@@ -408,8 +408,22 @@ def antibiotics_list():
                 flash(f'Antibiotic "{name}" added.', 'success')
         return redirect(url_for('settings.antibiotics_list'))
 
-    items = (Antibiotic.query.order_by(Antibiotic.group.asc(), Antibiotic.sort_order.asc()).all())
-    return render_template('settings/antibiotics.html', items=items)
+    q = (request.args.get('q') or '').strip()
+    query = Antibiotic.query
+    if q:
+        like = f'%{q}%'
+        from sqlalchemy import or_
+        query = query.filter(or_(
+            Antibiotic.name.ilike(like),
+            Antibiotic.short_name.ilike(like),
+            Antibiotic.group.ilike(like),
+        ))
+    items = query.order_by(Antibiotic.group.asc(), Antibiotic.sort_order.asc()).all()
+
+    # Distinct groups for dropdown
+    all_items = Antibiotic.query.all()
+    groups = sorted({(a.group or '').strip() for a in all_items if a.group and a.group.strip()})
+    return render_template('settings/antibiotics.html', items=items, groups=groups, q=q)
 
 
 @settings_bp.route('/antibiotics/<int:ab_id>/toggle', methods=['POST'])
@@ -469,3 +483,22 @@ def culture_labels():
         return redirect(url_for('settings.culture_labels'))
 
     return render_template('settings/culture_labels.html', settings=settings)
+
+@settings_bp.route('/antibiotics/<int:ab_id>/edit', methods=['POST'])
+@login_required
+def antibiotic_edit(ab_id):
+    if not _admin_only():
+        flash('Not allowed.', 'danger')
+        return redirect(url_for('dashboard.index'))
+    from core.models import Antibiotic
+    a = Antibiotic.query.get_or_404(ab_id)
+    new_name  = (request.form.get('name') or '').strip()
+    new_short = (request.form.get('short_name') or '').strip() or None
+    new_group = (request.form.get('group') or '').strip() or None
+    if new_name:
+        a.name = new_name
+        a.short_name = new_short
+        a.group = new_group
+        db.session.commit()
+        flash(f'Antibiotic "{new_name}" updated.', 'success')
+    return redirect(url_for('settings.antibiotics_list'))
