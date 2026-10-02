@@ -1,4 +1,4 @@
-{# Culture & Sensitivity ? ADAM-style entry form #}
+{# Culture & Sensitivity — ADAM-style entry form #}
 <div class="cul-block" data-item="{{ item.id }}">
   <div class="cul-block-hd">
     <i class="bi bi-bug"></i>
@@ -8,8 +8,8 @@
 
   {# ============ TABS ============ #}
   <div class="cul-tabs">
-    <div class="cul-tab active" data-cul-tab="culture">Culture</div>
-    <div class="cul-tab" data-cul-tab="growth">Culture Growth</div>
+    <div class="cul-tab" data-cul-tab="culture">Culture</div>
+    <div class="cul-tab active" data-cul-tab="growth">Culture Growth</div>
     <div class="cul-tab" data-cul-tab="comments">Comments</div>
   </div>
 
@@ -18,8 +18,15 @@
     {% set r = r[0] if r|length > 0 else None %}
   {% endif %}
 
-  {# ============ CULTURE TAB ============ #}
-  <div class="cul-pane active" data-cul-pane="culture">
+  {# ============ CULTURE TAB (kept empty) ============ #}
+  <div class="cul-pane" data-cul-pane="culture">
+    <div style="padding:20px;color:#6c757d;font-style:italic;text-align:center;">
+      All culture fields are on the <b>Culture Growth</b> tab.
+    </div>
+  </div>
+
+  {# ============ CULTURE GROWTH TAB (all fields) ============ #}
+  <div class="cul-pane active" data-cul-pane="growth">
     <div class="cul-grid">
       <div class="cul-row">
         <span class="cul-lbl">Specimen:</span>
@@ -37,9 +44,9 @@
         </select>
       </div>
 
-      <div class="cul-row cul-row-full" style="align-items:start; grid-column: 1 / -1; display: block;">
-        <span class="cul-lbl" style="display:block; text-align:left; margin-bottom:4px;">Bacteria:</span>
-        <div class="cul-bac-wrap" style="max-height:220px;height:220px;overflow-y:auto;overflow-x:hidden;border:1px solid #adb5bd;background:#fff;display:block;width:640px;max-width:100%;">
+      <div class="cul-row cul-row-full" style="align-items:start;">
+        <span class="cul-lbl" style="text-align:left;">Bacteria:</span>
+        <div class="cul-bac-wrap">
           <table class="cul-bac-table">
             <thead>
               <tr>
@@ -50,24 +57,20 @@
               </tr>
             </thead>
             <tbody>
-              {% set saved = (r.culture_bacteria_ids.split(',') if r and r.culture_bacteria_ids else []) %}
               {% for b in bacteria %}
               <tr>
                 <td>{{ b.name }}</td>
                 <td class="center col-g-1">
                   <input type="checkbox" class="cul-bac-g"
-                         data-item="{{ item.id }}" data-g="1"
-                         data-name="{{ b.name }}">
+                         data-item="{{ item.id }}" data-g="1" data-name="{{ b.name }}">
                 </td>
                 <td class="center col-g-2">
                   <input type="checkbox" class="cul-bac-g"
-                         data-item="{{ item.id }}" data-g="2"
-                         data-name="{{ b.name }}">
+                         data-item="{{ item.id }}" data-g="2" data-name="{{ b.name }}">
                 </td>
                 <td class="center col-g-3">
                   <input type="checkbox" class="cul-bac-g"
-                         data-item="{{ item.id }}" data-g="3"
-                         data-name="{{ b.name }}">
+                         data-item="{{ item.id }}" data-g="3" data-name="{{ b.name }}">
                 </td>
               </tr>
               {% endfor %}
@@ -75,8 +78,6 @@
           </table>
         </div>
       </div>
-
-
 
       <div class="cul-row">
         <span class="cul-lbl">PUS C/S Only:</span>
@@ -115,27 +116,25 @@
         </select>
       </div>
       {% endfor %}
-    </div>
-  </div>
 
-  {# ============ CULTURE GROWTH TAB ============ #}
-  <div class="cul-pane" data-cul-pane="growth">
-    {% for f in [
-      ('microscopy', 'Microscopy',  r.culture_micro_text  if r else '', r.culture_micro_note  if r else ''),
-      ('direct',     'Direct',      r.culture_direct_text if r else '', r.culture_direct_note if r else ''),
-      ('zn',         'Z.N Stain',   r.culture_zn_text     if r else '', r.culture_zn_note     if r else ''),
-      ('gram',       'Gram Stain',  r.culture_gram_text   if r else '', r.culture_gram_note   if r else ''),
-    ] %}
-    <div class="cul-gr-row">
-      <div class="cul-row">
-        <span class="cul-lbl">{{ f[1] }}:</span>
-        <input type="text" name="culture_{{ f[0] }}_text_{{ item.id }}" class="cul-input"
-               value="{{ f[2] }}">
+      {# ---- Growth details: Microscopy / Direct / Z.N / Gram ---- #}
+      {% for f in [
+        ('microscopy', 'Microscopy',  r.culture_micro_text  if r else '', r.culture_micro_note  if r else ''),
+        ('direct',     'Direct',      r.culture_direct_text if r else '', r.culture_direct_note if r else ''),
+        ('zn',         'Z.N Stain',   r.culture_zn_text     if r else '', r.culture_zn_note     if r else ''),
+        ('gram',       'Gram Stain',  r.culture_gram_text   if r else '', r.culture_gram_note   if r else ''),
+      ] %}
+      <div class="cul-gr-row cul-row-full">
+        <div class="cul-row">
+          <span class="cul-lbl">{{ f[1] }}:</span>
+          <input type="text" name="culture_{{ f[0] }}_text_{{ item.id }}" class="cul-input"
+                 value="{{ f[2] }}">
+        </div>
+        <textarea name="culture_{{ f[0] }}_note_{{ item.id }}" class="cul-textarea" rows="3"
+                  placeholder="{{ f[1] }} details...">{{ f[3] }}</textarea>
       </div>
-      <textarea name="culture_{{ f[0] }}_note_{{ item.id }}" class="cul-textarea" rows="3"
-                placeholder="{{ f[1] }} details...">{{ f[3] }}</textarea>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 
   {# ============ COMMENTS TAB ============ #}
@@ -153,7 +152,7 @@
               placeholder="Free-text comments...">{{ r.culture_comments_txt if r else '' }}</textarea>
   </div>
 
-  {# ============ BOTTOM: ANTIBIOTIC GRID (always visible) ============ #}
+  {# ============ BOTTOM: ANTIBIOTIC GRID ============ #}
   <div class="cul-ast-hd">Antibiotic Sensitivity</div>
   <div class="cul-ast-wrap">
     <table class="cul-ast">
@@ -174,36 +173,21 @@
         {% for ab in antibiotics %}
         {% set row = saved_ab_rows.get(ab.id) %}
         <tr>
-          <td class="cul-ast-group">{{ ab.group or '\u2014' }}</td>
+          <td class="cul-ast-group">{{ ab.group or '—' }}</td>
           <td class="cul-ast-med">{{ ab.name }}</td>
           <td class="cul-ast-short">{{ ab.short_name or '' }}</td>
-          <td class="col-mic-1"><input type="text" name="ca_mic_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
-                     value="{{ row.mic_1 if row and row.mic_1 else '' }}"></td>
-          <td class="col-s-1">
-            <select name="ca_s_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
-              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
-              <option value="{{ k }}" {% if row and row.s_1 == k %}selected{% endif %}>{{ v }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td class="col-mic-2"><input type="text" name="ca_mic_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
-                     value="{{ row.mic_2 if row and row.mic_2 else '' }}"></td>
-          <td class="col-s-2">
-            <select name="ca_s_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
-              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
-              <option value="{{ k }}" {% if row and row.s_2 == k %}selected{% endif %}>{{ v }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td class="col-mic-3"><input type="text" name="ca_mic_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-input"
-                     value="{{ row.mic_3 if row and row.mic_3 else '' }}"></td>
-          <td class="col-s-3">
-            <select name="ca_s_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
-              {% for k, v in [('', ''), ('S', 'S'), ('I', 'I'), ('R', 'R')] %}
-              <option value="{{ k }}" {% if row and row.s_3 == k %}selected{% endif %}>{{ v }}</option>
-              {% endfor %}
-            </select>
-          </td>
+          <td class="col-mic-1"><input type="text" name="ca_mic_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-input" value="{{ row.mic_1 if row and row.mic_1 else '' }}"></td>
+          <td class="col-s-1"><select name="ca_s_1_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k in ['','S','I','R'] %}<option value="{{ k }}" {% if row and row.s_1 == k %}selected{% endif %}>{{ k }}</option>{% endfor %}
+          </select></td>
+          <td class="col-mic-2"><input type="text" name="ca_mic_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-input" value="{{ row.mic_2 if row and row.mic_2 else '' }}"></td>
+          <td class="col-s-2"><select name="ca_s_2_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k in ['','S','I','R'] %}<option value="{{ k }}" {% if row and row.s_2 == k %}selected{% endif %}>{{ k }}</option>{% endfor %}
+          </select></td>
+          <td class="col-mic-3"><input type="text" name="ca_mic_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-input" value="{{ row.mic_3 if row and row.mic_3 else '' }}"></td>
+          <td class="col-s-3"><select name="ca_s_3_{{ item.id }}_{{ ab.id }}" class="cul-ast-select">
+              {% for k in ['','S','I','R'] %}<option value="{{ k }}" {% if row and row.s_3 == k %}selected{% endif %}>{{ k }}</option>{% endfor %}
+          </select></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -216,11 +200,9 @@
 .cul-tab { padding:5px 18px; font-size:0.7rem; font-weight:700; text-transform:uppercase;
            letter-spacing:0.04em; color:#495057; background:#f8f9fa;
            border:1px solid #dee2e6; border-bottom:none; cursor:pointer;
-           margin-bottom:-2px; user-select:none;
-           border-radius:6px 6px 0 0; }
+           margin-bottom:-2px; user-select:none; border-radius:6px 6px 0 0; }
 .cul-tab:hover { background:#e9ecef; }
-.cul-tab.active { background:#fff; color:#198754; border-color:#212529;
-                  border-bottom-color:#fff; padding-bottom:6px; }
+.cul-tab.active { background:#fff; color:#198754; border-color:#212529; border-bottom-color:#fff; padding-bottom:6px; }
 .cul-pane { display:none; padding:12px; }
 .cul-pane.active { display:block; }
 
@@ -229,24 +211,31 @@
 .cul-row-full { grid-column: 1 / -1; align-items: start; }
 .cul-row .cul-lbl { font-size:0.68rem; font-weight:700; text-transform:uppercase;
                     letter-spacing:0.05em; color:#495057; text-align:right; }
-.cul-input, .cul-select, .cul-textarea {
-  width:100%; padding:4px 8px; border:1px solid #adb5bd; border-radius:4px;
-  font-size:0.82rem; background:#fff; font-family:inherit; box-sizing:border-box;
-}
+.cul-input, .cul-select, .cul-textarea { width:100%; padding:4px 8px; border:1px solid #adb5bd;
+  border-radius:4px; font-size:0.82rem; background:#fff; font-family:inherit; box-sizing:border-box; }
 .cul-input, .cul-select { height:28px; }
 .cul-textarea { min-height:60px; resize:vertical; }
 .cul-input:focus, .cul-select:focus, .cul-textarea:focus {
-  outline:none; border-color:#198754; box-shadow:0 0 0 2px rgba(25,135,84,0.12);
-}
-select[multiple].cul-input { height:auto; padding:4px; }
+  outline:none; border-color:#198754; box-shadow:0 0 0 2px rgba(25,135,84,0.12); }
 
-.cul-gr-row { margin-bottom: 12px; }
-.cul-gr-row .cul-row { margin-bottom: 6px; }
+.cul-bac-wrap { max-height:220px; height:220px; overflow-y:auto; overflow-x:hidden;
+  border:1px solid #adb5bd; background:#fff; width:640px; max-width:100%; }
+.cul-bac-table { width:100%; border-collapse:collapse; font-size:0.76rem; table-layout:fixed; }
+.cul-bac-table thead th { background:#e9ecef; position:sticky; top:0; z-index:1;
+  font-size:0.6rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.05em; padding:3px 6px; border:1px solid #adb5bd; text-align:left; }
+.cul-bac-table thead th.center { text-align:center; }
+.cul-bac-table tbody td { padding:2px 6px; border:1px solid #dee2e6; vertical-align:middle; }
+.cul-bac-table tbody tr:nth-child(even) { background:#fbfcfd; }
+.cul-bac-table tbody tr:hover { background:#eef6ff; }
+.cul-bac-g { width:14px; height:14px; cursor:pointer; accent-color:#0d6efd; }
+
+.cul-gr-row { margin-bottom:12px; }
+.cul-gr-row .cul-row { margin-bottom:6px; }
 
 .cul-ast-hd { background:#212529; color:#fff; padding:5px 12px; font-size:0.72rem;
-              border-radius:6px 6px 0 0;
-              font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
-              margin-top: 10px; }
+  border-radius:6px 6px 0 0; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.05em; margin-top:10px; }
 .cul-ast-wrap { max-height:420px; overflow-y:auto; border:1px solid #adb5bd; }
 .cul-ast { width:100%; border-collapse:collapse; font-size:0.74rem; }
 .cul-ast thead th { background:#e9ecef; position:sticky; top:0; z-index:1;
@@ -254,148 +243,109 @@ select[multiple].cul-input { height:auto; padding:4px; }
   letter-spacing:0.05em; padding:3px 6px; border:1px solid #adb5bd; text-align:left; }
 .cul-ast tbody td { padding:2px 6px; border:1px solid #dee2e6; vertical-align:middle; }
 .cul-ast tbody tr:nth-child(even) { background:#fbfcfd; }
-.cul-ast-group { font-size:0.68rem; color:#495057; text-transform:uppercase;
-                 letter-spacing:0.03em; }
+.cul-ast-group { font-size:0.68rem; color:#495057; text-transform:uppercase; letter-spacing:0.03em; }
 .cul-ast-med { font-weight:600; }
 .cul-ast-short { font-family:Consolas, Monaco, monospace; font-weight:700; color:#0d6efd; }
 .cul-ast-input { width:100%; height:22px; padding:1px 4px; border:1px solid #adb5bd;
-                 border-radius:3px; font-size:0.72rem; font-family:Consolas, Monaco, monospace; }
+  border-radius:3px; font-size:0.72rem; font-family:Consolas, Monaco, monospace; text-align:center; }
 .cul-ast-select { width:100%; height:22px; padding:1px 4px; border:1px solid #adb5bd;
-                  border-radius:3px; font-size:0.72rem; font-weight:700; }
-
-
-<style>
-.cul-ast-select { text-align: center; font-weight: 700; }
-.cul-ast-select option[value="S"] { color: #0f5132; font-weight: 700; }
-.cul-ast-select option[value="I"] { color: #664d03; font-weight: 700; }
-.cul-ast-select option[value="R"] { color: #842029; font-weight: 700; }
-
-/* Live-coloured select via data attribute */
+  border-radius:3px; font-size:0.72rem; font-weight:700; text-align:center; }
 .cul-ast-select.s-S { background:#d1e7dd; color:#0f5132; border-color:#a3cfbb; }
 .cul-ast-select.s-I { background:#fff3cd; color:#664d03; border-color:#ffecb5; }
 .cul-ast-select.s-R { background:#f8d7da; color:#842029; border-color:#f5c2c7; }
-
-.cul-ast-input { text-align: center; }
-
-<style>
-.cul-bac-wrap { max-height: 160px; height: 160px; overflow-y: auto;
-                border: 1px solid #adb5bd; background: #fff;
-                width: 100%; resize: vertical; }
-.cul-bac-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
-.cul-bac-table thead th { background: #e9ecef; position: sticky; top: 0; z-index: 1;
-  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.05em; padding: 3px 6px; border: 1px solid #adb5bd;
-  text-align: left; }
-.cul-bac-table thead th.center { text-align: center; }
-.cul-bac-table tbody td { padding: 2px 6px; border: 1px solid #dee2e6;
-                          vertical-align: middle; }
-.cul-bac-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.cul-bac-table tbody tr:hover { background: #eef6ff; }
-.cul-bac-check, .cul-bac-g { width: 14px; height: 14px; cursor: pointer;
-                             accent-color: #198754; }
-.cul-bac-g { accent-color: #0d6efd; }
 </style>
 
-
 <script>
-(function(){
+(function () {
   function applySensitivity() {
     document.querySelectorAll('.cul-no-sensitive').forEach(function (sel) {
-      var n = 0;
       var v = sel.value || '';
+      var n = 0;
       if (v.indexOf('1') === 0) n = 1;
       else if (v.indexOf('2') === 0) n = 2;
       else if (v.indexOf('3') === 0) n = 3;
       else if (v.indexOf('4') === 0) n = 4;
       else if (v.indexOf('5') === 0) n = 5;
-      else n = 0;
-
       var wrap = sel.closest('.cul-block') || document;
       ['1','2','3'].forEach(function (level) {
         var show = parseInt(level, 10) <= n;
-        // hide/show MIC & S columns
-        wrap.querySelectorAll('.col-mic-' + level + ', .col-s-' + level).forEach(function (cell) {
-          cell.style.display = show ? '' : 'none';
-        });
-        // hide/show the G1/G2/G3 column in the bacteria grid
-        wrap.querySelectorAll('.col-g-' + level).forEach(function (cell) {
-          cell.style.display = show ? '' : 'none';
+        var cells = wrap.querySelectorAll(
+          '.col-mic-' + level + ', .col-s-' + level + ', .col-g-' + level
+        );
+        cells.forEach(function (cell) {
+          if (show) {
+            cell.style.display = '';
+          } else {
+            cell.style.display = 'none';
+          }
         });
       });
     });
   }
 
-  document.addEventListener('DOMContentLoaded', applySensitivity);
-  document.addEventListener('change', function (e) {
-    if (e.target && e.target.classList.contains('cul-no-sensitive')) {
-      applySensitivity();
-    }
-  });
-  document.addEventListener('input', function (e) {
-    if (e.target && e.target.classList.contains('cul-no-sensitive')) {
-      applySensitivity();
-    }
-  });
-  window.addEventListener('load', applySensitivity);
-})();
-</script>
-<script>
-(function(){
-  function paint(sel) {
-    var v = sel.value;
+  function paintSelect(sel) {
     sel.classList.remove('s-S', 's-I', 's-R');
-    if (v === 'S') sel.classList.add('s-S');
-    else if (v === 'I') sel.classList.add('s-I');
-    else if (v === 'R') sel.classList.add('s-R');
+    if (sel.value === 'S') sel.classList.add('s-S');
+    else if (sel.value === 'I') sel.classList.add('s-I');
+    else if (sel.value === 'R') sel.classList.add('s-R');
   }
   function paintAll() {
-    document.querySelectorAll('.cul-ast-select').forEach(paint);
+    document.querySelectorAll('.cul-ast-select').forEach(paintSelect);
   }
-  document.addEventListener('DOMContentLoaded', paintAll);
-  document.addEventListener('change', function (e) {
-    if (e.target && e.target.classList.contains('cul-ast-select')) paint(e.target);
-  });
-  window.addEventListener('load', paintAll);
-})();
-</script>
-<script>
-(function(){
+
   function buildLine(name) {
-    // Customize this template as needed
     return 'Isolate ' + name + ' - Heavy growth of ' + name +
            ' obtained after 24 hours of incubation at 37\u00b0C.';
   }
-
   function appendLine(itemId, g, name) {
     var ta = document.querySelector('textarea[name="culture_growth_' + g + '_' + itemId + '"]');
     if (!ta) return;
     var line = buildLine(name);
     var cur = ta.value.trim();
-    if (cur.indexOf(name) !== -1) return;   // already added
+    if (cur.indexOf(name) !== -1) return;
     ta.value = cur ? (cur + '\n' + line) : line;
   }
-
   function removeLine(itemId, g, name) {
     var ta = document.querySelector('textarea[name="culture_growth_' + g + '_' + itemId + '"]');
     if (!ta) return;
-    var lines = ta.value.split('\n').filter(function (l) {
-      return l.indexOf(name) === -1;
-    });
+    var lines = ta.value.split('\n').filter(function (l) { return l.indexOf(name) === -1; });
     ta.value = lines.join('\n').replace(/\n{2,}/g, '\n').trim();
   }
 
-  // When G1/G2/G3 checkbox changes, auto-fill or remove the matching growth textarea
+  // ---- Tab switching ----
+  document.querySelectorAll('.cul-tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      var key = t.dataset.culTab;
+      var wrap = t.closest('.cul-block');
+      wrap.querySelectorAll('.cul-tab').forEach(function (x) { x.classList.remove('active'); });
+      wrap.querySelectorAll('.cul-pane').forEach(function (x) { x.classList.remove('active'); });
+      t.classList.add('active');
+      var pane = wrap.querySelector('.cul-pane[data-cul-pane="' + key + '"]');
+      if (pane) pane.classList.add('active');
+    });
+  });
+
+  // ---- Global change handler ----
   document.addEventListener('change', function (e) {
-    if (!e.target.classList.contains('cul-bac-g')) return;
-    var itemId = e.target.dataset.item;
-    var g      = e.target.dataset.g;
-    var name   = e.target.dataset.name;
-    if (e.target.checked) {
-      appendLine(itemId, g, name);
-    } else {
-      removeLine(itemId, g, name);
+    if (!e.target) return;
+    if (e.target.classList.contains('cul-no-sensitive')) applySensitivity();
+    if (e.target.classList.contains('cul-ast-select')) paintSelect(e.target);
+    if (e.target.classList.contains('cul-bac-g')) {
+      var itemId = e.target.dataset.item;
+      var g      = e.target.dataset.g;
+      var name   = e.target.dataset.name;
+      if (e.target.checked) appendLine(itemId, g, name);
+      else removeLine(itemId, g, name);
     }
   });
+
+  // ---- Run on load ----
+  function boot() { applySensitivity(); paintAll(); }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+  window.addEventListener('load', boot);
 })();
 </script>
-
