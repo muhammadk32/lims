@@ -337,7 +337,13 @@ def save_culture_fields(item, form, user):
 
     def _g(k):
         v = form.get(k)
-        return (v or '').strip() or None
+        if v is None:
+            return None
+        v = str(v).strip()
+        # treat literal "None" / "null" as empty
+        if v.lower() in ('', 'none', 'null'):
+            return None
+        return v
 
     # Single-value fields
     r.culture_specimen      = _g(f'culture_specimen_{item.id}')

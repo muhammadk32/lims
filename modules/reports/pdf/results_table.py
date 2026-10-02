@@ -242,19 +242,24 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     critical_rows.append(row_idx)
 
             is_pcr = (item.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
-            row = [
-                Paragraph(item.test.name, cell_bold),
-                Paragraph('' if is_pcr else (item.result_value or '-'), cell_style),
-                Paragraph('' if is_pcr else (item.test.unit or '-'), cell_style),
-                Paragraph('' if is_pcr else (_rrfo(item.test, order) or '-'), cell_style),
-            ]
-            for pv in prev_values_for(item.test.name):
-                row.append(Paragraph(pv or '-', cell_prev))
-            data.append(row)
-            row_idx += 1
-            _collect_note(notes_flowables, item.test, order)
-            _collect_pcr_details(notes_flowables, item, order)
-            _collect_culture(notes_flowables, item, order)
+            is_culture = (item.test.result_format or '').lower() in ('culture', 'culture_sensitivity')
+
+            if is_culture:
+                # Culture: skip the plain table row; render as MICROBIOLOGY REPORT below
+                _collect_culture(notes_flowables, item, order)
+            else:
+                row = [
+                    Paragraph(item.test.name, cell_bold),
+                    Paragraph('' if is_pcr else (item.result_value or '-'), cell_style),
+                    Paragraph('' if is_pcr else (item.test.unit or '-'), cell_style),
+                    Paragraph('' if is_pcr else (_rrfo(item.test, order) or '-'), cell_style),
+                ]
+                for pv in prev_values_for(item.test.name):
+                    row.append(Paragraph(pv or '-', cell_prev))
+                data.append(row)
+                row_idx += 1
+                _collect_note(notes_flowables, item.test, order)
+                _collect_pcr_details(notes_flowables, item, order)
 
     # Column widths
     if n_prev > 0:
@@ -262,6 +267,17 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         col_widths += [22 * mm] * n_prev
     else:
         col_widths = [65 * mm, 30 * mm, 25 * mm, 35 * mm]
+
+    # If only the header row remains (all items were culture), return an empty 1x1 table
+    if len(data) <= 1:
+        empty = Table([['']], colWidths=[1])
+        empty.setStyle(TableStyle([
+            ('TOPPADDING', (0,0), (-1,-1), 0),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+        ]))
+        return empty, notes_flowables, len(abnormal_rows), len(critical_rows)
 
     t = Table(data, colWidths=col_widths, repeatRows=1)
 
