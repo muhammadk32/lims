@@ -53,9 +53,10 @@ def _culture_block(item, result, ab_rows):
     title_style = ParagraphStyle("CulTitle", parent=styles["Normal"],
         fontSize=10, fontName="Helvetica-Bold", alignment=1, spaceAfter=4)
     label_style = ParagraphStyle("CulLabel", parent=styles["Normal"],
-        fontSize=8, fontName="Helvetica-Bold")
+        fontSize=8.5, fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#000000"), alignment=0)
     body_style = ParagraphStyle("CulBody", parent=styles["Normal"],
-        fontSize=8, leading=11)
+        fontSize=8, leading=11, alignment=0)
     group_style = ParagraphStyle("CulGroup", parent=styles["Normal"],
         fontSize=7.5, fontName="Helvetica-Bold",
         textColor=colors.HexColor("#0d6efd"))
@@ -80,29 +81,68 @@ def _culture_block(item, result, ab_rows):
     out.append(t)
     out.append(Spacer(1, 3*mm))
 
-    # Specimen + Growth
-    specimen = _plain(result.culture_specimen) or "-"
-    body_rows = [[Paragraph("<b>%s:</b>" % _lbl["specimen"], label_style),
-                  Paragraph(specimen, body_style)]]
-    growth_lines = []
+
+    # ---- Each row gets its own bordered box ----
+    def _bordered_row(label_text, value_text):
+        # Detect abnormal keywords in the value ? highlight
+        txt_lower = (value_text or "").lower()
+        bad_keywords = ["resistant", "positive", "abnormal", "reactive",
+                        "detected", "esbl", "mrsa", "high", ">", "++"]
+        is_abnormal = any(k in txt_lower for k in bad_keywords)
+
+        # Choose border/background color
+        if is_abnormal:
+            border_color = colors.HexColor("#dc3545")
+            bg_color     = colors.HexColor("#fff5f5")
+        else:
+            border_color = colors.HexColor("#212529")
+            bg_color     = colors.white
+
+        t = Table(
+            [[Paragraph("<b>%s:</b>" % label_text.upper(), label_style),
+              Paragraph(value_text, body_style)]],
+            colWidths=[28 * mm, 142 * mm],
+        )
+        t.setStyle(TableStyle([
+            ("VALIGN",   (0, 0), (-1, -1), "TOP"),
+            ("LEFTPADDING",  (0, 0), (0, -1), 8),
+            ("LEFTPADDING",  (1, 0), (1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING",   (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING",(0, 0), (-1, -1), 4),
+            ("BOX", (0, 0), (-1, -1), 0.8, border_color),
+            ("ROUNDEDCORNERS", [3, 3, 3, 3]),
+            ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#f8f9fa")),
+            ("BACKGROUND", (1, 0), (1, -1), bg_color),
+        ]))
+        return t
+
+    # SPECIMEN row
+    specimen_val = _plain(result.culture_specimen) or "-"
+    out.append(_bordered_row(_lbl["specimen"], specimen_val))
+    out.append(Spacer(1, 1.2 * mm))
+
+    # DIRECT row
+    direct_text = _plain(getattr(result, "culture_micro_text", "") or "")
+    direct_note = _plain(getattr(result, "culture_micro_note", "") or "")
+    direct_val  = " ".join([x for x in [direct_text, direct_note] if x]).strip()
+    if direct_val:
+        out.append(_bordered_row("Direct", direct_val))
+        out.append(Spacer(1, 1.2 * mm))
+
+    # CULTURE 1 / 2 / 3 rows
     for g in (1, 2, 3):
-        txt = _plain(getattr(result, "culture_growth_%d" % g, "") or "")
-        if not txt or txt.strip().lower() in ("none", "null"):
+        growth_txt = _plain(getattr(result, "culture_growth_%d" % g, "") or "")
+        if not growth_txt or growth_txt.strip().lower() in ("none", "null"):
             continue
-        growth_lines.append("%s %d:  %s" % (_lbl["culture"], g, txt))
-    if growth_lines:
-        body_rows.append([Paragraph("", label_style),
-                          Paragraph("<br/>".join(growth_lines), body_style)])
-    t2 = Table(body_rows, colWidths=[30*mm, 140*mm])
-    t2.setStyle(TableStyle([
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING", (0, 0), (-1, -1), 1),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
-    ]))
-    out.append(t2)
-    out.append(Spacer(1, 3*mm))
+        colony = _plain(getattr(result, "culture_colony_%d" % g, "") or "")
+        val = growth_txt
+        if colony and colony.strip().lower() not in ("none", "null"):
+            val = val + "<br/>Colony Count: " + colony
+        out.append(_bordered_row("%s %d" % (_lbl["culture"], g), val))
+        out.append(Spacer(1, 1.2 * mm))
+
+    out.append(Spacer(1, 2 * mm))
 
     # Antibiotic grid ? 2-column layout
     filled = [r for r in ab_rows if (r.s_1 or r.s_2 or r.s_3 or r.mic_1 or r.mic_2 or r.mic_3)]
@@ -229,11 +269,12 @@ def _culture_block(item, result, ab_rows):
     comments = _plain(result.culture_comments_txt) or ""
     if comments:
         ct = Table([[Paragraph("<b>%s:</b>" % _lbl["comments"], label_style),
-                     Paragraph(comments, note_style)]], colWidths=[30*mm, 140*mm])
+                     Paragraph(comments, note_style)]], colWidths=[42*mm, 128*mm])
         ct.setStyle(TableStyle([
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("LEFTPADDING", (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("LEFTPADDING", (0, 0), (0, -1), 0),
+            ("LEFTPADDING", (1, 0), (1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
         ]))
         out.append(ct)
 
