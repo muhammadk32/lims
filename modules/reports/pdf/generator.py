@@ -31,10 +31,26 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     primary = _hex(lab['primary_color'])
 
     story = []
-    story.append(_header_table())
-    story.append(Spacer(1, 4 * mm))
-    story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
-    story.append(Spacer(1, 6 * mm))
+
+    # Check global header toggle
+    try:
+        from core.models import LabSettings
+        _lab_s = LabSettings.get()
+        _hdr_on = bool(getattr(_lab_s, 'header_enabled', True)) if _lab_s else True
+    except Exception:
+        _lab_s = None
+        _hdr_on = True
+
+    # Adjust top margin when header is off
+    if not _hdr_on and _lab_s is not None:
+        _top_mm = int(getattr(_lab_s, 'header_top_margin_mm', 15) or 15)
+        doc.topMargin = _top_mm * mm
+
+    if _hdr_on:
+        story.append(_header_table())
+        story.append(Spacer(1, 4 * mm))
+        story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
+        story.append(Spacer(1, 6 * mm))
 
     story.append(_patient_info_table(order))
     story.append(Spacer(1, 8 * mm))

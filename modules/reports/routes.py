@@ -89,9 +89,16 @@ def index():
         items = [i for i in items if not i.is_verified]
     # 'all' ? no filter
 
+    from core.models import LabSettings
+    lab_s = LabSettings.get()
+    header_enabled = bool(getattr(lab_s, 'header_enabled', True)) if lab_s else True
+    header_top_margin_mm = int(getattr(lab_s, 'header_top_margin_mm', 15) or 15) if lab_s else 15
+
     return render_template(
         'reports/list.html',
         items=items,
+        header_enabled=header_enabled,
+        header_top_margin_mm=header_top_margin_mm,
         status=status,
         q=q,
         phone=phone,
@@ -190,3 +197,44 @@ def view_pdf(order_id):
         download_name=f'report_{order.order_code}.pdf',
         as_attachment=False,
     )
+
+# ============================================================
+# Toggle global report header ON/OFF
+# ============================================================
+@reports_bp.route('/toggle-header', methods=['POST'])
+@login_required
+@permission_required('view_reports')
+def toggle_header():
+    from core.models import LabSettings
+    from extensions import db
+    s = LabSettings.get()
+    if s is None:
+        s = LabSettings()
+        db.session.add(s)
+    s.header_enabled = not bool(getattr(s, 'header_enabled', True))
+    db.session.commit()
+    state = 'ON' if s.header_enabled else 'OFF'
+    from flask import flash
+    flash(f'Report header is now {state} for all printed reports.', 'success')
+    return redirect(url_for('reports.index'))
+
+@reports_bp.route('/set-header-margin', methods=['POST'])
+@login_required
+@permission_required('view_reports')
+def set_header_margin():
+    from core.models import LabSettings
+    from extensions import db
+    from flask import flash
+    try:
+        v = int(request.form.get('mm', '15'))
+    except (TypeError, ValueError):
+        v = 15
+    v = max(0, min(v, 80))    # 0..80mm
+    s = LabSettings.get()
+    if s is None:
+        s = LabSettings()
+        db.session.add(s)
+    s.header_top_margin_mm = v
+    db.session.commit()
+    flash(f'Top margin set to {v}mm for header-OFF reports.', 'success')
+    return redirect(url_for('reports.index'))

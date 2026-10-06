@@ -142,6 +142,12 @@ class LabSettings(BaseModel):
     culture_comments_label    = db.Column(db.String(40),  nullable=False, default='COMMENTS')
     culture_antibiotic_header = db.Column(db.String(80),  nullable=False, default='Antibiotic Sensitivity')
     culture_bacteria_header   = db.Column(db.String(80),  nullable=False, default='Bacteria')
+
+    # --- Report header toggle (global) ---
+    header_enabled = db.Column(db.Boolean, nullable=False, default=True)
+
+    # Top margin (in mm) applied when header is disabled
+    header_top_margin_mm = db.Column(db.Integer, nullable=False, default=15)
     header_divider_color= db.Column(db.String(20), nullable=True)   # None = use primary_color
     header_show_contact = db.Column(db.Boolean,    nullable=False, default=True)
 
