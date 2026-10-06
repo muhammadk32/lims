@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Report Blocked ? LabMS{% endblock %}
+{% block content %}
+<div style="max-width: 720px; margin: 60px auto; padding: 20px;
+            font-family: 'Segoe UI', Arial, sans-serif; color: #212529;">
+  <div style="border: 2px solid #dc3545; background: #fff5f5;
+              padding: 24px 28px; text-align: center;">
+    <i class="bi bi-exclamation-octagon-fill"
+       style="font-size: 2.4rem; color: #dc3545;"></i>
+    <h2 style="font-size: 1.15rem; font-weight: 700; margin: 12px 0 8px;
+               text-transform: uppercase; letter-spacing: 0.03em;">
+      Report Blocked
+    </h2>
+    <div style="font-size: 0.95rem; color: #495057; margin-bottom: 4px;">
+      Rs {{ '%.0f'|format(balance) }} balance due for
+      <b>{{ order.order_code }}</b>
+    </div>
+    <div style="font-size: 0.85rem; color: #6c757d;">
+      Please record payment first, then open the report again.
+    </div>
+    <div style="margin-top: 24px; display: flex; gap: 8px;
+                justify-content: center; flex-wrap: wrap;">
+<a href="{{ url_for('reports.index') }}"
+         style="padding: 6px 16px; font-size: 0.78rem; font-weight: 700;
+                text-transform: uppercase; border: 1px solid #198754;
+                background: #198754; color: #fff; text-decoration: none;
+                border-radius: 4px;">Back to Reports</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

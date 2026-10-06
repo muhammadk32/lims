@@ -49,7 +49,10 @@ def get_verify_queue_items(q, date_from, date_to):
         )
 
     candidates = query.order_by(OrderItem.id.desc()).all()
-    return [i for i in candidates if i.is_verifiable and not i.is_verified]
+    return [
+        i for i in candidates
+        if i.is_verifiable and not i.is_verified and not i.correction_note
+    ]
 
 
 def group_by_order(items):

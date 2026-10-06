@@ -1,10 +1,10 @@
-"""
+﻿"""
 Order / Patient Registration routes.
 
 Cross-module model imports are done INSIDE functions (lazy imports)
 to prevent circular-import chains at startup.
 
-Routes are thin: parse request → call service → flash → redirect.
+Routes are thin: parse request â†’ call service â†’ flash â†’ redirect.
 Business logic lives in services.py; query building in queries.py.
 """
 from datetime import datetime, date, timedelta
@@ -192,10 +192,11 @@ def _handle_new_order_post():
         )
     flash(
         f'Lab # {order.order_code} created for {patient.full_name} '
-        f'— Total: {order.final_total:.2f}',
+        f'â€” Total: {order.final_total:.2f}',
         'success',
     )
-    return redirect(url_for('orders.view_order', order_id=order.id))
+    # Show the printable bill first; user clicks Continue for the order
+    return redirect(url_for('orders.print_order', order_id=order.id, copy='both'))
 
 
 # ============================================================
@@ -247,17 +248,8 @@ def view_order(order_id):
 def print_order(order_id):
     order = _get_order_or_404(order_id)
 
-    # Block report if balance is due
-    if order.balance_due > 0.01:
-        from flask import flash
-        flash(
-            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
-            f'Please record payment first.',
-            'warning',
-        )
-        from flask import redirect, url_for
-        return redirect(url_for('orders.view_order', order_id=order.id))
-
+    # Bills/receipts are always printable. Balance-due blocking lives in
+    # reports.view_pdf (report handout), not here.
 
     copy = request.args.get('copy', 'both').strip().lower()
     if copy not in ('patient', 'lab', 'both'):

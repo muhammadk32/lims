@@ -261,42 +261,40 @@ def _save_culture_fields(form, order):
 # PER-TEST save (used by /results/item/<id>)
 # ============================================================
 def save_item_result(item, form, user):
-    """Save value + notes for one OrderItem. If it's a panel,
-    iterate children and save each child's input too.
-
-    Culture-format tests also persist extended fields + antibiotic grid.
-    """
+    """Save values for one OrderItem. If it's a panel, save each child
+    and CLEAR the panel's own correction flag once children are re-filled."""
     from datetime import datetime
 
     now = datetime.utcnow()
 
-    # ---- Culture: extended fields + antibiotic grid ----
-    fmt = (item.test.result_format or '').lower()
-    if fmt in ('culture', 'culture_sensitivity'):
-        save_culture_fields(item, form, user)
-        # Mark item as ready for verification (has results)
-        if not item.result_value:
-            item.result_value = 'Culture'
-        db.session.commit()
-        return item
-
     if item.has_children:
+        any_saved = False
         for child in item.children:
             key = f'result_value_{child.id}'
             if key not in form:
                 continue
-            child.result_value = (form.get(key) or '').strip() or None
+            val = (form.get(key) or '').strip() or None
+            if val is None:
+                continue
+            child.result_value = val
             child.result_notes = (form.get(f'result_notes_{child.id}') or '').strip() or None
-            if child.result_value:
-                child.correction_note = None
-                child.correction_at = None
-                child.correction_by_id = None
+            child.correction_note = None
+            child.correction_at = None
+            child.correction_by_id = None
+            any_saved = True
+
+        # Clear parent correction flag when at least one child was re-saved
+        if any_saved and item.correction_note:
+            item.correction_note = None
+            item.correction_at = None
+            item.correction_by_id = None
     else:
         key = f'result_value_{item.id}'
         if key in form:
-            item.result_value = (form.get(key) or '').strip() or None
+            val = (form.get(key) or '').strip() or None
+            item.result_value = val
             item.result_notes = (form.get(f'result_notes_{item.id}') or '').strip() or None
-            if item.result_value:
+            if val:
                 item.correction_note = None
                 item.correction_at = None
                 item.correction_by_id = None
@@ -311,18 +309,23 @@ def save_item_result(item, form, user):
                 top.verified_at = None
                 top.verified_by_id = None
 
-    # If everything is filled, mark completed
+    # If was CORRECTION and nothing needs correction anymore ? flip to COMPLETED
+    still_correction = any(
+        getattr(t, 'correction_note', None) or
+        any(getattr(c, 'correction_note', None) for c in (t.children or []))
+        for t in order.top_level_items
+    )
+    if order.status == OrderStatus.CORRECTION and not still_correction:
+        order.status = OrderStatus.COMPLETED
+
     if order.all_results_done and order.status not in (OrderStatus.APPROVED, OrderStatus.CORRECTION):
         order.status = OrderStatus.COMPLETED
 
     db.session.commit()
     log_action('result', 'order_item', item.id,
-               f'Entered result for {item.test.code} ({item.test.name})')
+               f'Result saved for {item.test.code} ({item.test.name})')
     return item
 
-# ============================================================
-# Culture fields save (used by /results/item/<id>)
-# ============================================================
 def save_culture_fields(item, form, user):
     """Save all culture_* fields on the item's Result plus
     the CultureAntibiotic grid rows."""

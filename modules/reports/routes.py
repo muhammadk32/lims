@@ -142,16 +142,8 @@ def preview(order_id):
 def order_pdf(order_id):
     order = _get_order_or_404(order_id)
 
-    # Block report if balance is due
-    if order.balance_due > 0.01:
-        from flask import flash
-        flash(
-            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
-            f'Please record payment first.',
-            'warning',
-        )
-        from flask import redirect, url_for
-        return redirect(url_for('orders.view_order', order_id=order.id))
+    # Balance-due NO LONGER blocks the report.
+    # The PDF itself will show a banner (see pdf/generator.py).
 
 
     if not order.items:
@@ -176,18 +168,17 @@ def order_pdf(order_id):
 @permission_required('view_reports')
 def view_pdf(order_id):
     order = _get_order_or_404(order_id)
+
+    # Block PDF when balance is due
+    if order.balance_due > 0.01:
+        return render_template(
+            'reports/blocked.html',
+            order=order,
+            balance=order.balance_due,
+        )
     item_id = request.args.get('item', type=int)
 
-    # Block report if balance is due
-    if order.balance_due > 0.01:
-        from flask import flash
-        flash(
-            f'Report blocked - Rs {order.balance_due:.0f} balance due. '
-            f'Please record payment first.',
-            'warning',
-        )
-        from flask import redirect, url_for
-        return redirect(url_for('orders.view_order', order_id=order.id))
+    # Balance-due no longer blocks the report (see pdf/generator.py)
 
     from .pdf_generator import generate_report_pdf   # ← lazy
     buffer = generate_report_pdf(order, item_id=item_id)
@@ -238,3 +229,27 @@ def set_header_margin():
     db.session.commit()
     flash(f'Top margin set to {v}mm for header-OFF reports.', 'success')
     return redirect(url_for('reports.index'))
+
+# ============================================================
+# Preview PDF (for pathologist review ? ignores balance due)
+# ============================================================
+@reports_bp.route('/order/<int:order_id>/preview-pdf')
+@login_required
+@permission_required('view_reports')
+def preview_pdf(order_id):
+    """Same as view_pdf but skips the balance-due block. Used by the
+    verify queue for pre-approval review."""
+    order = _get_order_or_404(order_id)
+    item_id = request.args.get('item', type=int)
+
+    from .pdf_generator import generate_report_pdf
+    buffer = generate_report_pdf(order, item_id=item_id)
+
+    resp = send_file(
+        buffer,
+        mimetype='application/pdf',
+        download_name=f'preview_{order.order_code}.pdf',
+        as_attachment=False,
+    )
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+    return resp

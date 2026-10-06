@@ -32,6 +32,7 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
 
     story = []
 
+
     # Check global header toggle
     try:
         from core.models import LabSettings

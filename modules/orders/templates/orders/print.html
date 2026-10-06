@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -254,19 +254,19 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
 <!-- ============================================================
      Screen-only action bar: choose which copy, then print
      ============================================================ -->
-<div class="print-bar">
+<div class="print-bar"><a href="{{ url_for('orders.view_order', order_id=order.id) }}" class="btn btn-primary" style="padding:8px 12px;text-decoration:none;background:#0d6efd;color:#fff;border-radius:6px;font-weight:600;margin-right:8px;">Continue &rarr;</a>
 
   <select class="copy-select"
           onchange="if(this.value){window.location.href=this.value;}">
     <option value="{{ url_for('orders.print_order', order_id=order.id, copy='both') }}"
-            {% if copy == 'both' %}selected{% endif %}>📄 Both Copies</option>
+            {% if copy == 'both' %}selected{% endif %}> Both Copies</option>
     <option value="{{ url_for('orders.print_order', order_id=order.id, copy='patient') }}"
-            {% if copy == 'patient' %}selected{% endif %}>👤 Patient Bill only</option>
+            {% if copy == 'patient' %}selected{% endif %}> Patient Bill only</option>
     <option value="{{ url_for('orders.print_order', order_id=order.id, copy='lab') }}"
-            {% if copy == 'lab' %}selected{% endif %}>🧪 Lab Bill only</option>
+            {% if copy == 'lab' %}selected{% endif %}> Lab Bill only</option>
   </select>
 
-  <button onclick="window.print()">🖨️ Print</button>
+  <button onclick="window.print()"> Print</button>
   <a class="btn-close-bar" href="{{ url_for('orders.view_order', order_id=order.id) }}">Close</a>
 </div>
 
@@ -287,10 +287,10 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       <div class="contact">
         {% set parts = [] %}
         {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
-        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
-        {% if branding.email   %}{% set _ = parts.append('✓‰ ' ~ branding.email) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('âœ“â€° ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' · ') }}
+        {{ parts | join(' Â· ') }}
       </div>
     </div>
   </div>
@@ -351,7 +351,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       {% if order.discount_value > 0 %}
       <tr class="discount-row">
         <td colspan="2" style="text-align:right;">Discount :</td>
-        <td class="num">−{{ '%.0f'|format(order.discount_value) }}</td>
+        <td class="num">âˆ’{{ '%.0f'|format(order.discount_value) }}</td>
       </tr>
       {% endif %}
       <tr class="total-row">
@@ -361,10 +361,6 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       <tr>
         <td colspan="2" style="text-align:right;">Paid :</td>
         <td class="num">{{ '%.0f'|format(order.paid_amount) }}</td>
-      </tr>
-      <tr>
-        <td colspan="2" style="text-align:right;">Dues Received :</td>
-        <td class="num">{{ '%.0f'|format(order.balance_due) }}</td>
       </tr>
       <tr class="summary-row">
         <td colspan="2" style="text-align:right;">Balance :</td>
@@ -378,7 +374,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       Online Reporting: {{ branding.website or branding.email or '-' }}
     </div>
     <div class="right">
-      Patient No: {{ order.patient.patient_code }} · Lab #: {{ order.order_code }}
+      Patient No: {{ order.patient.patient_code }} Â· Lab #: {{ order.order_code }}
     </div>
   </div>
 
@@ -401,10 +397,10 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       <div class="contact">
         {% set parts = [] %}
         {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
-        {% if branding.phone   %}{% set _ = parts.append('☎ ' ~ branding.phone) %}{% endif %}
-        {% if branding.email   %}{% set _ = parts.append('✓‰ ' ~ branding.email) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('âœ“â€° ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' · ') }}
+        {{ parts | join(' Â· ') }}
       </div>
     </div>
   </div>
@@ -464,7 +460,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
   {% endfor %}
 
   <div class="consent-block">
-    <span class="box">✓</span>
+    <span class="box">âœ“</span>
     <span>I allow the staff for phlebotomy procedure for mentioned lab investigation(s).</span>
   </div>
 
