@@ -8,14 +8,25 @@ from extensions import db
 
 def _parse_range(date_from, date_to):
     today = date.today()
-    try:
-        d_from = datetime.strptime(date_from, '%Y-%m-%d').date() if date_from else today.replace(day=1)
-    except (ValueError, TypeError):
-        d_from = today.replace(day=1)
-    try:
-        d_to = datetime.strptime(date_to, '%Y-%m-%d').date() if date_to else today
-    except (ValueError, TypeError):
-        d_to = today
+
+    def _try(s, fallback):
+        if not s:
+            return fallback
+        if hasattr(s, 'year') and hasattr(s, 'month'):
+            return s  # already a date/datetime
+        try:
+            s = str(s).strip()
+        except Exception:
+            return fallback
+        for fmt in ('%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y', '%d-%m-%Y'):
+            try:
+                return datetime.strptime(s, fmt).date()
+            except (ValueError, TypeError):
+                continue
+        return fallback
+
+    d_from = _try(date_from, today.replace(day=1))
+    d_to   = _try(date_to,   today)
     return d_from, d_to
 
 

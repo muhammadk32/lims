@@ -1,9 +1,10 @@
-"""Entry point — assembles the PDF from header, patient box, results, footer."""
+﻿"""Entry point — assembles the PDF from header, patient box, results, footer."""
 import io
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
-from reportlab.platypus import SimpleDocTemplate, Spacer, HRFlowable
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, NextPageTemplate, Spacer, HRFlowable
 
 from .header import _header_table
 from .patient_box import _patient_info_table
@@ -17,16 +18,26 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     lab = _get_lab()
     buffer = io.BytesIO()
 
-    doc = SimpleDocTemplate(
+    LM = 20 * mm
+    RM = 20 * mm
+    TOP_PAGE1 = 8 * mm
+    TOP_LATER = 20 * mm   # room for strip + single-row patient line
+    BOT = 15 * mm + BOTTOM_PANEL_HEIGHT
+    content_w = A4[0] - LM - RM
+
+    doc = BaseDocTemplate(
         buffer,
         pagesize=A4,
-        leftMargin=20 * mm,
-        rightMargin=20 * mm,
-        topMargin=15 * mm,
-        bottomMargin=15 * mm + BOTTOM_PANEL_HEIGHT,
+        leftMargin=LM,
+        rightMargin=RM,
+        topMargin=TOP_PAGE1,
+        bottomMargin=BOT,
         title=f'Lab Report — {order.order_code}',
         author=lab['name'],
     )
+
+    frame_first = Frame(LM, BOT, content_w, A4[1] - TOP_PAGE1 - BOT, id='first')
+    frame_later = Frame(LM, BOT, content_w, A4[1] - TOP_LATER - BOT, id='later')
 
     primary = _hex(lab['primary_color'])
 
@@ -49,12 +60,14 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
 
     if _hdr_on:
         story.append(_header_table())
-        story.append(Spacer(1, 4 * mm))
+        story.append(Spacer(1, 1 * mm))
         story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
-        story.append(Spacer(1, 6 * mm))
+        story.append(Spacer(1, 1 * mm))
 
-    story.append(_patient_info_table(order))
-    story.append(Spacer(1, 8 * mm))
+    from reportlab.platypus import KeepTogether
+    story.append(KeepTogether([_patient_info_table(order)]))
+    story.append(NextPageTemplate('Later'))    # page 2+ uses 'Later' template
+    story.append(Spacer(1, 1 * mm))
 
     # Build previous-results map for this patient (last 2 prior visits)
     previous_map = {}
@@ -89,10 +102,19 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
 
     story.extend(_footer_flowables(abnormal_count))
 
-    doc.build(
-        story,
-        onFirstPage=_draw_page_bottom,
-        onLaterPages=_draw_page_bottom,
-    )
+    from .header import draw_continuation_header
+
+    def _on_later(canvas, doc):
+        draw_continuation_header(canvas, doc, order)
+        _draw_page_bottom(canvas, doc)
+
+    doc.addPageTemplates([
+        PageTemplate(id='First', frames=[frame_first],
+                     onPage=lambda c, d: _draw_page_bottom(c, d)),
+        PageTemplate(id='Later', frames=[frame_later],
+                     onPage=_on_later),
+    ])
+
+    doc.build(story)
     buffer.seek(0)
     return buffer

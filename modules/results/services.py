@@ -201,10 +201,34 @@ def save_pcr_result(item, form, user):
     r.value               = _g(f"pcr_result_value_{iid}") or (item.result_value or None)
     r.viral_load_type     = _g(f"pcr_viral_load_{iid}")
     r.no_of_repeat        = form.get(f"pcr_no_of_repeat_{iid}", type=int)
-    r.method_html         = _g(f"pcr_method_html_{iid}")
-    r.suggestion_html     = _g(f"pcr_suggestion_html_{iid}")
-    r.interpretation_html = _g(f"pcr_interpretation_html_{iid}")
-    r.comments_html       = _g(f"pcr_comments_html_{iid}")
+    # Load the current per-test template to detect "unchanged" values.
+    _tpl = None
+    try:
+        from modules.tests.models import PcrTemplate
+        _tpl = PcrTemplate.query.filter_by(test_id=item.test_id).first()
+    except Exception:
+        _tpl = None
+
+    def _differs(new_val, tpl_val):
+        """True if the submitted value is different from the template."""
+        if not new_val:
+            return False
+        if not tpl_val:
+            return True
+        # Normalize whitespace for comparison
+        import re as _re
+        norm = lambda s: _re.sub(r'\s+', ' ', (s or '')).strip()
+        return norm(new_val) != norm(tpl_val)
+
+    _m  = _g(f"pcr_method_html_{iid}")
+    _s  = _g(f"pcr_suggestion_html_{iid}")
+    _i  = _g(f"pcr_interpretation_html_{iid}")
+    _cm = _g(f"pcr_comments_html_{iid}")
+
+    r.method_html         = _m  if _differs(_m,  _tpl.methodology_html    if _tpl else None) else None
+    r.suggestion_html     = _s  if _differs(_s,  _tpl.suggestion_html     if _tpl else None) else None
+    r.interpretation_html = _i  if _differs(_i,  _tpl.interpretation_html if _tpl else None) else None
+    r.comments_html       = _cm if _differs(_cm, _tpl.comments_html       if _tpl else None) else None
     r.entered_at          = datetime.utcnow()
     if user is not None:
         r.entered_by_id = getattr(user, "id", None)

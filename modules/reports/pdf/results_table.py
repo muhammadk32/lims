@@ -9,7 +9,7 @@ from modules.tests.ranges import (
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
-from reportlab.platypus import Paragraph, Table, TableStyle
+from reportlab.platypus import Paragraph, Table, TableStyle, HRFlowable, Spacer
 
 from .branding import _get_lab, _hex
 from .culture_table import _culture_block as _culture_flowables
@@ -34,6 +34,13 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     previous_map = previous_map or {}
     date_labels = date_labels or []
     n_prev = len(date_labels)
+
+    # PCR full-page takeover: single PCR item
+    if items_override and len(items_override) == 1:
+        _only = items_override[0]
+        _fmt = (_only.test.result_format or '').lower()
+        if _fmt in ('pcr', 'molecular', 'pcr_quant'):
+            return _pcr_section(_only, order)
 
     lab = _get_lab()
     primary = _hex(lab['primary_color'])
@@ -63,10 +70,54 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         'PanelSub', parent=styles['Normal'], fontSize=8.5,
         textColor=colors.HexColor('#212529'), leftIndent=10,
     )
+    section_header_style = ParagraphStyle(
+        'SectionHdr', parent=styles['Normal'], fontSize=10,
+        fontName='Helvetica-Bold', textColor=colors.black,
+    )
+    col_header_style = ParagraphStyle(
+        'ColHdr', parent=styles['Normal'], fontSize=8.5,
+        fontName='Helvetica-Bold', textColor=colors.black,
+    )
 
+    # Header row (used only if no categories exist)
+    header_cells = [
+        Paragraph('Test', header_style),
+        Paragraph(order.created_at.strftime('%d-%b-%y') if order.created_at else 'Result', header_style),
+        Paragraph('Unit', header_style),
+        Paragraph('Normal Range', header_style),
+    ]
+    for d in date_labels:
+        header_cells.append(Paragraph(fmt_date(d), header_style))
+
+    data = []
+    notes_flowables = []
+    notes_row_indices = []
+    abnormal_rows = []
+    critical_rows = []
+    row_idx = 0
+
+    def fmt_date(d):
+        try:
+            return d.strftime('%d-%b-%y')
+        except Exception:
+            return '-'
+
+    def prev_values_for(name):
+        priors = previous_map.get((name or '').lower(), [])
+        out = []
+        for i in range(n_prev):
+            if i < len(priors):
+                out.append(priors[i][1])
+            else:
+                out.append(None)
+        return out
+
+    def _collect_note(bucket, test, order_):
+        # The normal range is already shown in the REFERENCE RANGE column —
+        # do not repeat it as a note below the table.
+        return
 
     def _collect_culture(bucket, item, order_):
-        """If this item is a culture test, append the ADAM microbiology block."""
         fmt = (item.test.result_format or '').lower()
         if fmt not in ('culture', 'culture_sensitivity'):
             return
@@ -83,16 +134,8 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             print(f'[culture_table] failed: {e}')
 
     def _collect_pcr_details(bucket, item, order_):
-        """Render PCR extended block under the result row.
-
-        Per-order Result.*_html values win; if empty, fall back to
-        the per-test PcrTemplate row. If both are missing, skip.
-        """
-        # Query Result directly (backref can be None for detached sessions)
         from modules.results.models import Result
         r = Result.query.filter_by(order_item_id=item.id).first()
-
-        # Per-test template fallback
         tpl = None
         try:
             from modules.tests.models import PcrTemplate
@@ -100,179 +143,174 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         except Exception:
             tpl = None
 
-        def _pick(r_val, t_val):
-            return r_val if r_val else (t_val if tpl else None)
+        def _pick(a, b):
+            return a if a else (b if tpl else None)
 
-        specimen     = r.specimen         if r else None
-        result_type  = (r.result_type or r.value) if r else None
-        viral_load   = r.viral_load_type  if r else None
+        specimen    = r.specimen if r else None
+        result_type = (r.result_type or r.value) if r else None
+        viral_load  = r.viral_load_type if r else None
         interpretation = _pick(r.interpretation_html if r else None,
                                tpl.interpretation_html if tpl else None)
-        methodology  = _pick(r.method_html if r else None,
-                             tpl.methodology_html if tpl else None)
-        suggestion   = _pick(r.suggestion_html if r else None,
-                             tpl.suggestion_html if tpl else None)
-        comments     = _pick(r.comments_html if r else None,
-                             tpl.comments_html if tpl else None)
+        methodology = _pick(r.method_html if r else None,
+                            tpl.methodology_html if tpl else None)
+        suggestion  = _pick(r.suggestion_html if r else None,
+                            tpl.suggestion_html if tpl else None)
+        comments    = _pick(r.comments_html if r else None,
+                            tpl.comments_html if tpl else None)
 
-        has_any = any([specimen, result_type, viral_load,
-                       interpretation, methodology, suggestion, comments])
-        if not has_any:
+        if not any([specimen, result_type, viral_load, interpretation,
+                    methodology, suggestion, comments]):
             return
-
-        import re as _re
 
         def _clean(html):
-            """Strip tags -> flat single-line string (for short headers)."""
             if not html:
                 return ''
-            txt = _re.sub(r'<[^>]+>', ' ', html)
-            txt = _re.sub(r'&nbsp;', ' ', txt)
-            txt = _re.sub(r'\s+', ' ', txt).strip()
-            return txt
+            h = str(html)
+            h = re.sub(r'<br\s*/?>', '<br/>', h, flags=re.I)
+            h = re.sub(r'</p\s*>', '<br/><br/>', h, flags=re.I)
+            h = re.sub(r'<p[^>]*>', '', h, flags=re.I)
+            h = re.sub(r'</?(div|span)[^>]*>', '', h, flags=re.I)
+            h = re.sub(r'<strong[^>]*>', '<b>', h, flags=re.I)
+            h = re.sub(r'</strong\s*>', '</b>', h, flags=re.I)
+            h = re.sub(r'<em[^>]*>', '<i>', h, flags=re.I)
+            h = re.sub(r'</em\s*>', '</i>', h, flags=re.I)
+            h = re.sub(r'<(?!/?(b|i|u|br|font|super|sub)\b)[^>]+>', '', h, flags=re.I)
+            h = re.sub(r'&nbsp;', ' ', h)
+            h = re.sub(r'&ndash;', '\u2013', h)
+            h = re.sub(r'&mdash;', '\u2014', h)
+            h = re.sub(r'&amp;', '&', h)
+            h = re.sub(r'[ \t]+', ' ', h)
+            h = re.sub(r'(\s*<br/>\s*){3,}', '<br/><br/>', h)
+            h = re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+)\b)', '&amp;', h)
+            return h.strip()
 
-        def _clean_html(html):
-            """Preserve ReportLab-supported tags; convert block tags to <br/>."""
-            if not html:
-                return ''
-            h = html
+        body_style = ParagraphStyle('PcrBody', parent=styles['Normal'],
+                                    fontSize=7, leading=9)
+        head_style = ParagraphStyle('PcrHead', parent=styles['Normal'],
+                                    fontSize=8, fontName='Helvetica-Bold')
 
-            # Block-level -> <br/>
-            h = _re.sub(r'<br\s*/?>', '<br/>', h, flags=_re.I)
-            h = _re.sub(r'</p\s*>', '<br/><br/>', h, flags=_re.I)
-            h = _re.sub(r'<p[^>]*>', '', h, flags=_re.I)
-            h = _re.sub(r'</?div[^>]*>', '', h, flags=_re.I)
-            h = _re.sub(r'</?span[^>]*>', '', h, flags=_re.I)
+        # --- MOLECULAR REPORT heading + test name ---
+        mol_hdr_style = ParagraphStyle('MolHdr', parent=styles['Normal'],
+                                       fontSize=10, fontName='Helvetica-Bold',
+                                       textColor=colors.black)
+        test_name_style = ParagraphStyle('MolTestName', parent=styles['Normal'],
+                                         fontSize=9, fontName='Helvetica-Bold',
+                                         textColor=colors.black)
 
-            # Lists -> bullet/numbered lines
-            h = _re.sub(r'<ul[^>]*>', '', h, flags=_re.I)
-            h = _re.sub(r'</ul\s*>', '<br/>', h, flags=_re.I)
-            h = _re.sub(r'<ol[^>]*>', '', h, flags=_re.I)
-            h = _re.sub(r'</ol\s*>', '<br/>', h, flags=_re.I)
-            h = _re.sub(r'<li[^>]*>', '&bull; ', h, flags=_re.I)
-            h = _re.sub(r'</li\s*>', '<br/>', h, flags=_re.I)
+        bucket.append(Spacer(1, 3 * mm))
+        # Underlined header box like other sections
+        _mol_hdr_tbl = Table([[Paragraph('MOLECULAR REPORT', mol_hdr_style)]],
+                             colWidths=[170 * mm])
+        _mol_hdr_tbl.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, 0), 1.2, colors.black),
+            ('LINEBELOW', (0, 0), (-1, 0), 1.2, colors.black),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ]))
+        bucket.append(_mol_hdr_tbl)
+        bucket.append(Spacer(1, 1 * mm))
+        bucket.append(Paragraph(item.test.name, test_name_style))
 
-            # Headings -> bold + <br/>
-            for tag in ('h1','h2','h3','h4','h5','h6'):
-                h = _re.sub(rf'<{tag}[^>]*>', '<b>', h, flags=_re.I)
-                h = _re.sub(rf'</{tag}\s*>', '</b><br/>', h, flags=_re.I)
-
-            # Keep b/i/u/strong/em; normalize strong/em to b/i for ReportLab
-            h = _re.sub(r'<strong[^>]*>', '<b>', h, flags=_re.I)
-            h = _re.sub(r'</strong\s*>', '</b>', h, flags=_re.I)
-            h = _re.sub(r'<em[^>]*>', '<i>', h, flags=_re.I)
-            h = _re.sub(r'</em\s*>', '</i>', h, flags=_re.I)
-
-            # Drop any remaining unsupported tags
-            h = _re.sub(r'<(?!/?(b|i|u|br|font|super|sub|a)\b)[^>]+>', '', h, flags=_re.I)
-
-            # Normalize whitespace + &nbsp;
-            h = _re.sub(r'&nbsp;', ' ', h)
-            h = _re.sub(r'[ \t]+', ' ', h)
-            h = _re.sub(r'(\s*<br/>\s*){3,}', '<br/><br/>', h)  # cap consecutive breaks
-            h = h.strip()
-
-            # Escape stray & that would break ReportLab XML
-            h = _re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+|bull)\b)', '&amp;', h)
-            return h
-
-        inner = []
+        # SPECIMEN / RESULT / VIRAL LOAD
         if specimen:
-            inner.append(f'<b>SPECIMEN:</b> {specimen}')
+            bucket.append(Paragraph(f'<b>SPECIMEN:</b> {specimen}', body_style))
         if result_type:
-            inner.append(f'<b>RESULT:</b> {result_type}')
+            bucket.append(Paragraph(f'<b>RESULT:</b> {result_type}', body_style))
         if viral_load:
-            inner.append(f'<b>VIRAL LOAD:</b> {viral_load}')
+            bucket.append(Paragraph(f'<b>VIRAL LOAD:</b> {viral_load}', body_style))
 
-        blocks = [
-            ('Interpretation', _clean_html(interpretation)),
-            ('Methodologies',  _clean_html(methodology)),
-            ('Suggestions',    _clean_html(suggestion)),
-            ('Comments',       _clean_html(comments)),
-        ]
-        for label, body in blocks:
-            if body:
-                inner.append(f'<br/><b><u>{label}:</u></b><br/>{body}')
-
-        if not inner:
-            return
-        html = '<br/>'.join(inner)
-        pcr_style = ParagraphStyle(
-            'PCRDetail', parent=styles['Normal'], fontSize=7.5,
-            textColor=colors.HexColor('#212529'), leftIndent=8, spaceBefore=4,
-            spaceAfter=6, leading=10,
-        )
-        bucket.append(Paragraph(html, pcr_style))
-
-    def _collect_note(bucket, test, order_):
-        """Append (test_name, note) as a Paragraph to the notes bucket."""
-        try:
-            rng = _prfp(test, getattr(order_, 'patient', None))
-        except Exception:
-            rng = None
-        notes = getattr(rng, 'notes', None) if rng else None
-        if not notes:
-            return
-        plain = re.sub(r'<[^>]+>', ' ', notes)
-        plain = re.sub(r'\s+', ' ', plain).strip()
-        if not plain:
-            return
-        html = f'<b>{test.name}:</b> {plain}'
-        bucket.append(Paragraph(html, notes_style))
-
-    def _append_notes_row(test, order_, n_cols):
-        """Return a notes row (as list) if the matching range has notes, else None."""
-        try:
-            rng = _prfp(test, getattr(order_, 'patient', None))
-        except Exception:
-            rng = None
-        notes = getattr(rng, 'notes', None) if rng else None
-        if not notes:
-            return None
-        # strip HTML tags for PDF (reportlab can't render HTML)
-        import re as _re
-        plain = _re.sub(r'<[^>]+>', ' ', notes)
-        plain = _re.sub(r'\s+', ' ', plain).strip()
-        if not plain:
-            return None
-        blank = Paragraph('', cell_style)
-        return [blank] + [Paragraph(plain, notes_style)] + [blank] * (n_cols - 2)
-
-    def fmt_date(d):
-        try:
-            return d.strftime('%d-%b-%y')
-        except Exception:
-            return '-'
-
-    # Header row
-    header_cells = [
-        Paragraph('Test', header_style),
-        Paragraph(order.created_at.strftime('%d-%b-%y') if order.created_at else 'Result', header_style),
-        Paragraph('Unit', header_style),
-        Paragraph('Normal Range', header_style),
-    ]
-    for d in date_labels:
-        header_cells.append(Paragraph(fmt_date(d), header_style))
-    data = [header_cells]
-
-    notes_flowables = []
-    notes_row_indices = []
-    abnormal_rows = []
-    critical_rows = []
-    row_idx = 1
-
-    def prev_values_for(name):
-        priors = previous_map.get((name or '').lower(), [])
-        out = []
-        for i in range(n_prev):
-            if i < len(priors):
-                out.append(priors[i][1])
-            else:
-                out.append(None)
-        return out
+        for label, body in [('Interpretation', interpretation),
+                            ('Methodologies', methodology),
+                            ('Suggestions', suggestion),
+                            ('Comments', comments)]:
+            cleaned = _clean(body)
+            if cleaned:
+                bucket.append(Spacer(1, 2 * mm))
+                bucket.append(HRFlowable(width='100%', thickness=0.4,
+                                         color=colors.HexColor('#adb5bd')))
+                bucket.append(Paragraph(f'<u><b>{label}:</b></u>', head_style))
+                bucket.append(Paragraph(cleaned, body_style))
 
     _iter_items = items_override if items_override is not None else order.top_level_items
-    for item in _iter_items:
+
+    # ---- Group items by category (alphabetical; uncategorized last) ----
+    class _SectionMarker:
+        __slots__ = ('name', 'test', 'has_children', 'children', 'result_value')
+        def __init__(self, name):
+            self.name = name
+            self.test = None
+            self.has_children = False
+            self.children = []
+            self.result_value = None
+
+    def _cat_key(it):
+        c = it.test.category_ref if getattr(it, 'test', None) else None
+        return (1, '') if c is None else (0, str(c.name).upper())
+
+    _sorted_items = sorted([i for i in _iter_items if getattr(i, 'test', None)],
+                           key=_cat_key)
+
+    _with_headers = []
+    _last_cat = object()
+    for _it in _sorted_items:
+        _c = _it.test.category_ref if _it.test else None
+        _cn = _c.name if _c else None
+        if _cn != _last_cat:
+            _last_cat = _cn
+            if _cn:
+                _with_headers.append(_SectionMarker(_cn))
+        _with_headers.append(_it)
+
+    _section_header_rows = []
+    _colhdr_rows = []
+
+    _with_headers = list(_with_headers)
+    for item in _with_headers:
+        if isinstance(item, _SectionMarker):
+            # Skip section if every item under it is PCR (they render standalone below)
+            _idx = _with_headers.index(item)
+            _upcoming = []
+            for _x in _with_headers[_idx + 1:]:
+                if isinstance(_x, _SectionMarker):
+                    break
+                _upcoming.append(_x)
+            _has_printable = any(
+                (i.test.result_format or '').lower() not in ('pcr', 'pcr_quant', 'molecular')
+                for i in _upcoming if getattr(i, 'test', None)
+            )
+            if not _has_printable:
+                continue
+
+            # Section title row — skip MOLECULAR (handled inside PCR blocks)
+            _is_molecular_section = (item.name or '').strip().upper() == 'MOLECULAR'
+            if not _is_molecular_section:
+                if '_first_section_done' in dir() and _first_section_done:
+                    _spacer = [Paragraph('', cell_style)] * (4 + n_prev)
+                    data.append(_spacer)
+                    row_idx += 1
+                _first_section_done = True
+                _hdr = [Paragraph(item.name.upper() + ' REPORT', section_header_style)]
+                _hdr += [Paragraph('', cell_style)] * (3 + n_prev)
+                data.append(_hdr)
+                _section_header_rows.append(row_idx)
+                row_idx += 1
+
+            # Column header row
+            _colhdr = [
+                Paragraph('TEST', col_header_style),
+                Paragraph('RESULT', col_header_style),
+                Paragraph('UNIT', col_header_style),
+                Paragraph('REFERENCE RANGE', col_header_style),
+            ]
+            for _d in date_labels:
+                _colhdr.append(Paragraph(fmt_date(_d), col_header_style))
+            data.append(_colhdr)
+            _colhdr_rows.append(row_idx)
+            row_idx += 1
+            continue
+
         if item.has_children:
             panel_cells = [
                 Paragraph('> ' + item.test.name, panel_header_style),
@@ -316,21 +354,22 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             is_culture = (item.test.result_format or '').lower() in ('culture', 'culture_sensitivity')
 
             if is_culture:
-                # Culture: skip the plain table row; render as MICROBIOLOGY REPORT below
                 _collect_culture(notes_flowables, item, order)
+            elif is_pcr:
+                # PCR: skip the flat row entirely; render standalone section below
+                _collect_pcr_details(notes_flowables, item, order)
             else:
                 row = [
                     Paragraph(item.test.name, cell_bold),
-                    Paragraph('' if is_pcr else (item.result_value or '-'), cell_style),
-                    Paragraph('' if is_pcr else (item.test.unit or '-'), cell_style),
-                    Paragraph('' if is_pcr else (_rrfo(item.test, order) or '-'), cell_style),
+                    Paragraph(item.result_value or '-', cell_style),
+                    Paragraph(item.test.unit or '-', cell_style),
+                    Paragraph(_rrfo(item.test, order) or '-', cell_style),
                 ]
                 for pv in prev_values_for(item.test.name):
                     row.append(Paragraph(pv or '-', cell_prev))
                 data.append(row)
                 row_idx += 1
                 _collect_note(notes_flowables, item.test, order)
-                _collect_pcr_details(notes_flowables, item, order)
 
     # Column widths
     if n_prev > 0:
@@ -339,36 +378,42 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     else:
         col_widths = [65 * mm, 30 * mm, 25 * mm, 35 * mm]
 
-    # If only the header row remains (all items were culture), return an empty 1x1 table
     if len(data) <= 1:
         empty = Table([['']], colWidths=[1])
         empty.setStyle(TableStyle([
-            ('TOPPADDING', (0,0), (-1,-1), 0),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
-            ('LEFTPADDING', (0,0), (-1,-1), 0),
-            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
         ]))
         return empty, notes_flowables, len(abnormal_rows), len(critical_rows)
 
-    t = Table(data, colWidths=col_widths, repeatRows=1)
+    t = Table(data, colWidths=col_widths, repeatRows=0)
 
     style = [
-        ('BACKGROUND', (0, 0), (-1, 0), primary),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-        ('ALIGN', (0, 0), (-1, 0), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 8.5),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+        ('GRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#cccccc')),
         ('LEFTPADDING', (0, 0), (-1, -1), 5),
         ('RIGHTPADDING', (0, 0), (-1, -1), 5),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
     ]
+
+    # Section title rows: black underline above + below, full span
+    for _r in _section_header_rows:
+        style.append(('LINEABOVE', (0, _r), (-1, _r), 1.2, colors.black))
+        style.append(('LINEBELOW', (0, _r), (-1, _r), 1.2, colors.black))
+        style.append(('BACKGROUND', (0, _r), (-1, _r), colors.white))
+        style.append(('SPAN', (0, _r), (-1, _r)))
+
+    # Column header rows: thin underline below
+    for _r in _colhdr_rows:
+        style.append(('LINEBELOW', (0, _r), (-1, _r), 0.8, colors.black))
+        style.append(('BACKGROUND', (0, _r), (-1, _r), colors.white))
 
     # Panel header rows (blue)
     for i, row in enumerate(data):
-        if i == 0:
+        if i in _section_header_rows or i in _colhdr_rows:
             continue
         cell0 = row[0]
         if hasattr(cell0, 'text') and cell0.text.startswith('>'):
@@ -379,20 +424,146 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         style.append(('BACKGROUND', (0, r), (-1, r), colors.HexColor('#f8d7da')))
         style.append(('TEXTCOLOR', (1, r), (1, r), colors.HexColor('#b02a37')))
 
-    # Critical rows (darker pink - applied after, wins)
+    # Critical rows
     for r in critical_rows:
         style.append(('BACKGROUND', (0, r), (-1, r), colors.HexColor('#f5b7b1')))
         style.append(('TEXTCOLOR', (1, r), (1, r), colors.HexColor('#7f1d1d')))
 
-    # Strip grid + padding from notes rows so they read as prose
     for r in notes_row_indices:
-        style.append(('LINEABOVE',   (0, r), (-1, r), 0, colors.white))
-        style.append(('LINEBELOW',   (0, r), (-1, r), 0, colors.white))
-        style.append(('LINEBEFORE',  (0, r), (0, r),  0, colors.white))
-        style.append(('LINEAFTER',   (-1, r), (-1, r), 0, colors.white))
-        style.append(('BACKGROUND',  (0, r), (-1, r), colors.white))
-        style.append(('TOPPADDING',  (0, r), (-1, r), 2))
-        style.append(('BOTTOMPADDING', (0, r), (-1, r), 6))
+        style.append(('LINEABOVE', (0, r), (-1, r), 0, colors.white))
+        style.append(('LINEBELOW', (0, r), (-1, r), 0, colors.white))
+        style.append(('LINEBEFORE', (0, r), (0, r), 0, colors.white))
+        style.append(('LINEAFTER', (-1, r), (-1, r), 0, colors.white))
+        style.append(('BACKGROUND', (0, r), (-1, r), colors.white))
 
     t.setStyle(TableStyle(style))
     return t, notes_flowables, len(abnormal_rows), len(critical_rows)
+
+
+def _pcr_section(item, order):
+    """Full-page MOLECULAR DIAGNOSTIC SECTION for a single PCR test.
+    Returns (Table, [], 0, 0) matching the _results_table signature.
+    """
+    import re as _re
+
+    lab = _get_lab()
+    primary = _hex(lab['primary_color'])
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle('PcrTitle', parent=styles['Normal'],
+                                 fontSize=10, fontName='Helvetica-Bold',
+                                 textColor=colors.black)
+    band_style = ParagraphStyle('PcrBand', parent=styles['Normal'],
+                                fontSize=9, fontName='Helvetica-Bold',
+                                textColor=colors.black)
+    kv_label = ParagraphStyle('PcrKv', parent=styles['Normal'],
+                              fontSize=8, fontName='Helvetica-Bold')
+    kv_val = ParagraphStyle('PcrKvVal', parent=styles['Normal'], fontSize=8)
+    section_head = ParagraphStyle('PcrSec', parent=styles['Normal'],
+                                  fontSize=8, fontName='Helvetica-Bold',
+                                  textColor=colors.black)
+    body_style = ParagraphStyle('PcrBody', parent=styles['Normal'],
+                                fontSize=7, leading=9)
+
+    from modules.results.models import Result
+    r = Result.query.filter_by(order_item_id=item.id).first()
+    tpl = None
+    try:
+        from modules.tests.models import PcrTemplate
+        tpl = PcrTemplate.query.filter_by(test_id=item.test_id).first()
+    except Exception:
+        tpl = None
+
+    def _pick(a, b):
+        return a if a else (b if tpl else None)
+
+    specimen    = r.specimen if r else None
+    result_type = (r.result_type or r.value) if r else None
+    viral_load  = r.viral_load_type if r else None
+    interpretation = _pick(r.interpretation_html if r else None,
+                           tpl.interpretation_html if tpl else None)
+    methodology = _pick(r.method_html if r else None,
+                        tpl.methodology_html if tpl else None)
+    comments    = _pick(r.comments_html if r else None,
+                        tpl.comments_html if tpl else None)
+
+    def _clean(html):
+        if not html:
+            return ''
+        h = str(html)
+        h = _re.sub(r'<br\s*/?>', '<br/>', h, flags=_re.I)
+        h = _re.sub(r'</p\s*>', '<br/><br/>', h, flags=_re.I)
+        h = _re.sub(r'<p[^>]*>', '', h, flags=_re.I)
+        h = _re.sub(r'</?(div|span)[^>]*>', '', h, flags=_re.I)
+        h = _re.sub(r'<strong[^>]*>', '<b>', h, flags=_re.I)
+        h = _re.sub(r'</strong\s*>', '</b>', h, flags=_re.I)
+        h = _re.sub(r'<em[^>]*>', '<i>', h, flags=_re.I)
+        h = _re.sub(r'</em\s*>', '</i>', h, flags=_re.I)
+        h = _re.sub(r'<(?!/?(b|i|u|br|font|super|sub)\b)[^>]+>', '', h, flags=_re.I)
+        h = _re.sub(r'&nbsp;', ' ', h)
+        h = _re.sub(r'&ndash;', '\u2013', h)
+        h = _re.sub(r'&mdash;', '\u2014', h)
+        h = _re.sub(r'&amp;', '&', h)
+        h = _re.sub(r'[ \t]+', ' ', h)
+        h = _re.sub(r'(\s*<br/>\s*){3,}', '<br/><br/>', h)
+        h = _re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+)\b)', '&amp;', h)
+        return h.strip()
+
+    page_w = 170 * mm
+
+    title_para = Paragraph('MOLECULAR DIAGNOSTIC SECTION', title_style)
+
+    band_tbl = Table([[Paragraph(item.test.name.upper(), band_style)]],
+                     colWidths=[page_w])
+    band_tbl.setStyle(TableStyle([
+        ('BOX', (0, 0), (-1, -1), 0.9, colors.black),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+    ]))
+
+    kv_rows = []
+    for label, val in [('SPECIMEN:', specimen),
+                       ('RESULT:', result_type),
+                       ('VIRAL LOAD:', viral_load)]:
+        if val:
+            kv_rows.append([
+                Paragraph(f'<b>{label}</b>', kv_label),
+                Paragraph(str(val), kv_val),
+            ])
+    kv_tbl = Table(kv_rows, colWidths=[30 * mm, 140 * mm])
+    kv_tbl.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 1),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ]))
+
+    flow = [title_para, band_tbl, kv_tbl]
+
+    def _section(title, body_html):
+        cleaned = _clean(body_html)
+        if not cleaned:
+            return
+        flow.append(Spacer(1, 2 * mm))
+        flow.append(HRFlowable(width='100%', thickness=0.4,
+                               color=colors.HexColor('#adb5bd'),
+                               spaceBefore=1, spaceAfter=2))
+        flow.append(Paragraph(f'<u><b>{title}:</b></u>', section_head))
+        flow.append(Spacer(1, 1))
+        flow.append(Paragraph(cleaned, body_style))
+
+    _section('Interpretation', interpretation)
+    _section('Methodologies', methodology)
+    _section('Comments', comments)
+
+    empty = Table([['']], colWidths=[1])
+    empty.setStyle(TableStyle([
+        ('TOPPADDING', (0, 0), (-1, -1), 0),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+    ]))
+    return empty, flow, 0, 0

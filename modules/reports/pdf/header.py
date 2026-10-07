@@ -196,3 +196,120 @@ def _header_split(lab, styles, primary):
         ('RIGHTPADDING', (0, 0), (-1, -1), 0),
     ]))
     return t
+
+
+# ============================================================
+# Canvas-drawable header — for onLaterPages repeat
+# ============================================================
+def draw_letterhead_on_canvas(canvas, doc):
+    """Draw the letterhead (logo + lab name + contact + divider) at the
+    top of the current page. Called from doc.build's onLaterPages."""
+    from reportlab.lib.units import mm
+    from reportlab.lib import colors
+    from .branding import _get_lab
+
+    lab = _get_lab()
+    page_w, page_h = doc.pagesize
+    left = doc.leftMargin
+    right = doc.rightMargin
+    top = 15 * mm
+
+    try:
+        primary = colors.HexColor(lab.get('primary_color') or '#0d6efd')
+    except Exception:
+        primary = colors.HexColor('#0d6efd')
+
+    canvas.saveState()
+
+    y = page_h - top
+    # Lab name (centered)
+    canvas.setFont('Helvetica-Bold', 16)
+    canvas.setFillColor(colors.HexColor('#b91c1c'))  # red-ish
+    canvas.drawCentredString(page_w / 2, y - 5 * mm, lab.get('name', 'LABORATORY'))
+
+    # Tagline
+    canvas.setFont('Helvetica', 8)
+    canvas.setFillColor(colors.HexColor('#6c757d'))
+    if lab.get('tagline'):
+        canvas.drawCentredString(page_w / 2, y - 9 * mm, lab['tagline'])
+
+    # Contact line
+    contact = ' · '.join(filter(None, [
+        lab.get('address', '').split('\n')[0] if lab.get('address') else '',
+        lab.get('phone', ''),
+        lab.get('email', ''),
+    ]))
+    if contact:
+        canvas.setFont('Helvetica', 7.5)
+        canvas.drawCentredString(page_w / 2, y - 13 * mm, contact)
+
+    # Divider
+    canvas.setStrokeColor(primary)
+    canvas.setLineWidth(1.5)
+    canvas.line(left, y - 16 * mm, page_w - right, y - 16 * mm)
+
+    canvas.restoreState()
+
+
+# ============================================================
+# Continuation-page header (thin strip) — drawn by onLaterPages
+# ============================================================
+def draw_continuation_header(canvas, doc, order=None):
+    """Compact patient strip + divider for pages 2+."""
+    from reportlab.lib.units import mm
+    from reportlab.lib import colors
+    from .branding import _get_lab
+
+    lab = _get_lab()
+    page_w, page_h = doc.pagesize
+    left = doc.leftMargin
+    right = doc.rightMargin
+    box_w = page_w - left - right
+
+    try:
+        primary = colors.HexColor(lab.get('primary_color') or '#0d6efd')
+    except Exception:
+        primary = colors.HexColor('#0d6efd')
+
+    canvas.saveState()
+
+    # Row 1: lab name (left) + contact (right)
+    y1 = page_h - 8 * mm
+    canvas.setFont('Helvetica-Bold', 9)
+    canvas.setFillColor(colors.HexColor('#b91c1c'))
+    canvas.drawString(left, y1, lab.get('name', 'LABORATORY'))
+
+    contact = ' · '.join(filter(None, [lab.get('phone', ''), lab.get('email', '')]))
+    if contact:
+        canvas.setFont('Helvetica', 7)
+        canvas.setFillColor(colors.HexColor('#6c757d'))
+        canvas.drawRightString(page_w - right, y1, contact)
+
+    # Row 2: patient | patient code | gender/age | order | status
+    if order is not None:
+        p = getattr(order, 'patient', None)
+        parts = []
+        if p and p.full_name:
+            parts.append('Patient: ' + p.full_name)
+        if p and p.patient_code:
+            parts.append(p.patient_code)
+        if p and p.gender:
+            parts.append(p.gender)
+        if order.order_code:
+            parts.append('Order ' + order.order_code)
+        if order.created_at:
+            parts.append(order.created_at.strftime('%d-%b-%Y'))
+        if order.status:
+            parts.append(order.status.title())
+        line2 = '  |  '.join(parts)
+        if line2:
+            canvas.setFont('Helvetica', 7.5)
+            canvas.setFillColor(colors.HexColor('#212529'))
+            canvas.drawString(left, page_h - 12.5 * mm, line2)
+
+    # Divider
+    canvas.setStrokeColor(primary)
+    canvas.setLineWidth(0.8)
+    canvas.line(left, page_h - 15 * mm, page_w - right, page_h - 15 * mm)
+
+    canvas.restoreState()

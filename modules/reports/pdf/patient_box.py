@@ -16,7 +16,7 @@ def _patient_info_table(order):
 
     styles = getSampleStyleSheet()
     label_style = ParagraphStyle(
-        'Lbl', parent=styles['Normal'], fontSize=8,
+        'Lbl', parent=styles['Normal'], fontSize=7.5,
         textColor=colors.HexColor('#6c757d'),
     )
     value_style = ParagraphStyle(

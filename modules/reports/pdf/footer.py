@@ -162,10 +162,6 @@ def _footer_flowables(abnormal_count):
             f'Please consult your physician.',
             small,
         ))
-    else:
-        elements.append(Paragraph(
-            '<font color="#198754"><b>✓</b></font> All results are within normal ranges.',
-            small,
-        ))
+    # Normal-range positive flag removed — it was misleading on PCR/qualitative reports.
 
     return elements
