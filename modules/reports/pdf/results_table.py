@@ -1,4 +1,4 @@
-"""Results table — grouped by panel, with abnormal highlighting."""
+﻿"""Results table — grouped by panel, with abnormal highlighting."""
 import re
 from reportlab.lib import colors
 from modules.tests.ranges import (
@@ -83,21 +83,47 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             print(f'[culture_table] failed: {e}')
 
     def _collect_pcr_details(bucket, item, order_):
-        """If this item has a Result with PCR fields, render them as
-        a borderless block under the result row."""
+        """Render PCR extended block under the result row.
+
+        Per-order Result.*_html values win; if empty, fall back to
+        the per-test PcrTemplate row. If both are missing, skip.
+        """
         # Query Result directly (backref can be None for detached sessions)
         from modules.results.models import Result
         r = Result.query.filter_by(order_item_id=item.id).first()
-        if r is None:
-            return
-        has_any = any([r.specimen, r.result_type, r.viral_load_type,
-                       r.interpretation_html, r.method_html,
-                       r.suggestion_html, r.comments_html])
+
+        # Per-test template fallback
+        tpl = None
+        try:
+            from modules.tests.models import PcrTemplate
+            tpl = PcrTemplate.query.filter_by(test_id=item.test_id).first()
+        except Exception:
+            tpl = None
+
+        def _pick(r_val, t_val):
+            return r_val if r_val else (t_val if tpl else None)
+
+        specimen     = r.specimen         if r else None
+        result_type  = (r.result_type or r.value) if r else None
+        viral_load   = r.viral_load_type  if r else None
+        interpretation = _pick(r.interpretation_html if r else None,
+                               tpl.interpretation_html if tpl else None)
+        methodology  = _pick(r.method_html if r else None,
+                             tpl.methodology_html if tpl else None)
+        suggestion   = _pick(r.suggestion_html if r else None,
+                             tpl.suggestion_html if tpl else None)
+        comments     = _pick(r.comments_html if r else None,
+                             tpl.comments_html if tpl else None)
+
+        has_any = any([specimen, result_type, viral_load,
+                       interpretation, methodology, suggestion, comments])
         if not has_any:
             return
 
         import re as _re
+
         def _clean(html):
+            """Strip tags -> flat single-line string (for short headers)."""
             if not html:
                 return ''
             txt = _re.sub(r'<[^>]+>', ' ', html)
@@ -105,19 +131,64 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             txt = _re.sub(r'\s+', ' ', txt).strip()
             return txt
 
+        def _clean_html(html):
+            """Preserve ReportLab-supported tags; convert block tags to <br/>."""
+            if not html:
+                return ''
+            h = html
+
+            # Block-level -> <br/>
+            h = _re.sub(r'<br\s*/?>', '<br/>', h, flags=_re.I)
+            h = _re.sub(r'</p\s*>', '<br/><br/>', h, flags=_re.I)
+            h = _re.sub(r'<p[^>]*>', '', h, flags=_re.I)
+            h = _re.sub(r'</?div[^>]*>', '', h, flags=_re.I)
+            h = _re.sub(r'</?span[^>]*>', '', h, flags=_re.I)
+
+            # Lists -> bullet/numbered lines
+            h = _re.sub(r'<ul[^>]*>', '', h, flags=_re.I)
+            h = _re.sub(r'</ul\s*>', '<br/>', h, flags=_re.I)
+            h = _re.sub(r'<ol[^>]*>', '', h, flags=_re.I)
+            h = _re.sub(r'</ol\s*>', '<br/>', h, flags=_re.I)
+            h = _re.sub(r'<li[^>]*>', '&bull; ', h, flags=_re.I)
+            h = _re.sub(r'</li\s*>', '<br/>', h, flags=_re.I)
+
+            # Headings -> bold + <br/>
+            for tag in ('h1','h2','h3','h4','h5','h6'):
+                h = _re.sub(rf'<{tag}[^>]*>', '<b>', h, flags=_re.I)
+                h = _re.sub(rf'</{tag}\s*>', '</b><br/>', h, flags=_re.I)
+
+            # Keep b/i/u/strong/em; normalize strong/em to b/i for ReportLab
+            h = _re.sub(r'<strong[^>]*>', '<b>', h, flags=_re.I)
+            h = _re.sub(r'</strong\s*>', '</b>', h, flags=_re.I)
+            h = _re.sub(r'<em[^>]*>', '<i>', h, flags=_re.I)
+            h = _re.sub(r'</em\s*>', '</i>', h, flags=_re.I)
+
+            # Drop any remaining unsupported tags
+            h = _re.sub(r'<(?!/?(b|i|u|br|font|super|sub|a)\b)[^>]+>', '', h, flags=_re.I)
+
+            # Normalize whitespace + &nbsp;
+            h = _re.sub(r'&nbsp;', ' ', h)
+            h = _re.sub(r'[ \t]+', ' ', h)
+            h = _re.sub(r'(\s*<br/>\s*){3,}', '<br/><br/>', h)  # cap consecutive breaks
+            h = h.strip()
+
+            # Escape stray & that would break ReportLab XML
+            h = _re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+|bull)\b)', '&amp;', h)
+            return h
+
         inner = []
-        if r.specimen:
-            inner.append(f'<b>SPECIMEN:</b> {r.specimen}')
-        if r.result_type or r.value:
-            inner.append(f'<b>RESULT:</b> {r.result_type or r.value}')
-        if r.viral_load_type:
-            inner.append(f'<b>VIRAL LOAD:</b> {r.viral_load_type}')
+        if specimen:
+            inner.append(f'<b>SPECIMEN:</b> {specimen}')
+        if result_type:
+            inner.append(f'<b>RESULT:</b> {result_type}')
+        if viral_load:
+            inner.append(f'<b>VIRAL LOAD:</b> {viral_load}')
 
         blocks = [
-            ('Interpretation', _clean(r.interpretation_html)),
-            ('Methodologies',  _clean(r.method_html)),
-            ('Suggestions',    _clean(r.suggestion_html)),
-            ('Comments',       _clean(r.comments_html)),
+            ('Interpretation', _clean_html(interpretation)),
+            ('Methodologies',  _clean_html(methodology)),
+            ('Suggestions',    _clean_html(suggestion)),
+            ('Comments',       _clean_html(comments)),
         ]
         for label, body in blocks:
             if body:

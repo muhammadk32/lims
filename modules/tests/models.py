@@ -246,3 +246,38 @@ class TestReferenceRange(BaseModel):
     def __repr__(self):
         return f'<RefRange test={self.test_id} {self.gender} {self.range_text}>'
 
+
+
+# ============================================================
+# PcrTemplate — per-test reusable Methodology / Suggestion /
+# Interpretation / Comments blocks for PCR-format tests.
+# ============================================================
+class PcrTemplate(BaseModel):
+    """Per-test default text blocks shown on PCR entry + reports.
+
+    One row per Test. The entry page pre-fills its tab editors from
+    these values, but a specific order can override them (the override
+    lives on Result.method_html etc.). Reports prefer the per-order
+    Result.* value, falling back to this template.
+    """
+    __tablename__ = 'pcr_templates'
+
+    test_id = db.Column(
+        db.Integer,
+        db.ForeignKey('tests.id', ondelete='CASCADE'),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+
+    methodology_html    = db.Column(db.Text, nullable=True)
+    suggestion_html     = db.Column(db.Text, nullable=True)
+    interpretation_html = db.Column(db.Text, nullable=True)
+    comments_html       = db.Column(db.Text, nullable=True)
+
+    test = db.relationship('Test', backref=db.backref(
+        'pcr_template', uselist=False, cascade='all, delete-orphan'
+    ))
+
+    def __repr__(self):
+        return f'<PcrTemplate test={self.test_id}>'

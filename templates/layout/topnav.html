@@ -170,6 +170,10 @@
            class="dropdown-item {% if request.endpoint == 'settings.culture_labels' %}active{% endif %}">
           <i class="bi bi-tags"></i> Culture Report Labels
         </a>
+        <a href="{{ url_for('settings.pcr_templates') }}"
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('settings.pcr_templates') %}active{% endif %}">
+          <i class="bi bi-clipboard2-pulse"></i> PCR Template Setting
+        </a>
 
       </div>
     </div>

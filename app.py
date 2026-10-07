@@ -22,6 +22,9 @@ def create_app(config_name=None):
 
     app = Flask(__name__)
 
+    # Global Jinja fix: render Python None as empty string, never as "None"
+    app.jinja_env.finalize = lambda x: '' if x is None else x
+
 
     # ===== Phase 3: reference ranges Jinja helper =====
     from modules.tests.ranges import resolve_range_for_order as _rrfo

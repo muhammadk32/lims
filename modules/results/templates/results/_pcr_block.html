@@ -1,3 +1,38 @@
+﻿<style>
+.pcr-block { border: 1.5px solid #212529; background: #fff; margin-top: 12px; }
+.pcr-block-hd { background: #0d6efd; color: #fff; padding: 6px 12px;
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; }
+.pcr-block-hd .text-muted { color: rgba(255,255,255,0.75) !important; }
+
+.pcr-inline-grid { display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px 18px; padding: 10px 12px; border-bottom: 1px solid #dee2e6; }
+.pcr-row { display: flex; align-items: center; gap: 8px; }
+.pcr-lbl { flex: 0 0 110px; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em; color: #495057; }
+.pcr-input { flex: 1; height: 26px; padding: 3px 8px; border: 1px solid #adb5bd;
+  border-radius: 4px; font-size: 0.82rem; background: #fff; font-family: inherit;
+  box-sizing: border-box; }
+.pcr-input:focus { outline: none; border-color: #198754;
+  box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
+select.pcr-input { padding-right: 4px; }
+
+.pcr-tabs { display: flex; background: #f8f9fa; border-bottom: 1px solid #dee2e6; }
+.pcr-tab { padding: 6px 14px; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;
+  color: #495057; border-bottom: 2px solid transparent; user-select: none; }
+.pcr-tab:hover { background: #e9ecef; }
+.pcr-tab.active { color: #0d6efd; border-bottom-color: #0d6efd; background: #fff; }
+
+.pcr-tab-body { padding: 14px 14px 18px; }
+.pcr-pane { display: none; }
+.pcr-pane.active { display: block; }
+.pcr-editor { width: 100%; min-height: 140px; padding: 6px 10px;
+  border: 1px solid #adb5bd; border-radius: 4px; font-size: 0.85rem; line-height: 1.5;
+  font-family: inherit; box-sizing: border-box; resize: vertical; }
+.pcr-editor:focus { outline: none; border-color: #198754;
+  box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
+</style>
 {# Renders the ADAM-style PCR block as a full-width <div> #}
 <div class="pcr-block" data-item="{{ item.id }}">
   <div class="pcr-block-hd">
@@ -46,16 +81,51 @@
   </div>
   <div class="pcr-tab-body" data-item="{{ item.id }}">
     <div class="pcr-pane active" data-item="{{ item.id }}" data-pane="method">
-      <textarea name="pcr_method_html_{{ item.id }}" class="pcr-editor">{{ r.method_html if r else '' }}</textarea>
+      <textarea name="pcr_method_html_{{ item.id }}" class="pcr-editor">{{ r.method_html if r and r.method_html else (tpl.methodology_html or '' if tpl else '') }}</textarea>
     </div>
     <div class="pcr-pane" data-item="{{ item.id }}" data-pane="suggestion">
-      <textarea name="pcr_suggestion_html_{{ item.id }}" class="pcr-editor">{{ r.suggestion_html if r else '' }}</textarea>
+      <textarea name="pcr_suggestion_html_{{ item.id }}" class="pcr-editor">{{ r.suggestion_html if r and r.suggestion_html else (tpl.suggestion_html or '' if tpl else '') }}</textarea>
     </div>
     <div class="pcr-pane" data-item="{{ item.id }}" data-pane="interpretation">
-      <textarea name="pcr_interpretation_html_{{ item.id }}" class="pcr-editor">{{ r.interpretation_html if r else '' }}</textarea>
+      <textarea name="pcr_interpretation_html_{{ item.id }}" class="pcr-editor">{{ r.interpretation_html if r and r.interpretation_html else (tpl.interpretation_html or '' if tpl else '') }}</textarea>
     </div>
     <div class="pcr-pane" data-item="{{ item.id }}" data-pane="comments">
-      <textarea name="pcr_comments_html_{{ item.id }}" class="pcr-editor">{{ r.comments_html if r else '' }}</textarea>
+      <textarea name="pcr_comments_html_{{ item.id }}" class="pcr-editor">{{ r.comments_html if r and r.comments_html else (tpl.comments_html or '' if tpl else '') }}</textarea>
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  function initPcrTabs(root) {
+    root.querySelectorAll('.pcr-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var block = tab.closest('.pcr-block');
+        var pane = tab.dataset.pane;
+        block.querySelectorAll('.pcr-tab').forEach(function (t) {
+          t.classList.toggle('active', t === tab);
+        });
+        block.querySelectorAll('.pcr-pane').forEach(function (p) {
+          p.classList.toggle('active', p.dataset.pane === pane);
+        });
+      });
+    });
+  }
+  function initPcrResultLink(root) {
+    var sel = root.querySelector('.pcr-result-type');
+    var val = root.querySelector('.pcr-result-value');
+    if (!sel || !val) return;
+    sel.addEventListener('change', function () {
+      var v = sel.value;
+      if (v === 'Not Detected')        val.value = 'Negative';
+      else if (v === 'Detected')       val.value = 'Positive';
+      else if (v === 'Detected & Quantified') val.value = 'Positive';
+      else if (v === 'Invalid' || v === '')   val.value = '';
+    });
+  }
+  document.querySelectorAll('.pcr-block').forEach(function (b) {
+    initPcrTabs(b);
+    initPcrResultLink(b);
+  });
+})();
+</script>

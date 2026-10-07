@@ -1,4 +1,4 @@
-import os
+﻿import os
 import uuid
 
 from flask import (
@@ -502,3 +502,57 @@ def antibiotic_edit(ab_id):
         db.session.commit()
         flash(f'Antibiotic "{new_name}" updated.', 'success')
     return redirect(url_for('settings.antibiotics_list'))
+
+
+# ============================================================
+# PCR TEMPLATES — per-test Methodology / Suggestion / Interp / Comments
+# ============================================================
+@settings_bp.route('/pcr-templates', methods=['GET', 'POST'])
+@login_required
+def pcr_templates():
+    if not _admin_only():
+        flash('Only administrators can manage PCR templates.', 'danger')
+        return redirect(url_for('dashboard.index'))
+
+    from modules.tests.models import Test, PcrTemplate
+
+    pcr_tests = (Test.query
+                 .filter(Test.result_format.in_(['pcr', 'molecular']))
+                 .order_by(Test.name)
+                 .all())
+
+    selected_id = request.args.get('test_id', type=int) \
+                  or request.form.get('test_id', type=int)
+    selected = None
+    tpl = None
+    if selected_id:
+        selected = Test.query.get(selected_id)
+        if selected:
+            tpl = PcrTemplate.query.filter_by(test_id=selected_id).first()
+
+    if request.method == 'POST' and selected:
+        if tpl is None:
+            tpl = PcrTemplate(test_id=selected.id)
+            db.session.add(tpl)
+
+        def _clean(v):
+            v = (v or '').strip()
+            if v.lower() in ('none', 'null', 'undefined'):
+                return None
+            return v or None
+
+        tpl.methodology_html    = _clean(request.form.get('methodology_html'))
+        tpl.suggestion_html     = _clean(request.form.get('suggestion_html'))
+        tpl.interpretation_html = _clean(request.form.get('interpretation_html'))
+        tpl.comments_html       = _clean(request.form.get('comments_html'))
+        db.session.commit()
+
+        flash(f'PCR template saved for {selected.name}.', 'success')
+        return redirect(url_for('settings.pcr_templates', test_id=selected.id))
+
+    return render_template(
+        'settings/pcr_templates.html',
+        pcr_tests=pcr_tests,
+        selected=selected,
+        tpl=tpl,
+    )

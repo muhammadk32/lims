@@ -225,7 +225,7 @@ table.rep-table tr.child td.test-name {
         {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
         {% if branding.email   %}{% set _ = parts.append('âœ‰ ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' Â· ') }}
+        {{ parts | join(' · ') }}
       </div>
     </div>
   </div>

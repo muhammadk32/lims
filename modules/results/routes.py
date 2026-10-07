@@ -1,10 +1,10 @@
-"""Results entry, listing, and patient history routes.
+﻿"""Results entry, listing, and patient history routes.
 
-Routes are thin: parse request → call service → flash → redirect.
+Routes are thin: parse request â†’ call service â†’ flash â†’ redirect.
 Business logic lives in services.py; query building in queries.py.
 """
 from flask import render_template, redirect, url_for, flash, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from core.decorators import permission_required
 from modules.results import results_bp
@@ -19,7 +19,7 @@ from . import services as svc
 @results_bp.route('/')
 @login_required
 def index():
-    """Pending results — grouped by ORDER.
+    """Pending results â€” grouped by ORDER.
 
     Shows ONE row per order. Expanding the row (click [+]) reveals
     the top-level tests that still need technician action:
@@ -174,7 +174,11 @@ def enter_item(item_id):
     item = OrderItem.query.get_or_404(item_id)
 
     if request.method == 'POST':
-        svc.save_item_result(item, request.form, None)
+        fmt_post = (item.test.result_format or '').lower()
+        if fmt_post in ('pcr', 'molecular'):
+            svc.save_pcr_result(item, request.form, current_user)
+        else:
+            svc.save_item_result(item, request.form, None)
         flash(f'Result saved for {item.test.name}.', 'success')
         if request.form.get('conduct'):
             return redirect(url_for('results.enter', order_id=item.order_id))
@@ -197,10 +201,20 @@ def enter_item(item_id):
     else:
         saved_rows = []
 
+    from modules.results.models import Result as _PcrResult
+    r = _PcrResult.query.filter_by(order_item_id=item.id).first()
+
+    tpl = None
+    if (item.test.result_format or '').lower() in ('pcr', 'molecular'):
+        from modules.tests.models import PcrTemplate
+        tpl = PcrTemplate.query.filter_by(test_id=item.test_id).first()
+
     return render_template(
         'results/enter_item.html',
         item=item,
         order=item.order,
+        r=r,
+        tpl=tpl,
         antibiotics=antibiotics,
         bacteria=bacteria,
         saved_ab_rows={r.antibiotic_id: r for r in saved_rows},

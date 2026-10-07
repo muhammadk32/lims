@@ -1,4 +1,4 @@
-import re
+﻿import re
 """Business logic for results entry.
 
 No HTTP, no flash, no redirect. Pure domain operations.
@@ -173,37 +173,44 @@ def get_patient_orders(patient_id):
 # PCR-STYLE result save
 # ============================================================
 def save_pcr_result(item, form, user):
-    """Upsert the extended PCR fields on Result for one OrderItem."""
+    """Upsert the extended PCR fields on Result for one OrderItem.
+
+    Reads prefixed form keys written by results/_pcr_block.html:
+      pcr_result_type_{item.id}, pcr_specimen_{item.id},
+      pcr_result_value_{item.id}, pcr_viral_load_{item.id},
+      pcr_no_of_repeat_{item.id}, pcr_method_html_{item.id},
+      pcr_suggestion_html_{item.id}, pcr_interpretation_html_{item.id},
+      pcr_comments_html_{item.id}
+    """
     from .models import Result
     from datetime import datetime
 
-    from .models import Result
-    r = Result.query.filter_by(order_item_id=item.id).first()
-    if r is None:
-        r = Result(order_item_id=item.id)
-        db.session.add(r)
+    iid = item.id
 
     def _g(k):
         v = (form.get(k) or "").strip()
         return v or None
 
-    r.specimen            = _g("specimen")
-    r.result_type         = _g("result_type")
-    r.viral_load_type     = _g("viral_load_type")
-    r.no_of_repeat        = form.get("no_of_repeat", type=int)
-    r.method_html         = _g("method_html")
-    r.suggestion_html     = _g("suggestion_html")
-    r.interpretation_html = _g("interpretation_html")
-    r.comments_html       = _g("comments_html")
-    r.value               = _g("value") or (item.result_value or None)
-    r.notes               = _g("notes")
+    r = Result.query.filter_by(order_item_id=iid).first()
+    if r is None:
+        r = Result(order_item_id=iid)
+        db.session.add(r)
+
+    r.result_type         = _g(f"pcr_result_type_{iid}")
+    r.specimen            = _g(f"pcr_specimen_{iid}")
+    r.value               = _g(f"pcr_result_value_{iid}") or (item.result_value or None)
+    r.viral_load_type     = _g(f"pcr_viral_load_{iid}")
+    r.no_of_repeat        = form.get(f"pcr_no_of_repeat_{iid}", type=int)
+    r.method_html         = _g(f"pcr_method_html_{iid}")
+    r.suggestion_html     = _g(f"pcr_suggestion_html_{iid}")
+    r.interpretation_html = _g(f"pcr_interpretation_html_{iid}")
+    r.comments_html       = _g(f"pcr_comments_html_{iid}")
     r.entered_at          = datetime.utcnow()
     if user is not None:
         r.entered_by_id = getattr(user, "id", None)
 
     # Mirror the short value up to OrderItem so the rest of the app sees it
     item.result_value = r.value
-    item.result_notes = r.notes
 
     db.session.commit()
     return r
