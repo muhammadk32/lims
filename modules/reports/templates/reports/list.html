@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Test Reports — LabMS
 {% endblock %}
 
@@ -254,7 +254,14 @@
             {% endif %}
           </td>
           <td class="num">{{ o.created_at | localtime('%d/%m/%y %H:%M') }}</td>
-          <td class="center"></td>
+          <td class="center">
+            <a href="{{ url_for('reports.view_pdf', order_id=o.id) }}"
+               class="rp-icon-btn rp-icon-btn-view"
+               title="Print all approved reports for this order"
+               target="_blank">
+              <i class="bi bi-printer"></i> Print All
+            </a>
+          </td>
         </tr>
 
         {# ---- Child rows: one per test ---- #}

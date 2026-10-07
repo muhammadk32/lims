@@ -2,6 +2,7 @@
 {% block title %}Enter Result â€” {{ item.test.name }}{% endblock %}
 
 {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <style>
 .ei-page { max-width: 1200px; margin: 0 auto; padding: 10px 18px 30px;
            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
@@ -262,4 +263,34 @@
     </form>
 
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  function initPcrEditors() {
+    var nodes = document.querySelectorAll('.pcr-editor');
+    if (!nodes.length) return;
+    if (window.tinymce) {
+      tinymce.init({
+        selector: '.pcr-editor',
+        height: 200,
+        menubar: false,
+        branding: false,
+        plugins: 'lists link hr',
+        toolbar: 'undo redo | bold italic underline | bullist numlist | link hr | removeformat',
+        content_style: "body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; line-height: 1.5; } p { margin: 0 0 6px 0; }",
+        setup: function (ed) {
+          ed.on('change keyup', function () { ed.save(); });
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPcrEditors);
+  } else {
+    initPcrEditors();
+  }
+})();
+</script>
 {% endblock %}

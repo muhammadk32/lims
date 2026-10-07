@@ -212,6 +212,27 @@ def save_pcr_result(item, form, user):
     # Mirror the short value up to OrderItem so the rest of the app sees it
     item.result_value = r.value
 
+    # Clear correction flag — the item has now been re-saved
+    if item.correction_note:
+        item.correction_note = None
+        item.correction_at = None
+        item.correction_by_id = None
+
+    # If the order was in CORRECTION and nothing else needs correction,
+    # flip it back to COMPLETED so it can be verified again.
+    order = item.order
+    if order and order.status == OrderStatus.CORRECTION:
+        still_correction = any(
+            getattr(t, 'correction_note', None) or
+            any(getattr(c, 'correction_note', None) for c in (t.children or []))
+            for t in order.top_level_items
+        )
+        if not still_correction:
+            order.status = OrderStatus.COMPLETED
+            order.correction_at = None
+            order.correction_by_id = None
+            order.correction_note = None
+
     db.session.commit()
     return r
 
