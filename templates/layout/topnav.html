@@ -161,6 +161,11 @@
           <i class="bi bi-person-badge"></i> Referrals &amp; Commission
         </a>
 
+        <a href="{{ url_for('settings.printers') }}"
+           class="dropdown-item {% if '/settings/printers' in request.path %}active{% endif %}">
+          <i class="bi bi-printer"></i> Printer Settings
+        </a>
+
         <a href="{{ url_for('settings.laboratories') }}"
            class="dropdown-item {% if '/settings/laboratories' in request.path %}active{% endif %}">
           <i class="bi bi-building"></i> Laboratories

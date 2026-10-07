@@ -673,3 +673,33 @@ def laboratory_delete(lid):
     db.session.commit()
     flash(f'Laboratory "{name}" removed.', 'info')
     return redirect(url_for('settings.laboratories'))
+
+
+# ============================================================
+# PRINTER SETTINGS — per print category
+# ============================================================
+@settings_bp.route('/printers', methods=['GET', 'POST'])
+@login_required
+def printers():
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+    from core.models import LabSettings
+
+    s = LabSettings.get()
+    if s is None:
+        s = LabSettings()
+        db.session.add(s)
+        db.session.commit()
+
+    if _rq.method == 'POST':
+        s.printer_patient_bill = (_rq.form.get('printer_patient_bill') or '').strip() or None
+        s.printer_lab_bill     = (_rq.form.get('printer_lab_bill')     or '').strip() or None
+        s.printer_report       = (_rq.form.get('printer_report')       or '').strip() or None
+        s.printer_barcode      = (_rq.form.get('printer_barcode')      or '').strip() or None
+        db.session.commit()
+        flash('Printer settings saved.', 'success')
+        return redirect(url_for('settings.printers'))
+
+    from core.printers import list_printers
+    available = list_printers()
+    return render_template('settings/printers.html', s=s, available=available)

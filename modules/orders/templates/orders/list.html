@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Daily Ledger — LabMS{% endblock %}
 
 {% block head %}
@@ -447,6 +447,11 @@
               <li>
                 <a class="dropdown-item" href="{{ url_for('reports.view_pdf', order_id=o.id) }}" target="_blank" rel="noopener">
                   <i class="bi bi-eye text-primary"></i> Preview Report
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('labels.print_labels', order_id=o.id) }}" target="_blank" rel="noopener">
+                  <i class="bi bi-upc-scan text-dark"></i> Barcode Labels
                 </a>
               </li>
               {% elif o.balance_due > 0.01 %}

@@ -116,6 +116,12 @@ class LabSettings(BaseModel):
     website = db.Column(db.String(150), nullable=True, default='')
     license_no = db.Column(db.String(80), nullable=True, default='')
 
+    # --- Printer selection (per print category) ---
+    printer_patient_bill = db.Column(db.String(120), nullable=True, default='')
+    printer_lab_bill     = db.Column(db.String(120), nullable=True, default='')
+    printer_report       = db.Column(db.String(120), nullable=True, default='')
+    printer_barcode      = db.Column(db.String(120), nullable=True, default='')
+
     # --- Print footer ---
     footer_note = db.Column(db.String(255), nullable=True,
                             default='Thank you for choosing our lab.')

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}Lab # {{ order.order_code }} — LabMS{% endblock %}
 
@@ -183,6 +183,10 @@
       <a href="{{ url_for('results.enter', order_id=order.id) }}"
          class="btn btn-sm btn-outline-primary">
         <i class="bi bi-pencil-square"></i> Enter Results
+      </a>
+      <a href="{{ url_for('labels.print_labels', order_id=order.id) }}"
+         class="btn btn-sm btn-outline-dark" target="_blank">
+        <i class="bi bi-upc-scan"></i> Labels
       </a>
 
       {% set pcr_items = order.top_level_items | selectattr('test.result_format', 'equalto', 'pcr') | list %}

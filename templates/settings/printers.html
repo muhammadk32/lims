@@ -1,0 +1,111 @@
+﻿{% extends 'base.html' %}
+{% block title %}Printer Settings - LabMS{% endblock %}
+
+{% block head %}
+<style>
+.pst-page { max-width: 900px; margin: 0 auto; padding: 10px 20px 30px;
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; color: #212529; }
+.pst-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 14px; }
+.pst-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+             text-transform: uppercase; letter-spacing: 0.02em; }
+.pst-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+
+.pst-note { background: #fff3cd; border: 1px solid #ffe69c; color: #664d03;
+            padding: 10px 14px; margin-bottom: 16px; font-size: 0.82rem; }
+.pst-note b { color: #b45309; }
+
+.pst-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
+.pst-table th { background: #212529; color: #fff; padding: 8px 12px;
+                text-align: left; font-size: 0.72rem; text-transform: uppercase;
+                letter-spacing: 0.05em; }
+.pst-table td { padding: 10px 12px; border-bottom: 1px solid #dee2e6; }
+.pst-table td label { font-weight: 600; }
+.pst-table td small { display: block; color: #6c757d; font-size: 0.72rem; margin-top: 2px; }
+.pst-table select { width: 100%; padding: 5px 10px; border: 1px solid #6c757d;
+                    font-size: 0.85rem; height: 32px; box-sizing: border-box;
+                    background: #fff; }
+.pst-table select:focus { outline: none; border-color: #198754; }
+.pst-table input { width: 100%; padding: 5px 10px; border: 1px solid #6c757d;
+                   font-size: 0.85rem; height: 32px; box-sizing: border-box; }
+.pst-table input:focus { outline: none; border-color: #198754; }
+
+.pst-save { margin-top: 14px; text-align: right; }
+.pst-btn { display: inline-block; padding: 6px 20px; font-size: 0.8rem;
+  font-weight: 700; border: 1px solid #198754; background: #198754;
+  color: #fff; text-decoration: none; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.03em; }
+.pst-btn:hover { background: #146c43; }
+</style>
+{% endblock %}
+
+{% block content %}
+{% macro printer_select(name, current) %}
+  <select name="{{ name }}" class="pst-select">
+    <option value="">— Use system default —</option>
+    {% for pr in available %}
+      <option value="{{ pr }}" {% if current == pr %}selected{% endif %}>{{ pr }}</option>
+    {% endfor %}
+    {% if current and current not in available %}
+      <option value="{{ current }}" selected>{{ current }} (not currently available)</option>
+    {% endif %}
+  </select>
+{% endmacro %}
+<div class="pst-page">
+
+  <div class="pst-header">
+    <h1 class="pst-title"><i class="bi bi-printer"></i> Printer Settings</h1>
+    <div class="pst-sub">Pick the printer used for each type of output</div>
+  </div>
+
+  <div class="pst-note">
+    <b>Note:</b> Enter the exact printer name as it appears in Windows Printers &amp; Scanners
+    (e.g. <code>EPSON L805 Series</code>). Leave blank to use the system default.
+  </div>
+
+  <form method="POST">
+    <table class="pst-table">
+      <thead>
+        <tr>
+          <th style="width:40%;">Output</th>
+          <th style="width:60%;">Printer name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <label>Patient Bill</label>
+            <small>Bills printed for patients (registration / ledger)</small>
+          </td>
+          <td>{{ printer_select('printer_patient_bill', s.printer_patient_bill) }}</td>
+        </tr>
+        <tr>
+          <td>
+            <label>Lab Bill</label>
+            <small>Internal lab copy of the bill</small>
+          </td>
+          <td>{{ printer_select('printer_lab_bill', s.printer_lab_bill) }}</td>
+        </tr>
+        <tr>
+          <td>
+            <label>Report</label>
+            <small>Test reports handed to the patient</small>
+          </td>
+          <td>{{ printer_select('printer_report', s.printer_report) }}</td>
+        </tr>
+        <tr>
+          <td>
+            <label>Barcode Labels</label>
+            <small>Sample tube labels</small>
+          </td>
+          <td>{{ printer_select('printer_barcode', s.printer_barcode) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pst-save">
+      <button type="submit" class="pst-btn"><i class="bi bi-check-lg"></i> Save Settings</button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
