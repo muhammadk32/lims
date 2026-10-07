@@ -47,6 +47,8 @@ def _patient_info_table(order):
         cell('Age', order.patient.compute_age()),
         cell('Phone', order.patient.phone),
     ]
+    if order.company_name:
+        left.append(cell('Laboratory', order.company_name))
 
     registered_pretty = _fmt_dt_pretty(order.created_at) or '—'
     if order.reported_at:
@@ -67,6 +69,8 @@ def _patient_info_table(order):
         cell('Doctor', order.referred_by_name or (order.doctor.full_name if order.doctor else '—')),
         cell('Status', status_label),
     ]
+    if order.company_name:
+        right.append(['', ''])
 
     rows = []
     for i in range(len(left)):

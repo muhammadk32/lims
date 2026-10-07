@@ -49,6 +49,11 @@
   const $referralInput = document.getElementById('referralInput');
   const $referralResults = document.getElementById('referralResults');
 
+  // Laboratory typeahead
+  const $laboratoryInput = document.getElementById('laboratoryInput');
+  const $laboratoryResults = document.getElementById('laboratoryResults');
+  const $laboratoryId = document.getElementById('laboratoryId');
+
   // Age inputs
   const $ageValue = document.getElementById('ageValue');
   const $ageUnit = document.getElementById('ageUnit');
@@ -196,6 +201,57 @@
       $newPatientForm.style.display = '';
       enablePatientFields();
       updateBilling();
+    });
+  }
+
+  /* ======================== LABORATORY TYPEAHEAD ======================== */
+  const doLaboratorySearch = debounce(async function () {
+    if (!$laboratoryInput || !$laboratoryResults) return;
+    const q = $laboratoryInput.value.trim();
+    if (q.length < 2) {
+      $laboratoryResults.style.display = 'none';
+      return;
+    }
+    try {
+      const resp = await fetch('/orders/api/laboratory-search?q=' + encodeURIComponent(q));
+      const data = await resp.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        $laboratoryResults.style.display = 'none';
+        return;
+      }
+      $laboratoryResults.innerHTML = '';
+      data.forEach(lab => {
+        const div = document.createElement('div');
+        div.className = 'referral-result';
+        div.textContent = lab.name + '  —  ' + lab.discount_percent + '% discount';
+        div.addEventListener('click', () => {
+          $laboratoryInput.value = lab.name;
+          if ($laboratoryId) $laboratoryId.value = lab.id;
+          $laboratoryResults.style.display = 'none';
+
+          // Auto-apply discount
+          const discPct = document.getElementById('discountPercentInput');
+          if (discPct && lab.discount_percent != null) {
+            discPct.value = lab.discount_percent;
+            discPct.dispatchEvent(new Event('input', { bubbles: true }));
+            discPct.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+        $laboratoryResults.appendChild(div);
+      });
+      $laboratoryResults.style.display = 'block';
+    } catch (err) { console.error('[laboratory-search]', err); }
+  }, 200);
+
+  if ($laboratoryInput) {
+    $laboratoryInput.addEventListener('input', doLaboratorySearch);
+    $laboratoryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') $laboratoryResults.style.display = 'none';
+    });
+    document.addEventListener('click', (e) => {
+      if (!$laboratoryInput.contains(e.target) && !$laboratoryResults.contains(e.target)) {
+        $laboratoryResults.style.display = 'none';
+      }
     });
   }
 

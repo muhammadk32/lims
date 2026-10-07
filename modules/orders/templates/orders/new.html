@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}New Registration — Reception{% endblock %}
 
@@ -195,8 +195,26 @@
             {% endfor %}
 
             {# Referral — typeahead #}
+            {# Laboratory typeahead #}
+            <div class="col-md-6 rec-field">
+              <label for="laboratoryInput">
+                <i class="bi bi-building"></i> Laboratory
+              </label>
+              <div class="referral-wrap">
+                <input type="text" name="company_name" id="laboratoryInput"
+                       class="form-control"
+                       placeholder="Type lab name (optional)"
+                       autocomplete="off">
+                <input type="hidden" name="company_id" id="laboratoryId" value="">
+                <div class="referral-results" id="laboratoryResults" style="display: none;"></div>
+              </div>
+              <small class="text-muted" style="font-size: 0.7rem;">
+                Discount applies automatically
+              </small>
+            </div>
+
             {% if 'referred_by' in config.visible_fields %}
-            <div class="col-12 rec-field">
+            <div class="col-md-6 rec-field">
               <label for="referralInput">
                 <i class="bi bi-person-badge"></i> Referred by
               </label>

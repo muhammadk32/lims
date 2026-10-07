@@ -2,6 +2,9 @@
 
 
 def register_blueprints(app):
+    # Ensure all models are imported so Alembic sees them
+    import modules.laboratories.models  # noqa: F401
+    import modules.referrals.models    # noqa: F401
     """Import and register every feature blueprint."""
 
     from modules.auth import auth_bp

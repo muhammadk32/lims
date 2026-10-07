@@ -89,6 +89,14 @@ def create_order(patient, tests, form, user):
     if not tests:
         raise ValueError('Please select at least one test.')
 
+    # ---------- Laboratory / Company ----------
+    company_id_raw = form.get('company_id') or ''
+    company_name = (form.get('company_name') or '').strip() or None
+    try:
+        company_id = int(company_id_raw) if company_id_raw else None
+    except (ValueError, TypeError):
+        company_id = None
+
     # ---------- Referral ----------
     # The form field can hold either:
     #   - a numeric User id (registered doctor)
@@ -124,6 +132,8 @@ def create_order(patient, tests, form, user):
         sample_collected_at=sample_collected_at,
         notes=(form.get('notes') or '').strip() or None,
         referred_by_name=referred_by_name,
+        company_id=company_id,
+        company_name=company_name,
     )
 
     db.session.add(order)

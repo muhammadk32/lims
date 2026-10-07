@@ -556,3 +556,120 @@ def pcr_templates():
         selected=selected,
         tpl=tpl,
     )
+
+
+# ============================================================
+# LABORATORIES — external labs / companies
+# ============================================================
+@settings_bp.route('/laboratories')
+@login_required
+def laboratories():
+    from modules.laboratories.models import Laboratory
+    from flask import request as _rq
+
+    q_search = _rq.args.get('q', '').strip()
+    query = Laboratory.query
+    if q_search:
+        query = query.filter(Laboratory.name.ilike(f'%{q_search}%'))
+    rows = query.order_by(Laboratory.name.asc()).all()
+
+    return render_template('settings/laboratories.html',
+                           rows=rows, q_search=q_search)
+
+
+@settings_bp.route('/laboratories/create', methods=['POST'])
+@login_required
+def laboratory_create():
+    from modules.laboratories.models import Laboratory
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+    from sqlalchemy import func
+
+    name = (_rq.form.get('name') or '').strip()
+    if not name:
+        flash('Laboratory name is required.', 'warning')
+        return redirect(url_for('settings.laboratories'))
+
+    existing = Laboratory.query.filter(func.lower(Laboratory.name) == name.lower()).first()
+    if existing:
+        flash(f'Laboratory "{name}" already exists.', 'warning')
+        return redirect(url_for('settings.laboratories'))
+
+    def _f(k):
+        try:
+            return float(_rq.form.get(k, 0) or 0)
+        except (ValueError, TypeError):
+            return 0.0
+
+    lab = Laboratory(
+        name=name,
+        contact_person=(_rq.form.get('contact_person') or '').strip() or None,
+        phone=(_rq.form.get('phone') or '').strip() or None,
+        email=(_rq.form.get('email') or '').strip() or None,
+        address=(_rq.form.get('address') or '').strip() or None,
+        notes=(_rq.form.get('notes') or '').strip() or None,
+        discount_percent=_f('discount_percent'),
+        commission_percent=_f('commission_percent'),
+        is_active=True,
+    )
+    db.session.add(lab)
+    db.session.commit()
+    flash(f'Laboratory "{name}" added.', 'success')
+    return redirect(url_for('settings.laboratories'))
+
+
+@settings_bp.route('/laboratories/<int:lid>/edit', methods=['POST'])
+@login_required
+def laboratory_edit(lid):
+    from modules.laboratories.models import Laboratory
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+
+    lab = Laboratory.query.get_or_404(lid)
+
+    def _f(k, default=0.0):
+        try:
+            return float(_rq.form.get(k, default) or default)
+        except (ValueError, TypeError):
+            return default
+
+    lab.name = (_rq.form.get('name') or lab.name).strip()
+    lab.contact_person = (_rq.form.get('contact_person') or '').strip() or None
+    lab.phone = (_rq.form.get('phone') or '').strip() or None
+    lab.email = (_rq.form.get('email') or '').strip() or None
+    lab.address = (_rq.form.get('address') or '').strip() or None
+    lab.notes = (_rq.form.get('notes') or '').strip() or None
+    lab.discount_percent = _f('discount_percent')
+    lab.commission_percent = _f('commission_percent')
+    db.session.commit()
+    flash(f'Laboratory "{lab.name}" updated.', 'success')
+    return redirect(url_for('settings.laboratories'))
+
+
+@settings_bp.route('/laboratories/<int:lid>/toggle', methods=['POST'])
+@login_required
+def laboratory_toggle(lid):
+    from modules.laboratories.models import Laboratory
+    from extensions import db
+    from flask import flash, redirect, url_for
+
+    lab = Laboratory.query.get_or_404(lid)
+    lab.is_active = not lab.is_active
+    db.session.commit()
+    flash(f'Laboratory "{lab.name}" {"enabled" if lab.is_active else "disabled"}.', 'info')
+    return redirect(url_for('settings.laboratories'))
+
+
+@settings_bp.route('/laboratories/<int:lid>/delete', methods=['POST'])
+@login_required
+def laboratory_delete(lid):
+    from modules.laboratories.models import Laboratory
+    from extensions import db
+    from flask import flash, redirect, url_for
+
+    lab = Laboratory.query.get_or_404(lid)
+    name = lab.name
+    db.session.delete(lab)
+    db.session.commit()
+    flash(f'Laboratory "{name}" removed.', 'info')
+    return redirect(url_for('settings.laboratories'))

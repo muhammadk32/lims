@@ -1,0 +1,182 @@
+﻿{% extends 'base.html' %}
+{% block title %}Laboratories - LabMS{% endblock %}
+
+{% block head %}
+<style>
+.lab-page { max-width: 1400px; margin: 0 auto; padding: 8px 18px 24px;
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.lab-header { display: flex; justify-content: space-between; align-items: flex-end;
+              border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 8px; }
+.lab-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+             text-transform: uppercase; letter-spacing: 0.02em; }
+.lab-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+
+.lab-toolbar { display: flex; gap: 8px; align-items: end; margin-bottom: 10px; }
+.lab-toolbar input { padding: 4px 10px; border: 1px solid #6c757d;
+                     font-size: 0.82rem; height: 30px; box-sizing: border-box; width: 280px; }
+.lab-toolbar input:focus { outline: none; border-color: #198754; }
+
+.lab-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
+  font-weight: 600; border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; cursor: pointer; border-radius: 0;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 30px;
+  line-height: 1.8; box-sizing: border-box; }
+.lab-btn:hover { background: #f1f3f5; }
+.lab-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.lab-btn-primary:hover { background: #146c43; }
+.lab-btn-sm { padding: 2px 10px; font-size: 0.68rem; height: 24px; line-height: 1.7; }
+.lab-btn-warn { border-color: #ffc107; color: #664d03; }
+.lab-btn-danger { border-color: #dc3545; color: #dc3545; }
+.lab-btn-danger:hover { background: #dc3545; color: #fff; }
+
+.lab-add { background: #f8f9fa; border: 1px solid #dee2e6;
+           padding: 10px 12px; margin-bottom: 10px; }
+.lab-add-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1.5fr 2fr 1fr 1fr auto;
+                gap: 10px; align-items: end; }
+.lab-field label { display: block; font-size: 0.6rem; font-weight: 700;
+                   text-transform: uppercase; letter-spacing: 0.06em;
+                   color: #6c757d; margin-bottom: 2px; }
+.lab-field input, .lab-field textarea { width: 100%; padding: 3px 8px;
+                   border: 1px solid #6c757d; font-size: 0.82rem;
+                   background: #fff; height: 28px; box-sizing: border-box; }
+.lab-field input:focus, .lab-field textarea:focus { outline: none; border-color: #198754; }
+
+.lab-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
+.lab-table thead th { background: #212529; color: #fff; font-size: 0.65rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 6px 8px; text-align: left; border-right: 1px solid #343a40; }
+.lab-table tbody td { padding: 5px 8px; border-bottom: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6; vertical-align: middle; }
+.lab-table tbody tr.inactive { background: #f8f9fa; color: #adb5bd; }
+.lab-table tbody tr.inactive a { color: #adb5bd; }
+.lab-table .num { text-align: right; font-family: Consolas, Monaco, monospace; }
+.lab-table .center { text-align: center; }
+.lab-table .pill { display: inline-block; padding: 1px 6px; font-size: 0.62rem;
+  font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+.pill-active { background: #198754; color: #fff; }
+.pill-inactive { background: #adb5bd; color: #fff; }
+.lab-table .edit-input { width: 100%; padding: 2px 6px; border: 1px solid #adb5bd;
+                         font-size: 0.8rem; height: 24px; box-sizing: border-box; }
+.lab-table .edit-input:focus { outline: none; border-color: #198754; }
+
+.lab-empty { padding: 24px; text-align: center; color: #6c757d;
+             border: 1px dashed #adb5bd; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="lab-page">
+
+  <div class="lab-header">
+    <div>
+      <h1 class="lab-title"><i class="bi bi-building"></i> Laboratories</h1>
+      <div class="lab-sub">External labs / companies — discount and commission rates</div>
+    </div>
+  </div>
+
+  <form method="GET" action="{{ url_for('settings.laboratories') }}" class="lab-toolbar">
+    <input type="text" name="q" value="{{ q_search }}" placeholder="Search by name...">
+    <button type="submit" class="lab-btn">Search</button>
+    {% if q_search %}<a href="{{ url_for('settings.laboratories') }}" class="lab-btn">Clear</a>{% endif %}
+  </form>
+
+  <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
+    <div class="lab-add-grid">
+      <div class="lab-field">
+        <label>Name *</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="lab-field">
+        <label>Contact person</label>
+        <input type="text" name="contact_person">
+      </div>
+      <div class="lab-field">
+        <label>Phone</label>
+        <input type="text" name="phone">
+      </div>
+      <div class="lab-field">
+        <label>Email</label>
+        <input type="email" name="email">
+      </div>
+      <div class="lab-field">
+        <label>Address</label>
+        <input type="text" name="address">
+      </div>
+      <div class="lab-field">
+        <label>Discount %</label>
+        <input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0">
+      </div>
+      <div class="lab-field">
+        <label>Commission %</label>
+        <input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0">
+      </div>
+      <div class="lab-field">
+        <button type="submit" class="lab-btn lab-btn-primary">
+          <i class="bi bi-plus-lg"></i> Add
+        </button>
+      </div>
+    </div>
+  </form>
+
+  {% if rows %}
+  <table class="lab-table">
+    <thead>
+      <tr>
+        <th style="width:22%;">Name</th>
+        <th style="width:14%;">Contact</th>
+        <th style="width:12%;">Phone</th>
+        <th style="width:15%;">Email</th>
+        <th style="width:12%;" class="num">Discount %</th>
+        <th style="width:12%;" class="num">Commission %</th>
+        <th style="width:8%;" class="center">Used</th>
+        <th style="width:5%;" class="center">Active</th>
+        <th style="width:14%;" class="center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr class="{% if not r.is_active %}inactive{% endif %}">
+        <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
+          <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
+          <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
+          <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
+          <td><input type="email" name="email" value="{{ r.email or '' }}" class="edit-input"></td>
+          <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+          <td class="num"><input type="number" name="commission_percent" value="{{ r.commission_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+          <td class="center num">{{ r.times_used or 0 }}</td>
+          <td class="center">
+            <span class="pill {% if r.is_active %}pill-active{% else %}pill-inactive{% endif %}">
+              {% if r.is_active %}On{% else %}Off{% endif %}
+            </span>
+          </td>
+          <td class="center">
+            <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save changes">
+              <i class="bi bi-check-lg"></i>
+            </button>
+        </form>
+            <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
+              <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle active">
+                <i class="bi bi-power"></i>
+              </button>
+            </form>
+            <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;"
+                  onsubmit="return confirm('Delete {{ r.name }}?');">
+              <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="lab-empty">
+    <i class="bi bi-building fs-3 d-block mb-2"></i>
+    <div style="font-weight:600;">No laboratories yet</div>
+    <div>Add one above to get started.</div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

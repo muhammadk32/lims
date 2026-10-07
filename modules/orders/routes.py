@@ -363,6 +363,24 @@ def send_back(order_id):
 
 
 
+@orders_bp.route('/api/laboratory-search')
+@login_required
+def api_laboratory_search():
+    """Return laboratory suggestions matching ?q=."""
+    from modules.laboratories.queries import search_laboratories
+    query = request.args.get('q', '').strip()
+    results = search_laboratories(query)
+    return jsonify([
+        {
+            'id': r.id,
+            'name': r.name,
+            'discount_percent': r.discount_percent,
+            'commission_percent': r.commission_percent,
+        }
+        for r in results
+    ])
+
+
 @orders_bp.route('/api/referral-search')
 @login_required
 def api_referral_search():

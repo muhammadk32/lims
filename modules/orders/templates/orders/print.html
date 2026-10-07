@@ -287,10 +287,10 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       <div class="contact">
         {% set parts = [] %}
         {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
-        {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
-        {% if branding.email   %}{% set _ = parts.append('âœ“â€° ' ~ branding.email) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append('Ph: ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append('Email: ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' Â· ') }}
+        {{ parts | join(' | ') }}
       </div>
     </div>
   </div>
@@ -311,9 +311,10 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
     <div class="row full"><span class="key">Address:</span><span class="val">{{ order.patient.address or '-' }}</span></div>
 
     <div class="row"><span class="key">Reference:</span><span class="val">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else 'Walk-in') }}</span></div>
-    <div class="row"><span class="key">Advised by:</span><span class="val">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else '-') }}</span></div>
+
 
     <div class="row"><span class="key">Registered At:</span><span class="val">{{ branding.lab_name or '-' }}</span></div>
+    {% if order.company_name %}<div class="row"><span class="key">Laboratory:</span><span class="val">{{ order.company_name }}</span></div>{% endif %}
     <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
 
     <div class="row full"><span class="key">Specimen:</span><span class="val">Taken in Lab</span></div>
@@ -351,7 +352,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       {% if order.discount_value > 0 %}
       <tr class="discount-row">
         <td colspan="2" style="text-align:right;">Discount :</td>
-        <td class="num">âˆ’{{ '%.0f'|format(order.discount_value) }}</td>
+        <td class="num">{{ '%.0f'|format(order.discount_value) }}</td>
       </tr>
       {% endif %}
       <tr class="total-row">
@@ -374,7 +375,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       Online Reporting: {{ branding.website or branding.email or '-' }}
     </div>
     <div class="right">
-      Patient No: {{ order.patient.patient_code }} Â· Lab #: {{ order.order_code }}
+      Patient No: {{ order.patient.patient_code }}  Lab #: {{ order.order_code }}
     </div>
   </div>
 
@@ -397,16 +398,18 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
       <div class="contact">
         {% set parts = [] %}
         {% if branding.address %}{% set _ = parts.append(branding.address) %}{% endif %}
-        {% if branding.phone   %}{% set _ = parts.append('â˜Ž ' ~ branding.phone) %}{% endif %}
-        {% if branding.email   %}{% set _ = parts.append('âœ“â€° ' ~ branding.email) %}{% endif %}
+        {% if branding.phone   %}{% set _ = parts.append(' ' ~ branding.phone) %}{% endif %}
+        {% if branding.email   %}{% set _ = parts.append(' ' ~ branding.email) %}{% endif %}
         {% if branding.website %}{% set _ = parts.append(branding.website) %}{% endif %}
-        {{ parts | join(' Â· ') }}
+        {{ parts | join('  ') }}
       </div>
     </div>
   </div>
 
   <div class="meta-block">
     <div class="row full"><span class="key">Patient Name:</span><span class="val">{{ order.patient.full_name }}</span></div>
+
+    {% if order.company_name %}<div class="row full"><span class="key">Laboratory:</span><span class="val">{{ order.company_name }}</span></div>{% endif %}
     <div class="row"><span class="key">Age / Gender:</span>
       <span class="val">{{ order.patient.compute_age() or '-' }} / {{ order.patient.gender or '-' }}</span>
     </div>
@@ -414,7 +417,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
     <div class="row"><span class="key">Patient #:</span><span class="val">{{ order.patient.patient_code }}</span></div>
     <div class="row"><span class="key">Lab #:</span><span class="val">{{ order.order_code }}</span></div>
     <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
-    <div class="row"><span class="key">Advised by:</span><span class="val">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else '-') }}</span></div>
+
   </div>
 
   <div class="bill-title lab">LAB BILL</div>
@@ -460,7 +463,7 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
   {% endfor %}
 
   <div class="consent-block">
-    <span class="box">âœ“</span>
+    <span class="box"></span>
     <span>I allow the staff for phlebotomy procedure for mentioned lab investigation(s).</span>
   </div>
 

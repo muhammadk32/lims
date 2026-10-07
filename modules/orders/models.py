@@ -55,6 +55,15 @@ class Order(BaseModel):
 
     correction_note = db.Column(db.Text, nullable=True)
 
+    # ---- Laboratory / Company (snapshot at order creation) ----
+    company_id = db.Column(
+        db.Integer,
+        db.ForeignKey('laboratories.id'),
+        nullable=True,
+        index=True,
+    )
+    company_name = db.Column(db.String(150), nullable=True)
+
     # ---- Referral commission (snapshot at order creation) ----
     commission_amount = db.Column(db.Float, nullable=False, default=0.0)
     commission_paid = db.Column(db.Boolean, nullable=False, default=False)
