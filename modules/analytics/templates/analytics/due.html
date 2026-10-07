@@ -1,5 +1,5 @@
-{% extends 'analytics/_base.html' %}
-{% block report_title %}Due Collection Report{% endblock %}
+﻿{% extends 'analytics/_base.html' %}
+{% block report_title %}Due/Receivable Report{% endblock %}
 {% block excel_url %}{{ url_for('analytics.due_xlsx', date_from=date_from_raw, date_to=date_to_raw) }}{% endblock %}
 
 {% block report_body %}
@@ -25,7 +25,6 @@
       <th class="num" style="width: 90px;">Paid</th>
       <th class="num" style="width: 90px;">Due</th>
       <th class="text-center" style="width: 70px;">Age</th>
-      <th class="text-end" style="width: 130px;">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -42,12 +41,7 @@
       <td class="text-center muted" style="font-size:0.75rem;">
         {{ r.days_old }}d
       </td>
-      <td class="text-end">
-        <a href="{{ url_for('billing.invoice', order_id=r.order_id) }}"
-           class="btn btn-sm btn-success" style="font-size:0.72rem;">
-          <i class="bi bi-cash-coin"></i> Receive
-        </a>
-      </td>
+
     </tr>
     {% else %}
     <tr><td colspan="10" class="an-empty">
