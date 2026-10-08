@@ -251,13 +251,17 @@
     {% endif %}
 
     {# ============ FORMAT-SPECIFIC DETAIL BLOCKS ============ #}
-    {% set fmt = (item.test.result_format or '').lower() %}
-    {% if fmt in ('culture', 'culture_sensitivity') %}
-      {% include 'results/_culture_block.html' %}
-    {% elif fmt in ('microscopy', 'microscopy_text', 'text_fields') %}
-      {% include 'results/_microscopy_block.html' %}
-    {% elif fmt in ('pcr', 'molecular') %}
-      {% include 'results/_pcr_block.html' %}
+    {# Format-specific blocks are only for non-panel standalone tests.
+       Panels render their children table above and must not double-render. #}
+    {% if not item.has_children %}
+      {% set fmt = (item.test.result_format or '').lower() %}
+      {% if fmt in ('culture', 'culture_sensitivity') %}
+        {% include 'results/_culture_block.html' %}
+      {% elif fmt in ('microscopy', 'microscopy_text', 'text_fields') %}
+        {% include 'results/_microscopy_block.html' %}
+      {% elif fmt in ('pcr', 'molecular') %}
+        {% include 'results/_pcr_block.html' %}
+      {% endif %}
     {% endif %}
 
     </form>

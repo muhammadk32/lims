@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Pending Verification — LabMS{% endblock %}
 
 {% block head %}
@@ -273,14 +273,7 @@
                       </a>
                     </span>
                   </div>
-                  {% for child in item.children %}
-                  <div class="lv-test-line child">
-                    <span class="test-icon"><i class="bi bi-arrow-return-right"></i></span>
-                    <span class="test-name">{{ child.test.name }}</span>
-                    <span class="test-result">{{ child.result_value or '—' }}</span>
-                    <span class="test-action"></span>
-                  </div>
-                  {% endfor %}
+                  
                 {% else %}
                   <div class="lv-test-line">
                     <span class="test-icon"><i class="bi bi-droplet"></i></span>

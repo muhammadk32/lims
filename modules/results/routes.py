@@ -3,6 +3,7 @@
 Routes are thin: parse request â†’ call service â†’ flash â†’ redirect.
 Business logic lives in services.py; query building in queries.py.
 """
+from extensions import db
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 
@@ -177,8 +178,21 @@ def enter_item(item_id):
         fmt_post = (item.test.result_format or '').lower()
         if fmt_post in ('pcr', 'molecular'):
             svc.save_pcr_result(item, request.form, current_user)
+        elif fmt_post in ('culture', 'culture_sensitivity'):
+            svc.save_culture_fields(item, request.form, current_user)
+            from modules.results.models import Result
+            r = Result.query.filter_by(order_item_id=item.id).first()
+            if r and not r.value:
+                r.value = 'Completed'
+                db.session.commit()
         else:
             svc.save_item_result(item, request.form, None)
+
+        order = item.order
+        from modules.orders.models import OrderStatus
+        if order and order.all_results_done and order.status not in (OrderStatus.APPROVED, OrderStatus.CORRECTION):
+            order.status = OrderStatus.COMPLETED
+            db.session.commit()
         flash(f'Result saved for {item.test.name}.', 'success')
         if request.form.get('conduct'):
             return redirect(url_for('results.enter', order_id=item.order_id))

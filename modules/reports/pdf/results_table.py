@@ -80,6 +80,13 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     )
 
     # Header row (used only if no categories exist)
+    def fmt_date(d):
+        try:
+            return d.strftime('%d-%b-%y')
+        except Exception:
+            return '-'
+
+
     header_cells = [
         Paragraph('Test', header_style),
         Paragraph(order.created_at.strftime('%d-%b-%y') if order.created_at else 'Result', header_style),
@@ -95,12 +102,6 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     abnormal_rows = []
     critical_rows = []
     row_idx = 0
-
-    def fmt_date(d):
-        try:
-            return d.strftime('%d-%b-%y')
-        except Exception:
-            return '-'
 
     def prev_values_for(name):
         priors = previous_map.get((name or '').lower(), [])
@@ -264,6 +265,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         _with_headers.append(_it)
 
     _section_header_rows = []
+    _section_hdr_row_indices = []
     _colhdr_rows = []
 
     _with_headers = list(_with_headers)
@@ -277,7 +279,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     break
                 _upcoming.append(_x)
             _has_printable = any(
-                (i.test.result_format or '').lower() not in ('pcr', 'pcr_quant', 'molecular')
+                (i.test.result_format or '').lower() not in ('pcr', 'pcr_quant', 'molecular', 'culture', 'culture_sensitivity')
                 for i in _upcoming if getattr(i, 'test', None)
             )
             if not _has_printable:
@@ -322,27 +324,51 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             data.append(panel_cells)
             row_idx += 1
 
-            for child in item.children:
-                flag, _crit = _efo(child.test, child.result_value, order)
-                if flag == 'abnormal':
-                    abnormal_rows.append(row_idx)
-                    if _crit:
-                        critical_rows.append(row_idx)
+            # Group children by section — keep original order, group headings
+            _seen = set()
+            _ordered_sections = []
+            for _ch in item.children:
+                _sec = (getattr(_ch.test, 'panel_section', None) or '').strip()
+                if _sec not in _seen:
+                    _seen.add(_sec)
+                    _ordered_sections.append(_sec)
 
-                child_is_pcr = (child.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
-                row = [
-                    Paragraph(child.test.name, panel_sub_style),
-                    Paragraph('' if child_is_pcr else (child.result_value or '-'), cell_style),
-                    Paragraph('' if child_is_pcr else (child.test.unit or '-'), cell_style),
-                    Paragraph('' if child_is_pcr else (_rrfo(child.test, order) or '-'), cell_style),
-                ]
-                for pv in prev_values_for(child.test.name):
-                    row.append(Paragraph(pv or '-', cell_prev))
-                data.append(row)
-                row_idx += 1
-                _collect_note(notes_flowables, child.test, order)
-                _collect_pcr_details(notes_flowables, child, order)
-                _collect_culture(notes_flowables, child, order)
+            section_hdr_style = ParagraphStyle(
+                'PanelSectionHdr', parent=styles['Normal'], fontSize=8.5,
+                fontName='Helvetica-Bold', textColor=colors.HexColor('#212529'),
+            )
+
+            for _sec in _ordered_sections:
+                # Emit section header row (spans all columns)
+                if _sec:
+                    _sh = [Paragraph(_sec, section_hdr_style)]
+                    _sh += [Paragraph('', cell_style)] * (3 + n_prev)
+                    data.append(_sh)
+                    _section_hdr_row_indices.append(row_idx)
+                    row_idx += 1
+
+                for child in [c for c in item.children
+                              if (getattr(c.test, 'panel_section', None) or '').strip() == _sec]:
+                    flag, _crit = _efo(child.test, child.result_value, order)
+                    if flag == 'abnormal':
+                        abnormal_rows.append(row_idx)
+                        if _crit:
+                            critical_rows.append(row_idx)
+
+                    child_is_pcr = (child.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
+                    row = [
+                        Paragraph(child.test.name, panel_sub_style),
+                        Paragraph('' if child_is_pcr else (child.result_value or '-'), cell_style),
+                        Paragraph('' if child_is_pcr else (child.test.unit or '-'), cell_style),
+                        Paragraph('' if child_is_pcr else (_rrfo(child.test, order) or '-'), cell_style),
+                    ]
+                    for pv in prev_values_for(child.test.name):
+                        row.append(Paragraph(pv or '-', cell_prev))
+                    data.append(row)
+                    row_idx += 1
+                    _collect_note(notes_flowables, child.test, order)
+                    _collect_pcr_details(notes_flowables, child, order)
+                    _collect_culture(notes_flowables, child, order)
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
             if flag == 'abnormal':
@@ -405,6 +431,12 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         style.append(('LINEBELOW', (0, _r), (-1, _r), 1.2, colors.black))
         style.append(('BACKGROUND', (0, _r), (-1, _r), colors.white))
         style.append(('SPAN', (0, _r), (-1, _r)))
+
+    # Panel sub-section header rows (grey background, spans all columns)
+    for _r in _section_hdr_row_indices:
+        style.append(('SPAN', (0, _r), (-1, _r)))
+        style.append(('BACKGROUND', (0, _r), (-1, _r), colors.HexColor('#dee2e6')))
+        style.append(('LINEBELOW', (0, _r), (-1, _r), 0.5, colors.black))
 
     # Column header rows: thin underline below
     for _r in _colhdr_rows:

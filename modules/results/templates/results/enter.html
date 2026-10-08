@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Result Entry Page — Lab # {{ order.order_code }}{% endblock %}
 
 {% block head %}
@@ -196,7 +196,7 @@
                 <span class="er-status verified">Verified</span>
               {% elif item.needs_correction %}
                 <span class="er-status correction">Correction</span>
-              {% elif item.result_value %}
+              {% elif item.has_result %}
                 <span class="er-status pending">Completed</span>
               {% else %}
                 <span class="er-status pending">Pending</span>

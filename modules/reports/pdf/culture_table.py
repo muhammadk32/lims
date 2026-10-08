@@ -1,4 +1,4 @@
-"""Culture & Sensitivity - ADAM microbiology 2-column layout."""
+﻿"""Culture & Sensitivity - ADAM microbiology 2-column layout."""
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
@@ -122,13 +122,19 @@ def _culture_block(item, result, ab_rows):
     out.append(_bordered_row(_lbl["specimen"], specimen_val))
     out.append(Spacer(1, 1.2 * mm))
 
-    # DIRECT row
-    direct_text = _plain(getattr(result, "culture_micro_text", "") or "")
-    direct_note = _plain(getattr(result, "culture_micro_note", "") or "")
-    direct_val  = " ".join([x for x in [direct_text, direct_note] if x]).strip()
-    if direct_val:
-        out.append(_bordered_row("Direct", direct_val))
-        out.append(Spacer(1, 1.2 * mm))
+    # MICROSCOPY / DIRECT / Z.N STAIN / GRAM STAIN — render each if present
+    for lbl_txt, txt_f, note_f in [
+        ("Microscopy",  "culture_micro_text",  "culture_micro_note"),
+        ("Direct",      "culture_direct_text", "culture_direct_note"),
+        ("Z.N. Stain",  "culture_zn_text",     "culture_zn_note"),
+        ("Gram Stain",  "culture_gram_text",   "culture_gram_note"),
+    ]:
+        _t = _plain(getattr(result, txt_f,  "") or "")
+        _n = _plain(getattr(result, note_f, "") or "")
+        _val = " ".join([x for x in [_t, _n] if x]).strip()
+        if _val:
+            out.append(_bordered_row(lbl_txt, _val))
+            out.append(Spacer(1, 1.2 * mm))
 
     # CULTURE 1 / 2 / 3 rows
     for g in (1, 2, 3):

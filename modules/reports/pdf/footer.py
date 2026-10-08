@@ -155,13 +155,7 @@ def _footer_flowables(abnormal_count):
     elements = []
     elements.append(Spacer(1, 6 * mm))
 
-    if abnormal_count:
-        elements.append(Paragraph(
-            f'<font color="#b02a37"><b>Note:</b></font> '
-            f'{abnormal_count} result(s) flagged as <b>abnormal</b>. '
-            f'Please consult your physician.',
-            small,
-        ))
+        # abnormal-note flag removed
     # Normal-range positive flag removed — it was misleading on PCR/qualitative reports.
 
     return elements

@@ -337,10 +337,29 @@ class OrderItem(BaseModel):
 
     @property
     def has_result(self):
-        """True if this item (or every child, for a panel) has a result."""
+        """True if this item (or every child, for a panel) has a result.
+
+        Standalone items may store their data either in result_value
+        (simple tests) or in the Result row (culture / PCR / microscopy).
+        """
         if self.has_children:
             return self.all_children_have_results
-        return bool(self.result_value)
+        if self.result_value:
+            return True
+        try:
+            from modules.results.models import Result
+            r = Result.query.filter_by(order_item_id=self.id).first()
+            if r is not None:
+                if (getattr(r, 'value', None)
+                        or getattr(r, 'result_type', None)
+                        or getattr(r, 'culture_specimen', None)
+                        or getattr(r, 'culture_bacteria_ids', None)
+                        or getattr(r, 'culture_growth_1', None)
+                        or getattr(r, 'culture_comments_txt', None)):
+                    return True
+        except Exception:
+            pass
+        return False
 
     # ---------- Verification state ----------
     @property
