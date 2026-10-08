@@ -25,6 +25,16 @@ def create_app(config_name=None):
     # Global Jinja fix: render Python None as empty string, never as "None"
     app.jinja_env.finalize = lambda x: '' if x is None else x
 
+    # QR code data-URI helper for HTML templates
+    @app.template_global()
+    def qr_data_uri(value):
+        import base64
+        from modules.reports.pdf.qr import qr_png_bytes
+        buf = qr_png_bytes(str(value) if value else '')
+        if not buf:
+            return ''
+        return base64.b64encode(buf.getvalue()).decode('ascii')
+
 
     # ===== Phase 3: reference ranges Jinja helper =====
     from modules.tests.ranges import resolve_range_for_order as _rrfo

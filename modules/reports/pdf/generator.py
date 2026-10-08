@@ -18,16 +18,36 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     lab = _get_lab()
     buffer = io.BytesIO()
 
-    LM = 20 * mm
-    RM = 20 * mm
-    TOP_PAGE1 = 8 * mm
-    TOP_LATER = 20 * mm   # room for strip + single-row patient line
-    BOT = 15 * mm + BOTTOM_PANEL_HEIGHT
-    content_w = A4[0] - LM - RM
+    # ---- Read page setup from LabSettings ----
+    from reportlab.lib.pagesizes import LETTER, LEGAL
+    from core.models import LabSettings
+    _ps = LabSettings.get()
+
+    def _flt(attr, default):
+        v = getattr(_ps, attr, None) if _ps else None
+        try:
+            return float(v) if v is not None else default
+        except (TypeError, ValueError):
+            return default
+
+    page_name = (getattr(_ps, 'report_page_size', 'A4') or 'A4') if _ps else 'A4'
+    PAGE = {'A4': A4, 'Letter': LETTER, 'Legal': LEGAL, 'A5': (A4[0]/2, A4[1]/2)}.get(page_name, A4)
+    if (getattr(_ps, 'report_orientation', 'portrait') or 'portrait').lower() == 'landscape':
+        PAGE = (PAGE[1], PAGE[0])
+
+    LM = _flt('report_margin_left', 0.8)   * 72   # inches -> points
+    RM = _flt('report_margin_right', 0.8)  * 72
+    TM = _flt('report_margin_top', 0.6)    * 72
+    BM = _flt('report_margin_bottom', 0.6) * 72
+    BOT = BM + BOTTOM_PANEL_HEIGHT
+
+    TOP_PAGE1 = TM
+    TOP_LATER = max(TM, 20 * mm)
+    content_w = PAGE[0] - LM - RM
 
     doc = BaseDocTemplate(
         buffer,
-        pagesize=A4,
+        pagesize=PAGE,
         leftMargin=LM,
         rightMargin=RM,
         topMargin=TOP_PAGE1,
@@ -36,8 +56,8 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
         author=lab['name'],
     )
 
-    frame_first = Frame(LM, BOT, content_w, A4[1] - TOP_PAGE1 - BOT, id='first')
-    frame_later = Frame(LM, BOT, content_w, A4[1] - TOP_LATER - BOT, id='later')
+    frame_first = Frame(LM, BOT, content_w, PAGE[1] - TOP_PAGE1 - BOT, id='first')
+    frame_later = Frame(LM, BOT, content_w, PAGE[1] - TOP_LATER - BOT, id='later')
 
     primary = _hex(lab['primary_color'])
 

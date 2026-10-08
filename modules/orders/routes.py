@@ -37,7 +37,7 @@ def _get_order_or_404(order_id):
 def list_orders():
     today = date.today()
 
-    date_from_str = request.args.get('date_from', '').strip() or today.strftime('%Y-%m-%d')
+    date_from_str = request.args.get('date_from', '').strip() or today.replace(day=1).strftime('%Y-%m-%d')
     date_to_str = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
 
     date_from = q.parse_date(date_from_str) or today

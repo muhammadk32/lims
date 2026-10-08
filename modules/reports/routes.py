@@ -1,4 +1,4 @@
-"""
+﻿"""
 Reports routes.
 
 IMPORTANT: Cross-module imports are done INSIDE functions (lazy imports).
@@ -46,7 +46,8 @@ def index():
     phone       = request.args.get('phone', '').strip()
     test_q      = request.args.get('test', '').strip()
     today       = _d.today()
-    date_from_s = request.args.get('date_from', '').strip() or today.strftime('%Y-%m-%d')
+    month_start = today.replace(day=1)
+    date_from_s = request.args.get('date_from', '').strip() or month_start.strftime('%Y-%m-%d')
     date_to_s   = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
 
     try:    date_from = _dt.strptime(date_from_s, '%Y-%m-%d').date()
@@ -198,6 +199,8 @@ def view_pdf(order_id):
 def toggle_header():
     from core.models import LabSettings
     from extensions import db
+    from flask import flash, redirect, url_for, request as _rq
+
     s = LabSettings.get()
     if s is None:
         s = LabSettings()
@@ -205,9 +208,15 @@ def toggle_header():
     s.header_enabled = not bool(getattr(s, 'header_enabled', True))
     db.session.commit()
     state = 'ON' if s.header_enabled else 'OFF'
-    from flask import flash
     flash(f'Report header is now {state} for all printed reports.', 'success')
-    return redirect(url_for('reports.index'))
+
+    # Preserve current filter state
+    qs = {}
+    for k in ('status', 'q', 'phone', 'test', 'date_from', 'date_to'):
+        v = _rq.form.get(k) or _rq.args.get(k)
+        if v:
+            qs[k] = v
+    return redirect(url_for('reports.index', **qs))
 
 @reports_bp.route('/set-header-margin', methods=['POST'])
 @login_required

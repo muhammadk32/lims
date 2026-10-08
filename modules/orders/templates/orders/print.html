@@ -295,27 +295,48 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
     </div>
   </div>
 
-  <div class="meta-block">
-    <div class="row"><span class="key">Patient #:</span><span class="val">{{ order.patient.patient_code }}</span></div>
-    <div class="row"><span class="key">Lab #:</span><span class="val">{{ order.order_code }}</span></div>
-
-    <div class="row full"><span class="key">Patient Name:</span><span class="val">{{ order.patient.full_name }}</span></div>
-
-    <div class="row"><span class="key">Age / Gender:</span>
-      <span class="val">
-        {{ order.patient.compute_age() or '-' }} / {{ order.patient.gender or '-' }}
-      </span>
-    </div>
-    <div class="row"><span class="key">Phone:</span><span class="val">{{ order.patient.phone or '-' }}</span></div>
-
-    <div class="row full"><span class="key">Address:</span><span class="val">{{ order.patient.address or '-' }}</span></div>
-
-    <div class="row"><span class="key">Reference:</span><span class="val">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else 'Walk-in') }}</span></div>
-
-
-    <div class="row"><span class="key">Registered At:</span><span class="val">{{ branding.lab_name or '-' }}</span></div>
-    {% if order.company_name %}<div class="row"><span class="key">Laboratory:</span><span class="val">{{ order.company_name }}</span></div>{% endif %}
-    <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
+  <div class="meta-block" style="display:block; width:100%; grid-template-columns:none; gap:0; padding:0; background:transparent; border:none;">
+    <table style="width:100%; border-collapse:collapse; border:1px solid #adb5bd;">
+      <tr>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Patient Name:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.full_name }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Registered At:</div>
+          <div style="font-size:8.5pt;">{{ branding.lab_name or '-' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Reference:</div>
+          <div style="font-size:8.5pt;">{{ order.company_name or 'Walk-in' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Patient No:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.patient_code }}</div>
+        </td>
+        <td rowspan="2" style="padding:3px 6px; vertical-align:middle; text-align:center; width:14%;">
+          <img src="data:image/png;base64,{{ qr_data_uri(order) }}" alt="QR" style="width:20mm; height:20mm;">
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Age/Gender:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.compute_age() or '-' }} / {{ order.patient.gender or '-' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Registered On:</div>
+          <div style="font-size:8.5pt;">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Consultant:</div>
+          <div style="font-size:8.5pt;">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else '-') }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Case No:</div>
+          <div style="font-size:8.5pt;">{{ order.order_code }}</div>
+        </td>
+      </tr>
+    </table>
 
     <div class="row full"><span class="key">Specimen:</span><span class="val">Taken in Lab</span></div>
   </div>
@@ -406,18 +427,48 @@ body[data-print="lab"]     .page-sheet.patient-sheet { display: none; }
     </div>
   </div>
 
-  <div class="meta-block">
-    <div class="row full"><span class="key">Patient Name:</span><span class="val">{{ order.patient.full_name }}</span></div>
-
-    {% if order.company_name %}<div class="row full"><span class="key">Laboratory:</span><span class="val">{{ order.company_name }}</span></div>{% endif %}
-    <div class="row"><span class="key">Age / Gender:</span>
-      <span class="val">{{ order.patient.compute_age() or '-' }} / {{ order.patient.gender or '-' }}</span>
-    </div>
-    <div class="row"><span class="key">Phone:</span><span class="val">{{ order.patient.phone or '-' }}</span></div>
-    <div class="row"><span class="key">Patient #:</span><span class="val">{{ order.patient.patient_code }}</span></div>
-    <div class="row"><span class="key">Lab #:</span><span class="val">{{ order.order_code }}</span></div>
-    <div class="row"><span class="key">Requested on:</span><span class="val">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</span></div>
-
+  <div class="meta-block" style="display:block; width:100%; grid-template-columns:none; gap:0; padding:0; background:transparent; border:none;">
+    <table style="width:100%; border-collapse:collapse; border:1px solid #adb5bd;">
+      <tr>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Patient Name:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.full_name }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Registered At:</div>
+          <div style="font-size:8.5pt;">{{ branding.lab_name or '-' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Reference:</div>
+          <div style="font-size:8.5pt;">{{ order.company_name or 'Walk-in' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Patient No:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.patient_code }}</div>
+        </td>
+        <td rowspan="2" style="padding:3px 6px; vertical-align:middle; text-align:center; width:14%;">
+          <img src="data:image/png;base64,{{ qr_data_uri(order) }}" alt="QR" style="width:20mm; height:20mm;">
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Age/Gender:</div>
+          <div style="font-size:8.5pt;">{{ order.patient.compute_age() or '-' }} / {{ order.patient.gender or '-' }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Registered On:</div>
+          <div style="font-size:8.5pt;">{{ order.created_at | localtime('%d-%b-%Y %I:%M %p') }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Consultant:</div>
+          <div style="font-size:8.5pt;">{{ order.referred_by_name or (order.doctor.full_name if order.doctor else '-') }}</div>
+        </td>
+        <td style="padding:3px 6px; vertical-align:top; width:24%;">
+          <div style="font-size:7pt; font-weight:700; color:#495057;">Case No:</div>
+          <div style="font-size:8.5pt;">{{ order.order_code }}</div>
+        </td>
+      </tr>
+    </table>
   </div>
 
   <div class="bill-title lab">LAB BILL</div>
