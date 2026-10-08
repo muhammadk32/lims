@@ -61,7 +61,8 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     if _hdr_on:
         story.append(_header_table())
         story.append(Spacer(1, 1 * mm))
-        story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
+        if getattr(_lab_s, 'header_show_divider', True) if _lab_s else True:
+            story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
         story.append(Spacer(1, 1 * mm))
 
     from reportlab.platypus import KeepTogether

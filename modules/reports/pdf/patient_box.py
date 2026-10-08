@@ -1,102 +1,104 @@
-﻿"""Patient + order information box."""
+﻿"""Patient + order info box — 4-column reference layout with QR top-right."""
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import mm
-from reportlab.platypus import Paragraph, Table, TableStyle
+from reportlab.platypus import Paragraph, Table, TableStyle, Image
 
 from .base import _fmt_dt_pretty
 from .branding import _get_lab, _hex
+from .qr import qr_png_bytes
 
 
 def _patient_info_table(order):
-    """Two-column info box with patient + order details."""
+    """4-column patient + order info with QR code on the right."""
     lab = _get_lab()
-    primary = _hex(lab['primary_color'])
-    header_bg = colors.HexColor('#e7f1ff')
 
     styles = getSampleStyleSheet()
-    label_style = ParagraphStyle(
-        'Lbl', parent=styles['Normal'], fontSize=7.5,
-        textColor=colors.HexColor('#6c757d'),
-    )
-    value_style = ParagraphStyle(
-        'Val', parent=styles['Normal'], fontSize=10, textColor=colors.black,
-    )
-    pending_style = ParagraphStyle(
-        'Pending', parent=styles['Normal'], fontSize=10,
-        textColor=colors.HexColor('#adb5bd'), fontName='Helvetica-Oblique',
-    )
+    label_style = ParagraphStyle('PB_Lbl', parent=styles['Normal'],
+                                 fontSize=7, leading=8.5,
+                                 fontName='Helvetica-Bold',
+                                 textColor=colors.HexColor('#495057'))
+    value_style = ParagraphStyle('PB_Val', parent=styles['Normal'],
+                                 fontSize=8.5, leading=10,
+                                 textColor=colors.black)
 
-    def cell(label, value):
+    def block(label, value):
         return [
-            Paragraph(label.upper(), label_style),
-            Paragraph(str(value if value is not None else '—'), value_style),
+            Paragraph(label, label_style),
+            Paragraph(str(value if value not in (None, '') else '-'), value_style),
         ]
 
-    def cell_pending(label, value, is_pending=False):
-        return [
-            Paragraph(label.upper(), label_style),
-            Paragraph(str(value), pending_style if is_pending else value_style),
-        ]
-
-    left = [
-        [Paragraph('<b>Patient Information</b>', styles['Heading4']), ''],
-        cell('Name', order.patient.full_name),
-        cell('Patient Code', order.patient.patient_code),
-        cell('Gender', order.patient.gender),
-        cell('Age', order.patient.compute_age()),
-        cell('Phone', order.patient.phone),
-    ]
-    if order.company_name:
-        left.append(cell('Laboratory', order.company_name))
-
-    registered_pretty = _fmt_dt_pretty(order.created_at) or '—'
-    if order.reported_at:
-        reporting_value = _fmt_dt_pretty(order.reported_at) or '—'
-        reporting_pending = False
-    else:
-        reporting_value = 'Pending Approval'
-        reporting_pending = True
-
+    registered_pretty = _fmt_dt_pretty(order.created_at) or '-'
     from modules.orders.models import OrderStatus
     status_label = OrderStatus.LABELS.get(order.status, order.status.capitalize())
 
-    right = [
-        [Paragraph('<b>Order Information</b>', styles['Heading4']), ''],
-        cell('Order Code', order.order_code),
-        cell('Registered On', registered_pretty),
-        cell_pending('Reporting Date', reporting_value, reporting_pending),
-        cell('Doctor', order.referred_by_name or (order.doctor.full_name if order.doctor else '—')),
-        cell('Status', status_label),
+    patient_code = getattr(order.patient, 'patient_code', None) or '-'
+    age_str = order.patient.compute_age() or '-'
+    gender = order.patient.gender or '-'
+    age_gender = f'{age_str} / {gender}'
+
+    doctor_name = order.referred_by_name or (
+        order.doctor.full_name if order.doctor else '-')
+
+    ref_value = order.company_name or 'Walk-in'
+
+    col1_r1 = block('Patient Name:', order.patient.full_name)
+    col1_r2 = block('Age/Gender:', age_gender)
+
+    col2_r1 = block('Registered At:', lab.get('name') or '-')
+    col2_r2 = block('Registered On:', registered_pretty)
+
+    col3_r1 = block('Reference:', ref_value)
+    col3_r2 = block('Consultant:', doctor_name)
+
+    col4_r1 = block('Patient No:', patient_code)
+    col4_r2 = block('Case No:', order.order_code)
+
+    rows = [
+        [col1_r1[0], col2_r1[0], col3_r1[0], col4_r1[0]],
+        [col1_r1[1], col2_r1[1], col3_r1[1], col4_r1[1]],
+        [col1_r2[0], col2_r2[0], col3_r2[0], col4_r2[0]],
+        [col1_r2[1], col2_r2[1], col3_r2[1], col4_r2[1]],
     ]
-    if order.company_name:
-        right.append(['', ''])
 
-    rows = []
-    for i in range(len(left)):
-        l = left[i]
-        r = right[i]
-        if i == 0:
-            rows.append([l[0], '', r[0], ''])
-        else:
-            rows.append([l[0], l[1], r[0], r[1]])
+    # ---- QR (blank until content decided) ----
+    qr_flowable = None
+    try:
+        from core.models import LabSettings
+        s = LabSettings.get()
+        show_qr = bool(getattr(s, 'report_show_qr', True)) if s else True
+    except Exception:
+        show_qr = True
 
-    col_widths = [25 * mm, 60 * mm, 25 * mm, 60 * mm]
+    if show_qr:
+        buf = qr_png_bytes(order.order_code or '')
+        if buf:
+            qr_flowable = Image(buf, width=22 * mm, height=22 * mm)
+            qr_flowable.hAlign = 'CENTER'
+
+    if qr_flowable is not None:
+        for i, r in enumerate(rows):
+            r.append(qr_flowable if i == 0 else '')
+
+    n_cols = len(rows[0])
+    col_widths = [42 * mm, 42 * mm, 42 * mm, 30 * mm]
+    if qr_flowable is not None:
+        col_widths.append(26 * mm)
+
     t = Table(rows, colWidths=col_widths)
 
-    t.setStyle(TableStyle([
+    style = [
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
-        ('LEFTPADDING', (0, 0), (-1, -1), 6),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-        ('SPAN', (0, 0), (1, 0)),
-        ('SPAN', (2, 0), (3, 0)),
-        ('BACKGROUND', (0, 0), (1, 0), header_bg),
-        ('BACKGROUND', (2, 0), (3, 0), header_bg),
-        ('BOX', (0, 0), (1, -1), 0.5, colors.HexColor('#ced4da')),
-        ('BOX', (2, 0), (3, -1), 0.5, colors.HexColor('#ced4da')),
-        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#e9ecef')),
-    ]))
-    return t
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 1),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+        ('BOX', (0, 0), (-1, -1), 0.4, colors.HexColor('#adb5bd')),
+    ]
+    if qr_flowable is not None:
+        style.append(('SPAN', (4, 0), (4, 3)))
+        style.append(('VALIGN', (4, 0), (4, 3), 'MIDDLE'))
+        style.append(('ALIGN', (4, 0), (4, 3), 'CENTER'))
 
+    t.setStyle(TableStyle(style))
+    return t

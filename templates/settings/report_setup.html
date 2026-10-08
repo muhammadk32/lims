@@ -1,0 +1,351 @@
+﻿{% extends 'base.html' %}
+{% block title %}Report Page Setup - LabMS{% endblock %}
+
+{% block head %}
+<style>
+.rps-page { max-width: 1100px; margin: 0 auto; padding: 10px 20px 30px;
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; color: #212529; }
+.rps-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 14px;
+              display: flex; justify-content: space-between; align-items: flex-end; }
+.rps-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+             text-transform: uppercase; letter-spacing: 0.02em; }
+.rps-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.rps-card { border: 1.5px solid #212529; background: #fff; margin-bottom: 14px; }
+.rps-card-hd { background: #212529; color: #fff; padding: 6px 12px;
+               font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+               letter-spacing: 0.05em; }
+.rps-card-body { padding: 12px 14px; }
+.rps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 16px; }
+.rps-field label { display: block; font-size: 0.62rem; font-weight: 700;
+                   text-transform: uppercase; letter-spacing: 0.06em;
+                   color: #6c757d; margin-bottom: 3px; }
+.rps-field input, .rps-field select { width: 100%; padding: 5px 8px;
+                   border: 1px solid #6c757d; font-size: 0.85rem;
+                   height: 30px; box-sizing: border-box; background: #fff; }
+.rps-field input:focus, .rps-field select:focus { outline: none; border-color: #198754; }
+.rps-hint { font-size: 0.68rem; color: #6c757d; margin-top: 2px; }
+.rps-save { position: sticky; bottom: 0; background: #fff;
+            padding: 10px 14px; border-top: 1px solid #dee2e6;
+            display: flex; justify-content: space-between; align-items: center; }
+.rps-btn { display: inline-block; padding: 6px 20px; font-size: 0.8rem;
+  font-weight: 700; border: 1px solid #212529; background: #fff;
+  color: #212529; text-decoration: none; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.03em; }
+.rps-btn:hover { background: #f1f3f5; }
+.rps-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.rps-btn-primary:hover { background: #146c43; }
+.rps-btn-preview { background: #0d6efd; border-color: #0d6efd; color: #fff; }
+.rps-btn-preview:hover { background: #0a58ca; }
+.rps-logo-row { display: flex; gap: 16px; align-items: flex-start; }
+.rps-logo-box { width: 100px; height: 100px; border: 1px solid #dee2e6;
+                border-radius: 4px; display: flex; align-items: center;
+                justify-content: center; background: #f8f9fa;
+                flex-shrink: 0; padding: 6px; }
+.rps-logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.rps-logo-input { flex: 1; }
+.rps-logo-input label { display: block; font-size: 0.62rem; font-weight: 700;
+                        text-transform: uppercase; letter-spacing: 0.06em;
+                        color: #6c757d; margin-bottom: 4px; }
+.rps-logo-input input[type="file"] { font-size: 0.82rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rps-page">
+
+  <div class="rps-header">
+    <div>
+      <h1 class="rps-title"><i class="bi bi-sliders"></i> Report Page Setup</h1>
+      <div class="rps-sub">Page size, orientation, margins, and font per output type</div>
+    </div>
+    <a href="{{ url_for('settings.report_setup_preview') }}" target="_blank" class="rps-btn rps-btn-preview">
+      <i class="bi bi-eye"></i> Preview
+    </a>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+
+    {# ============ BRANDING & HEADER ============ #}
+    <div class="rps-card">
+      <div class="rps-card-hd"><i class="bi bi-palette"></i> Branding &amp; Header</div>
+      <div class="rps-card-body">
+
+        {# Logo row #}
+        <div class="rps-logo-row">
+          <div class="rps-logo-box">
+            {% if s.logo_filename %}
+              <img src="{{ url_for('static', filename='uploads/branding/' + s.logo_filename) }}"
+                   alt="logo" style="max-width:100%; max-height:100%; object-fit:contain;">
+            {% else %}
+              <span style="color:#adb5bd; font-size:0.8rem;">No logo</span>
+            {% endif %}
+          </div>
+          <div class="rps-logo-input">
+            <label>Logo (PNG / JPG / SVG / WEBP)</label>
+            <input type="file" name="logo" accept=".png,.jpg,.jpeg,.svg,.webp">
+            <small style="display:block; color:#6c757d; margin-top:3px;">
+              Uploading a new logo replaces the current one. Leave blank to keep existing.
+            </small>
+          </div>
+        </div>
+
+        {# Names + tagline #}
+        <div class="rps-grid" style="margin-top:14px;">
+          <div class="rps-field" style="grid-column: span 2;">
+            <label>Lab name</label>
+            <input type="text" name="lab_name" value="{{ s.lab_name or '' }}" required>
+          </div>
+          <div class="rps-field" style="grid-column: span 2;">
+            <label>Tagline</label>
+            <input type="text" name="tagline" value="{{ s.tagline or '' }}">
+          </div>
+        </div>
+
+        {# Contact #}
+        <div class="rps-grid" style="margin-top:10px;">
+          <div class="rps-field" style="grid-column: span 2;">
+            <label>Address</label>
+            <input type="text" name="address" value="{{ s.address or '' }}">
+          </div>
+          <div class="rps-field">
+            <label>Phone</label>
+            <input type="text" name="phone" value="{{ s.phone or '' }}">
+          </div>
+          <div class="rps-field">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ s.email or '' }}">
+          </div>
+          <div class="rps-field">
+            <label>Website</label>
+            <input type="text" name="website" value="{{ s.website or '' }}">
+          </div>
+          <div class="rps-field">
+            <label>License No.</label>
+            <input type="text" name="license_no" value="{{ s.license_no or '' }}">
+          </div>
+          <div class="rps-field">
+            <label>Primary color</label>
+            <input type="color" name="primary_color" value="{{ s.primary_color or '#0d6efd' }}"
+                   style="height:30px; padding:2px;">
+          </div>
+          <div class="rps-field">
+            <label>Divider color (optional)</label>
+            <input type="text" name="header_divider_color"
+                   value="{{ s.header_divider_color or '' }}" placeholder="blank = use primary">
+          </div>
+        </div>
+
+        {# Header layout #}
+        <div class="rps-grid" style="margin-top:10px;">
+          <div class="rps-field">
+            <label>Header layout</label>
+            <select name="header_style">
+              <option value="centered" {% if s.header_style == 'centered' %}selected{% endif %}>Centered</option>
+              <option value="left"     {% if s.header_style == 'left' %}selected{% endif %}>Left-aligned</option>
+              <option value="split"    {% if s.header_style == 'split' %}selected{% endif %}>Split (logo left, info right)</option>
+              <option value="banner"   {% if s.header_style == 'banner' %}selected{% endif %}>Banner only (logo, no text)</option>
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Logo size</label>
+            <select name="header_logo_size">
+              <option value="small"  {% if s.header_logo_size == 'small' %}selected{% endif %}>Small</option>
+              <option value="medium" {% if s.header_logo_size == 'medium' %}selected{% endif %}>Medium</option>
+              <option value="large"  {% if s.header_logo_size == 'large' %}selected{% endif %}>Large</option>
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Footer note</label>
+            <input type="text" name="footer_note" value="{{ s.footer_note or '' }}">
+          </div>
+        </div>
+
+        {# Toggles #}
+        <div class="rps-grid" style="margin-top:10px;">
+          <div class="rps-field">
+            <label>Options</label>
+            <div style="display:flex; gap:16px; padding-top:6px;">
+              <label style="font-weight:400; text-transform:none; letter-spacing:0; color:#212529; font-size:0.85rem;">
+                <input type="checkbox" name="header_show_divider" value="1"
+                       {% if s.header_show_divider %}checked{% endif %}> Show divider
+              </label>
+              <label style="font-weight:400; text-transform:none; letter-spacing:0; color:#212529; font-size:0.85rem;">
+                <input type="checkbox" name="header_show_contact" value="1"
+                       {% if s.header_show_contact %}checked{% endif %}> Show contact
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rps-card">
+      <div class="rps-card-hd"><i class="bi bi-file-earmark-medical"></i> Report PDF</div>
+      <div class="rps-card-body">
+        <div class="rps-grid">
+          <div class="rps-field">
+            <label>Page size</label>
+            <select name="report_page_size">
+              {% for ps in ['A4','Letter','A5','Legal'] %}
+                <option value="{{ ps }}" {% if s.report_page_size == ps %}selected{% endif %}>{{ ps }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Orientation</label>
+            <select name="report_orientation">
+              <option value="portrait" {% if s.report_orientation == 'portrait' %}selected{% endif %}>Portrait</option>
+              <option value="landscape" {% if s.report_orientation == 'landscape' %}selected{% endif %}>Landscape</option>
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Font family</label>
+            <select name="report_font_family">
+              {% for f in ['Helvetica','Times-Roman','Courier'] %}
+                <option value="{{ f }}" {% if s.report_font_family == f %}selected{% endif %}>{{ f }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Base font size (pt)</label>
+            <input type="number" name="report_base_font_size" value="{{ s.report_base_font_size }}" min="6" max="14" step="1">
+          </div>
+          <div class="rps-field">
+            <label>Top margin (in)</label>
+            <input type="number" name="report_margin_top" value="{{ s.report_margin_top }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Bottom margin (in)</label>
+            <input type="number" name="report_margin_bottom" value="{{ s.report_margin_bottom }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Left margin (in)</label>
+            <input type="number" name="report_margin_left" value="{{ s.report_margin_left }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Right margin (in)</label>
+            <input type="number" name="report_margin_right" value="{{ s.report_margin_right }}" step="0.05" min="0" max="3">
+          </div>          <div class="rps-field" style="grid-column: span 4;">
+            <label style="display:inline-flex; align-items:center; gap:6px; font-weight:400; text-transform:none; letter-spacing:0; color:#212529; font-size:0.85rem; cursor:pointer;">
+              <input type="checkbox" name="report_show_qr" value="1"
+                     {% if s.report_show_qr %}checked{% endif %}>
+              Show QR code in patient box
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rps-card">
+      <div class="rps-card-hd"><i class="bi bi-receipt"></i> Bill / Receipt</div>
+      <div class="rps-card-body">
+        <div class="rps-grid">
+          <div class="rps-field">
+            <label>Page size</label>
+            <select name="bill_page_size">
+              {% for ps in ['A4','Letter','A5','Legal'] %}
+                <option value="{{ ps }}" {% if s.bill_page_size == ps %}selected{% endif %}>{{ ps }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Orientation</label>
+            <select name="bill_orientation">
+              <option value="portrait" {% if s.bill_orientation == 'portrait' %}selected{% endif %}>Portrait</option>
+              <option value="landscape" {% if s.bill_orientation == 'landscape' %}selected{% endif %}>Landscape</option>
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Font family</label>
+            <select name="bill_font_family">
+              {% for f in ['Helvetica','Times-Roman','Courier'] %}
+                <option value="{{ f }}" {% if s.bill_font_family == f %}selected{% endif %}>{{ f }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Base font size (pt)</label>
+            <input type="number" name="bill_base_font_size" value="{{ s.bill_base_font_size }}" min="6" max="14" step="1">
+          </div>
+          <div class="rps-field">
+            <label>Top margin (in)</label>
+            <input type="number" name="bill_margin_top" value="{{ s.bill_margin_top }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Bottom margin (in)</label>
+            <input type="number" name="bill_margin_bottom" value="{{ s.bill_margin_bottom }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Left margin (in)</label>
+            <input type="number" name="bill_margin_left" value="{{ s.bill_margin_left }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Right margin (in)</label>
+            <input type="number" name="bill_margin_right" value="{{ s.bill_margin_right }}" step="0.05" min="0" max="3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rps-card">
+      <div class="rps-card-hd"><i class="bi bi-upc-scan"></i> Barcode Labels</div>
+      <div class="rps-card-body">
+        <div class="rps-grid">
+          <div class="rps-field">
+            <label>Page size</label>
+            <select name="label_page_size">
+              {% for ps in ['A4','Letter','A5','Legal'] %}
+                <option value="{{ ps }}" {% if s.label_page_size == ps %}selected{% endif %}>{{ ps }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Orientation</label>
+            <select name="label_orientation">
+              <option value="portrait" {% if s.label_orientation == 'portrait' %}selected{% endif %}>Portrait</option>
+              <option value="landscape" {% if s.label_orientation == 'landscape' %}selected{% endif %}>Landscape</option>
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Grid columns</label>
+            <input type="number" name="label_grid_cols" value="{{ s.label_grid_cols }}" min="1" max="6">
+          </div>
+          <div class="rps-field">
+            <label>Grid rows</label>
+            <input type="number" name="label_grid_rows" value="{{ s.label_grid_rows }}" min="1" max="12">
+          </div>
+          <div class="rps-field">
+            <label>Font family</label>
+            <select name="label_font_family">
+              {% for f in ['Helvetica','Times-Roman','Courier'] %}
+                <option value="{{ f }}" {% if s.label_font_family == f %}selected{% endif %}>{{ f }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rps-field">
+            <label>Base font size (pt)</label>
+            <input type="number" name="label_base_font_size" value="{{ s.label_base_font_size }}" min="6" max="14" step="1">
+          </div>
+          <div class="rps-field">
+            <label>Top margin (in)</label>
+            <input type="number" name="label_margin_top" value="{{ s.label_margin_top }}" step="0.05" min="0" max="3">
+          </div>
+          <div class="rps-field">
+            <label>Bottom margin (in)</label>
+            <input type="number" name="label_margin_bottom" value="{{ s.label_margin_bottom }}" step="0.05" min="0" max="3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rps-save">
+      <div class="rps-hint">Changes take effect on the next print.</div>
+      <button type="submit" class="rps-btn rps-btn-primary">
+        <i class="bi bi-check-lg"></i> Save Setup
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

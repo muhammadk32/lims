@@ -28,6 +28,13 @@ def _admin_only():
     return current_user.has_role('admin')
 
 
+@settings_bp.route('/branding-legacy')
+@login_required
+def branding_redirect():
+    from flask import redirect, url_for
+    return redirect(url_for('settings.report_setup'), code=301)
+
+
 @settings_bp.route('/branding', methods=['GET', 'POST'])
 @login_required
 def branding():
@@ -703,3 +710,123 @@ def printers():
     from core.printers import list_printers
     available = list_printers()
     return render_template('settings/printers.html', s=s, available=available)
+
+
+# ============================================================
+# REPORT PAGE SETUP
+# ============================================================
+@settings_bp.route('/report-setup', methods=['GET', 'POST'])
+@login_required
+def report_setup():
+    from extensions import db
+    from flask import request as _rq, flash, redirect, url_for
+    from core.models import LabSettings
+
+    s = LabSettings.get()
+    if s is None:
+        s = LabSettings()
+        db.session.add(s)
+        db.session.commit()
+
+    if _rq.method == 'POST':
+        # ---- Branding / header (merged from /settings/branding) ----
+        s.lab_name    = (_rq.form.get('lab_name') or s.lab_name or '').strip()
+        s.tagline     = _rq.form.get('tagline') or ''
+        s.address     = _rq.form.get('address') or ''
+        s.phone       = _rq.form.get('phone') or ''
+        s.email       = _rq.form.get('email') or ''
+        s.website     = _rq.form.get('website') or ''
+        s.license_no  = _rq.form.get('license_no') or ''
+        s.footer_note = _rq.form.get('footer_note') or ''
+        s.primary_color = (_rq.form.get('primary_color') or '#0d6efd').strip()
+        s.header_style      = (_rq.form.get('header_style') or 'centered').strip()
+        s.header_logo_size  = (_rq.form.get('header_logo_size') or 'medium').strip()
+        s.header_show_divider = bool(_rq.form.get('header_show_divider'))
+        s.header_show_contact = bool(_rq.form.get('header_show_contact'))
+        s.header_divider_color = (_rq.form.get('header_divider_color') or '').strip() or None
+
+        # ---- Logo upload ----
+        file = _rq.files.get('logo')
+        if file and file.filename:
+            import os, uuid
+            from flask import current_app
+            ext = file.filename.rsplit('.', 1)[-1].lower()
+            allowed = {'png', 'jpg', 'jpeg', 'svg', 'webp'}
+            if ext not in allowed:
+                flash('Unsupported logo format. Use png/jpg/svg/webp.', 'danger')
+                return redirect(url_for('settings.report_setup'))
+            # Delete old
+            if s.logo_filename:
+                old_path = os.path.join(current_app.root_path, 'static',
+                                        'uploads', 'branding', s.logo_filename)
+                if os.path.exists(old_path):
+                    try: os.remove(old_path)
+                    except OSError: pass
+            new_name = f'logo_{uuid.uuid4().hex[:12]}.{ext}'
+            save_dir = os.path.join(current_app.root_path, 'static',
+                                    'uploads', 'branding')
+            os.makedirs(save_dir, exist_ok=True)
+            file.save(os.path.join(save_dir, new_name))
+            s.logo_filename = new_name
+
+        def _int(k, default):
+            try:
+                return int(_rq.form.get(k) or default)
+            except (ValueError, TypeError):
+                return default
+
+        def _flt(k, default):
+            try:
+                return float(_rq.form.get(k) or default)
+            except (ValueError, TypeError):
+                return default
+
+        def _str(k, default):
+            return (_rq.form.get(k) or default).strip() or default
+
+        s.report_page_size      = _str('report_page_size', 'A4')
+        s.report_orientation    = _str('report_orientation', 'portrait')
+        s.report_margin_top     = _flt('report_margin_top', 0.6)
+        s.report_margin_bottom  = _flt('report_margin_bottom', 0.6)
+        s.report_margin_left    = _flt('report_margin_left', 0.8)
+        s.report_margin_right   = _flt('report_margin_right', 0.8)
+        s.report_font_family    = _str('report_font_family', 'Helvetica')
+        s.report_base_font_size = _int('report_base_font_size', 8)
+        s.report_show_qr = bool(_rq.form.get('report_show_qr'))
+
+        s.bill_page_size      = _str('bill_page_size', 'A4')
+        s.bill_orientation    = _str('bill_orientation', 'portrait')
+        s.bill_margin_top     = _flt('bill_margin_top', 0.5)
+        s.bill_margin_bottom  = _flt('bill_margin_bottom', 0.5)
+        s.bill_margin_left    = _flt('bill_margin_left', 0.5)
+        s.bill_margin_right   = _flt('bill_margin_right', 0.5)
+        s.bill_font_family    = _str('bill_font_family', 'Helvetica')
+        s.bill_base_font_size = _int('bill_base_font_size', 8)
+
+        s.label_page_size      = _str('label_page_size', 'A4')
+        s.label_orientation    = _str('label_orientation', 'portrait')
+        s.label_margin_top     = _flt('label_margin_top', 0.5)
+        s.label_margin_bottom  = _flt('label_margin_bottom', 0.5)
+        s.label_margin_left    = _flt('label_margin_left', 0.2)
+        s.label_margin_right   = _flt('label_margin_right', 0.2)
+        s.label_font_family    = _str('label_font_family', 'Helvetica')
+        s.label_base_font_size = _int('label_base_font_size', 8)
+        s.label_grid_cols      = _int('label_grid_cols', 3)
+        s.label_grid_rows      = _int('label_grid_rows', 8)
+
+        db.session.commit()
+        flash('Report setup saved.', 'success')
+        return redirect(url_for('settings.report_setup'))
+
+    return render_template('settings/report_setup.html', s=s)
+
+
+@settings_bp.route('/report-setup/preview')
+@login_required
+def report_setup_preview():
+    from flask import send_file
+    from modules.reports.pdf.preview import build_preview_pdf
+    buf = build_preview_pdf()
+    return send_file(buf, mimetype='application/pdf',
+                     download_name='report_preview.pdf',
+                     as_attachment=False)

@@ -99,11 +99,12 @@ def _header_centered(lab, styles, primary):
     rows.append([Paragraph(lab['name'], name_style)])
     if lab['tagline']:
         rows.append([Paragraph(lab['tagline'], tag_style)])
-    cl = _contact_line(lab)
-    if cl:
-        rows.append([Paragraph(cl, contact_style)])
-    if lab['license_no']:
-        rows.append([Paragraph(f"License #: {lab['license_no']}", license_style)])
+    if lab.get('header_show_contact', True):
+        cl = _contact_line(lab)
+        if cl:
+            rows.append([Paragraph(cl, contact_style)])
+        if lab['license_no']:
+            rows.append([Paragraph(f"License #: {lab['license_no']}", license_style)])
     t = Table(rows, colWidths=[170 * mm])
     t.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
@@ -135,11 +136,12 @@ def _header_left(lab, styles, primary):
     rows.append([Paragraph(lab['name'], name_style)])
     if lab['tagline']:
         rows.append([Paragraph(lab['tagline'], tag_style)])
-    cl = _contact_line(lab)
-    if cl:
-        rows.append([Paragraph(cl, contact_style)])
-    if lab['license_no']:
-        rows.append([Paragraph(f"License #: {lab['license_no']}", contact_style)])
+    if lab.get('header_show_contact', True):
+        cl = _contact_line(lab)
+        if cl:
+            rows.append([Paragraph(cl, contact_style)])
+        if lab['license_no']:
+            rows.append([Paragraph(f"License #: {lab['license_no']}", contact_style)])
     t = Table(rows, colWidths=[170 * mm])
     t.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
@@ -166,11 +168,12 @@ def _header_split(lab, styles, primary):
     right_rows = [[Paragraph(lab['name'], name_style)]]
     if lab['tagline']:
         right_rows.append([Paragraph(lab['tagline'], tag_style)])
-    cl = _contact_line(lab)
-    if cl:
-        right_rows.append([Paragraph(cl, contact_style)])
-    if lab['license_no']:
-        right_rows.append([Paragraph(f"License #: {lab['license_no']}", contact_style)])
+    if lab.get('header_show_contact', True):
+        cl = _contact_line(lab)
+        if cl:
+            right_rows.append([Paragraph(cl, contact_style)])
+        if lab['license_no']:
+            right_rows.append([Paragraph(f"License #: {lab['license_no']}", contact_style)])
 
     right = Table(right_rows, colWidths=[100 * mm])
     right.setStyle(TableStyle([

@@ -27,3 +27,4 @@ tzdata==2026.4
 Werkzeug==3.1.8
 WTForms==3.1.2
 email-validator==2.1.1python-barcode==0.16.1
+qrcode[pil]==7.4.2

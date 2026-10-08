@@ -122,6 +122,39 @@ class LabSettings(BaseModel):
     printer_report       = db.Column(db.String(120), nullable=True, default='')
     printer_barcode      = db.Column(db.String(120), nullable=True, default='')
 
+    # ============================================================
+    # Report / Bill / Label page setup (per output type)
+    # ============================================================
+    report_page_size      = db.Column(db.String(20),  nullable=False, default='A4')
+    report_orientation    = db.Column(db.String(10),  nullable=False, default='portrait')
+    report_margin_top     = db.Column(db.Float,       nullable=False, default=0.6)
+    report_margin_bottom  = db.Column(db.Float,       nullable=False, default=0.6)
+    report_margin_left    = db.Column(db.Float,       nullable=False, default=0.8)
+    report_margin_right   = db.Column(db.Float,       nullable=False, default=0.8)
+    report_font_family    = db.Column(db.String(40),  nullable=False, default='Helvetica')
+    report_base_font_size = db.Column(db.Integer,     nullable=False, default=8)
+    report_show_qr        = db.Column(db.Boolean,     nullable=False, default=True)
+
+    bill_page_size      = db.Column(db.String(20),  nullable=False, default='A4')
+    bill_orientation    = db.Column(db.String(10),  nullable=False, default='portrait')
+    bill_margin_top     = db.Column(db.Float,       nullable=False, default=0.5)
+    bill_margin_bottom  = db.Column(db.Float,       nullable=False, default=0.5)
+    bill_margin_left    = db.Column(db.Float,       nullable=False, default=0.5)
+    bill_margin_right   = db.Column(db.Float,       nullable=False, default=0.5)
+    bill_font_family    = db.Column(db.String(40),  nullable=False, default='Helvetica')
+    bill_base_font_size = db.Column(db.Integer,     nullable=False, default=8)
+
+    label_page_size      = db.Column(db.String(20),  nullable=False, default='A4')
+    label_orientation    = db.Column(db.String(10),  nullable=False, default='portrait')
+    label_margin_top     = db.Column(db.Float,       nullable=False, default=0.5)
+    label_margin_bottom  = db.Column(db.Float,       nullable=False, default=0.5)
+    label_margin_left    = db.Column(db.Float,       nullable=False, default=0.2)
+    label_margin_right   = db.Column(db.Float,       nullable=False, default=0.2)
+    label_font_family    = db.Column(db.String(40),  nullable=False, default='Helvetica')
+    label_base_font_size = db.Column(db.Integer,     nullable=False, default=8)
+    label_grid_cols      = db.Column(db.Integer,     nullable=False, default=3)
+    label_grid_rows      = db.Column(db.Integer,     nullable=False, default=8)
+
     # --- Print footer ---
     footer_note = db.Column(db.String(255), nullable=True,
                             default='Thank you for choosing our lab.')
