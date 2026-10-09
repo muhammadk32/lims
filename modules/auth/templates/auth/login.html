@@ -1,4 +1,4 @@
-{% extends 'base_public.html' %}
+﻿{% extends 'base_public.html' %}
 
 {% block title %}Login · {{ branding.lab_name or 'LabMS' }}{% endblock %}
 
@@ -11,32 +11,7 @@
 <div class="login-wrapper">
 
   <!-- ===================== TOP BANNER ===================== -->
-  <header class="login-banner">
-    <div class="container-fluid d-flex align-items-center justify-content-center py-3">
-
-      {# Prefer uploaded logo from Branding Settings; fallback to static/images/logo.png #}
-      {% if branding.logo_url %}
-        <img src="{{ branding.logo_url }}"
-             alt="{{ branding.lab_name }}"
-             class="login-banner-logo">
-      {% else %}
-        <img src="{{ url_for('static', filename='images/logo.png') }}"
-             alt="{{ branding.lab_name }}"
-             class="login-banner-logo"
-             onerror="this.style.display='none';">
-      {% endif %}
-
-      <div class="ms-3 text-start">
-        <div class="login-banner-title">
-          {{ branding.lab_name or 'Laboratory Management System' }}
-        </div>
-        {% if branding.tagline %}
-          <div class="login-banner-tagline">{{ branding.tagline }}</div>
-        {% endif %}
-      </div>
-
-    </div>
-  </header>
+  <!-- top banner removed — logo now in right panel -->
 
   <!-- ===================== MAIN AREA ===================== -->
   <main class="login-main">
@@ -121,12 +96,18 @@
         <div class="col-12 col-md-6 col-lg-5">
           <div class="login-info-panel">
 
+            {% if branding.logo_url %}
+              <img src="{{ branding.logo_url }}" alt="logo"
+                   style="max-height:64px; max-width:200px; display:block; margin:0 auto 8px;">
+            {% endif %}
             <h2 class="login-info-title">
-              LIMS <span class="text-muted">2.0</span>
+              {{ branding.lab_name or 'Laboratory' }}
             </h2>
-            <div class="login-info-subtitle">
-              Product ID: 0.0.1
-            </div>
+            {% if branding.tagline %}
+              <div class="login-info-subtitle">
+                {{ branding.tagline }}
+              </div>
+            {% endif %}
 
             <h4 class="login-info-heading">
               Lab Information &amp; Management System
@@ -180,8 +161,7 @@
 
   <!-- ===================== FOOTER ===================== -->
   <footer class="login-footer">
-    &copy; 2025 {{ branding.lab_name or 'LabMS' }}
-    {% if branding.website %} · {{ branding.website }}{% endif %}
+    LIMS 2.0 · Product ID: 0.0.1
   </footer>
 
 </div>
