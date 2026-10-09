@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Pending Results — LabMS{% endblock %}
 
 {% block head %}
@@ -146,7 +146,7 @@
         <th>Patient</th>
         <th class="center">Age</th>
         <th class="center">Gender</th>
-        <th class="center">Pending</th>
+        <th class="center">Status</th>
         <th>Registered</th>
         <th class="center">Action</th>
       </tr>
@@ -168,7 +168,7 @@
           <td class="center">{{ o.patient.compute_age() or '—' }}</td>
           <td class="center">{{ o.patient.gender or '—' }}</td>
           <td class="center">
-            <span class="pr-badge pending">{{ pending_count or '—' }}</span>
+            <span class="pr-badge pending">{{ o.status_label or o.status }}</span>
           </td>
           <td class="num">{{ o.created_at | localtime('%d/%m/%y %H:%M') }}</td>
           <td class="center">

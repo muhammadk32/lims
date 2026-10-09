@@ -171,3 +171,90 @@ def bulk_send_back():
         flash('Nothing was sent back.', 'warning')
 
     return redirect(url_for('lab.verify_queue'))
+
+# ============================================================
+# SAMPLE RECEIVING — orders pending collection
+# ============================================================
+@lab_bp.route('/receiving')
+@login_required
+@permission_required('view_reports')
+def receiving():
+    """List orders awaiting sample collection."""
+    from modules.orders.models import Order, OrderStatus
+    from sqlalchemy import or_
+
+    q = request.args.get('q', '').strip()
+    query = Order.query.filter(Order.status == OrderStatus.PENDING)
+    if q:
+        like = f'%{q}%'
+        query = query.join(Order.patient).filter(or_(
+            Order.order_code.ilike(like),
+            Order.patient.has(full_name=q) if False else Order.order_code.ilike(like),
+        ))
+    orders = query.order_by(Order.created_at.desc()).all()
+
+    return render_template('lab/receiving.html', orders=orders, q=q)
+
+
+@lab_bp.route('/receiving/<int:order_id>/mark', methods=['POST'])
+@login_required
+@permission_required('update_order_status')
+def mark_received(order_id):
+    """Flip a PENDING order to COLLECTED and stamp sample_collected_at."""
+    from modules.orders.models import Order, OrderStatus
+    from datetime import datetime as _dt
+    from extensions import db
+
+    order = Order.query.get_or_404(order_id)
+    if order.status == OrderStatus.PENDING:
+        order.status = OrderStatus.COLLECTED
+        order.sample_collected_at = _dt.utcnow()
+        db.session.commit()
+        flash(f'Sample for Lab # {order.order_code} marked as received.', 'success')
+    else:
+        flash(f'Lab # {order.order_code} is not pending.', 'warning')
+    return redirect(url_for('lab.receiving'))
+
+
+# ============================================================
+# TEST IN PROCESS — samples collected, results not yet entered
+# ============================================================
+@lab_bp.route('/in-process')
+@login_required
+@permission_required('view_reports')
+def in_process():
+    """List orders where samples are received but results are pending."""
+    from modules.orders.models import Order, OrderStatus, OrderItem
+
+    q = request.args.get('q', '').strip()
+    query = Order.query.filter(Order.status == OrderStatus.COLLECTED)
+    if q:
+        like = f'%{q}%'
+        query = query.join(Order.patient).filter(
+            (Order.order_code.ilike(like)) |
+            (Order.patient.has(full_name=q) if False else Order.order_code.ilike(like))
+        )
+    orders = query.order_by(Order.created_at.desc()).all()
+
+    return render_template('lab/in_process.html', orders=orders, q=q)
+
+
+# ============================================================
+# START TEST — COLLECTED -> IN_PROCESS
+# ============================================================
+@lab_bp.route('/in-process/<int:order_id>/start', methods=['POST'])
+@login_required
+@permission_required('update_order_status')
+def start_test(order_id):
+    """Move an order from SAMPLE RECEIVED to TEST IN PROCESS."""
+    from modules.orders.models import Order, OrderStatus
+    from extensions import db
+
+    order = Order.query.get_or_404(order_id)
+    if order.status == OrderStatus.COLLECTED:
+        order.status = OrderStatus.IN_PROCESS
+        db.session.commit()
+        flash(f'Order {order.order_code} moved to Test In Process.', 'success')
+    else:
+        flash(f'Order {order.order_code} cannot be started.', 'warning')
+    return redirect(url_for('lab.in_process'))

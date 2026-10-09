@@ -1,0 +1,91 @@
+﻿{% extends 'base.html' %}
+{% block title %}Sample Receiving — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.sr-page { max-width: 1300px; margin: 0 auto; padding: 10px 20px 30px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; color: #212529; }
+.sr-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
+.sr-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+            text-transform: uppercase; letter-spacing: 0.02em; }
+.sr-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.sr-filter { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.sr-filter input { padding: 5px 10px; border: 1px solid #6c757d;
+                   font-size: 0.85rem; height: 32px; box-sizing: border-box; width: 280px; }
+.sr-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
+  font-weight: 600; border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; cursor: pointer; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 32px;
+  line-height: 1.9; box-sizing: border-box; }
+.sr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+.sr-btn-primary:hover { background: #146c43; }
+.sr-btn-sm { padding: 2px 10px; font-size: 0.7rem; height: 26px; line-height: 1.6; }
+.sr-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
+.sr-table thead th { background: #212529; color: #fff; padding: 5px 8px;
+                     text-align: left; font-size: 0.7rem;
+                     text-transform: uppercase; letter-spacing: 0.05em; }
+.sr-table tbody td { padding: 5px 8px; border-bottom: 1px solid #dee2e6;
+                     vertical-align: middle; }
+.sr-table tbody tr:hover { background: #f8f9fa; }
+.sr-empty { padding: 30px; text-align: center; color: #6c757d;
+            border: 1px dashed #adb5bd; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sr-page">
+
+  <div class="sr-header">
+    <h1 class="sr-title"><i class="bi bi-inbox"></i> Sample Receiving</h1>
+    <div class="sr-sub">Orders awaiting sample collection</div>
+  </div>
+
+  <form method="GET" class="sr-filter">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search Lab # / patient name">
+    <button type="submit" class="sr-btn sr-btn-primary">Search</button>
+    {% if q %}<a href="{{ url_for('lab.receiving') }}" class="sr-btn">Clear</a>{% endif %}
+  </form>
+
+  {% if orders %}
+  <table class="sr-table">
+    <thead>
+      <tr>
+        <th style="width:12%;">Lab #</th>
+        <th style="width:22%;">Patient</th>
+        <th style="width:12%;">Patient #</th>
+        <th style="width:16%;">Registered</th>
+        <th style="width:12%;" class="text-center">Tests</th>
+        <th style="width:12%;">Status</th>
+        <th style="width:14%;" class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td><code>{{ o.order_code }}</code></td>
+        <td><b>{{ o.patient.full_name }}</b></td>
+        <td>{{ o.patient.patient_code }}</td>
+        <td>{{ o.created_at | localtime('%d-%b-%Y %I:%M %p') }}</td>
+        <td class="text-center">{{ o.top_level_items | length }}</td>
+        <td><span style="padding:2px 8px; border-radius:10px; background:#fff3cd; color:#664d03; font-size:0.7rem; font-weight:700;">SAMPLE TO COME</span></td>
+        <td class="text-end">
+          <form method="POST" action="{{ url_for('lab.mark_received', order_id=o.id) }}"
+                style="display:inline;">
+            <button type="submit" class="sr-btn sr-btn-primary sr-btn-sm">
+              <i class="bi bi-check-lg"></i> Mark Received
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="sr-empty">
+    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+    No pending samples.
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

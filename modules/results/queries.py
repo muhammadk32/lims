@@ -1,4 +1,4 @@
-"""Query helpers for results entry — pure data-fetching.
+﻿"""Query helpers for results entry — pure data-fetching.
 
 No HTTP, no flash, no commits.
 """
@@ -78,7 +78,7 @@ def list_pending_orders(q='', order_filter=''):
     """
     from modules.patients.models import Patient
 
-    query = Order.query.filter(Order.status != OrderStatus.CANCELLED)
+    query = Order.query.filter(Order.status.in_([OrderStatus.IN_PROCESS, OrderStatus.CORRECTION]))
 
     if q:
         like = f'%{q}%'

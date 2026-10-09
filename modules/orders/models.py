@@ -7,17 +7,19 @@ from datetime import datetime
 class OrderStatus:
     PENDING     = 'pending'
     COLLECTED   = 'collected'
+    IN_PROCESS  = 'in_process'
     COMPLETED   = 'completed'
     APPROVED    = 'approved'
     CORRECTION  = 'correction'
     CANCELLED   = 'cancelled'
 
-    CHOICES = [PENDING, COLLECTED, COMPLETED, APPROVED, CORRECTION, CANCELLED]
+    CHOICES = [PENDING, COLLECTED, IN_PROCESS, COMPLETED, APPROVED, CORRECTION, CANCELLED]
 
     LABELS = {
-        PENDING:    'Pending',
-        COLLECTED:  'Collected',
-        COMPLETED:  'Completed',
+        PENDING:    'Sample To Come',
+        COLLECTED:  'Sample Received',
+        IN_PROCESS: 'Test In Process',
+        COMPLETED:  'Awaiting Approval',
         APPROVED:   'Approved',
         CORRECTION: 'Correction',
         CANCELLED:  'Cancelled',

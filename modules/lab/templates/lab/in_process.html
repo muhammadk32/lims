@@ -1,0 +1,91 @@
+﻿{% extends 'base.html' %}
+{% block title %}Test In Process — LabMS{% endblock %}
+
+{% block head %}
+<style>
+.tip-page { max-width: 1300px; margin: 0 auto; padding: 10px 20px 30px;
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; color: #212529; }
+.tip-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
+.tip-title { font-size: 1.15rem; font-weight: 700; margin: 0;
+             text-transform: uppercase; letter-spacing: 0.02em; }
+.tip-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+.tip-filter { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.tip-filter input { padding: 5px 10px; border: 1px solid #6c757d;
+                    font-size: 0.85rem; height: 32px; box-sizing: border-box; width: 280px; }
+.tip-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
+  font-weight: 600; border: 1px solid #212529; background: #fff; color: #212529;
+  text-decoration: none; cursor: pointer; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.03em; height: 32px;
+  line-height: 1.9; box-sizing: border-box; }
+.tip-btn-primary { background: #0d6efd; border-color: #0d6efd; color: #fff; }
+.tip-btn-primary:hover { background: #0a58ca; }
+.tip-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
+.tip-table thead th { background: #212529; color: #fff; padding: 6px 10px;
+                      text-align: left; font-size: 0.7rem;
+                      text-transform: uppercase; letter-spacing: 0.05em; }
+.tip-table tbody td { padding: 6px 10px; border-bottom: 1px solid #dee2e6;
+                      vertical-align: middle; }
+.tip-table tbody tr:hover { background: #f8f9fa; }
+.tip-empty { padding: 30px; text-align: center; color: #6c757d;
+             border: 1px dashed #adb5bd; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tip-page">
+
+  <div class="tip-header">
+    <h1 class="tip-title"><i class="bi bi-hourglass-split"></i> Test In Process</h1>
+    <div class="tip-sub">Samples received — awaiting results entry</div>
+  </div>
+
+  <form method="GET" class="tip-filter">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search Lab # / patient name">
+    <button type="submit" class="tip-btn tip-btn-primary">Search</button>
+    {% if q %}<a href="{{ url_for('lab.in_process') }}" class="tip-btn">Clear</a>{% endif %}
+  </form>
+
+  {% if orders %}
+  <table class="tip-table">
+    <thead>
+      <tr>
+        <th style="width:12%;">Lab #</th>
+        <th style="width:22%;">Patient</th>
+        <th style="width:12%;">Patient #</th>
+        <th style="width:16%;">Collected</th>
+        <th style="width:12%;" class="text-center">Tests</th>
+        <th style="width:12%;">Status</th>
+        <th style="width:14%;" class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td><code>{{ o.order_code }}</code></td>
+        <td><b>{{ o.patient.full_name }}</b></td>
+        <td>{{ o.patient.patient_code }}</td>
+        <td>{{ o.sample_collected_at | localtime('%d-%b-%Y %I:%M %p') if o.sample_collected_at else '—' }}</td>
+        <td class="text-center">{{ o.top_level_items | length }}</td>
+        <td><span style="padding:2px 8px; border-radius:10px; background:#cfe2ff; color:#084298; font-size:0.7rem; font-weight:700;">SAMPLE RECEIVED</span></td>
+        <td class="text-end">
+          <form method="POST" action="{{ url_for('lab.start_test', order_id=o.id) }}"
+                style="display:inline;">
+            <button type="submit" class="tip-btn tip-btn-primary"
+                    style="height:26px; padding:2px 10px; font-size:0.7rem; line-height:1.6;">
+              <i class="bi bi-play-circle"></i> Test In Process
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="tip-empty">
+    <i class="bi bi-hourglass fs-3 d-block mb-2"></i>
+    No tests in process.
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
