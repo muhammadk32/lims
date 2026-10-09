@@ -1,0 +1,153 @@
+﻿/* ==========================================================
+   LabMS — Unified theme-aware table styling
+   Loaded AFTER test_settings.css, style.css, themes.css
+   Makes ALL tables respond to the current theme.
+   ========================================================== */
+
+/* --- Theme-aware table variables ------------------------- */
+:root,
+[data-bs-theme="light"],
+[data-bs-theme="grey"],
+[data-bs-theme="blue"],
+[data-bs-theme="green"],
+[data-bs-theme="purple"],
+[data-bs-theme="high_contrast"],
+[data-bs-theme="dark"] {
+  --tbl-border:        var(--bs-border-color);
+  --tbl-header-bg:     #212529;
+  --tbl-header-color:  #ffffff;
+  --tbl-row-bg:        var(--bs-body-bg);
+  --tbl-row-alt-bg:    var(--bs-tertiary-bg);
+  --tbl-row-hover-bg:  var(--bs-secondary-bg);
+  --tbl-code-bg:       var(--bs-tertiary-bg);
+  --tbl-code-border:   var(--bs-border-color);
+  --tbl-code-color:    var(--bs-body-color);
+}
+
+/* --- Base table ------------------------------------------- */
+.lt-table,
+.rp-table,
+.dl-table,
+.ts-table,
+.tf-table {
+  font-size: 0.9rem;
+  background: var(--tbl-row-bg);
+  border: 1px solid var(--tbl-border);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* --- Header ---------------------------------------------- */
+.lt-table thead th,
+.rp-table thead th,
+.dl-table thead th,
+.ts-table thead th,
+.tf-table thead th {
+  background: var(--tbl-header-bg) !important;
+  color: var(--tbl-header-color) !important;
+  border: 1px solid #495057 !important;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* --- Body cells ------------------------------------------ */
+.lt-table tbody td,
+.rp-table tbody td,
+.dl-table tbody td,
+.ts-table tbody td,
+.tf-table tbody td {
+  padding: 8px 10px;
+  border: 1px solid var(--tbl-border);
+  vertical-align: middle;
+  color: var(--bs-body-color);
+  font-size: 0.88rem;
+}
+
+/* --- Zebra + hover --------------------------------------- */
+.lt-table tbody tr:nth-child(even),
+.rp-table tbody tr:nth-child(even),
+.dl-table tbody tr:nth-child(even),
+.ts-table tbody tr:nth-child(even),
+.tf-table tbody tr:nth-child(even) {
+  background: var(--tbl-row-alt-bg);
+}
+.lt-table tbody tr:hover,
+.rp-table tbody tr:hover,
+.dl-table tbody tr:hover,
+.ts-table tbody tr:hover,
+.tf-table tbody tr:hover {
+  background: var(--tbl-row-hover-bg);
+}
+
+/* --- Code pills ------------------------------------------ */
+.lt-table code,
+.rp-table code,
+.dl-table code,
+.ts-table code,
+.tf-table code {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.82rem;
+  padding: 2px 6px;
+  background: var(--tbl-code-bg);
+  border: 1px solid var(--tbl-code-border);
+  color: var(--tbl-code-color);
+  white-space: nowrap;
+}
+
+/* --- Numeric / right-aligned ----------------------------- */
+.lt-table .num,
+.rp-table .num,
+.dl-table .num,
+.ts-table .num,
+.tf-table .num {
+  text-align: right;
+  font-family: Consolas, Monaco, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Name / muted ---------------------------------------- */
+.lt-table .name,
+.rp-table .name,
+.dl-table .name,
+.ts-table .name,
+.tf-table .name {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.lt-table .muted,
+.rp-table .muted,
+.dl-table .muted,
+.ts-table .muted,
+.tf-table .muted {
+  color: var(--bs-secondary-color);
+  font-size: 0.82rem;
+}
+
+/* --- Center align ---------------------------------------- */
+.lt-table .center,
+.rp-table .center,
+.dl-table .center,
+.ts-table .center,
+.tf-table .center {
+  text-align: center;
+}
+
+/* --- Category badges (keep semantic colors) -------------- */
+.lt-badge-cat {
+  background: #0dcaf0 !important;
+  color: #055160 !important;
+  padding: 3px 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 0;
+  display: inline-block;
+}

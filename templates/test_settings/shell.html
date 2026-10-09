@@ -1,9 +1,10 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block title %}Lab Test Settings · {{ branding.lab_name }}{% endblock %}
 
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/test_settings.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
 {% endblock %}
 
 {% block content %}
