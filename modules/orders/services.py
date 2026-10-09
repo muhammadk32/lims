@@ -140,14 +140,41 @@ def create_order(patient, tests, form, user):
     db.session.flush()
 
     # ---------- Items ----------
+    from datetime import datetime as _dt
+
+    def _item_extras(test_id):
+        """Pull per-item snapshot fields from the form."""
+        try:
+            rpt = form.get(f'reporting_date_{test_id}', '').strip()
+            rpt_dt = _dt.strptime(rpt.replace('T', ' ')[:16], '%Y-%m-%d %H:%M') if rpt else None
+        except (ValueError, TypeError):
+            rpt_dt = None
+        return {
+            'reporting_date': rpt_dt,
+            'sample_type': (form.get(f'sample_type_{test_id}', '') or '').strip() or None,
+        }
+
+    def _company_rate(test_id, fallback_price):
+        raw = form.get(f'company_rate_{test_id}', '').strip()
+        if raw:
+            try:
+                return float(raw)
+            except (ValueError, TypeError):
+                pass
+        return fallback_price
+
     for t in tests:
+        extras = _item_extras(t.id)
+        comp_rate = _company_rate(t.id, t.price)
         if t.is_panel:
             parent = OrderItem(
                 order_id=order.id,
                 test_id=t.id,
                 price=t.price,
+                company_rate=comp_rate,
                 parent_item_id=None,
                 sort_order=0,
+                **extras,
             )
             db.session.add(parent)
             db.session.flush()
@@ -164,8 +191,10 @@ def create_order(patient, tests, form, user):
                 order_id=order.id,
                 test_id=t.id,
                 price=t.price,
+                company_rate=comp_rate,
                 parent_item_id=None,
                 sort_order=0,
+                **extras,
             ))
 
     db.session.flush()

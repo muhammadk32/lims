@@ -433,12 +433,30 @@
   });
 
   /* ======================== SELECTED TESTS ======================== */
+  function _pct() {
+    // Current discount percent (0-100)
+    const el = document.getElementById('discountPercentInput');
+    const v = el ? parseFloat(el.value) || 0 : 0;
+    return Math.max(0, Math.min(100, v));
+  }
+
+  function _companyRate(price, pct) {
+    return Math.round((Number(price) || 0) * (1 - pct / 100) * 100) / 100;
+  }
+
   function addTest(t) {
     if (state.selectedTests.some(x => x.id === t.id)) return;
+    const now = new Date();
+    const hours = t.turnaround_hours || 24;
+    const rpt = new Date(now.getTime() + hours * 3600 * 1000);
+    const pct = _pct();
     state.selectedTests.push({
       id: t.id, code: t.code, name: t.name, price: t.price,
       is_panel: t.is_panel,
       parameter_count: t.parameter_count || 0,
+      sample_type: t.sample_type || '',
+      reporting_date: rpt.toISOString().slice(0, 16),
+      company_rate: _companyRate(t.price, pct),
     });
     renderSelectedTests();
     updateBilling();
@@ -450,36 +468,55 @@
     updateBilling();
   }
 
+  function refreshCompanyRates() {
+    const pct = _pct();
+    state.selectedTests.forEach(t => {
+      t.company_rate = _companyRate(t.price, pct);
+    });
+    renderSelectedTests();
+  }
+
   function renderSelectedTests() {
     const n = state.selectedTests.length;
-    $testCountBadge.textContent = n + ' selected';
+    if ($testCountBadge) $testCountBadge.textContent = n + ' selected';
+    const body = document.getElementById('basketBody');
+    if (!body) return;
+
     if (n === 0) {
-      $selectedTestsList.innerHTML =
-        '<li class="selected-empty">' +
+      body.innerHTML = '<tr><td colspan="7" class="selected-empty">' +
         '<i class="bi bi-inbox fs-5 d-block mb-1"></i>' +
-        'No tests selected yet.</li>';
+        'There is no test in the basket</td></tr>';
       return;
     }
-    $selectedTestsList.innerHTML = '';
-    state.selectedTests.forEach(t => {
-      const li = document.createElement('li');
-      li.className = 'selected-item' + (t.is_panel ? ' is-panel' : '');
-      li.innerHTML =
-        '<div>' +
-        '<div class="si-name">' +
-        (t.is_panel ? '<i class="bi bi-collection text-primary"></i> ' : '') +
-        esc(t.name) + '</div>' +
-        '<div class="si-meta">' +
-        '<code>' + esc(t.code) + '</code>' +
-        (t.is_panel && t.parameter_count
-          ? ' · Panel · ' + t.parameter_count + ' params' : '') +
-        '</div></div>' +
-        '<div class="d-flex align-items-center">' +
-        '<span class="si-price">' + fmt(t.price) + '</span>' +
-        '<button type="button" class="si-remove"><i class="bi bi-x-lg"></i></button>' +
-        '</div>';
-      li.querySelector('.si-remove').addEventListener('click', () => removeTest(t.id));
-      $selectedTestsList.appendChild(li);
+
+    body.innerHTML = '';
+    state.selectedTests.forEach((t, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><code>' + esc(t.code) + '</code></td>' +
+        '<td>' + esc(t.name) + '</td>' +
+        '<td class="num" style="font-family:Consolas,monospace;">' + esc(t.reporting_date || '') + '</td>' +
+        '<td>' + esc(t.sample_type || '—') + '</td>' +
+        '<td class="num">' + fmt(t.price) + '</td>' +
+        '<td class="num">' + fmt(t.company_rate || 0) + '</td>' +
+        '<td class="center"><button type="button" class="si-remove" data-idx="' + idx + '"><i class="bi bi-x-lg"></i></button></td>';
+      body.appendChild(tr);
+    });
+
+    body.querySelectorAll('.si-input').forEach(el => {
+      el.addEventListener('input', ev => {
+        const i = parseInt(ev.target.getAttribute('data-idx'), 10);
+        const f = ev.target.getAttribute('data-field');
+        if (state.selectedTests[i]) state.selectedTests[i][f] = ev.target.value;
+      });
+    });
+    body.querySelectorAll('.si-remove').forEach(btn => {
+      btn.addEventListener('click', ev => {
+        const i = parseInt(ev.currentTarget.getAttribute('data-idx'), 10);
+        state.selectedTests.splice(i, 1);
+        renderSelectedTests();
+        updateBilling();
+      });
     });
   }
 
@@ -488,6 +525,7 @@
     $discountPercent.addEventListener('input', () => {
       _discountLock = 'percent';
       updateBilling();
+      refreshCompanyRates();
     });
     $discountPercent.addEventListener('blur', () => { _discountLock = null; });
   }
@@ -516,7 +554,7 @@
       (s, t) => s + (Number(t.price) || 0), 0
     );
     const roundedSubtotal = roundMoney(subtotal);
-    $sumSubtotal.textContent = fmt(roundedSubtotal);
+    $sumSubtotal.value = fmt(roundedSubtotal);
 
     const pctInput = $discountPercent;
     const amtInput = $discountAmount;
@@ -551,19 +589,19 @@
 
     if (roundedDiscount > 0) {
       $discountRow.style.display = 'flex';
-      $sumDiscount.textContent = '−' + fmt(roundedDiscount);
+      $sumDiscount.value = '−' + fmt(roundedDiscount);
     } else {
       $discountRow.style.display = 'none';
     }
 
     const total = Math.max(0, roundedSubtotal - roundedDiscount);
-    $sumTotal.textContent = fmt(total);
+    $sumTotal.value = fmt(total);
     $sumTotal.dataset.value = total.toFixed(2);
 
     if ($paymentAmount && $sumBalance) {
       const paid = Math.max(0, parseFloat($paymentAmount.value) || 0);
       const balance = Math.max(0, total - paid);
-      $sumBalance.textContent = fmt(balance);
+      $sumBalance.value = fmt(balance);
       $sumBalance.classList.toggle('text-danger', balance > 0.001);
       $sumBalance.classList.toggle('text-success', balance <= 0.001);
     }
@@ -585,12 +623,39 @@
   /* ======================== SUBMIT ======================== */
   if ($orderForm) {
     $orderForm.addEventListener('submit', (e) => {
+      // Remove any previously injected hidden fields
       document.querySelectorAll('input[name="test_ids"][type="hidden"]').forEach(el => el.remove());
+      document.querySelectorAll('input[name^="reporting_date_"][type="hidden"]').forEach(el => el.remove());
+      document.querySelectorAll('input[name^="sample_type_"][type="hidden"]').forEach(el => el.remove());
+      document.querySelectorAll('input[name^="company_rate_"][type="hidden"]').forEach(el => el.remove());
+
       state.selectedTests.forEach(t => {
-        const inp = document.createElement('input');
+        // test_ids
+        let inp = document.createElement('input');
         inp.type = 'hidden';
         inp.name = 'test_ids';
         inp.value = t.id;
+        $orderForm.appendChild(inp);
+
+        // reporting_date
+        inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'reporting_date_' + t.id;
+        inp.value = t.reporting_date || '';
+        $orderForm.appendChild(inp);
+
+        // sample_type
+        inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'sample_type_' + t.id;
+        inp.value = t.sample_type || '';
+        $orderForm.appendChild(inp);
+
+        // company_rate
+        inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'company_rate_' + t.id;
+        inp.value = t.company_rate != null ? t.company_rate : '';
         $orderForm.appendChild(inp);
       });
 

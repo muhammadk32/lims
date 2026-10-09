@@ -1,4 +1,4 @@
-"""Query helpers for orders — pure data-fetching.
+﻿"""Query helpers for orders — pure data-fetching.
 
 No HTTP, no flash, no commits. Everything here can be called from
 a route, a CLI command, or a test without a request context.
@@ -208,6 +208,8 @@ def search_tests(q, limit=15):
             'is_panel': t.is_panel,
             'category': t.category_ref.name if t.category_ref else None,
             'format': t.result_format,
+            'sample_type': t.sample_type,
+            'turnaround_hours': t.turnaround_hours or 24,
         }
         if t.is_panel:
             params = t.get_parameters()

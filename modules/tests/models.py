@@ -71,6 +71,7 @@ class Test(BaseModel):
     description = db.Column(db.Text, nullable=True)
 
     turnaround_hours = db.Column(db.Integer, default=24)
+    sample_type = db.Column(db.String(120), nullable=True)  # e.g. EDTA whole blood
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
     # ---------- Panel / format fields (Phase 1) ----------

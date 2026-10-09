@@ -1,4 +1,4 @@
-"""
+﻿"""
 Helpers for the Reception Form config system.
 
 These functions are the API that the reception/order page uses
@@ -81,6 +81,7 @@ def get_form_config():
                 'is_visible': is_visible,
                 'is_required': is_required,
                 'default_value': default_value,
+                'sort_order': cfg.sort_order if cfg else 9999,
             }
             field_map[key] = field_info
 
@@ -89,6 +90,8 @@ def get_form_config():
                 fields_in_section.append(field_info)
             if is_required:
                 required_fields.add(key)
+
+        fields_in_section.sort(key=lambda x: x.get('sort_order', 9999))
 
         sections_out.append({
             'key': section_key,

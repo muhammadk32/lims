@@ -32,7 +32,7 @@
          COLUMN 1 — PATIENT
          ============================================================ #}
       {% set patient_section = config.sections | selectattr('key', 'equalto', 'patient') | first %}
-      <div class="rec-cell">
+      <div class="rec-cell" data-area="patient">
         <div class="rec-cell-title">
           <i class="bi bi-person"></i> Patient
           <span class="badge bg-secondary" id="patientBadge">New</span>
@@ -54,34 +54,19 @@
             </div>
           </div>
 
-          <div class="row g-2" id="newPatientForm">
+          <div class="row g-1" id="newPatientForm">
 
-            {# Mobile lookup #}
-            {% if 'patient_phone' in config.visible_fields %}
-            <div class="col-12 rec-field">
-              <label for="lookupPhone">
-                {{ config.field_map.patient_phone.label }}
-                {% if 'patient_phone' in config.required_fields %}<span class="req">*</span>{% endif %}
-              </label>
-              <div class="mobile-lookup-wrap">
-                <input type="tel" class="form-control" id="lookupPhone"
-                       name="phone"
-                       {% if 'patient_phone' in config.required_fields %}required{% endif %}>
-                <div class="lookup-results" id="lookupResults" style="display: none;"></div>
-              </div>
-            </div>
-            {% endif %}
 
             {# Other patient fields #}
             {% for f in patient_section.fields %}
-              {% if f.key != 'patient_phone' %}
+              {# patient_phone now rendered by the loop in DB order #}
 
                 {% if f.input_type == 'textarea' %}
                   {% set col_class = 'col-12' %}
                 {% elif f.key in ['patient_name', 'patient_email', 'patient_address', 'patient_father_husband'] %}
-                  {% set col_class = 'col-12' %}
+                  {% set col_class = 'col-md-3' %}
                 {% else %}
-                  {% set col_class = 'col-6' %}
+                  {% set col_class = 'col-md-3' %}
                 {% endif %}
 
                 <div class="{{ col_class }} rec-field" data-field="{{ f.key }}">
@@ -191,12 +176,11 @@
                            {% if f.default_value %}value="{{ f.default_value }}"{% endif %}>
                   {% endif %}
                 </div>
-              {% endif %}
             {% endfor %}
 
             {# Referral — typeahead #}
             {# Laboratory typeahead #}
-            <div class="col-md-6 rec-field">
+            <div class="col-md-3 rec-field">
               <label for="laboratoryInput">
                 <i class="bi bi-building"></i> Laboratory
               </label>
@@ -214,7 +198,7 @@
             </div>
 
             {% if 'referred_by' in config.visible_fields %}
-            <div class="col-md-6 rec-field">
+            <div class="col-md-3 rec-field">
               <label for="referralInput">
                 <i class="bi bi-person-badge"></i> Referred by
               </label>
@@ -233,7 +217,7 @@
 
             {# Registration Date #}
             {% if 'sample_date' in config.visible_fields %}
-            <div class="col-12 rec-field">
+            <div class="col-md-3 rec-field">
               <label for="fld_sample_date">
                 <i class="bi bi-calendar-event"></i> Registration Date
               </label>
@@ -264,7 +248,7 @@
          COLUMN 2 — TESTS
          ============================================================ #}
       {% set tests_section = config.sections | selectattr('key', 'equalto', 'tests') | first %}
-      <div class="rec-cell">
+      <div class="rec-cell" data-area="tests">
         <div class="rec-cell-title">
           <i class="bi bi-clipboard2-pulse"></i> Tests &amp; Panels
           <span class="badge bg-secondary" id="testCountBadge">0 selected</span>
@@ -284,12 +268,25 @@
 
           <div class="test-search-results" id="testSearchResults" style="display: none;"></div>
 
-          <ul class="selected-list mt-2" id="selectedTestsList">
-            <li class="selected-empty">
-              <i class="bi bi-inbox fs-5 d-block mb-1"></i>
-              No tests selected yet.
-            </li>
-          </ul>
+          <table class="basket-table">
+            <thead>
+              <tr>
+                <th style="width:8%;">Code</th>
+                <th style="width:24%;">Test Name</th>
+                <th style="width:18%;">Reporting Date</th>
+                <th style="width:20%;">Sample Type</th>
+                <th class="num" style="width:10%;">Rate</th>
+                <th class="num" style="width:12%;">Company Rate</th>
+                <th class="center" style="width:8%;"></th>
+              </tr>
+            </thead>
+            <tbody id="basketBody">
+              <tr><td colspan="7" class="selected-empty">
+                <i class="bi bi-inbox fs-5 d-block mb-1"></i>
+                There is no test in the basket
+              </td></tr>
+            </tbody>
+          </table>
 
           {% endif %}
         </div>
@@ -298,126 +295,129 @@
       {# ============================================================
          COLUMN 3 — BILLING
          ============================================================ #}
-      <div class="rec-cell">
+      <div class="rec-cell" data-area="billing">
         <div class="rec-cell-title">
           <i class="bi bi-calculator"></i> Billing
         </div>
         <div class="rec-cell-body">
 
-          <div class="billing-row">
-            <span class="label">Subtotal</span>
-            <span class="value" id="sumSubtotal">{{ config.currency_symbol }} 0.00</span>
-          </div>
+          <div class="row g-2" id="billingForm">
 
-          {% if 'discount_amount' in config.visible_fields or 'discount_percent' in config.visible_fields %}
-          <div class="discount-block-clean">
-            <div class="discount-header">
-              <i class="bi bi-percent"></i> Discount
-              <span class="discount-hint">type % or amount — other updates</span>
+            {# Subtotal — readonly #}
+            <div class="col-md-3 rec-field">
+              <label>Subtotal</label>
+              <input type="text" class="form-control form-control-sm bg-light"
+                     id="sumSubtotal" value="{{ config.currency_symbol }} 0.00" readonly>
             </div>
 
-            <div class="discount-inputs">
-              {% if 'discount_percent' in config.visible_fields %}
-              <div class="discount-side">
-                <label for="discountPercentInput">Percent</label>
-                <div class="input-group input-group-sm">
-                  <input type="number" name="discount_percent" id="discountPercentInput"
-                         class="form-control" step="0.01" min="0" max="100"
-                         value="0" placeholder="0">
-                  <span class="input-group-text">%</span>
-                </div>
+            {# Discount % #}
+            {% if 'discount_percent' in config.visible_fields %}
+            <div class="col-md-3 rec-field">
+              <label for="discountPercentInput">Discount %</label>
+              <div class="input-group input-group-sm">
+                <input type="number" name="discount_percent" id="discountPercentInput"
+                       class="form-control" step="0.01" min="0" max="100"
+                       value="0" placeholder="0">
+                <span class="input-group-text">%</span>
               </div>
-              {% endif %}
-
-              {% if 'discount_amount' in config.visible_fields %}
-              <div class="discount-link" aria-hidden="true">
-                <i class="bi bi-arrow-left-right"></i>
-              </div>
-              <div class="discount-side">
-                <label for="discountAmountInput">Amount</label>
-                <div class="input-group input-group-sm">
-                  <span class="input-group-text">{{ config.currency_symbol }}</span>
-                  <input type="number" name="discount_amount" id="discountAmountInput"
-                         class="form-control" step="0.01" min="0"
-                         value="0" placeholder="0.00">
-                </div>
-              </div>
-              {% endif %}
             </div>
+            {% endif %}
 
-            <input type="hidden" name="discount_type" id="discountType" value="amount">
+            {# Discount amount #}
+            {% if 'discount_amount' in config.visible_fields %}
+            <div class="col-md-3 rec-field">
+              <label for="discountAmountInput">Discount Rs</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text">{{ config.currency_symbol }}</span>
+                <input type="number" name="discount_amount" id="discountAmountInput"
+                       class="form-control" step="0.01" min="0"
+                       value="0" placeholder="0.00">
+              </div>
+            </div>
+            {% endif %}
 
+            {# Amount received #}
+            {% if 'payment_amount' in config.visible_fields %}
+            <div class="col-md-3 rec-field">
+              <label for="paymentAmount">Amount Received</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text">{{ config.currency_symbol }}</span>
+                <input type="number" name="payment_amount" id="paymentAmount"
+                       class="form-control" step="1" min="0" value="0">
+                <button type="button" class="btn btn-outline-secondary" id="fillFullAmount">Full</button>
+              </div>
+            </div>
+            {% endif %}
+
+            {# Method #}
+            {% if 'payment_method' in config.visible_fields %}
+            <div class="col-md-3 rec-field">
+              <label for="paymentMethod">Method</label>
+              <select name="payment_method" id="paymentMethod" class="form-select form-select-sm">
+                {% for m in payment_methods %}
+                  <option value="{{ m }}">{{ payment_method_labels[m] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            {% endif %}
+
+            {# Reference #}
+            {% if 'payment_reference' in config.visible_fields %}
+            <div class="col-md-3 rec-field">
+              <label for="paymentReference">Reference</label>
+              <input type="text" name="payment_reference" id="paymentReference"
+                     class="form-control form-control-sm" placeholder="Transaction ID">
+            </div>
+            {% endif %}
+
+            {# Discount reason #}
             {% if 'discount_reason' in config.visible_fields %}
-            <input type="text" name="discount_reason"
-                   class="form-control form-control-sm mt-2"
-                   placeholder="Reason (optional)">
-            {% endif %}
-          </div>
-          {% endif %}
-
-          <div class="billing-row" id="discountRow" style="display: none;">
-            <span class="label">Discount applied</span>
-            <span class="value text-danger" id="sumDiscount">−{{ config.currency_symbol }} 0.00</span>
-          </div>
-
-          {% if 'payment_amount' in config.visible_fields %}
-          <div class="rec-field mt-2">
-            <label for="paymentAmount">Amount received</label>
-            <div class="input-group input-group-sm">
-              <span class="input-group-text">{{ config.currency_symbol }}</span>
-              <input type="number" name="payment_amount" id="paymentAmount"
-                     class="form-control" step="1" min="0" value="0">
-              <button type="button" class="btn btn-outline-secondary" id="fillFullAmount">Full</button>
+            <div class="col-md-3 rec-field">
+              <label>Reason</label>
+              <input type="text" name="discount_reason"
+                     class="form-control form-control-sm" placeholder="Optional">
             </div>
-          </div>
-          {% endif %}
-
-          {% if 'payment_method' in config.visible_fields %}
-          <div class="rec-field">
-            <label for="paymentMethod">Method</label>
-            <select name="payment_method" id="paymentMethod" class="form-select form-select-sm">
-              {% for m in payment_methods %}
-                <option value="{{ m }}">{{ payment_method_labels[m] }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          {% endif %}
-
-          {% if 'payment_reference' in config.visible_fields %}
-          <div class="rec-field">
-            <label for="paymentReference">Reference</label>
-            <input type="text" name="payment_reference" id="paymentReference"
-                   class="form-control form-control-sm"
-                   placeholder="Transaction ID">
-          </div>
-          {% endif %}
-
-          <div class="billing-total">
-            <span class="label">Total</span>
-            <span class="value" id="sumTotal">{{ config.currency_symbol }} 0.00</span>
-          </div>
-
-          <div class="balance-row">
-            <span class="label">Balance due</span>
-            <span class="value" id="sumBalance">{{ config.currency_symbol }} 0.00</span>
-          </div>
-
-          {% if 'print_patient_copy' in config.visible_fields or 'print_lab_copy' in config.visible_fields %}
-          <div class="print-options">
-            {% if 'print_patient_copy' in config.visible_fields %}
-            <label class="form-check">
-              <input type="checkbox" name="print_patient_copy" class="form-check-input" value="1" checked>
-              <span class="form-check-label">Print Patient Copy</span>
-            </label>
             {% endif %}
-            {% if 'print_lab_copy' in config.visible_fields %}
-            <label class="form-check">
-              <input type="checkbox" name="print_lab_copy" class="form-check-input" value="1" checked>
-              <span class="form-check-label">Print Lab Copy</span>
-            </label>
-            {% endif %}
+
+            {# Total — readonly #}
+            <div class="col-md-3 rec-field">
+              <label>Total</label>
+              <input type="text" class="form-control form-control-sm bg-light fw-bold"
+                     id="sumTotal" value="{{ config.currency_symbol }} 0.00" readonly>
+            </div>
+
+            {# Balance due — readonly #}
+            <div class="col-md-3 rec-field">
+              <label>Balance Due</label>
+              <input type="text" class="form-control form-control-sm bg-light fw-bold text-danger"
+                     id="sumBalance" value="{{ config.currency_symbol }} 0.00" readonly>
+            </div>
+
+            {# Print options #}
+            <div class="col-md-6 rec-field">
+              <label>Print</label>
+              <div style="display:flex; gap:16px; padding-top:4px;">
+                {% if 'print_patient_copy' in config.visible_fields %}
+                <label class="form-check" style="margin:0;">
+                  <input type="checkbox" name="print_patient_copy" class="form-check-input" value="1" checked>
+                  <span class="form-check-label">Patient Copy</span>
+                </label>
+                {% endif %}
+                {% if 'print_lab_copy' in config.visible_fields %}
+                <label class="form-check" style="margin:0;">
+                  <input type="checkbox" name="print_lab_copy" class="form-check-input" value="1" checked>
+                  <span class="form-check-label">Lab Copy</span>
+                </label>
+                {% endif %}
+              </div>
+            </div>
+
+            {# Hidden fields + old sumDiscount anchor #}
+            <input type="hidden" name="discount_type" id="discountType" value="amount">
+            <span id="sumDiscount" class="d-none">0</span>
+            <span id="discountRow" class="d-none"></span>
+
           </div>
-          {% endif %}
 
         </div>
       </div>

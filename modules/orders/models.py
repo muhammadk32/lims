@@ -285,6 +285,11 @@ class OrderItem(BaseModel):
     )
     sort_order = db.Column(db.Integer, default=0, nullable=False)
 
+    # ---- Snapshot fields set at registration (per-item) ----
+    reporting_date = db.Column(db.DateTime, nullable=True)
+    sample_type    = db.Column(db.String(120), nullable=True)
+    company_rate   = db.Column(db.Float, nullable=True)
+
     result_value = db.Column(db.String(200), nullable=True)
     result_notes = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(20), default='pending', nullable=False)

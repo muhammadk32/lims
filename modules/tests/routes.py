@@ -320,6 +320,7 @@ def edit_test(test_id):
         test.unit = request.form.get('unit', '').strip() or None
         test.description = request.form.get('description', '').strip() or None
         test.turnaround_hours = request.form.get('turnaround_hours', type=int) or 24
+        test.sample_type = request.form.get('sample_type', '').strip() or None
 
         db.session.commit()
 

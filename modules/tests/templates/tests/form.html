@@ -61,6 +61,14 @@
             </div>
 
             <div class="col-md-6">
+              <label class="form-label">Sample Type</label>
+              <input type="text" name="sample_type" class="form-control"
+                placeholder="e.g. EDTA whole blood / Urine / Serum"
+                value="{{ form.sample_type if form else (test.sample_type if test else '') }}">
+              <div class="form-text">Default sample type shown on registration basket rows.</div>
+            </div>
+
+            <div class="col-md-6">
               <label class="form-label">Unit</label>
               <input type="text" name="unit" class="form-control"
                 value="{{ form.unit if form else (test.unit if test else '') }}"
