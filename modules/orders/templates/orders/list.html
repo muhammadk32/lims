@@ -7,7 +7,7 @@
    Daily Ledger — dense classical ledger layout
    ============================================================ */
 .dl-page {
-  max-width: 1500px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 10px 20px 30px;
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -55,7 +55,7 @@
 }
 .dl-field label {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -126,17 +126,17 @@
   width: 100%;
   border-collapse: collapse;
   border: 1.5px solid #212529;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   background: #fff;
 }
 .dl-table thead th {
   background: #212529;
   color: #fff;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 8px;
+  padding: 8px 10px;
   text-align: left;
   border: 1px solid #212529;
   white-space: nowrap;
@@ -144,20 +144,22 @@
 .dl-table thead th.num { text-align: right; }
 .dl-table thead th.center { text-align: center; }
 .dl-table tbody td {
-  padding: 3px 8px;
+  padding: 8px 10px;
   border: 1px solid #adb5bd;
   vertical-align: middle;
+  height: 32px;
+  font-size: 0.9rem;
 }
 .dl-table tbody tr:nth-child(even) { background: #fbfcfd; }
 .dl-table tbody tr:hover { background: #f1f3f5; }
 .dl-table tbody tr.cancelled-row td { background: #f8f9fa !important; opacity: 0.75; }
 .dl-table code {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   padding: 0 3px;
   font-family: Consolas, Monaco, monospace;
 }
-.dl-table .name { font-weight: 700; font-size: 0.82rem; }
-.dl-table .sub { font-size: 0.7rem; color: #6c757d; }
+.dl-table .name { font-weight: 700; font-size: 0.95rem; }
+.dl-table .sub { font-size: 0.8rem; color: #6c757d; }
 .dl-table .num {
   text-align: right;
   font-family: Consolas, Monaco, monospace;
@@ -171,8 +173,8 @@
 /* Badges */
 .dl-badge {
   display: inline-block;
-  padding: 1px 6px;
-  font-size: 0.62rem;
+  padding: 3px 9px;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   border-radius: 0;
@@ -245,7 +247,7 @@
 .dl-summary .value.success { color: #146c43; }
 .dl-summary .value.danger { color: #b02a37; }
 
-@media (max-width: 1100px) {
+@media (max-width: 100%) {
   .dl-filter-row { grid-template-columns: 1fr 1fr 1fr; }
   .dl-table { font-size: 0.72rem; }
   .dl-table thead th,

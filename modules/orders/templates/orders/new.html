@@ -458,4 +458,29 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/reception.js') }}"></script>
+
+<!-- Patient History Modal -->
+<div class="modal fade" id="patientHistoryModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#0d6efd; color:#fff;">
+        <h5 class="modal-title">
+          <i class="bi bi-clock-history"></i> Patient History — Find Existing Patient
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label small fw-bold">Search by mobile, name, or patient code</label>
+        <input type="text" id="historySearch" class="form-control form-control-lg"
+               placeholder="e.g. 0300... or Muhammad or P00001" autocomplete="off">
+        <div id="historyResults" class="mt-3"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="skipHistoryBtn">
+          <i class="bi bi-person-plus"></i> New Patient (Skip)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

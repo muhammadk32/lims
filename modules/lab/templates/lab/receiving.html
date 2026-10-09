@@ -3,8 +3,8 @@
 
 {% block head %}
 <style>
-.sr-page { max-width: 1300px; margin: 0 auto; padding: 10px 20px 30px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; color: #212529; }
+.sr-page { max-width: 100%; margin: 0 auto; padding: 10px 20px 30px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 1rem; color: #212529; }
 .sr-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
 .sr-title { font-size: 1.15rem; font-weight: 700; margin: 0;
             text-transform: uppercase; letter-spacing: 0.02em; }
@@ -23,9 +23,9 @@
 .sr-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
 .sr-table thead th { background: #212529; color: #fff; padding: 5px 8px;
                      text-align: left; font-size: 0.7rem;
-                     text-transform: uppercase; letter-spacing: 0.05em; }
-.sr-table tbody td { padding: 5px 8px; border-bottom: 1px solid #dee2e6;
-                     vertical-align: middle; }
+                     text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #0a58ca; }
+.sr-table tbody td { padding: 5px 8px; border: 1px solid #adb5bd;
+                     vertical-align: middle; font-size: 0.95rem; }
 .sr-table tbody tr:hover { background: #f8f9fa; }
 .sr-empty { padding: 30px; text-align: center; color: #6c757d;
             border: 1px dashed #adb5bd; }
@@ -67,7 +67,7 @@
         <td>{{ o.patient.patient_code }}</td>
         <td>{{ o.created_at | localtime('%d-%b-%Y %I:%M %p') }}</td>
         <td class="text-center">{{ o.top_level_items | length }}</td>
-        <td><span style="padding:2px 8px; border-radius:10px; background:#fff3cd; color:#664d03; font-size:0.7rem; font-weight:700;">SAMPLE TO COME</span></td>
+        <td><span style="padding:2px 8px; border-radius:10px; background:#fff3cd; color:#664d03; font-size:0.78rem; font-weight:700;">SAMPLE TO COME</span></td>
         <td class="text-end">
           <form method="POST" action="{{ url_for('lab.mark_received', order_id=o.id) }}"
                 style="display:inline;">

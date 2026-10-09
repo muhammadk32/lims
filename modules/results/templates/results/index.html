@@ -3,8 +3,8 @@
 
 {% block head %}
 <style>
-.pr-page { max-width: 1600px; margin: 0 auto; padding: 10px 20px 30px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.pr-page { max-width: 100%; margin: 0 auto; padding: 10px 20px 30px;
+           font-family: 'Segoe UI', Arial, sans-serif; font-size: 1rem; color: #212529; }
 
 .pr-header { display: flex; justify-content: space-between; align-items: flex-end;
              border-bottom: 2px solid #212529; padding-bottom: 5px;
@@ -55,31 +55,31 @@
 .pr-expand:hover { background: #212529; color: #fff; border-color: #212529; }
 
 .pr-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
-            font-size: 0.78rem; background: #fff; table-layout: fixed; }
+            font-size: 0.95rem; background: #fff; table-layout: fixed; }
 .pr-table thead th {
-  background: #212529; color: #fff; font-size: 0.6rem; font-weight: 700;
+  background: #212529; color: #fff; font-size: 0.8rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em;
-  padding: 3px 8px; text-align: left; border: 1px solid #212529;
+  padding: 8px 10px; text-align: left; border: 1px solid #212529;
   white-space: nowrap;
 }
 .pr-table thead th.center { text-align: center; }
 .pr-table thead th.end { text-align: right; }
-.pr-table tbody td { padding: 2px 8px; border: 1px solid #dee2e6;
-                     vertical-align: middle; height: 26px; }
+.pr-table tbody td { padding: 8px 10px; border: 1px solid #adb5bd;
+                     vertical-align: middle; height: 32px; font-size: 0.9rem; }
 .pr-table .patient-code { font-size: 0.68rem; overflow: hidden;
                           text-overflow: ellipsis; white-space: nowrap; }
 .pr-table tbody tr:nth-child(even) { background: #fbfcfd; }
 .pr-table tbody tr:hover { background: #f1f3f5; }
 .pr-table .lab { font-family: Consolas, Monaco, monospace; font-weight: 700;
-                 font-size: 0.78rem; color: #0d6efd; }
-.pr-table .patient { font-weight: 600; font-size: 0.82rem; }
+                 font-size: 0.95rem; color: #0d6efd; }
+.pr-table .patient { font-weight: 600; font-size: 0.95rem; }
 .pr-table .patient-code { font-family: Consolas, Monaco, monospace;
-                          font-size: 0.68rem; color: #6c757d; }
+                          font-size: 0.8rem; color: #6c757d; }
 .pr-table .center { text-align: center; }
 .pr-table .num { text-align: right; font-family: Consolas, Monaco, monospace;
-                 font-size: 0.72rem; }
-.pr-badge { display: inline-block; padding: 1px 7px;
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
+                 font-size: 0.85rem; }
+.pr-badge { display: inline-block; padding: 3px 9px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;
   text-transform: uppercase; color: #fff; border-radius: 0; }
 .pr-badge.pending   { background: #ffc107; color: #664d03; }
 

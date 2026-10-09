@@ -161,8 +161,33 @@ def lookup_patients(phone='', query='', limit=10):
 
     results = pat_q.order_by(Patient.id.desc()).limit(limit).all()
 
-    return [
-        {
+    # Fetch visit stats per patient
+    from modules.orders.models import Order, OrderStatus
+    from sqlalchemy import func
+    pid_list = [p.id for p in results]
+    visit_stats = {}
+    if pid_list:
+        rows = (
+            db.session.query(
+                Order.patient_id,
+                func.max(Order.created_at).label('last_visit'),
+                func.count(Order.id).label('cnt'),
+            )
+            .filter(Order.patient_id.in_(pid_list))
+            .filter(Order.status != OrderStatus.CANCELLED)
+            .group_by(Order.patient_id)
+            .all()
+        )
+        for pid, last_visit, cnt in rows:
+            visit_stats[pid] = {'last_visit': last_visit, 'count': cnt}
+
+    def _fmt(dt):
+        return dt.strftime('%d-%b-%Y') if dt else None
+
+    out = []
+    for p in results:
+        st = visit_stats.get(p.id, {})
+        out.append({
             'id': p.id,
             'patient_code': p.patient_code,
             'full_name': p.full_name,
@@ -172,9 +197,10 @@ def lookup_patients(phone='', query='', limit=10):
             'email': p.email,
             'address': p.address,
             'blood_group': p.blood_group,
-        }
-        for p in results
-    ]
+            'last_visit': _fmt(st.get('last_visit')),
+            'order_count': st.get('count') or 0,
+        })
+    return out
 
 
 def search_tests(q, limit=15):

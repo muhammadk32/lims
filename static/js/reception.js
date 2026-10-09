@@ -769,3 +769,211 @@
   }, 100);
 
 })();
+
+/* ======================== PATIENT HISTORY MODAL ======================== */
+window.addEventListener('DOMContentLoaded', function () {
+  function _esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function _dbnc(fn, delay) {
+    let t;
+    return function (...args) {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  const $modal = document.getElementById('patientHistoryModal');
+  const $search = document.getElementById('historySearch');
+  const $results = document.getElementById('historyResults');
+  const $skipBtn = document.getElementById('skipHistoryBtn');
+
+  if (!$modal) return;
+
+  const params = new URLSearchParams(window.location.search);
+  if (!params.get('patient_id') && !params.get('revisit_from')) {
+    const m = new bootstrap.Modal($modal, { backdrop: 'static', keyboard: false });
+    m.show();
+  }
+
+  const doSearch = _dbnc(async function () {
+    const q = ($search.value || '').trim();
+    if (q.length < 2) { $results.innerHTML = ''; return; }
+    try {
+      const resp = await fetch('/orders/api/patient-lookup?q=' + encodeURIComponent(q));
+      const data = await resp.json();
+      renderHistoryResults(data || []);
+    } catch (err) { console.error('[history-search]', err); }
+  }, 250);
+
+  function renderHistoryResults(list) {
+    if (!list.length) {
+      $results.innerHTML = '<div class="text-muted small">No matches. Click New Patient to continue.</div>';
+      return;
+    }
+    $results.innerHTML = '';
+    list.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'border rounded p-2 mb-2 d-flex justify-content-between align-items-center';
+      row.innerHTML =
+        '<div>' +
+        '<div class="fw-bold">' + _esc(p.full_name) + '</div>' +
+        '<div class="small text-muted">' + _esc(p.patient_code) + ' · ' + _esc(p.phone || '') + ' · ' + _esc(p.age || '') + ' / ' + _esc(p.gender || '') + '</div>' +
+        (p.last_visit ? '<div class="small"><i class="bi bi-clock-history"></i> Last visit: <b>' + _esc(p.last_visit) + '</b> · ' + _esc(String(p.order_count)) + ' order(s)</div>' : '') +
+        '</div>' +
+        '<button type="button" class="btn btn-sm btn-primary">Use</button>';
+      row.querySelector('button').addEventListener('click', () => fillPatient(p));
+      $results.appendChild(row);
+    });
+  }
+
+  function fillPatient(p) {
+    const $pid = document.getElementById('patientIdInput');
+    if ($pid) $pid.value = p.id;
+
+    const setVal = (sel, v) => { const el = document.querySelector(sel); if (el) el.value = v || ''; };
+    setVal('input[name="phone"]', p.phone);
+    setVal('input[name="patient_phone"]', p.phone);
+    setVal('input[name="patient_name"]', p.full_name);
+    setVal('input[name="patient_email"]', p.email);
+    setVal('input[name="patient_address"]', p.address);
+    setVal('select[name="gender"]', p.gender);
+    setVal('select[name="blood_group"]', p.blood_group);
+
+    const ageEl = document.getElementById('ageValue');
+    if (ageEl && p.age) ageEl.value = p.age;
+    const unitEl = document.getElementById('ageUnit');
+    if (unitEl) unitEl.value = 'years';
+
+    const box = document.getElementById('selectedPatientBox');
+    const nameEl = document.getElementById('spName');
+    const metaEl = document.getElementById('spMeta');
+    if (box && nameEl && metaEl) {
+      nameEl.textContent = p.full_name;
+      metaEl.textContent = ' · ' + p.patient_code + ' · ' + (p.phone || '');
+      box.style.display = 'block';
+      // Form stays visible and editable — do NOT hide it
+    }
+
+    // Change patient button — reveal form again
+    const $change = document.getElementById('btnChangePatient');
+    if ($change && !$change.dataset._wired) {
+      $change.dataset._wired = '1';
+      $change.addEventListener('click', () => {
+        if (box) box.style.display = 'none';
+        const inst2 = bootstrap.Modal.getOrCreateInstance($modal);
+        inst2.show();
+      });
+    }
+
+    const inst = bootstrap.Modal.getInstance($modal);
+    if (inst) inst.hide();
+  }
+
+  let _hlIdx = -1;
+  function _highlightResult(delta) {
+    const rows = $results.querySelectorAll('.border.rounded');
+    if (!rows.length) return;
+    _hlIdx = Math.max(0, Math.min(rows.length - 1, _hlIdx + delta));
+    rows.forEach((r, i) => {
+      r.style.background = (i === _hlIdx) ? '#e7f1ff' : '';
+      r.style.borderColor = (i === _hlIdx) ? '#0d6efd' : '';
+    });
+    rows[_hlIdx].scrollIntoView({ block: 'nearest' });
+  }
+  function _pickHighlighted() {
+    const rows = $results.querySelectorAll('.border.rounded');
+    if (_hlIdx >= 0 && rows[_hlIdx]) {
+      const btn = rows[_hlIdx].querySelector('button');
+      if (btn) btn.click();
+    }
+  }
+  $search.addEventListener('input', function () { _hlIdx = -1; doSearch(); });
+  $search.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); _highlightResult(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); _highlightResult(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); _pickHighlighted(); }
+    else if (e.key === 'Escape') {
+      const inst = bootstrap.Modal.getInstance($modal);
+      if (inst) inst.hide();
+    }
+  });
+  $skipBtn.addEventListener('click', () => {
+    const inst = bootstrap.Modal.getInstance($modal);
+    if (inst) inst.hide();
+  });
+});
+
+/* ======================== TYPEAHEAD KEYBOARD NAV ======================== */
+document.addEventListener('DOMContentLoaded', function () {
+  function wireKeys(inputId, resultsId) {
+    const input = document.getElementById(inputId);
+    const results = document.getElementById(resultsId);
+    if (!input || !results) return;
+
+    let idx = -1;
+
+    function items() {
+      return results.querySelectorAll('.referral-result');
+    }
+
+    function highlight(delta) {
+      const list = items();
+      if (!list.length) return;
+      idx = Math.max(0, Math.min(list.length - 1, idx + delta));
+      list.forEach((el, i) => {
+        el.style.background = (i === idx) ? '#e7f1ff' : '';
+        el.style.fontWeight = (i === idx) ? '700' : '';
+      });
+      list[idx].scrollIntoView({ block: 'nearest' });
+    }
+
+    function pick() {
+      const list = items();
+      if (idx >= 0 && list[idx]) list[idx].click();
+    }
+
+    input.addEventListener('keydown', function (e) {
+      if (input.disabled) return;
+      const list = items();
+      if (e.key === 'ArrowDown') { e.preventDefault(); highlight(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(-1); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        var target = (idx >= 0 && list[idx]) ? list[idx] : (list.length > 0 ? list[0] : null);
+        if (target) {
+          // Extract visible name — prefer .rr-name, fall back to textContent
+          var nameNode = target.querySelector('.rr-name') || target;
+          var picked = (nameNode.textContent || '').trim();
+          // Also grab the hidden id if present
+          var idAttr = target.dataset.id || (target.querySelector('[data-id]') || {}).dataset?.id;
+          // Set value and fire events
+          input.value = picked;
+          if (idAttr) {
+            var $idField = document.getElementById(inputId.replace('Input', 'Id'));
+            if ($idField) $idField.value = idAttr;
+          }
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          results.style.display = 'none';
+          idx = -1;
+        }
+      }
+      else if (e.key === 'Escape') { results.style.display = 'none'; idx = -1; }
+    });
+
+    input.addEventListener('input', function () { idx = -1; });
+  }
+
+  wireKeys('laboratoryInput', 'laboratoryResults');
+  wireKeys('referralInput', 'referralResults');
+  wireKeys('historySearch', 'historyResults');
+});
