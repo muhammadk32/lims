@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Lab Tests - LabMS{% endblock %}
 
 {% block head %}
@@ -7,7 +7,7 @@
    Lab Tests (catalog) - dense classical layout
    ============================================================ */
 .lt-page {
-  max-width: 1500px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 10px 20px 30px;
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -47,7 +47,7 @@
 }
 .lt-field label {
   display: block;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -95,39 +95,41 @@
   width: 100%;
   border-collapse: collapse;
   border: 1.5px solid #212529;
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   background: #fff;
 }
 .lt-table thead th {
   background: #212529;
   color: #fff;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 4px 8px;
+  padding: 8px 10px;
   text-align: left;
-  border: 1px solid #212529;
+  border: 1px solid #495057;
   white-space: nowrap;
 }
 .lt-table thead th.center { text-align: center; }
 .lt-table thead th.end { text-align: right; }
 .lt-table tbody td {
-  padding: 4px 8px;
+  padding: 8px 10px;
   border: 1px solid #dee2e6;
   vertical-align: middle;
+  height: 26px;
+  font-size: 0.88rem;
 }
 .lt-table tbody tr:nth-child(even) { background: #fbfcfd; }
 .lt-table tbody tr:hover { background: #f1f3f5; }
 .lt-table code {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-family: Consolas, Monaco, monospace;
   padding: 0 3px;
   background: #f1f3f5;
   border: 1px solid #dee2e6;
 }
-.lt-table .name { font-weight: 700; font-size: 0.82rem; }
-.lt-table .muted { color: #6c757d; font-size: 0.74rem; }
+.lt-table .name { font-weight: 700; font-size: 0.95rem; }
+.lt-table .muted { color: #6c757d; font-size: 0.82rem; }
 .lt-table .num {
   text-align: right;
   font-family: Consolas, Monaco, monospace;
@@ -139,8 +141,8 @@
 /* Badges */
 .lt-badge {
   display: inline-block;
-  padding: 1px 6px;
-  font-size: 0.62rem;
+  padding: 3px 9px;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   border-radius: 0;
@@ -154,8 +156,8 @@
 .lt-actions-col { display: inline-flex; gap: 3px; }
 .lt-icon-btn {
   display: inline-block;
-  padding: 2px 7px;
-  font-size: 0.72rem;
+  padding: 3px 9px;
+  font-size: 0.74rem;
   border: 1px solid #6c757d;
   background: #fff;
   color: #212529;
@@ -332,13 +334,13 @@
   <table class="lt-table">
     <thead>
       <tr>
-        <th style="width: 90px;">Code</th>
+        <th style="width: 120px;">Code</th>
         <th>Name</th>
-        <th style="width: 140px;">Category</th>
-        <th class="num" style="width: 90px;">Price</th>
-        <th style="width: 90px;">Unit</th>
-        <th class="center" style="width: 70px;">Status</th>
-        <th class="center" style="width: 130px;">Actions</th>
+        <th style="width: 150px;">Category</th>
+        <th class="num" style="width: 100px;">Price</th>
+        <th style="width: 80px;">Unit</th>
+        <th class="center" style="width: 80px;">Status</th>
+        <th class="center" style="width: 150px;">Actions</th>
       </tr>
     </thead>
     <tbody>
