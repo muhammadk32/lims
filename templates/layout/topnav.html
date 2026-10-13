@@ -30,8 +30,13 @@
 
 
         <a href="{{ url_for('reports.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') %}active{% endif %}">
+           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') and request.endpoint != 'reports.outsourced' %}active{% endif %}">
           <i class="bi bi-file-earmark-medical"></i> Test Reports
+        </a>
+
+        <a href="{{ url_for('reports.outsourced') }}"
+           class="dropdown-item {% if request.endpoint == 'reports.outsourced' %}active{% endif %}">
+          <i class="bi bi-building"></i> Outsourced Lab Tests
         </a>
 
       </div>
@@ -118,6 +123,10 @@
         <a href="{{ url_for('analytics.abnormal') }}"
            class="dropdown-item {% if request.endpoint == 'analytics.abnormal' %}active{% endif %}">
           <i class="bi bi-exclamation-triangle"></i> Abnormal Results
+        </a>
+        <a href="{{ url_for('reports.outsourced') }}"
+           class="dropdown-item {% if request.endpoint == 'reports.outsourced' %}active{% endif %}">
+          <i class="bi bi-building"></i> Outsourced Lab Tests
         </a>
 
         <div class="dropdown-divider"></div>

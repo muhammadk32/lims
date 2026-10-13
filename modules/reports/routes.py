@@ -262,3 +262,59 @@ def preview_pdf(order_id):
     )
     resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
     return resp
+
+
+@reports_bp.route('/outsourced')
+@login_required
+def outsourced():
+    """Outsourced Lab Tests — daily/range report of tests sent to partner labs."""
+    from modules.reports import queries as q
+    from modules.laboratories.models import Laboratory
+    from datetime import datetime as _dt, date as _d
+
+    today = _d.today()
+    month_start = today.replace(day=1)
+
+    date_from_s = request.args.get('date_from', '').strip() or month_start.strftime('%Y-%m-%d')
+    date_to_s   = request.args.get('date_to', '').strip() or today.strftime('%Y-%m-%d')
+    lab_id_s    = request.args.get('lab_id', '').strip()
+    status      = request.args.get('status', 'all').strip() or 'all'
+
+    try:
+        date_from = _dt.strptime(date_from_s, '%Y-%m-%d').date()
+    except (ValueError, TypeError):
+        date_from = month_start
+    try:
+        date_to = _dt.strptime(date_to_s, '%Y-%m-%d').date()
+    except (ValueError, TypeError):
+        date_to = today
+
+    lab_id = None
+    if lab_id_s:
+        try:
+            lab_id = int(lab_id_s)
+        except (ValueError, TypeError):
+            lab_id = None
+
+    rows = q.outsourced_report(date_from, date_to, lab_id=lab_id, status=status)
+
+    total_net = sum((r['net'] or 0.0) for r in rows)
+    total_discount = sum((r['applied_discount_amt'] or 0.0) for r in rows)
+
+    partner_labs = (Laboratory.query
+                    .filter_by(is_partner_lab=True, is_active=True)
+                    .order_by(Laboratory.name.asc())
+                    .all())
+
+    return render_template(
+        'reports/outsourced.html',
+        rows=rows,
+        partner_labs=partner_labs,
+        date_from=date_from_s,
+        date_to=date_to_s,
+        lab_id=lab_id_s,
+        status=status,
+        total_net=total_net,
+        total_discount=total_discount,
+        row_count=len(rows),
+    )

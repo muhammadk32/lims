@@ -1,4 +1,4 @@
-from extensions import db
+﻿from extensions import db
 
 """Report query helpers."""
 
@@ -81,3 +81,58 @@ def build_previous_map(patient_id, current_order_id, limit=2):
         break  # only first test is enough for labels
 
     return result_map, date_labels
+
+
+def outsourced_report(date_from, date_to, lab_id=None, status=None):
+    """Return rows for the Outsourced Lab Tests report.
+
+    Each row = one top-level OrderItem whose Test.is_outsourced == True.
+
+    Filters:
+      date_from / date_to : dates (inclusive)
+      lab_id              : Laboratory.id (partner lab) or None for all
+      status              : 'approved' | 'pending' | 'all' (default: all)
+    """
+    from modules.orders.models import Order, OrderItem, OrderStatus
+    from modules.tests.models import Test
+    from modules.laboratories.models import Laboratory
+
+    q = (OrderItem.query
+         .join(Order, OrderItem.order_id == Order.id)
+         .join(Test, OrderItem.test_id == Test.id)
+         .filter(OrderItem.parent_item_id.is_(None))
+         .filter(Test.is_outsourced.is_(True))
+         .filter(Order.status != OrderStatus.CANCELLED)
+         .filter(db.func.date(Order.created_at) >= date_from)
+         .filter(db.func.date(Order.created_at) <= date_to))
+
+    if lab_id:
+        q = q.filter(Test.laboratory_id == lab_id)
+
+    if status == 'approved':
+        q = q.filter(Order.status == OrderStatus.APPROVED)
+    elif status == 'pending':
+        q = q.filter(Order.status != OrderStatus.APPROVED)
+
+    items = q.order_by(Order.created_at.desc(), Order.id.desc()).all()
+
+    rows = []
+    for it in items:
+        o = it.order
+        t = it.test
+        rows.append({
+            'order_id': o.id,
+            'order_code': o.order_code,
+            'created_at': o.created_at,
+            'patient_name': (o.patient.full_name if o.patient else '-'),
+            'test_code': t.code,
+            'test_name': t.name,
+            'lab_name': (t.laboratory_ref.name if getattr(t, 'laboratory_ref', None) else '-'),
+            'price': it.price or 0.0,
+            'max_discount_pct': t.max_discount_percent,
+            'applied_discount_pct': it.applied_discount_pct or 0.0,
+            'applied_discount_amt': it.applied_discount_amount or 0.0,
+            'net': (it.price or 0.0) - (it.applied_discount_amount or 0.0),
+            'order_status': o.status,
+        })
+    return rows
