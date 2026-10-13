@@ -236,6 +236,8 @@ def search_tests(q, limit=15):
             'format': t.result_format,
             'sample_type': t.sample_type,
             'turnaround_hours': t.turnaround_hours or 24,
+            'is_outsourced': bool(getattr(t, 'is_outsourced', False)),
+            'max_discount_percent': t.max_discount_percent if t.is_outsourced else None,
         }
         if t.is_panel:
             params = t.get_parameters()

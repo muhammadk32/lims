@@ -233,6 +233,27 @@ class Order(BaseModel):
 
     @property
     def discount_value(self):
+        """Total discount for the order.
+
+        Uses per-item applied_discount_amount when available (so that
+        outsourced tests with a max_discount_percent cap are honored).
+        Falls back to the legacy order-level formula for orders saved
+        before the per-item feature existed.
+        """
+        # Prefer per-item discounts (only when the new engine ran —
+        # detected by discount_source being set on any top-level item)
+        item_sum = 0.0
+        has_item_discounts = False
+        for i in self.top_level_items:
+            src = getattr(i, 'discount_source', None)
+            if src is not None:
+                has_item_discounts = True
+                item_sum += float(getattr(i, 'applied_discount_amount', 0.0) or 0.0)
+
+        if has_item_discounts:
+            return round(item_sum, 2)
+
+        # Legacy fallback — no per-item data
         if self.discount_type == 'percent':
             pct = max(0.0, min(100.0, self.discount_percent or 0.0))
             return round(self.subtotal * (pct / 100.0), 2)
@@ -289,6 +310,15 @@ class OrderItem(BaseModel):
     reporting_date = db.Column(db.DateTime, nullable=True)
     sample_type    = db.Column(db.String(120), nullable=True)
     company_rate   = db.Column(db.Float, nullable=True)
+
+    # ---- Per-item discount (audit) ----
+    # Records the actual discount applied to this line item after
+    # any per-test cap (e.g. outsourced tests) is enforced.
+    applied_discount_pct    = db.Column(db.Float, nullable=False, default=0.0)
+    applied_discount_amount = db.Column(db.Float, nullable=False, default=0.0)
+    discount_source         = db.Column(db.String(20), nullable=True)
+    # ^ 'global' = took the order-level %, 'capped' = capped by test policy,
+    #   'none' = no discount, NULL = legacy row before this feature.
 
     result_value = db.Column(db.String(200), nullable=True)
     result_notes = db.Column(db.String(255), nullable=True)

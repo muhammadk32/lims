@@ -222,6 +222,10 @@ def create_order(patient, tests, form, user):
         order.discount_amount = round_money(amt)
         order.discount_percent = 0.0
 
+    # NEW: per-item discounts (respects outsourced caps)
+    from modules.orders.discounts import apply_discounts
+    apply_discounts(order)
+
     order.recompute_total()
 
     # Guard: flag when 100 percent discount wipes the entire total
@@ -504,6 +508,10 @@ def update_order(order, form, new_test_ids, user):
             order.discount_percent = 0.0
         except (ValueError, TypeError):
             order.discount_amount = 0.0
+
+    # NEW: per-item discounts (respects outsourced caps)
+    from modules.orders.discounts import apply_discounts
+    apply_discounts(order)
 
     order.recompute_total()
 

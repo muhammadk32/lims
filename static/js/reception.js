@@ -457,6 +457,8 @@
       sample_type: t.sample_type || '',
       reporting_date: rpt.toISOString().slice(0, 16),
       company_rate: _companyRate(t.price, pct),
+      is_outsourced: !!t.is_outsourced,
+      max_discount_percent: (t.max_discount_percent != null) ? Number(t.max_discount_percent) : null,
     });
     renderSelectedTests();
     updateBilling();
@@ -493,7 +495,12 @@
     state.selectedTests.forEach((t, idx) => {
       const tr = document.createElement('tr');
       tr.innerHTML =
-        '<td><code>' + esc(t.code) + '</code></td>' +
+        '<td>' +
+          '<code>' + esc(t.code) + '</code>' +
+          ((t.is_outsourced && t.max_discount_percent != null)
+            ? ' <span style="display:inline-block;background:#dc3545;color:#fff;font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:999px;margin-left:4px;white-space:nowrap;">MAX ' + t.max_discount_percent + '%</span>'
+            : '') +
+        '</td>' +
         '<td>' + esc(t.name) + '</td>' +
         '<td class="num" style="font-family:Consolas,monospace;">' + esc(t.reporting_date || '') + '</td>' +
         '<td>' + esc(t.sample_type || '—') + '</td>' +
@@ -558,34 +565,70 @@
 
     const pctInput = $discountPercent;
     const amtInput = $discountAmount;
-    let discountValue = 0;
+
+    // ---- Determine the staff-entered discount as a target amount ----
+    let targetDiscount = 0;
+    let enteredPct = 0;
 
     if (_discountLock === 'percent' && pctInput) {
-      const pct = clamp(parseFloat(pctInput.value) || 0, 0, 100);
-      discountValue = roundedSubtotal * (pct / 100);
-      if (amtInput) amtInput.value = roundMoney(discountValue).toFixed(2);
+      enteredPct = clamp(parseFloat(pctInput.value) || 0, 0, 100);
+      targetDiscount = roundedSubtotal * (enteredPct / 100);
+      if (amtInput) amtInput.value = roundMoney(targetDiscount).toFixed(2);
     } else if (_discountLock === 'amount' && amtInput) {
       const amt = Math.max(0, parseFloat(amtInput.value) || 0);
-      discountValue = Math.min(amt, roundedSubtotal);
-      if (pctInput && roundedSubtotal > 0) {
-        const pct = (discountValue / roundedSubtotal) * 100;
-        pctInput.value = pct.toFixed(2);
-      } else if (pctInput) {
-        pctInput.value = '0';
-      }
-      if (amtInput) amtInput.value = roundMoney(discountValue).toFixed(2);
+      targetDiscount = Math.min(amt, roundedSubtotal);
+      enteredPct = roundedSubtotal > 0 ? (targetDiscount / roundedSubtotal) * 100 : 0;
+      if (pctInput) pctInput.value = enteredPct.toFixed(2);
     } else {
       const amt = Math.max(0, parseFloat(amtInput?.value) || 0);
       const pct = clamp(parseFloat(pctInput?.value) || 0, 0, 100);
       if (amt > 0) {
-        discountValue = Math.min(amt, roundedSubtotal);
+        targetDiscount = Math.min(amt, roundedSubtotal);
+        enteredPct = roundedSubtotal > 0 ? (targetDiscount / roundedSubtotal) * 100 : 0;
       } else if (pct > 0) {
-        discountValue = roundedSubtotal * (pct / 100);
+        enteredPct = pct;
+        targetDiscount = roundedSubtotal * (pct / 100);
       }
     }
 
+    // ---- Apply per-test caps (outsourced tests) ----
+    console.log('[CAP-DEBUG] enteredPct=', enteredPct, 'tests=', state.selectedTests.map(function(t){return {code: t.code, out: t.is_outsourced, cap: t.max_discount_percent};}));
+    let cappedDiscount = 0;
+    let cappedHits = [];
+    state.selectedTests.forEach(t => {
+      const price = Number(t.price) || 0;
+      const cap = (t.is_outsourced && t.max_discount_percent != null)
+        ? Number(t.max_discount_percent)
+        : null;
+      const appliedPct = (cap != null) ? Math.min(enteredPct, cap) : enteredPct;
+      const amt = price * appliedPct / 100;
+      cappedDiscount += amt;
+      if (cap != null && enteredPct > cap) {
+        cappedHits.push({ code: t.code, cap: cap });
+      }
+    });
+
+    let discountValue = roundMoney(cappedDiscount);
     if (discountValue > roundedSubtotal) discountValue = roundedSubtotal;
-    const roundedDiscount = roundMoney(discountValue);
+    const roundedDiscount = discountValue;
+
+    // ---- Show / hide the cap warning banner ----
+    let banner = document.getElementById('capWarningBanner');
+    if (cappedHits.length > 0) {
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'capWarningBanner';
+        banner.className = 'alert alert-danger py-2 px-3 mb-2';
+        banner.style.fontSize = '0.85rem';
+        const host = document.getElementById('billingForm');
+        if (host && host.parentNode) host.parentNode.insertBefore(banner, host);
+      }
+      const list = cappedHits.map(h => h.code + ' (max ' + h.cap + '%)').join(', ');
+      banner.innerHTML = '<i class=\"bi bi-exclamation-triangle-fill\"></i> Discount capped for: <strong>' + list + '</strong>';
+      banner.style.display = '';
+    } else if (banner) {
+      banner.style.display = 'none';
+    }
 
     if (roundedDiscount > 0) {
       $discountRow.style.display = 'flex';
