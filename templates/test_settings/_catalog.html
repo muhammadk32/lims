@@ -1,4 +1,4 @@
-
+﻿
 {# ============ CATALOG TAB ============ #}
 <div class="lt-header">
   <div>
@@ -75,7 +75,7 @@
       </td>
       <td>
         {% if t.category_ref %}
-          <span class="lt-badge lt-badge-cat">{{ t.category_ref.name }}</span>
+          <span class="lt-badge lt-badge-cat" data-category="{{ t.category_ref.name|lower|replace(' ','-') }}">{{ t.category_ref.name }}</span>
         {% else %}
           <span class="muted">—</span>
         {% endif %}

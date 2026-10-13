@@ -91,53 +91,6 @@
 .lt-btn-clear:hover { background: #dc3545; color: #fff; }
 
 /* Table */
-.lt-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1.5px solid #212529;
-  font-size: 0.95rem;
-  background: #fff;
-}
-.lt-table thead th {
-  background: #212529;
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 8px 10px;
-  text-align: left;
-  border: 1px solid #495057;
-  white-space: nowrap;
-}
-.lt-table thead th.center { text-align: center; }
-.lt-table thead th.end { text-align: right; }
-.lt-table tbody td {
-  padding: 8px 10px;
-  border: 1px solid #dee2e6;
-  vertical-align: middle;
-  height: 26px;
-  font-size: 0.88rem;
-}
-.lt-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.lt-table tbody tr:hover { background: #f1f3f5; }
-.lt-table code {
-  font-size: 0.85rem;
-  font-family: Consolas, Monaco, monospace;
-  padding: 0 3px;
-  background: #f1f3f5;
-  border: 1px solid #dee2e6;
-}
-.lt-table .name { font-weight: 700; font-size: 0.95rem; }
-.lt-table .muted { color: #6c757d; font-size: 0.82rem; }
-.lt-table .num {
-  text-align: right;
-  font-family: Consolas, Monaco, monospace;
-  font-variant-numeric: tabular-nums;
-}
-.lt-table .center { text-align: center; }
-.lt-table .price { color: #146c43; font-weight: 600; }
-
 /* Badges */
 .lt-badge {
   display: inline-block;
@@ -150,8 +103,6 @@
   color: #fff;
   white-space: nowrap;
 }
-.lt-badge-cat { background: #0dcaf0; color: #055160; }
-
 /* Row actions */
 .lt-actions-col { display: inline-flex; gap: 3px; }
 .lt-icon-btn {
@@ -186,10 +137,8 @@
 
 @media (max-width: 900px) {
   .lt-filter { grid-template-columns: 1fr; }
-  .lt-table { font-size: 0.72rem; }
   .lt-table thead th,
-  .lt-table tbody td { padding: 3px 5px; }
-}
+  }
 
 .lt-row-paused { opacity: 0.6; }
 .lt-row-paused td { background: #f8f9fa !important; }
@@ -355,7 +304,7 @@
         </td>
         <td>
           {% if t.category_ref %}
-            <span class="lt-badge lt-badge-cat">{{ t.category_ref.name }}</span>
+            <span class="lt-badge lt-badge-cat" data-category="{{ t.category_ref.name|lower|replace(' ','-') }}">{{ t.category_ref.name }}</span>
           {% else %}
             <span class="muted">—</span>
           {% endif %}

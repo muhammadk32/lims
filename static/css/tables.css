@@ -1,153 +1,241 @@
 ﻿/* ==========================================================
-   LabMS — Unified theme-aware table styling
-   Loaded AFTER test_settings.css, style.css, themes.css
-   Makes ALL tables respond to the current theme.
+   LabMS — Unified table styling (FORCE-OVERRIDE version)
+   Every rule uses !important to beat test_settings.css
    ========================================================== */
 
-/* --- Theme-aware table variables ------------------------- */
-:root,
-[data-bs-theme="light"],
-[data-bs-theme="grey"],
-[data-bs-theme="blue"],
-[data-bs-theme="green"],
-[data-bs-theme="purple"],
-[data-bs-theme="high_contrast"],
-[data-bs-theme="dark"] {
-  --tbl-border:        var(--bs-border-color);
-  --tbl-header-bg:     #212529;
-  --tbl-header-color:  #ffffff;
-  --tbl-row-bg:        var(--bs-body-bg);
-  --tbl-row-alt-bg:    var(--bs-tertiary-bg);
-  --tbl-row-hover-bg:  var(--bs-secondary-bg);
-  --tbl-code-bg:       var(--bs-tertiary-bg);
-  --tbl-code-border:   var(--bs-border-color);
-  --tbl-code-color:    var(--bs-body-color);
+/* --- Container: rounded, bordered, shadowed -------- */
+.lt-table, .rp-table, .dl-table, .ts-table, .tf-table {
+  width: 100% !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08) !important;
+  font-size: 0.9rem !important;
 }
 
-/* --- Base table ------------------------------------------- */
-.lt-table,
-.rp-table,
-.dl-table,
-.ts-table,
-.tf-table {
-  font-size: 0.9rem;
-  background: var(--tbl-row-bg);
-  border: 1px solid var(--tbl-border);
-  border-collapse: collapse;
-  width: 100%;
+/* --- Header row: dark navy, white text, dividers --- */
+.lt-table thead th, .rp-table thead th, .dl-table thead th,
+.ts-table thead th, .tf-table thead th {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-right: 1px solid #334155 !important;
+  border-bottom: 2px solid #0d6efd !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  padding: 14px 16px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
 }
 
-/* --- Header ---------------------------------------------- */
+/* Remove right border from last header cell */
+.lt-table thead th:last-child, .rp-table thead th:last-child,
+.dl-table thead th:last-child, .ts-table thead th:last-child,
+.tf-table thead th:last-child {
+  border-right: none !important;
+}
+
+/* Round top corners of header */
+.lt-table thead th:first-child, .rp-table thead th:first-child,
+.dl-table thead th:first-child, .ts-table thead th:first-child,
+.tf-table thead th:first-child {
+  border-top-left-radius: 10px !important;
+}
+.lt-table thead th:last-child, .rp-table thead th:last-child,
+.dl-table thead th:last-child, .ts-table thead th:last-child,
+.tf-table thead th:last-child {
+  border-top-right-radius: 10px !important;
+}
+
+/* --- Body cells: visible borders --- */
+.lt-table tbody td, .rp-table tbody td, .dl-table tbody td,
+.ts-table tbody td, .tf-table tbody td {
+  padding: 12px 16px !important;
+  border: none !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  border-right: 1px solid #e2e8f0 !important;
+  vertical-align: middle !important;
+  color: #1e293b !important;
+  font-size: 0.88rem !important;
+  background: transparent !important;
+}
+
+/* Remove right border from last cell */
+.lt-table tbody td:last-child, .rp-table tbody td:last-child,
+.dl-table tbody td:last-child, .ts-table tbody td:last-child,
+.tf-table tbody td:last-child {
+  border-right: none !important;
+}
+
+/* --- Zebra rows --- */
+.lt-table tbody tr:nth-child(even) td,
+.rp-table tbody tr:nth-child(even) td,
+.dl-table tbody tr:nth-child(even) td,
+.ts-table tbody tr:nth-child(even) td,
+.tf-table tbody tr:nth-child(even) td {
+  background: #f8fafc !important;
+}
+
+/* --- Hover: blue tint --- */
+.lt-table tbody tr:hover td,
+.rp-table tbody tr:hover td,
+.dl-table tbody tr:hover td,
+.ts-table tbody tr:hover td,
+.tf-table tbody tr:hover td {
+  background: #eff6ff !important;
+}
+
+/* --- Code pills: gray rounded --- */
+.lt-table code, .rp-table code, .dl-table code,
+.ts-table code, .tf-table code {
+  font-family: Consolas, Monaco, monospace !important;
+  font-size: 0.78rem !important;
+  padding: 3px 8px !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  color: #334155 !important;
+  white-space: nowrap !important;
+}
+
+/* --- Name: bold dark --- */
+.lt-table .name, .rp-table .name, .dl-table .name,
+.ts-table .name, .tf-table .name {
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+  color: #0f172a !important;
+}
+
+/* --- Numbers --- */
+.lt-table .num, .rp-table .num, .dl-table .num,
+.ts-table .num, .tf-table .num {
+  text-align: right !important;
+  font-family: Consolas, Monaco, monospace !important;
+  font-variant-numeric: tabular-nums !important;
+  color: #334155 !important;
+}
+
+
+
+/* --- Status icon --- */
+.lt-table .bi-check-circle-fill, .lt-table .bi-check-lg {
+  color: #16a34a !important;
+  font-size: 1.05rem !important;
+}
+
+/* --- Action buttons: 30x30 rounded squares --- */
+.lt-actions-col {
+  display: inline-flex !important;
+  gap: 4px !important;
+}
+.lt-icon-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  font-size: 0.85rem !important;
+  border: 1px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  text-decoration: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.12s ease !important;
+}
+.lt-icon-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+}
+.lt-icon-btn-view { border-color: #93c5fd !important; color: #0d6efd !important; }
+.lt-icon-btn-view:hover { background: #0d6efd !important; color: #ffffff !important; border-color: #0d6efd !important; }
+.lt-icon-btn-edit { border-color: #cbd5e1 !important; color: #475569 !important; }
+.lt-icon-btn-edit:hover { background: #475569 !important; color: #ffffff !important; border-color: #475569 !important; }
+.lt-icon-btn-danger { border-color: #fecaca !important; color: #dc3545 !important; }
+.lt-icon-btn-danger:hover { background: #dc3545 !important; color: #ffffff !important; border-color: #dc3545 !important; }
+/* --- HARD OVERRIDE: all header cells white, no exceptions --- */
 .lt-table thead th,
+.lt-table thead th.num,
+.lt-table thead th.center,
+.lt-table thead th.end,
 .rp-table thead th,
+.rp-table thead th.num,
+.rp-table thead th.center,
+.rp-table thead th.end,
 .dl-table thead th,
+.dl-table thead th.num,
+.dl-table thead th.center,
+.dl-table thead th.end,
 .ts-table thead th,
-.tf-table thead th {
-  background: var(--tbl-header-bg) !important;
-  color: var(--tbl-header-color) !important;
-  border: 1px solid #495057 !important;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding: 8px 10px;
-  text-align: left;
-  white-space: nowrap;
-  vertical-align: middle;
+.ts-table thead th.num,
+.ts-table thead th.center,
+.ts-table thead th.end,
+.tf-table thead th,
+.tf-table thead th.num,
+.tf-table thead th.center,
+.tf-table thead th.end {
+  background: #0f172a !important;
+  color: #ffffff !important;
 }
+/* ==========================================================
+   Per-category badge colors — one distinct color per category
+   Uses data-category attribute (lowercase, spaces→dashes)
+   ========================================================== */
 
-/* --- Body cells ------------------------------------------ */
-.lt-table tbody td,
-.rp-table tbody td,
-.dl-table tbody td,
-.ts-table tbody td,
-.tf-table tbody td {
-  padding: 8px 10px;
-  border: 1px solid var(--tbl-border);
-  vertical-align: middle;
-  color: var(--bs-body-color);
-  font-size: 0.88rem;
-}
-
-/* --- Zebra + hover --------------------------------------- */
-.lt-table tbody tr:nth-child(even),
-.rp-table tbody tr:nth-child(even),
-.dl-table tbody tr:nth-child(even),
-.ts-table tbody tr:nth-child(even),
-.tf-table tbody tr:nth-child(even) {
-  background: var(--tbl-row-alt-bg);
-}
-.lt-table tbody tr:hover,
-.rp-table tbody tr:hover,
-.dl-table tbody tr:hover,
-.ts-table tbody tr:hover,
-.tf-table tbody tr:hover {
-  background: var(--tbl-row-hover-bg);
-}
-
-/* --- Code pills ------------------------------------------ */
-.lt-table code,
-.rp-table code,
-.dl-table code,
-.ts-table code,
-.tf-table code {
-  font-family: Consolas, Monaco, monospace;
-  font-size: 0.82rem;
-  padding: 2px 6px;
-  background: var(--tbl-code-bg);
-  border: 1px solid var(--tbl-code-border);
-  color: var(--tbl-code-color);
-  white-space: nowrap;
-}
-
-/* --- Numeric / right-aligned ----------------------------- */
-.lt-table .num,
-.rp-table .num,
-.dl-table .num,
-.ts-table .num,
-.tf-table .num {
-  text-align: right;
-  font-family: Consolas, Monaco, monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-/* --- Name / muted ---------------------------------------- */
-.lt-table .name,
-.rp-table .name,
-.dl-table .name,
-.ts-table .name,
-.tf-table .name {
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-.lt-table .muted,
-.rp-table .muted,
-.dl-table .muted,
-.ts-table .muted,
-.tf-table .muted {
-  color: var(--bs-secondary-color);
-  font-size: 0.82rem;
-}
-
-/* --- Center align ---------------------------------------- */
-.lt-table .center,
-.rp-table .center,
-.dl-table .center,
-.ts-table .center,
-.tf-table .center {
-  text-align: center;
-}
-
-/* --- Category badges (keep semantic colors) -------------- */
 .lt-badge-cat {
-  background: #0dcaf0 !important;
-  color: #055160 !important;
-  padding: 3px 9px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  border-radius: 0;
-  display: inline-block;
+  background: #64748b !important;   /* fallback slate */
+  color: #ffffff !important;
+  padding: 4px 12px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  border-radius: 999px !important;
+  display: inline-block !important;
+  border: none !important;
+}
+
+.lt-badge-cat[data-category="hematology"]    { background: #dc2626 !important; }
+.lt-badge-cat[data-category="abc"]           { background: #16a34a !important; }
+.lt-badge-cat[data-category="endocrinology"] { background: #4f46e5 !important; }
+.lt-badge-cat[data-category="serology"]      { background: #7c3aed !important; }
+.lt-badge-cat[data-category="urinalysis"]    { background: #0d6efd !important; }
+.lt-badge-cat[data-category="microbiology"]  { background: #ea580c !important; }
+.lt-badge-cat[data-category="biochemistry"]  { background: #0891b2 !important; }
+.lt-badge-cat[data-category="molecular"]     { background: #c026d3 !important; }
+.lt-badge-cat[data-category="hormones"]      { background: #db2777 !important; }
+/* ==========================================================
+   HARD OVERRIDE — every header cell, every variant, white text
+   Fixes invisible PRICE column header and similar .num/.center cases
+   ========================================================== */
+.lt-table thead th,
+.lt-table thead th.num,
+.lt-table thead th.center,
+.lt-table thead th.end,
+.rp-table thead th,
+.rp-table thead th.num,
+.rp-table thead th.center,
+.rp-table thead th.end,
+.dl-table thead th,
+.dl-table thead th.num,
+.dl-table thead th.center,
+.dl-table thead th.end,
+.ts-table thead th,
+.ts-table thead th.num,
+.ts-table thead th.center,
+.ts-table thead th.end,
+.tf-table thead th,
+.tf-table thead th.num,
+.tf-table thead th.center,
+.tf-table thead th.end {
+  background: #0f172a !important;
+  color: #ffffff !important;
 }
