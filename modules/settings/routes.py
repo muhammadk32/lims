@@ -575,13 +575,23 @@ def laboratories():
     from flask import request as _rq
 
     q_search = _rq.args.get('q', '').strip()
+    view_type = (_rq.args.get('type') or 'all').strip().lower()
+    if view_type not in ('all', 'referrer', 'partner'):
+        view_type = 'all'
+
     query = Laboratory.query
     if q_search:
         query = query.filter(Laboratory.name.ilike(f'%{q_search}%'))
+    if view_type == 'partner':
+        query = query.filter(Laboratory.is_partner_lab == True)  # noqa: E712
+    elif view_type == 'referrer':
+        query = query.filter(Laboratory.is_partner_lab == False)  # noqa: E712
+
     rows = query.order_by(Laboratory.name.asc()).all()
 
     return render_template('settings/laboratories.html',
-                           rows=rows, q_search=q_search)
+                           rows=rows, q_search=q_search,
+                           view_type=view_type)
 
 
 @settings_bp.route('/laboratories/create', methods=['POST'])
@@ -617,6 +627,11 @@ def laboratory_create():
         notes=(_rq.form.get('notes') or '').strip() or None,
         discount_percent=_f('discount_percent'),
         commission_percent=_f('commission_percent'),
+        is_partner_lab=bool(_rq.form.get('is_partner_lab')),
+        default_max_discount_percent=(
+            _f('default_max_discount_percent')
+            if _rq.form.get('default_max_discount_percent') else None
+        ),
         is_active=True,
     )
     db.session.add(lab)
@@ -647,6 +662,11 @@ def laboratory_edit(lid):
     lab.address = (_rq.form.get('address') or '').strip() or None
     lab.notes = (_rq.form.get('notes') or '').strip() or None
     lab.discount_percent = _f('discount_percent')
+    lab.is_partner_lab = bool(_rq.form.get('is_partner_lab'))
+    lab.default_max_discount_percent = (
+        _f('default_max_discount_percent')
+        if _rq.form.get('default_max_discount_percent') else None
+    )
     lab.commission_percent = _f('commission_percent')
     db.session.commit()
     flash(f'Laboratory "{lab.name}" updated.', 'success')

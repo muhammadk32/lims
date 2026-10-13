@@ -74,6 +74,28 @@ class Test(BaseModel):
     sample_type = db.Column(db.String(120), nullable=True)  # e.g. EDTA whole blood
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
+    # ---------- Outsourced / referral test ----------
+    # When True, this test is performed by a partner lab. The discount
+    # applied to it is capped at max_discount_percent.
+    is_outsourced = db.Column(
+        db.Boolean,
+        default=False,
+        nullable=False,
+        index=True,
+    )
+
+    # Maximum discount % allowed for this test. NULL = no cap.
+    max_discount_percent = db.Column(db.Float, nullable=True)
+
+    # Which partner lab performs this test (only meaningful when is_outsourced=True)
+    laboratory_id = db.Column(
+        db.Integer,
+        db.ForeignKey('laboratories.id'),
+        nullable=True,
+        index=True,
+    )
+    laboratory_ref = db.relationship('Laboratory', foreign_keys=[laboratory_id])
+
     # ---------- Panel / format fields (Phase 1) ----------
     # Section marker inside a panel (Physical / Chemical / Microscopy?)
     panel_section = db.Column(db.String(40), nullable=True)
@@ -282,3 +304,8 @@ class PcrTemplate(BaseModel):
 
     def __repr__(self):
         return f'<PcrTemplate test={self.test_id}>'
+
+
+# ============================================================
+# LABORATORY (partner / referral lab)
+# ============================================================

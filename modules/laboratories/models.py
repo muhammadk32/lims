@@ -23,6 +23,16 @@ class Laboratory(BaseModel):
     # Commission percent paid back to the lab (0-100).
     commission_percent = db.Column(db.Float, nullable=False, default=0.0)
 
+    # ---------- Outsourced / partner-lab fields ----------
+    # True means: we send our outsourced tests TO this lab.
+    # False means: this lab refers patients TO us (referrer company).
+    # Both kinds live in this table; is_partner_lab distinguishes them.
+    is_partner_lab = db.Column(db.Boolean, nullable=False, default=False, index=True)
+
+    # Cap on discount for outsourced tests assigned to this lab.
+    # NULL = no cap. Pre-fills the test form when assigning.
+    default_max_discount_percent = db.Column(db.Float, nullable=True)
+
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     times_used = db.Column(db.Integer, nullable=False, default=0)
     last_used_at = db.Column(db.DateTime, nullable=True)

@@ -12,6 +12,13 @@ from core.audit import log_action
 
 
 # ---------- Helpers ----------
+def _labs_for_test_form():
+    from modules.laboratories.models import Laboratory
+    return (Laboratory.query
+        .filter_by(is_partner_lab=True, is_active=True)
+        .order_by(Laboratory.name.asc())
+        .all())
+
 def _get_test_or_404(test_id):
     t = Test.query.get(test_id)
     if not t:
@@ -243,12 +250,12 @@ def new_test():
 
         if not code or not name:
             flash('Code and Name are required.', 'danger')
-            return render_template('tests/form.html', test=None, categories=categories, form=request.form)
+            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form())
 
         # Duplicate check
         if Test.query.filter_by(code=code).first():
             flash(f'A test with code "{code}" already exists.', 'danger')
-            return render_template('tests/form.html', test=None, categories=categories, form=request.form)
+            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form())
 
         category = None
         cat_id = request.form.get('category_id', type=int)
@@ -264,6 +271,15 @@ def new_test():
             unit=request.form.get('unit', '').strip() or None,
             description=request.form.get('description', '').strip() or None,
             turnaround_hours=request.form.get('turnaround_hours', type=int) or 24,
+            is_outsourced=bool(request.form.get('is_outsourced')),
+            max_discount_percent=(
+                request.form.get('max_discount_percent', type=float)
+                if request.form.get('is_outsourced') else None
+            ),
+            laboratory_id=(
+                request.form.get('laboratory_id', type=int)
+                if request.form.get('is_outsourced') else None
+            ),
         )
 
         db.session.add(test)
@@ -274,7 +290,7 @@ def new_test():
         flash(f'Test "{test.name}" created.', 'success')
         return redirect(url_for('tests.list_tests'))
 
-    return render_template('tests/form.html', test=None, categories=categories, form={})
+    return render_template('tests/form.html', test=None, categories=categories, form={}, labs=_labs_for_test_form())
 
 
 # ---------- View ----------
@@ -303,13 +319,13 @@ def edit_test(test_id):
 
         if not code or not name:
             flash('Code and Name are required.', 'danger')
-            return render_template('tests/form.html', test=test, categories=categories, form=request.form)
+            return render_template('tests/form.html', test=test, categories=categories, form=request.form, labs=_labs_for_test_form())
 
         # Duplicate check (excluding self)
         existing = Test.query.filter(Test.code == code, Test.id != test.id).first()
         if existing:
             flash(f'Another test already uses code "{code}".', 'danger')
-            return render_template('tests/form.html', test=test, categories=categories, form=request.form)
+            return render_template('tests/form.html', test=test, categories=categories, form=request.form, labs=_labs_for_test_form())
 
         test.code = code
         test.name = name
@@ -321,6 +337,15 @@ def edit_test(test_id):
         test.description = request.form.get('description', '').strip() or None
         test.turnaround_hours = request.form.get('turnaround_hours', type=int) or 24
         test.sample_type = request.form.get('sample_type', '').strip() or None
+        test.is_outsourced = bool(request.form.get('is_outsourced'))
+        test.max_discount_percent = (
+            request.form.get('max_discount_percent', type=float)
+            if test.is_outsourced else None
+        )
+        test.laboratory_id = (
+            request.form.get('laboratory_id', type=int)
+            if test.is_outsourced else None
+        )
 
         db.session.commit()
 
@@ -329,7 +354,7 @@ def edit_test(test_id):
         flash('Test updated.', 'success')
         return redirect(url_for('tests.view_test', test_id=test.id))
 
-    return render_template('tests/form.html', test=test, categories=categories, form={}, ranges=test.reference_ranges or [])
+    return render_template('tests/form.html', test=test, categories=categories, form={}, ranges=test.reference_ranges or [], labs=_labs_for_test_form())
 
 
 # ---------- Archive ----------
@@ -473,3 +498,5 @@ def update_range(range_id):
     flash("Reference value updated.", "success")
     return redirect(url_for("tests.edit_ranges_gender",
                             test_id=test_id, gender=gender))
+
+

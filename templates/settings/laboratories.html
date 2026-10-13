@@ -76,6 +76,11 @@
 
   <form method="GET" action="{{ url_for('settings.laboratories') }}" class="lab-toolbar">
     <input type="text" name="q" value="{{ q_search }}" placeholder="Search by name...">
+    <select name="type" onchange="this.form.submit()">
+      <option value="all"      {% if view_type == "all" %}selected{% endif %}>All labs</option>
+      <option value="referrer" {% if view_type == "referrer" %}selected{% endif %}>Referrers only</option>
+      <option value="partner"  {% if view_type == "partner" %}selected{% endif %}>Partner labs only</option>
+    </select>
     <button type="submit" class="lab-btn">Search</button>
     {% if q_search %}<a href="{{ url_for('settings.laboratories') }}" class="lab-btn">Clear</a>{% endif %}
   </form>
@@ -111,6 +116,17 @@
         <input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0">
       </div>
       <div class="lab-field">
+        <label>Partner Lab?</label>
+        <label style="display:flex;align-items:center;gap:6px;font-weight:400;">
+          <input type="checkbox" name="is_partner_lab" value="1">
+          <span>Yes — we send outsourced tests here</span>
+        </label>
+      </div>
+      <div class="lab-field">
+        <label>Default Max Discount % (partner labs only)</label>
+        <input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35">
+      </div>
+      <div class="lab-field">
         <button type="submit" class="lab-btn lab-btn-primary">
           <i class="bi bi-plus-lg"></i> Add
         </button>
@@ -126,8 +142,14 @@
         <th style="width:14%;">Contact</th>
         <th style="width:12%;">Phone</th>
         <th style="width:15%;">Email</th>
+        {% if view_type != 'partner' %}
         <th style="width:12%;" class="num">Discount %</th>
         <th style="width:12%;" class="num">Commission %</th>
+        {% endif %}
+        {% if view_type != 'referrer' %}
+        <th style="width:8%;" class="center">Partner</th>
+        <th style="width:10%;" class="num">Max Disc %</th>
+        {% endif %}
         <th style="width:8%;" class="center">Used</th>
         <th style="width:5%;" class="center">Active</th>
         <th style="width:14%;" class="center">Actions</th>
@@ -141,8 +163,18 @@
           <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
           <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
           <td><input type="email" name="email" value="{{ r.email or '' }}" class="edit-input"></td>
+          {% if view_type != 'partner' %}
           <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
           <td class="num"><input type="number" name="commission_percent" value="{{ r.commission_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+          {% endif %}
+          {% if view_type != 'referrer' %}
+          <td class="center">
+            <input type="checkbox" name="is_partner_lab" value="1" {% if r.is_partner_lab %}checked{% endif %}>
+          </td>
+          <td class="num">
+            <input type="number" name="default_max_discount_percent" value="{{ r.default_max_discount_percent if r.default_max_discount_percent is not none else '' }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;" placeholder="—">
+          </td>
+          {% endif %}
           <td class="center num">{{ r.times_used or 0 }}</td>
           <td class="center">
             <span class="pill {% if r.is_active %}pill-active{% else %}pill-inactive{% endif %}">
