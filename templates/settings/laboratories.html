@@ -7,16 +7,17 @@
   max-width: 1400px; margin: 0 auto; padding: 0;
             font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.9rem;
             color: var(--bs-body-color); }
-.lab-header { display: flex; justify-content: space-between; align-items: flex-end;
+.lab-header { display: flex; flex-direction: column; align-items: flex-start;
+              justify-content: flex-start; text-align: left;
               border-bottom: 1px solid var(--bs-border-color);
-              padding-bottom: 6px; margin-bottom: 8px; }
-.lab-title { font-size: 1.05rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
-.lab-sub { font-size: 0.72rem; color: var(--bs-secondary-color); margin-top: 1px; }
+              padding-bottom: 8px; margin-bottom: 10px; }
+.lab-title { font-size: 1.9rem; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.015em; color: var(--brand-primary); }
+.lab-sub { font-size: 0.88rem; color: var(--bs-secondary-color); margin-top: 2px; }
 
 .lab-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
   background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color);
   border-radius: 12px; padding: 12px 14px; }
-.lab-toolbar input, .lab-toolbar select { padding: 7px 11px;
+.lab-toolbar input, .lab-toolbar select { padding: 9px 12px; border: 2px solid #1a1a1a; font-size: 0.92rem;
   border: 1px solid var(--bs-border-color); background: var(--bs-body-bg);
   color: var(--bs-body-color); border-radius: 8px;
   font-size: 0.82rem; height: 34px; box-sizing: border-box; }
@@ -46,11 +47,21 @@
 .lab-field label { display: block; font-size: 0.6rem; font-weight: 600;
                    text-transform: uppercase; letter-spacing: 0.06em;
                    color: var(--bs-secondary-color); margin-bottom: 5px; }
-.lab-field input, .lab-field textarea { width: 100%; padding: 7px 10px;
-                   border: 1px solid var(--bs-border-color); border-radius: 8px;
-                   font-size: 0.82rem; background: var(--bs-body-bg);
-                   color: var(--bs-body-color); height: 34px;
+.lab-field input, .lab-field textarea { width: 100%; padding: 8px 11px;
+                   border: 2px solid #1a1a1a; border-radius: 6px;
+                   font-size: 0.92rem; background: #f3f8ff;
+                   color: var(--bs-body-color); height: 38px;
                    box-sizing: border-box; transition: all .15s; }
+.lab-field input[type="number"] { background: #fff8ee; }
+.lab-field select                { background: #f6fff0; }
+.lab-field textarea              { background: #fdf5ff; }
+[data-bs-theme="dark"] .lab-field input,
+[data-bs-theme="dark"] .lab-field textarea,
+[data-bs-theme="dark"] .lab-field select { border-color: #000; }
+[data-bs-theme="dark"] .lab-field input { background: #1a2433; color: #e8eaee; }
+[data-bs-theme="dark"] .lab-field input[type="number"] { background: #2a2116; }
+[data-bs-theme="dark"] .lab-field select { background: #1a2719; color: #e8eaee; }
+[data-bs-theme="dark"] .lab-field textarea { background: #241a2c; color: #e8eaee; }
 .lab-field--check { display:flex; align-items:center; gap:8px; height:34px;
                     padding:7px 10px; border:1px solid var(--bs-border-color);
                     border-radius:8px; background:var(--bs-body-bg);
@@ -62,16 +73,17 @@
 .lab-table { width: 100%; border-collapse: separate; border-spacing: 0;
   border: 1px solid var(--bs-border-color); border-radius: 12px;
   overflow: hidden; background: var(--bs-body-bg); }
-.lab-table thead th { background: var(--bs-tertiary-bg);
-  color: var(--bs-secondary-color); font-size: 0.7rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px;
-  text-align: left; white-space: nowrap;
-  border-bottom: 1px solid var(--bs-border-color);
-  border-right: 1px solid var(--bs-border-color); }
+.lab-table thead th { background: #1a1a1a;
+  color: #ffffff; font-size: 0.85rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 12px 14px;
+  text-align: center; white-space: nowrap;
+  border-bottom: 2px solid #000;
+  border-right: 1px solid #333846; }
 .lab-table thead th:last-child { border-right: none; }
 .lab-table thead th.num { text-align: right; }
 .lab-table thead th.center { text-align: center; }
-.lab-table tbody td { padding: 6px 10px; font-size: 0.85rem;
+.lab-table tbody td { padding: 6px 10px; font-size: 0.9rem;
   border-bottom: 1px solid var(--bs-border-color);
   border-right: 1px solid var(--bs-border-color); vertical-align: middle; }
 .lab-table tbody td:last-child { border-right: none; }
@@ -87,11 +99,14 @@
 .pill-active { background: rgba(25,135,84,.15); color: #198754; }
 [data-bs-theme="dark"] .pill-active { background: rgba(34,197,94,.2); color: #4ade80; }
 .pill-inactive { background: rgba(108,117,125,.2); color: var(--bs-secondary-color); }
-.lab-table .edit-input { width: 100%; padding: 4px 8px;
-  border: 1px solid var(--bs-border-color); border-radius: 6px;
-  font-size: 0.85rem; height: 28px; box-sizing: border-box;
-  background: var(--bs-body-bg); color: var(--bs-body-color);
+.lab-table .edit-input { width: 100%; padding: 6px 9px;
+  border: 1.5px solid #1a1a1a; border-radius: 6px;
+  font-size: 0.9rem; height: 32px; box-sizing: border-box;
+  background: #f3f8ff; color: var(--bs-body-color);
   transition: all .15s; }
+.lab-table .edit-input[type="number"] { background: #fff8ee; }
+[data-bs-theme="dark"] .lab-table .edit-input { border-color: #000; background: #1a2433; color: #e8eaee; }
+[data-bs-theme="dark"] .lab-table .edit-input[type="number"] { background: #2a2116; }
 .lab-table .edit-input::placeholder { color: var(--bs-secondary-color); opacity: .6; }
 .lab-table .edit-input:focus { outline: none; border-color: var(--brand-primary);
   box-shadow: 0 0 0 3px rgba(13,110,253,.15); }
@@ -132,9 +147,9 @@
 
 .lab-panel .lab-add { margin-bottom: 8px; }
 .lab-panel .lab-add-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
-.lab-panel .lab-table thead th { font-size: 0.62rem; padding: 5px 7px; }
+.lab-panel .lab-table thead th { font-size: 0.82rem; padding: 11px 12px; }
 .lab-panel .lab-table tbody td { padding: 2px 6px; font-size: 0.78rem; line-height: 1.15; }
-.lab-panel .lab-table .edit-input { height: 22px; font-size: 0.78rem; padding: 1px 5px; }
+.lab-panel .lab-table .edit-input { height: 30px; font-size: 0.88rem; padding: 5px 8px; }
 .lab-panel .lab-table td.actions .lab-btn-sm { height: 22px; width: 22px; padding: 0; }
 .lab-panel .lab-table .pill { padding: 1px 6px; font-size: 0.56rem; }
 .lab-panel .lab-table td.actions form { margin: 0 1px 0 0; }
@@ -152,6 +167,50 @@
 #panel-outsourced .lab-panel-head .chev { color: #d97706; }
 #panel-outsourced .lab-panel-head .count {
   border-color: rgba(217,119,6,.35); color: #d97706; }
+
+  /* ---- Modal ---- */
+  .lab-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 1080;
+    padding: 20px;
+  }
+  .lab-modal-backdrop.open { display: flex; }
+  .lab-modal {
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 12px;
+    width: 100%; max-width: 720px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    animation: labModalIn .15s ease;
+  }
+  @keyframes labModalIn {
+    from { transform: translateY(8px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  .lab-modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .lab-modal-head h3 { margin: 0; font-size: 1.1rem; font-weight: 700; }
+  .lab-modal-x {
+    border: none; background: transparent; cursor: pointer;
+    font-size: 1.5rem; line-height: 1; color: var(--bs-secondary-color);
+    padding: 0 4px;
+  }
+  .lab-modal-x:hover { color: var(--bs-body-color); }
+  .lab-modal-body { padding: 16px 18px; }
+  .lab-modal-foot {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--bs-border-color);
+    background: var(--bs-tertiary-bg);
+    border-radius: 0 0 12px 12px;
+  }
 </style>
 {% endblock %}
 
@@ -160,16 +219,30 @@
 
   <div class="lab-header">
     <div>
-      <h1 class="lab-title"><i class="bi bi-building"></i> Laboratories</h1>
-      <div class="lab-sub">External labs / companies — reference &amp; outsourced</div>
+      <h1 class="lab-title"><i class="bi bi-building"></i>
+        {% if view == 'ref' %}Reference Laboratories
+        {% elif view == 'out' %}Outsource Laboratories
+        {% else %}Laboratories{% endif %}
+      </h1>
+      <div class="lab-sub">
+        {% if view == 'ref' %}Companies that refer patients to us
+        {% elif view == 'out' %}Partner labs we send outsourced tests to
+        {% else %}External labs / companies — reference &amp; outsourced{% endif %}
+      </div>
     </div>
   </div>
 
-  <form method="GET" action="{{ url_for('settings.laboratories') }}" class="lab-toolbar">
-    <input type="text" name="q" value="{{ q_search }}" placeholder="Search by name...">
-    <button type="submit" class="lab-btn">Search</button>
-    {% if q_search %}<a href="{{ url_for('settings.laboratories') }}" class="lab-btn">Clear</a>{% endif %}
-  </form>
+  <div class="lab-toolbar">
+    <form method="GET" action="{{ url_for('settings.laboratories') }}" style="display:flex;gap:8px;align-items:center;flex:1;">
+      <input type="hidden" name="view" value="{{ view }}">
+      <input type="text" name="q" value="{{ q_search }}" placeholder="Search by name...">
+      <button type="submit" class="lab-btn">Search</button>
+      {% if q_search %}<a href="{{ url_for('settings.laboratories', view=view) }}" class="lab-btn">Clear</a>{% endif %}
+    </form>
+    <button type="button" class="lab-btn lab-btn-primary" onclick="openAddModal()">
+      <i class="bi bi-plus-lg"></i> Add
+    </button>
+  </div>
 
   <div class="lab-split{% if view == 'ref' or view == 'out' %} lab-split-single{% endif %}">
 
@@ -184,20 +257,6 @@
         </div>
       </header>
       <div class="lab-panel-body">
-
-        <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
-          <input type="hidden" name="is_partner_lab" value="">
-          <div class="lab-add-grid">
-            <div class="lab-field"><label>Name *</label><input type="text" name="name" required></div>
-            <div class="lab-field"><label>Contact person</label><input type="text" name="contact_person"></div>
-            <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
-            <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
-            <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
-            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
-            <div class="lab-field"><label>Commission %</label><input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0"></div>
-            <div class="lab-field" style="display:flex;align-items:flex-end;"><button type="submit" class="lab-btn lab-btn-primary" style="width:100%;justify-content:center;"><i class="bi bi-plus-lg"></i> Add</button></div>
-          </div>
-        </form>
 
         {% if rows_ref %}
         <table class="lab-table">
@@ -215,6 +274,7 @@
             {% for r in rows_ref %}
             <tr class="{% if not r.is_active %}inactive{% endif %}">
               <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
+                <input type="hidden" name="view" value="{{ view }}">
                 <input type="hidden" name="is_partner_lab" value="">
                 <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
                 <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
@@ -225,9 +285,11 @@
                   <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save"><i class="bi bi-check-lg"></i></button>
               </form>
                   <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
+                  <input type="hidden" name="view" value="{{ view }}">
                     <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle"><i class="bi bi-power"></i></button>
                   </form>
                   <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;" onsubmit="return confirm('Delete {{ r.name }}?');">
+                    <input type="hidden" name="view" value="{{ view }}">
                     <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete"><i class="bi bi-trash"></i></button>
                   </form>
                 </td>
@@ -259,20 +321,6 @@
       </header>
       <div class="lab-panel-body">
 
-        <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
-          <input type="hidden" name="is_partner_lab" value="1">
-          <div class="lab-add-grid">
-            <div class="lab-field"><label>Name *</label><input type="text" name="name" required></div>
-            <div class="lab-field"><label>Contact person</label><input type="text" name="contact_person"></div>
-            <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
-            <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
-            <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
-            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
-            <div class="lab-field"><label>Max Disc %</label><input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35"></div>
-            <div class="lab-field" style="display:flex;align-items:flex-end;"><button type="submit" class="lab-btn lab-btn-primary" style="width:100%;justify-content:center;"><i class="bi bi-plus-lg"></i> Add</button></div>
-          </div>
-        </form>
-
         {% if rows_out %}
         <table class="lab-table">
           <thead>
@@ -290,6 +338,7 @@
             {% for r in rows_out %}
             <tr class="{% if not r.is_active %}inactive{% endif %}">
               <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
+                <input type="hidden" name="view" value="{{ view }}">
                 <input type="hidden" name="is_partner_lab" value="1">
                 <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
                 <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
@@ -305,9 +354,11 @@
                   <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save"><i class="bi bi-check-lg"></i></button>
               </form>
                   <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
+                  <input type="hidden" name="view" value="{{ view }}">
                     <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle"><i class="bi bi-power"></i></button>
                   </form>
                   <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;" onsubmit="return confirm('Delete {{ r.name }}?');">
+                    <input type="hidden" name="view" value="{{ view }}">
                     <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete"><i class="bi bi-trash"></i></button>
                   </form>
                 </td>
@@ -329,4 +380,54 @@
   </div>
 </div>
     {% endif %}
+
+  {# ============ ADD MODAL ============ #}
+  <div class="lab-modal-backdrop" id="addModal" onclick="if(event.target===this)closeAddModal()">
+    <div class="lab-modal" role="dialog" aria-modal="true">
+      <div class="lab-modal-head">
+        <h3 id="addModalTitle">Add Laboratory</h3>
+        <button type="button" class="lab-modal-x" onclick="closeAddModal()" aria-label="Close">&times;</button>
+      </div>
+      <form method="POST" action="{{ url_for('settings.laboratory_create') }}" id="addModalForm">
+        <input type="hidden" name="view" value="{{ view }}">
+        <input type="hidden" name="is_partner_lab" id="modalPartnerFlag" value="{{ '1' if view == 'out' else '' }}">
+        <div class="lab-modal-body">
+          <div class="lab-add-grid">
+            <div class="lab-field"><label>Name *</label><input type="text" name="name" required></div>
+            <div class="lab-field"><label>Contact person</label><input type="text" name="contact_person"></div>
+            <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
+            <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
+            <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
+            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
+            <div class="lab-field" id="modalCommissionWrap"><label>Commission %</label><input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0"></div>
+            <div class="lab-field" id="modalMaxDiscWrap" style="display:none;"><label>Max Disc %</label><input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35"></div>
+          </div>
+        </div>
+        <div class="lab-modal-foot">
+          <button type="button" class="lab-btn" onclick="closeAddModal()">Cancel</button>
+          <button type="submit" class="lab-btn lab-btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openAddModal() {
+      var isOut = {{ 'true' if view == 'out' else 'false' }};
+      document.getElementById('addModalTitle').textContent = isOut ? 'Add Outsource Laboratory' : 'Add Reference Laboratory';
+      document.getElementById('modalPartnerFlag').value = isOut ? '1' : '';
+      document.getElementById('modalCommissionWrap').style.display = isOut ? 'none' : '';
+      document.getElementById('modalMaxDiscWrap').style.display = isOut ? '' : 'none';
+      document.getElementById('addModal').classList.add('open');
+      var first = document.querySelector('#addModalForm input[name=\"name\"]');
+      if (first) first.focus();
+    }
+    function closeAddModal() {
+      document.getElementById('addModal').classList.remove('open');
+      document.getElementById('addModalForm').reset();
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeAddModal();
+    });
+  </script>
 {% endblock %}

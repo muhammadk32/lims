@@ -578,9 +578,9 @@ def laboratories():
     # view=ref (Administration → Reference Labs)
     # view=out (Lab Test Settings → Outsource Labs)
     # view=all (default, shows both panels)
-    view = (_rq.args.get('view') or 'all').strip().lower()
+    view = (_rq.args.get('view') or 'ref').strip().lower()
     if view not in ('all', 'ref', 'out'):
-        view = 'all'
+        view = 'ref'
 
     base = Laboratory.query
     if q_search:
@@ -610,12 +610,12 @@ def laboratory_create():
     name = (_rq.form.get('name') or '').strip()
     if not name:
         flash('Laboratory name is required.', 'warning')
-        return redirect(url_for('settings.laboratories'))
+        return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
     existing = Laboratory.query.filter(func.lower(Laboratory.name) == name.lower()).first()
     if existing:
         flash(f'Laboratory "{name}" already exists.', 'warning')
-        return redirect(url_for('settings.laboratories'))
+        return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
     def _f(k):
         try:
@@ -642,7 +642,8 @@ def laboratory_create():
     db.session.add(lab)
     db.session.commit()
     flash(f'Laboratory "{name}" added.', 'success')
-    return redirect(url_for('settings.laboratories'))
+    _view = 'out' if lab.is_partner_lab else 'ref'
+    return redirect(url_for('settings.laboratories', view=_view))
 
 
 @settings_bp.route('/laboratories/<int:lid>/edit', methods=['POST'])
@@ -675,7 +676,7 @@ def laboratory_edit(lid):
     lab.commission_percent = _f('commission_percent')
     db.session.commit()
     flash(f'Laboratory "{lab.name}" updated.', 'success')
-    return redirect(url_for('settings.laboratories'))
+    return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
 
 @settings_bp.route('/laboratories/<int:lid>/toggle', methods=['POST'])
@@ -689,7 +690,7 @@ def laboratory_toggle(lid):
     lab.is_active = not lab.is_active
     db.session.commit()
     flash(f'Laboratory "{lab.name}" {"enabled" if lab.is_active else "disabled"}.', 'info')
-    return redirect(url_for('settings.laboratories'))
+    return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
 
 @settings_bp.route('/laboratories/<int:lid>/delete', methods=['POST'])
@@ -704,7 +705,7 @@ def laboratory_delete(lid):
     db.session.delete(lab)
     db.session.commit()
     flash(f'Laboratory "{name}" removed.', 'info')
-    return redirect(url_for('settings.laboratories'))
+    return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
 
 # ============================================================
