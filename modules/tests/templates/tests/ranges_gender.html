@@ -1,89 +1,227 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Setup Gender Reference Values ?{{ test.name }}{% endblock %}
 
 {% block head %}
 <style>
-.rg-page { max-width: 1080px; margin: 0 auto; padding: 14px 22px 48px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
-.rg-header { display: flex; justify-content: space-between; align-items: flex-end;
-             border-bottom: 2px solid #212529; padding-bottom: 6px; margin-bottom: 16px; }
-.rg-title { font-size: 1.12rem; font-weight: 700; margin: 0;
-            text-transform: uppercase; letter-spacing: 0.04em; }
-.rg-sub { font-size: 0.78rem; color: #495057; margin-top: 3px; font-weight: 600; }
+  /* ---- Layout ---- */
+  .rg-page {
+    padding: 0 8px 20px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.9rem;
+    color: var(--bs-body-color);
+  }
 
-.rg-form { background: #fff; border: 1.5px solid #212529; padding: 20px 26px 18px; }
-.rg-form .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  /* ---- Header ---- */
+  .rg-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--bs-border-color);
+    padding-bottom: 6px; margin-bottom: 10px;
+  }
+  .rg-title {
+    font-size: 1.45rem; font-weight: 700; letter-spacing: -0.01em;
+    margin: 0; display: flex; align-items: center; gap: 8px;
+  }
+  .rg-title i { color: var(--brand-primary); }
+  .rg-sub {
+    font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px;
+  }
 
-.rg-group { display: flex; flex-direction: column; gap: 6px; }
-.rg-gender-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-                 padding-bottom: 12px; border-bottom: 1px solid #e9ecef; }
-.rg-gender-row .lbl { font-size: 0.72rem; font-weight: 700; color: #495057;
-                      text-transform: uppercase; letter-spacing: 0.06em; min-width: 100px; }
+  /* ---- Form sections (colored bands) ---- */
+  .rg-form {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
 
-.rg-row { display: grid; grid-template-columns: 150px 1fr; align-items: center;
-          gap: 10px; margin-bottom: 10px; }
-.rg-row .lbl { font-size: 0.72rem; font-weight: 700; color: #495057;
-               text-transform: uppercase; letter-spacing: 0.04em; text-align: right; }
+  .rg-band {
+    font-size: 0.95rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    margin: 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rg-band i { font-size: 1rem; }
+  .rg-band-gender { color: #1d4ed8; background: #dbeafe; }
+  .rg-band-min    { color: #b45309; background: #fef3c7; }
+  .rg-band-max    { color: #15803d; background: #dcfce7; }
+  .rg-band-notes  { color: #c026d3; background: #fbe7fb; }
+  [data-bs-theme="dark"] .rg-band-gender { color: #dbeafe; background: #1e3a8a; }
+  [data-bs-theme="dark"] .rg-band-min    { color: #fef3c7; background: #78350f; }
+  [data-bs-theme="dark"] .rg-band-max    { color: #dcfce7; background: #14532d; }
+  [data-bs-theme="dark"] .rg-band-notes  { color: #fbe7fb; background: #4a1c50; }
 
-.rg-input, .rg-select { height: 28px; padding: 3px 8px;
-    border: 1px solid #adb5bd; border-radius: 0; font-size: 0.82rem;
-    background: #fff; font-family: inherit; color: #212529; box-sizing: border-box; }
-.rg-input:focus, .rg-select:focus { outline: none; border-color: #198754;
-    box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
-.rg-input.num { text-align: right; font-family: Consolas, Monaco, monospace;
-                font-variant-numeric: tabular-nums; }
+  .rg-form-inner { padding: 12px 14px; }
 
-.rg-inline { display: grid; grid-template-columns: 1fr 120px; gap: 8px; }
-.rg-inline.stack { grid-template-columns: 1fr 96px; }
+  /* Gender row */
+  .rg-gender-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .rg-gender-row .lbl {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+    min-width: 90px;
+  }
 
-.rg-notes-row { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-top: 4px; }
-.rg-notes-row .lbl { font-size: 0.72rem; font-weight: 700; color: #495057;
-                     text-transform: uppercase; letter-spacing: 0.04em;
-                     text-align: right; padding-top: 6px; }
-.rg-notes-row textarea { width: 100%; min-height: 96px; padding: 6px 8px;
-    border: 1px solid #adb5bd; border-radius: 0; font-size: 0.82rem;
-    font-family: inherit; resize: vertical; box-sizing: border-box; }
-.rg-notes-row textarea:focus { outline: none; border-color: #198754;
-    box-shadow: 0 0 0 2px rgba(25,135,84,0.12); }
+  /* Two-column min/max */
+  .rg-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .rg-col { padding: 12px 14px; }
+  .rg-col + .rg-col { border-left: 1px solid var(--bs-border-color); }
+  @media (max-width: 800px) {
+    .rg-cols { grid-template-columns: 1fr; }
+    .rg-col + .rg-col { border-left: none; border-top: 1px solid var(--bs-border-color); }
+  }
 
-.rg-actions { margin-top: 18px; padding-left: 160px; display: flex; gap: 8px;
-              align-items: center; }
-.rg-btn { display: inline-block; padding: 5px 18px; font-size: 0.78rem; font-weight: 700;
-  border: 1px solid #212529; background: #fff; color: #212529; text-decoration: none;
-  cursor: pointer; border-radius: 0; text-transform: uppercase;
-  letter-spacing: 0.05em; height: 30px; line-height: 1.6; }
-.rg-btn:hover { background: #f1f3f5; }
-.rg-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.rg-btn-primary:hover { background: #146c43; }
-.rg-btn-warn { background: #ffc107; border-color: #b8860b; color: #664d03; }
-.rg-btn-warn:hover { background: #e0a800; }
-.rg-btn-danger { border-color: #dc3545; color: #dc3545; background:#fff; }
-.rg-btn-danger:hover { background: #dc3545; color: #fff; }
-.rg-btn-sm { padding: 2px 10px; font-size: 0.7rem; height: 24px; line-height: 1.4; }
+  .rg-row {
+    display: grid; grid-template-columns: 120px 1fr;
+    align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+  .rg-row:last-child { margin-bottom: 0; }
+  .rg-row .lbl {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+    text-align: right;
+  }
 
-.rg-hint { margin-top: 8px; padding-left: 160px; font-size: 0.72rem;
-           color: #6c757d; font-family: Consolas, Monaco, monospace; letter-spacing: 0.02em; }
+  /* Fields */
+  .rg-input, .rg-select {
+    height: 32px; padding: 6px 10px;
+    border: 2px solid #1a1a1a;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--bs-body-color);
+    background: #fff;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .rg-input[type="number"], .rg-input.num { background: #fff8ee; }
+  .rg-input[type="text"]                   { background: #f3f8ff; }
+  .rg-select                               { background: #f6fff0; }
+  .rg-input.num { text-align: right; font-family: Consolas, Monaco, monospace; }
+  .rg-input:focus, .rg-select:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .rg-input,
+  [data-bs-theme="dark"] .rg-select { border-color: #000; color: #e8eaee; }
+  [data-bs-theme="dark"] .rg-input[type="number"] { background: #2a2116; }
+  [data-bs-theme="dark"] .rg-input[type="text"]   { background: #1a2433; }
+  [data-bs-theme="dark"] .rg-select               { background: #1a2719; }
 
-/* Saved ranges */
-.rg-list-title { margin-top: 26px; margin-bottom: 8px; font-size: 0.9rem;
-                 font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-                 color: #212529; border-bottom: 1.5px solid #212529; padding-bottom: 4px; }
-.rg-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
-            font-size: 0.78rem; background: #fff; }
-.rg-table thead th { background: #212529; color: #fff;
-                     font-size: 0.62rem; font-weight: 700;
-                     text-transform: uppercase; letter-spacing: 0.06em;
-                     padding: 6px 10px; text-align: left; border: 1px solid #212529; }
-.rg-table tbody td { padding: 6px 10px; border: 1px solid #dee2e6; vertical-align: middle; }
-.rg-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.rg-table tbody tr:hover { background: #f1f3f5; }
-.rg-table .num { text-align: right; font-family: Consolas, Monaco, monospace; }
-.rg-table .center { text-align: center; }
-.rg-table .badge { display: inline-block; padding: 1px 8px; font-size: 0.62rem;
-                   font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
-                   background: #e9ecef; color: #495057; }
-.rg-empty { text-align: center; padding: 26px; color: #6c757d; font-style: italic;
-            border: 1.5px solid #212529; border-top: none; background: #fafbfc; }
+  .rg-inline { display: grid; grid-template-columns: 1fr 110px; gap: 8px; }
+
+  /* Notes row */
+  .rg-notes-row { display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
+  .rg-notes-row .lbl {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+    text-align: right; padding-top: 8px;
+  }
+  .rg-notes-row textarea {
+    width: 100%; min-height: 100px; padding: 8px 10px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.9rem; font-family: inherit;
+    resize: vertical; box-sizing: border-box;
+    background: #fdf5ff; color: var(--bs-body-color);
+  }
+  .rg-notes-row textarea:focus {
+    outline: none; border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .rg-notes-row textarea { border-color: #000; background: #241a2c; color: #e8eaee; }
+
+  /* Buttons */
+  .rg-actions {
+    margin-top: 0;
+    padding: 10px 14px;
+    display: flex; gap: 8px; align-items: center;
+    background: var(--bs-tertiary-bg);
+    border-top: 1px solid var(--bs-border-color);
+  }
+  .rg-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 16px;
+    font-size: 0.8rem; font-weight: 600;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .12s, border-color .12s;
+  }
+  .rg-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
+  .rg-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+  .rg-btn-primary:hover { background: #146c43; border-color: #146c43; color: #fff; }
+  .rg-btn-warn { background: #ffc107; border-color: #b8860b; color: #664d03; }
+  .rg-btn-warn:hover { background: #e0a800; color: #664d03; }
+  .rg-btn-danger { border-color: #dc3545; color: #dc3545; background: transparent; }
+  .rg-btn-danger:hover { background: #dc3545; color: #fff; }
+  .rg-btn-sm { padding: 4px 10px; font-size: 0.72rem; }
+
+  .rg-hint {
+    padding: 8px 14px 10px;
+    font-size: 0.72rem;
+    color: var(--bs-secondary-color);
+    font-family: Consolas, Monaco, monospace;
+    background: var(--bs-body-bg);
+    border-top: 1px solid var(--bs-border-color);
+  }
+
+  /* Saved ranges */
+  .rg-list-title {
+    margin: 16px 0 8px;
+    font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--bs-body-color);
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .rg-table {
+    width: 100%;
+    border-collapse: separate; border-spacing: 0;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.85rem;
+    background: var(--bs-body-bg);
+  }
+  .rg-table thead th {
+    background: var(--bs-tertiary-bg);
+    color: var(--bs-secondary-color);
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 8px 10px; text-align: left;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .rg-table tbody td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--bs-border-color);
+    vertical-align: middle;
+  }
+  .rg-table tbody tr:last-child td { border-bottom: none; }
+  .rg-table tbody tr:hover { background: var(--bs-tertiary-bg); }
+  .rg-table .num { text-align: right; font-family: Consolas, Monaco, monospace; }
+  .rg-table .center { text-align: center; }
+  .rg-table .badge {
+    display: inline-block; padding: 2px 9px;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    background: var(--bs-tertiary-bg); color: var(--bs-secondary-color);
+    border: 1px solid var(--bs-border-color); border-radius: 999px;
+  }
+  .rg-empty {
+    text-align: center; padding: 26px;
+    color: var(--bs-secondary-color); font-style: italic;
+    border: 1px dashed var(--bs-border-color); border-radius: 10px;
+    background: var(--bs-tertiary-bg);
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
@@ -119,9 +257,10 @@ document.addEventListener("DOMContentLoaded", function () {
   <form method="post" class="rg-form" id="rg-form"
         action="{% if editing %}{{ url_for('tests.update_range', range_id=editing.id) }}{% else %}{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}{% endif %}">
 
-    <div class="rg-gender-row">
+    <div class="rg-band rg-band-gender"><i class="bi bi-gender-ambiguous"></i> Gender</div>
+    <div class="rg-gender-row" style="border-bottom:none;">
       <div class="lbl">Gender</div>
-      <select name="gender_display" class="rg-select" style="width: 240px;"
+      <select name="gender_display" class="rg-select" style="max-width: 260px;"
               onchange="window.location='{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='__g__') }}'.replace('__g__', this.value);">
         {% for g, label in [('male','Male'), ('female','Female'), ('any','Other')] %}
         <option value="{{ g }}" {% if g == gender %}selected{% endif %}>{{ label }}</option>
@@ -129,10 +268,13 @@ document.addEventListener("DOMContentLoaded", function () {
       </select>
     </div>
 
-    <div class="grid">
+    <div class="rg-band rg-band-min"><i class="bi bi-arrow-down"></i> Minimum</div>
+    <div class="rg-band rg-band-max" style="display:none;"></div>
+
+    <div class="rg-cols">
 
       {# LEFT column: Minimum #}
-      <div class="rg-group">
+      <div class="rg-col">
         <div class="rg-row">
           <div class="lbl">Minimum Age</div>
           <div class="rg-inline">
@@ -157,8 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </div>
 
-      {# RIGHT column: Maximum #}
-      <div class="rg-group">
+      <div class="rg-col">
         <div class="rg-row">
           <div class="lbl">Maximum Age</div>
           <div class="rg-inline">
@@ -185,9 +326,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     </div>
 
+    <div class="rg-band rg-band-notes"><i class="bi bi-chat-left-text"></i> Comments</div>
+    <div style="padding: 12px 14px;">
     <div class="rg-notes-row">
       <div class="lbl">Comments</div>
-      <textarea name="notes" id="rg-notes" style="width:100%; min-height:140px;">{{ editing.notes if editing else '' }}</textarea>
+      <textarea name="notes" id="rg-notes">{{ editing.notes if editing else '' }}</textarea>
+    </div>
     </div>
 
     <div class="rg-actions">

@@ -575,6 +575,12 @@ def laboratories():
     from flask import request as _rq
 
     q_search = _rq.args.get('q', '').strip()
+    # view=ref (Administration → Reference Labs)
+    # view=out (Lab Test Settings → Outsource Labs)
+    # view=all (default, shows both panels)
+    view = (_rq.args.get('view') or 'all').strip().lower()
+    if view not in ('all', 'ref', 'out'):
+        view = 'all'
 
     base = Laboratory.query
     if q_search:
@@ -589,7 +595,8 @@ def laboratories():
                            rows_ref=rows_ref,
                            rows_out=rows_out,
                            q_search=q_search,
-                           view_type='all')
+                           view_type='all',
+                           view=view)
 
 
 @settings_bp.route('/laboratories/create', methods=['POST'])

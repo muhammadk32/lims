@@ -109,6 +109,7 @@
 /* ---- Split panels: Reference | Outsourced ---- */
 .lab-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 900px)  { .lab-split { grid-template-columns: 1fr; } }
+.lab-split-single { grid-template-columns: 1fr; }
 
 .lab-panel { background: var(--bs-body-bg);
              border: 1px solid var(--bs-border-color); border-radius: 12px;
@@ -170,9 +171,10 @@
     {% if q_search %}<a href="{{ url_for('settings.laboratories') }}" class="lab-btn">Clear</a>{% endif %}
   </form>
 
-  <div class="lab-split">
+  <div class="lab-split{% if view == 'ref' or view == 'out' %} lab-split-single{% endif %}">
 
     <!-- ============================== REFERENCE ============================== -->
+    {% if view != 'out' %}
     <section class="lab-panel" id="panel-reference">
       <header class="lab-panel-head" onclick="document.getElementById('panel-reference').classList.toggle('collapsed')">
         <h2><i class="bi bi-people-fill"></i> Reference Laboratories</h2>
@@ -243,8 +245,10 @@
 
       </div>
     </section>
+    {% endif %}
 
     <!-- ============================== OUTSOURCED ============================== -->
+    {% if view != 'ref' %}
     <section class="lab-panel" id="panel-outsourced">
       <header class="lab-panel-head" onclick="document.getElementById('panel-outsourced').classList.toggle('collapsed')">
         <h2><i class="bi bi-box-seam"></i> Outsourced Laboratories</h2>
@@ -324,4 +328,5 @@
 
   </div>
 </div>
+    {% endif %}
 {% endblock %}
