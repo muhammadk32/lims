@@ -3,12 +3,12 @@
 
     <!-- Dashboard -->
     <a href="{{ url_for('dashboard.index') }}"
-       class="topnav-link {% if request.endpoint and request.endpoint.startswith('dashboard.') %}active{% endif %}">
+       class="topnav-link tn-dashboard {% if request.endpoint and request.endpoint.startswith('dashboard.') %}active{% endif %}">
       <i class="bi bi-speedometer2"></i><span>Dashboard</span>
     </a>
 
     <!-- Operations dropdown -->
-    <div class="topnav-item">
+    <div class="topnav-item tn-operations">
       <button type="button" class="topnav-link
         {% if request.endpoint and (request.endpoint.startswith('orders.') or request.endpoint.startswith('reports.')) %}active{% endif %}">
         <i class="bi bi-clipboard2-pulse"></i>
@@ -39,7 +39,7 @@
 
     <!-- Laboratory dropdown (admin & doctor only) -->
     {% if current_user.role in ['admin', 'doctor'] %}
-    <div class="topnav-item">
+    <div class="topnav-item tn-laboratory">
       <button type="button" class="topnav-link
         {% if request.endpoint and (request.endpoint.startswith('lab.') or request.endpoint.startswith('results.')) %}active{% endif %}">
         <i class="bi bi-clipboard2-check"></i>
@@ -76,7 +76,7 @@
 
     <!-- Management Reports (dropdown) -->
     {% if current_user.role in ['admin', 'doctor', 'receptionist'] %}
-    <div class="topnav-item">
+    <div class="topnav-item tn-reports">
       <button type="button" class="topnav-link
         {% if request.path.startswith('/analytics') or (request.endpoint and request.endpoint.startswith('billing.')) %}active{% endif %}">
         <i class="bi bi-bar-chart-line"></i>
@@ -144,7 +144,7 @@
 
     <!-- Administration (admin only) -->
     {% if current_user.role == 'admin' %}
-    <div class="topnav-item">
+    <div class="topnav-item tn-admin">
       <button type="button" class="topnav-link
         {% if request.endpoint and (request.endpoint.startswith('users.') or request.endpoint.startswith('audit.') or request.endpoint.startswith('settings.') or request.endpoint.startswith('form_settings.') or request.endpoint.startswith('patients.')) %}active{% endif %}">
         <i class="bi bi-shield-check"></i>
@@ -228,49 +228,47 @@
     <!-- Lab Test Settings (top-level dropdown, admin only) -->
     {% if current_user.role == 'admin' %}
     {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','units','bulk','previews'] or request.path.startswith('/settings/tests') %}
-    <div class="dropdown d-inline-block">
-      <a href="#" class="topnav-link {% if lts_active %}active{% endif %} dropdown-toggle"
-         data-bs-toggle="dropdown" aria-expanded="false" role="button">
-        <i class="bi bi-sliders2"></i><span>Lab Test Settings</span>
-      </a>
-      <ul class="dropdown-menu lts-nav-menu">
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='catalog') }}"><i class="bi bi-clipboard2-pulse"></i> Catalog</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='formats') }}"><i class="bi bi-sliders2"></i> Formats</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='categories') }}"><i class="bi bi-tags"></i> Categories</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='panels') }}"><i class="bi bi-collection"></i> Panels</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='units') }}"><i class="bi bi-rulers"></i> Units &amp; Ranges</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='bulk') }}"><i class="bi bi-upload"></i> Bulk Actions</a></li>
-        <li><a class="dropdown-item" href="{{ url_for('tests.index', tab='previews') }}"><i class="bi bi-eye"></i> Previews</a></li>
-      </ul>
+    <div class="topnav-item tn-tests">
+      <button type="button" class="topnav-link {% if lts_active %}active{% endif %}">
+        <i class="bi bi-sliders2"></i>
+        <span>Lab Test Settings</span>
+        <i class="bi bi-chevron-down small"></i>
+      </button>
+      <div class="topnav-dropdown">
+        <a href="{{ url_for('tests.index', tab='catalog') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'catalog' %}active{% endif %}">
+          <i class="bi bi-clipboard2-pulse"></i> Catalog
+        </a>
+        <a href="{{ url_for('tests.index', tab='formats') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'formats' %}active{% endif %}">
+          <i class="bi bi-sliders2"></i> Formats
+        </a>
+        <a href="{{ url_for('tests.index', tab='categories') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'categories' %}active{% endif %}">
+          <i class="bi bi-tags"></i> Categories
+        </a>
+        <a href="{{ url_for('tests.index', tab='panels') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'panels' %}active{% endif %}">
+          <i class="bi bi-collection"></i> Panels
+        </a>
+        <a href="{{ url_for('tests.index', tab='units') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'units' %}active{% endif %}">
+          <i class="bi bi-rulers"></i> Units &amp; Ranges
+        </a>
+        <a href="{{ url_for('tests.index', tab='bulk') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'bulk' %}active{% endif %}">
+          <i class="bi bi-upload"></i> Bulk Actions
+        </a>
+        <a href="{{ url_for('tests.index', tab='previews') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'previews' %}active{% endif %}">
+          <i class="bi bi-eye"></i> Previews
+        </a>
+      </div>
     </div>
     {% endif %}
 
   </div>
 
-<style>
-.lts-nav-menu {
-  border-radius: 0;
-  border: 1.5px solid #212529;
-  min-width: 220px;
-  font-size: 0.82rem;
-  padding: 4px 0;
-  margin-top: 4px;
-}
-.lts-nav-menu .dropdown-item {
-  padding: 6px 14px;
-  color: #212529;
-}
-.lts-nav-menu .dropdown-item:hover {
-  background: #212529;
-  color: #fff;
-}
-.lts-nav-menu .dropdown-item i {
-  width: 20px;
-  margin-right: 6px;
-  color: #198754;
-}
-.lts-nav-menu .dropdown-item:hover i { color: #fff; }
-.topnav-link.dropdown-toggle::after { margin-left: 4px; }
-</style>
+
 
 </nav>

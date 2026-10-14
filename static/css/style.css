@@ -498,3 +498,134 @@ body {
 .app-content {
   padding-top: 16px;
 }
+
+/* ============================================================
+   TOP-NAV COLOR CODING — each top-level menu gets its own accent
+   ============================================================ */
+
+/* Uniform text size across all top-nav links */
+.topnav-link {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+}
+.topnav-dropdown .dropdown-item {
+  font-size: 0.9rem !important;
+  font-weight: 500;
+}
+.topnav-dropdown .dropdown-section {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* ---------- Heading accents ----------
+   Add class to each <div class="topnav-item"> via template:
+   tn-dashboard, tn-operations, tn-laboratory, tn-reports,
+   tn-admin, tn-tests
+*/
+
+/* Dashboard */
+.topnav-link.tn-dashboard i { color: #38bdf8; }
+
+/* Operations */
+.topnav-item.tn-operations > .topnav-link i { color: #fb923c; }
+.topnav-item.tn-operations .topnav-dropdown .dropdown-item:hover {
+  background: #fff1e2; color: #c2610a;
+}
+.topnav-item.tn-operations .topnav-dropdown .dropdown-item.active {
+  background: #d97a12; color: #fff;
+}
+.topnav-item.tn-operations .topnav-dropdown .dropdown-section { color: #c2610a; }
+
+/* Laboratory */
+.topnav-item.tn-laboratory > .topnav-link i { color: #60a5fa; }
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-item:hover {
+  background: #e0eaff; color: #1d4ed8;
+}
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-item.active {
+  background: #2563eb; color: #fff;
+}
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-section { color: #1d4ed8; }
+
+/* Reports */
+.topnav-item.tn-reports > .topnav-link i { color: #a78bfa; }
+.topnav-item.tn-reports .topnav-dropdown .dropdown-item:hover {
+  background: #ede9fe; color: #6d28d9;
+}
+.topnav-item.tn-reports .topnav-dropdown .dropdown-item.active {
+  background: #7c3aed; color: #fff;
+}
+.topnav-item.tn-reports .topnav-dropdown .dropdown-section { color: #6d28d9; }
+
+/* Administration */
+.topnav-item.tn-admin > .topnav-link i { color: #f87171; }
+.topnav-item.tn-admin .topnav-dropdown .dropdown-item:hover {
+  background: #fee2e2; color: #b91c1c;
+}
+.topnav-item.tn-admin .topnav-dropdown .dropdown-item.active {
+  background: #b91c1c; color: #fff;
+}
+.topnav-item.tn-admin .topnav-dropdown .dropdown-section { color: #b91c1c; }
+
+/* Lab Test Settings */
+.topnav-item.tn-tests > .topnav-link i { color: #2dd4bf; }
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item:hover,
+.lts-nav-menu .dropdown-item:hover {
+  background: #ccfbf1; color: #0f766e;
+}
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item.active {
+  background: #0d9488; color: #fff;
+}
+
+/* Dark theme overrides — lighter tints */
+[data-bs-theme="dark"] .topnav-item.tn-operations .topnav-dropdown .dropdown-item:hover { background: #3a2410; color: #fbbf24; }
+[data-bs-theme="dark"] .topnav-item.tn-laboratory .topnav-dropdown .dropdown-item:hover { background: #1e3a8a; color: #93c5fd; }
+[data-bs-theme="dark"] .topnav-item.tn-reports .topnav-dropdown .dropdown-item:hover    { background: #3b1a6f; color: #c4b5fd; }
+[data-bs-theme="dark"] .topnav-item.tn-admin .topnav-dropdown .dropdown-item:hover      { background: #3a131a; color: #fca5a5; }
+[data-bs-theme="dark"] .topnav-item.tn-tests .topnav-dropdown .dropdown-item:hover      { background: #0f3f3a; color: #5eead4; }
+
+/* Colored band at top of each dropdown */
+.topnav-item.tn-operations .topnav-dropdown { border-top: 3px solid #d97a12; }
+.topnav-item.tn-laboratory .topnav-dropdown { border-top: 3px solid #2563eb; }
+.topnav-item.tn-reports    .topnav-dropdown { border-top: 3px solid #7c3aed; }
+.topnav-item.tn-admin      .topnav-dropdown { border-top: 3px solid #b91c1c; }
+.topnav-item.tn-tests      .topnav-dropdown,
+.lts-nav-menu                               { border-top: 3px solid #0d9488; }
+
+/* ============================================================
+   COLOR EACH DROPDOWN ITEM ICON BY ITS PARENT HEADING
+   (always visible, not hover-only)
+   ============================================================ */
+
+.topnav-item.tn-operations .topnav-dropdown .dropdown-item i { color: #d97a12 !important; }
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-item i { color: #2563eb !important; }
+.topnav-item.tn-reports    .topnav-dropdown .dropdown-item i { color: #7c3aed !important; }
+.topnav-item.tn-admin      .topnav-dropdown .dropdown-item i { color: #b91c1c !important; }
+.topnav-item.tn-tests      .topnav-dropdown .dropdown-item i,
+.lts-nav-menu .dropdown-item i                                 { color: #0d9488 !important; }
+
+/* Same for "section" divider labels inside dropdowns */
+.topnav-item.tn-reports .topnav-dropdown .dropdown-section { color: #7c3aed !important; }
+.topnav-item.tn-admin   .topnav-dropdown .dropdown-section { color: #b91c1c !important; }
+
+/* Colored left accent bar on each dropdown item */
+.topnav-item.tn-operations .topnav-dropdown .dropdown-item { border-left: 3px solid transparent; }
+.topnav-item.tn-operations .topnav-dropdown .dropdown-item:hover { border-left-color: #d97a12; }
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-item { border-left: 3px solid transparent; }
+.topnav-item.tn-laboratory .topnav-dropdown .dropdown-item:hover { border-left-color: #2563eb; }
+.topnav-item.tn-reports    .topnav-dropdown .dropdown-item { border-left: 3px solid transparent; }
+.topnav-item.tn-reports    .topnav-dropdown .dropdown-item:hover { border-left-color: #7c3aed; }
+.topnav-item.tn-admin      .topnav-dropdown .dropdown-item { border-left: 3px solid transparent; }
+.topnav-item.tn-admin      .topnav-dropdown .dropdown-item:hover { border-left-color: #b91c1c; }
+.topnav-item.tn-tests      .topnav-dropdown .dropdown-item,
+.lts-nav-menu .dropdown-item                                { border-left: 3px solid transparent; }
+.topnav-item.tn-tests      .topnav-dropdown .dropdown-item:hover,
+.lts-nav-menu .dropdown-item:hover                          { border-left-color: #0d9488; }
+
+/* Dark mode — brighter icon colors */
+[data-bs-theme="dark"] .topnav-item.tn-operations .topnav-dropdown .dropdown-item i { color: #fb923c !important; }
+[data-bs-theme="dark"] .topnav-item.tn-laboratory .topnav-dropdown .dropdown-item i { color: #60a5fa !important; }
+[data-bs-theme="dark"] .topnav-item.tn-reports    .topnav-dropdown .dropdown-item i { color: #a78bfa !important; }
+[data-bs-theme="dark"] .topnav-item.tn-admin      .topnav-dropdown .dropdown-item i { color: #f87171 !important; }
+[data-bs-theme="dark"] .topnav-item.tn-tests      .topnav-dropdown .dropdown-item i,
+[data-bs-theme="dark"] .lts-nav-menu .dropdown-item i                                { color: #2dd4bf !important; }
