@@ -3,260 +3,200 @@
 
 {% block head %}
 <style>
-/* ============================================================
-   Referrals & Commission - dense classical layout
-   ============================================================ */
-.rfc-page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 8px 18px 24px;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-size: 0.82rem;
-  color: #212529;
-}
+  /* ============ Page ============ */
+  .rfc-page {
+    padding: 4px 8px 24px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.95rem;
+    color: var(--bs-body-color);
+  }
 
-/* Header */
-.rfc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 2px solid #212529;
-  padding-bottom: 5px;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.rfc-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-.rfc-subtitle {
-  font-size: 0.76rem;
-  color: #6c757d;
-  margin-top: 2px;
-}
+  /* ============ Header ============ */
+  .rfc-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--bs-border-color);
+    padding-bottom: 8px; margin-bottom: 12px;
+  }
+  .rfc-title {
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.015em;
+    margin: 0; display: flex; align-items: center; gap: 10px;
+  }
+  .rfc-title i { color: var(--brand-primary); }
+  .rfc-subtitle {
+    font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px;
+  }
 
-/* Section heading */
-.rfc-section {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #6c757d;
-  margin: 0 0 5px 0;
-  padding-bottom: 2px;
-  border-bottom: 1px solid #dee2e6;
-}
+  /* ============ Colored section bands ============ */
+  .rfc-band {
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    margin: 14px 0 0;
+    border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rfc-band i { font-size: 1rem; }
+  .rfc-band-add      { background: #dbeafe; color: #1d4ed8; }
+  .rfc-band-list     { background: #fef3c7; color: #b45309; }
+  .rfc-band-recalc   { background: #dcfce7; color: #15803d; }
+  [data-bs-theme="dark"] .rfc-band-add    { background: #1e3a8a; color: #dbeafe; }
+  [data-bs-theme="dark"] .rfc-band-list   { background: #78350f; color: #fef3c7; }
+  [data-bs-theme="dark"] .rfc-band-recalc { background: #14532d; color: #dcfce7; }
 
-/* Add referral form */
-.rfc-add {
-  background: #f8f9fa;
-  border: 1px solid #212529;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-}
-.rfc-add-row {
-  display: grid;
-  grid-template-columns: 2fr 2fr 1.5fr 1fr auto;
-  gap: 8px;
-  align-items: end;
-}
-.rfc-field label {
-  display: block;
-  font-size: 0.64rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #6c757d;
-  margin-bottom: 1px;
-}
-.rfc-field input {
-  width: 100%;
-  padding: 3px 8px;
-  border: 1px solid #6c757d;
-  border-radius: 0;
-  font-size: 0.85rem;
-  background: #fff;
-}
-.rfc-field input:focus {
-  outline: none;
-  border-color: #198754;
-  box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.15);
-}
-.rfc-field input[type="number"] {
-  font-family: Consolas, Monaco, monospace;
-  text-align: right;
-}
+  /* Panel wrapper (card under the band) */
+  .rfc-panel {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+  }
 
-/* Buttons */
-.rfc-btn {
-  display: inline-block;
-  padding: 6px 14px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border: 1px solid #212529;
-  background: #fff;
-  color: #212529;
-  text-decoration: none;
-  border-radius: 0;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-.rfc-btn:hover { background: #f1f3f5; color: #212529; }
-.rfc-btn-primary {
-  background: #198754;
-  border-color: #198754;
-  color: #fff;
-}
-.rfc-btn-primary:hover { background: #146c43; color: #fff; }
-.rfc-btn-icon {
-  padding: 5px 9px;
-  font-size: 0.85rem;
-}
-.rfc-btn-danger {
-  background: #fff;
-  color: #dc3545;
-  border-color: #dc3545;
-}
-.rfc-btn-danger:hover {
-  background: #dc3545;
-  color: #fff;
-}
+  /* ============ Add form ============ */
+  .rfc-add-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.4fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+  @media (max-width: 900px) { .rfc-add-row { grid-template-columns: 1fr; } }
 
-/* Search bar */
-.rfc-search {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 6px;
-  max-width: 500px;
-}
-.rfc-search input {
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid #6c757d;
-  border-radius: 0;
-  font-size: 0.85rem;
-}
+  .rfc-field { display: flex; flex-direction: column; gap: 4px; }
+  .rfc-field label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+  }
+  .rfc-field input {
+    width: 100%; padding: 5px 10px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.9rem; background: #f3f8ff;
+    color: var(--bs-body-color); height: 32px;
+    box-sizing: border-box;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .rfc-field input[type="number"] { background: #fff8ee; text-align: right; font-family: Consolas, Monaco, monospace; }
+  .rfc-field input[type="tel"]    { background: #f6fff0; }
+  .rfc-field input[type="date"]   { background: #fdf5ff; }
+  .rfc-field input:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .rfc-field input { border-color: #000; }
+  [data-bs-theme="dark"] .rfc-field input { background: #1a2433; color: #e8eaee; }
+  [data-bs-theme="dark"] .rfc-field input[type="number"] { background: #2a2116; }
+  [data-bs-theme="dark"] .rfc-field input[type="tel"]    { background: #1a2719; }
+  [data-bs-theme="dark"] .rfc-field input[type="date"]   { background: #241a2c; }
 
-/* Table */
-.rfc-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1.5px solid #212529;
-  font-size: 0.82rem;
-}
-.rfc-table thead th {
-  background: #212529;
-  color: #fff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 4px 10px;
-  text-align: left;
-  border: 1px solid #212529;
-  white-space: nowrap;
-}
-.rfc-table thead th.num { text-align: right; }
-.rfc-table thead th.center { text-align: center; }
-.rfc-table tbody td {
-  padding: 3px 10px;
-  border: 1px solid #6c757d;
-  vertical-align: middle;
-}
-.rfc-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.rfc-table tbody tr:hover { background: #f1f3f5; }
-.rfc-table .name { font-weight: 700; font-size: 0.88rem; }
-.rfc-table .muted { color: #6c757d; font-size: 0.78rem; }
-.rfc-table td.num {
-  text-align: right;
-  font-family: Consolas, Monaco, monospace;
-  font-variant-numeric: tabular-nums;
-}
-.rfc-table td.center { text-align: center; }
+  /* ============ Buttons ============ */
+  .rfc-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; font-size: 0.85rem; font-weight: 600;
+    border: 1px solid var(--bs-border-color); background: var(--bs-body-bg);
+    color: var(--bs-body-color); text-decoration: none; border-radius: 6px;
+    cursor: pointer; letter-spacing: 0.02em; transition: background .12s;
+  }
+  .rfc-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
+  .rfc-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+  .rfc-btn-primary:hover { background: #146c43; color: #fff; }
+  .rfc-btn-danger { background: transparent; color: #dc3545; border-color: #dc3545; }
+  .rfc-btn-danger:hover { background: #dc3545; color: #fff; }
+  .rfc-btn-icon { padding: 6px 10px; font-size: 0.85rem; }
 
-/* Inline commission editor */
-.rfc-comm-form {
-  display: inline-flex;
-  gap: 4px;
-  align-items: stretch;
-  justify-content: flex-end;
-}
-.rfc-comm-input {
-  width: 72px;
-  padding: 2px 6px;
-  border: 1px solid #6c757d;
-  border-radius: 0;
-  font-size: 0.82rem;
-  font-family: Consolas, Monaco, monospace;
-  text-align: right;
-  background: #fff;
-}
-.rfc-comm-pct {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 6px;
-  background: #f1f3f5;
-  border: 1px solid #6c757d;
-  border-left: none;
-  font-size: 0.78rem;
-  color: #6c757d;
-  font-weight: 600;
-}
-.rfc-save {
-  padding: 2px 8px;
-  background: #198754;
-  color: #fff;
-  border: 1px solid #198754;
-  cursor: pointer;
-  font-size: 0.82rem;
-  border-radius: 0;
-}
-.rfc-save:hover { background: #146c43; }
+  /* ============ Search ============ */
+  .rfc-search { display: flex; gap: 8px; margin-bottom: 12px; max-width: 520px; }
+  .rfc-search input {
+    flex: 1; padding: 6px 10px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.9rem; background: #f3f8ff; color: var(--bs-body-color);
+  }
+  .rfc-search input:focus {
+    outline: none; border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .rfc-search input { border-color: #000; background: #1a2433; color: #e8eaee; }
 
-.rfc-delete {
-  padding: 2px 8px;
-  background: #fff;
-  color: #dc3545;
-  border: 1px solid #dc3545;
-  cursor: pointer;
-  font-size: 0.82rem;
-  border-radius: 0;
-}
-.rfc-delete:hover { background: #dc3545; color: #fff; }
+  /* ============ Table ============ */
+  .rfc-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border: 2px solid #1a1a1a; border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.88rem; background: var(--bs-body-bg);
+  }
+  .rfc-table thead th {
+    background: #1a1a1a; color: #ffffff;
+    font-size: 0.76rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 6px 10px; text-align: left; white-space: nowrap;
+    border-bottom: 2px solid #000;
+    border-right: 1px solid #333846;
+  }
+  .rfc-table thead th:last-child { border-right: none; }
+  .rfc-table thead th.num    { text-align: right; }
+  .rfc-table thead th.center { text-align: center; }
+  .rfc-table tbody td {
+    padding: 4px 10px;
+    border-bottom: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    vertical-align: middle;
+  }
+  .rfc-table tbody td:last-child { border-right: none; }
+  .rfc-table tbody tr:last-child td { border-bottom: none; }
+  .rfc-table tbody tr:hover { background: var(--bs-tertiary-bg); }
+  .rfc-table .name  { font-weight: 700; font-size: 0.95rem; }
+  .rfc-table .muted { color: var(--bs-secondary-color); font-size: 0.85rem; }
+  .rfc-table td.num { text-align: right; font-family: Consolas, Monaco, monospace; font-variant-numeric: tabular-nums; }
+  .rfc-table td.center { text-align: center; }
 
-/* Empty state */
-.rfc-empty {
-  text-align: center;
-  padding: 22px 16px;
-  color: #6c757d;
-  font-style: italic;
-  border: 1.5px solid #212529;
-  background: #fafbfc;
-}
+  /* Inline commission editor */
+  .rfc-comm-form { display: inline-flex; gap: 4px; align-items: stretch; justify-content: flex-end; }
+  .rfc-comm-input {
+    width: 72px; padding: 3px 7px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.85rem; font-family: Consolas, Monaco, monospace;
+    text-align: right; background: #fff8ee; color: var(--bs-body-color);
+  }
+  .rfc-comm-input:focus {
+    outline: none; border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  .rfc-comm-pct {
+    display: inline-flex; align-items: center; padding: 0 9px;
+    background: var(--bs-tertiary-bg); color: var(--bs-secondary-color);
+    border: 2px solid #1a1a1a; border-left: none; border-radius: 0 6px 6px 0;
+    font-size: 0.85rem; font-weight: 700;
+  }
+  .rfc-comm-form .rfc-comm-input { border-radius: 6px 0 0 6px; border-right: none; }
+  .rfc-save {
+    padding: 3px 9px; background: #198754; color: #fff;
+    border: 2px solid #198754; border-radius: 6px;
+    cursor: pointer; font-size: 0.82rem;
+  }
+  .rfc-save:hover { background: #146c43; }
+  .rfc-delete {
+    padding: 3px 9px; background: transparent; color: #dc3545;
+    border: 2px solid #dc3545; border-radius: 6px;
+    cursor: pointer; font-size: 0.82rem;
+  }
+  .rfc-delete:hover { background: #dc3545; color: #fff; }
+  [data-bs-theme="dark"] .rfc-comm-input { border-color: #000; background: #2a2116; }
+  [data-bs-theme="dark"] .rfc-comm-pct   { border-color: #000; }
 
-/* Footer note */
-.rfc-note {
-  margin-top: 8px;
-  padding-top: 6px;
-  border-top: 1px solid #dee2e6;
-  font-size: 0.75rem;
-  color: #6c757d;
-  line-height: 1.55;
-}
-.rfc-note strong { color: #212529; }
-
-@media (max-width: 900px) {
-  .rfc-add-row { grid-template-columns: 1fr; }
-  .rfc-table { font-size: 0.74rem; }
-  .rfc-table thead th,
-  .rfc-table tbody td { padding: 5px 7px; }
-}
+  /* ============ Empty + Note ============ */
+  .rfc-empty {
+    text-align: center; padding: 26px;
+    color: var(--bs-secondary-color); font-style: italic;
+    border: 1px dashed var(--bs-border-color); border-radius: 10px;
+    background: var(--bs-tertiary-bg);
+  }
+  .rfc-note {
+    margin-top: 14px; padding: 10px 14px;
+    border: 1px solid var(--bs-border-color); border-radius: 10px;
+    background: var(--bs-tertiary-bg);
+    font-size: 0.82rem; color: var(--bs-secondary-color); line-height: 1.55;
+  }
+  .rfc-note strong { color: var(--bs-body-color); }
 </style>
 {% endblock %}
 
@@ -277,7 +217,8 @@
   </div>
 
   {# ============ ADD REFERRAL ============ #}
-  <p class="rfc-section">Add New Referral</p>
+  <div class="rfc-band rfc-band-add"><i class="bi bi-plus-circle"></i> Add New Referral</div>
+  <div class="rfc-panel">
   <form method="POST" action="{{ url_for('settings.referral_create') }}" class="rfc-add">
     <div class="rfc-add-row">
       <div class="rfc-field">
@@ -309,7 +250,9 @@
   </form>
 
   {# ============ SEARCH ============ #}
-  <p class="rfc-section">All Referrals ({{ rows|length }})</p>
+  </div>
+  <div class="rfc-band rfc-band-list"><i class="bi bi-people"></i> All Referrals ({{ rows|length }})</div>
+  <div class="rfc-panel">
   <form method="GET" class="rfc-search">
     <input type="text" name="q" value="{{ q_search }}"
            placeholder="Search referral name...">
@@ -397,40 +340,4 @@ Existing orders keep their referral name.');">
   </div>
   {% endif %}
 
-  {# ============ RECALCULATE ============ #}
-  <p class="rfc-section" style="margin-top: 12px;">Recalculate Existing Orders</p>
-  <form method="POST" action="{{ url_for('settings.referrals_recalculate') }}"
-        class="rfc-add" style="display: flex; gap: 8px; align-items: end; flex-wrap: wrap; margin-bottom: 6px;">
-    <div class="rfc-field">
-      <label>From (optional)</label>
-      <input type="date" name="date_from">
-    </div>
-    <div class="rfc-field">
-      <label>To (optional)</label>
-      <input type="date" name="date_to">
-    </div>
-    <div class="rfc-field">
-      <button type="submit" class="rfc-btn rfc-btn-primary"
-              onclick="return confirm('Recalculate commission for all matching orders using the current %?\n\nThis will overwrite their existing commission_amount.');">
-        <i class="bi bi-arrow-clockwise"></i> Recalculate
-      </button>
-    </div>
-    <div style="flex: 1; font-size: 0.74rem; color: #6c757d;">
-      Commission = <strong>(Subtotal − Discount) × Referral %</strong>.
-      Applied to orders already created. Leave dates blank to recalculate ALL orders.
-    </div>
-  </form>
-
-  {# ============ NOTE ============ #}
-  <div class="rfc-note">
-    <i class="bi bi-info-circle"></i>
-    <strong>How it works:</strong>
-    Commission is calculated as <strong>final total (after discount) × commission %</strong>
-    and stored with each new order at creation time.
-    Changing the % here does <strong>not</strong> affect orders already created.
-    Adding a referral here makes it immediately available in the
-    <em>Referred by</em> field on the registration form.
-  </div>
-
-</div>
 {% endblock %}

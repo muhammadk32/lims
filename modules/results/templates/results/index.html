@@ -3,88 +3,190 @@
 
 {% block head %}
 <style>
-.pr-page { max-width: 100%; margin: 0 auto; padding: 10px 20px 30px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 1rem; color: #212529; }
+  /* ============ Page ============ */
+  .pr-page {
+    padding: 4px 10px 24px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.95rem;
+    color: var(--bs-body-color);
+  }
 
-.pr-header { display: flex; justify-content: space-between; align-items: flex-end;
-             border-bottom: 2px solid #212529; padding-bottom: 5px;
-             margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
-.pr-title { font-size: 1.15rem; font-weight: 700; margin: 0;
-            text-transform: uppercase; letter-spacing: 0.02em; }
-.pr-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
-.pr-count { font-size: 0.76rem; color: #6c757d;
-            font-family: Consolas, Monaco, monospace; }
+  /* ============ Header ============ */
+  .pr-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--bs-border-color);
+    padding-bottom: 8px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .pr-title {
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.015em;
+    margin: 0; display: flex; align-items: center; gap: 10px;
+  }
+  .pr-title i { color: var(--brand-primary); }
+  .pr-subtitle { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
+  .pr-count {
+    font-size: 0.85rem; color: var(--bs-secondary-color);
+    font-family: Consolas, Monaco, monospace;
+  }
 
-.pr-filter {
-  background: #f8f9fa; border: 1px solid #dee2e6;
-  padding: 8px 10px; margin-bottom: 8px;
-  display: grid; grid-template-columns: 2fr 1.2fr auto;
-  gap: 8px; align-items: end;
-}
-.pr-field label { display: block; font-size: 0.62rem; font-weight: 700;
-                  text-transform: uppercase; letter-spacing: 0.06em;
-                  color: #6c757d; margin-bottom: 2px; }
-.pr-field input, .pr-field select {
-  width: 100%; padding: 3px 8px; border: 1px solid #6c757d;
-  border-radius: 0; font-size: 0.82rem; background: #fff; height: 28px;
-}
-.pr-field input:focus, .pr-field select:focus { outline: none; border-color: #198754; }
+  /* ============ Filter card ============ */
+  .pr-filter {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bs-body-bg);
+    margin-bottom: 12px;
+    padding: 12px 14px 12px 14px;
+    padding-top: 40px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 1.2fr auto;
+    gap: 12px; align-items: end;
+  }
+  .pr-filter::before {
+    content: "\\f4fe  Filters";
+    font-family: 'bootstrap-icons', 'Segoe UI', Arial, sans-serif;
+    position: absolute; top: 0; left: 0; right: 0;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    color: #1d4ed8; background: #dbeafe;
+  }
+  [data-bs-theme="dark"] .pr-filter::before { color: #dbeafe; background: #1e3a8a; }
 
-.pr-btn { display: inline-block; padding: 4px 12px; font-size: 0.74rem;
-  font-weight: 600; border: 1px solid #212529; background: #fff;
-  color: #212529; text-decoration: none; cursor: pointer; border-radius: 0;
-  text-transform: uppercase; letter-spacing: 0.03em; height: 28px;
-  line-height: 1.6; box-sizing: border-box; }
-.pr-btn:hover { background: #f1f3f5; }
-.pr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.pr-btn-primary:hover { background: #146c43; }
-.pr-btn-clear { border-color: #dc3545; color: #dc3545; }
-.pr-btn-clear:hover { background: #dc3545; color: #fff; }
-.pr-btn-enter { background: #198754; border-color: #198754; color: #fff;
-                padding: 3px 12px; font-size: 0.7rem; height: 24px;
-                line-height: 1.7; }
-.pr-btn-enter:hover { background: #146c43; }
+  .pr-field { display: flex; flex-direction: column; gap: 4px; }
+  .pr-field label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+  }
+  .pr-field input,
+  .pr-field select {
+    width: 100%; padding: 6px 10px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.9rem; background: #f3f8ff;
+    color: var(--bs-body-color); height: 34px; box-sizing: border-box;
+  }
+  .pr-field select { background: #f6fff0; }
+  .pr-field input:focus,
+  .pr-field select:focus {
+    outline: none; border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .pr-field input,
+  [data-bs-theme="dark"] .pr-field select { border-color: #000; color: #e8eaee; }
+  [data-bs-theme="dark"] .pr-field input { background: #1a2433; }
+  [data-bs-theme="dark"] .pr-field select { background: #1a2719; }
 
-.pr-expand {
-  display: inline-block; width: 22px; height: 22px; line-height: 20px;
-  text-align: center; border: 1px solid #6c757d; background: #fff;
-  color: #212529; cursor: pointer; font-weight: 700; user-select: none;
-  text-decoration: none; font-family: Consolas, Monaco, monospace;
-  font-size: 0.85rem;
-}
-.pr-expand:hover { background: #212529; color: #fff; border-color: #212529; }
+  /* ============ Buttons ============ */
+  .pr-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; font-size: 0.84rem; font-weight: 600;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg); color: var(--bs-body-color);
+    text-decoration: none; cursor: pointer; border-radius: 6px;
+    transition: background .12s;
+  }
+  .pr-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
+  .pr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+  .pr-btn-primary:hover { background: #146c43; color: #fff; }
+  .pr-btn-clear { border-color: #dc3545; color: #dc3545; background: transparent; }
+  .pr-btn-clear:hover { background: #dc3545; color: #fff; }
+  .pr-btn-enter {
+    background: #198754; border-color: #198754; color: #fff;
+    padding: 5px 12px; font-size: 0.78rem; border-radius: 6px;
+  }
+  .pr-btn-enter:hover { background: #146c43; color: #fff; }
 
-.pr-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
-            font-size: 0.95rem; background: #fff; table-layout: fixed; }
-.pr-table thead th {
-  background: #212529; color: #fff; font-size: 0.8rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  padding: 8px 10px; text-align: left; border: 1px solid #212529;
-  white-space: nowrap;
-}
-.pr-table thead th.center { text-align: center; }
-.pr-table thead th.end { text-align: right; }
-.pr-table tbody td { padding: 8px 10px; border: 1px solid #adb5bd;
-                     vertical-align: middle; height: 32px; font-size: 0.9rem; }
-.pr-table .patient-code { font-size: 0.68rem; overflow: hidden;
-                          text-overflow: ellipsis; white-space: nowrap; }
-.pr-table tbody tr:nth-child(even) { background: #fbfcfd; }
-.pr-table tbody tr:hover { background: #f1f3f5; }
-.pr-table .lab { font-family: Consolas, Monaco, monospace; font-weight: 700;
-                 font-size: 0.95rem; color: #0d6efd; }
-.pr-table .patient { font-weight: 600; font-size: 0.95rem; }
-.pr-table .patient-code { font-family: Consolas, Monaco, monospace;
-                          font-size: 0.8rem; color: #6c757d; }
-.pr-table .center { text-align: center; }
-.pr-table .num { text-align: right; font-family: Consolas, Monaco, monospace;
-                 font-size: 0.85rem; }
-.pr-badge { display: inline-block; padding: 3px 9px;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;
-  text-transform: uppercase; color: #fff; border-radius: 0; }
-.pr-badge.pending   { background: #ffc107; color: #664d03; }
+  /* ============ Band + card wrapper ============ */
+  .pr-band {
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px; border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; gap: 8px;
+    background: #fef3c7; color: #b45309;
+    margin-top: 4px;
+  }
+  .pr-band i { font-size: 1rem; }
+  [data-bs-theme="dark"] .pr-band { background: #78350f; color: #fef3c7; }
+  .pr-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 10px; margin-bottom: 8px;
+  }
 
-.pr-empty { text-align: center; padding: 40px 20px; color: #6c757d;
-            font-style: italic; border: 1.5px solid #212529; background: #fafbfc; }
+  /* ============ Expand toggle ============ */
+  .pr-expand {
+    display: inline-block; width: 24px; height: 24px; line-height: 22px;
+    text-align: center;
+    border: 2px solid #1a1a1a; background: var(--bs-body-bg);
+    color: var(--bs-body-color); cursor: pointer;
+    font-weight: 700; user-select: none;
+    text-decoration: none; font-family: Consolas, Monaco, monospace;
+    font-size: 0.85rem; border-radius: 6px;
+  }
+  .pr-expand:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  /* ============ Table ============ */
+  .pr-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border: 2px solid #1a1a1a; border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.9rem; background: var(--bs-body-bg);
+    table-layout: fixed;
+  }
+  .pr-table thead th {
+    background: #1a1a1a; color: #fff;
+    font-size: 0.76rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 9px 10px; text-align: left; white-space: nowrap;
+    border-bottom: 2px solid #000;
+    border-right: 1px solid #333846;
+  }
+  .pr-table thead th:last-child { border-right: none; }
+  .pr-table thead th.center { text-align: center; }
+  .pr-table thead th.end    { text-align: right; }
+  .pr-table tbody td {
+    padding: 6px 10px;
+    border-bottom: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    vertical-align: middle; height: 30px; font-size: 0.88rem;
+  }
+  .pr-table tbody td:last-child { border-right: none; }
+  .pr-table tbody tr:last-child td { border-bottom: none; }
+  .pr-table tbody tr:hover td { background: var(--bs-tertiary-bg); }
+  .pr-table .lab {
+    font-family: Consolas, Monaco, monospace; font-weight: 700;
+    font-size: 0.9rem; color: var(--brand-primary);
+  }
+  .pr-table .patient      { font-weight: 700; font-size: 0.92rem; }
+  .pr-table .patient-code { font-family: Consolas, Monaco, monospace;
+                            font-size: 0.8rem; color: var(--bs-secondary-color); }
+  .pr-table .center { text-align: center; }
+  .pr-table .num {
+    text-align: right;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.85rem;
+  }
+  [data-bs-theme="dark"] .pr-table { border-color: #000; }
+  [data-bs-theme="dark"] .pr-table tbody td { border-color: #2a2f3a; }
+
+  /* ============ Badges ============ */
+  .pr-badge {
+    display: inline-block; padding: 3px 10px;
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: #fff; border-radius: 999px;
+  }
+  .pr-badge.pending { background: #ffc107; color: #664d03; }
+
+  /* ============ Empty ============ */
+  .pr-empty {
+    padding: 40px; text-align: center;
+    color: var(--bs-secondary-color); font-style: italic;
+    border: 1px dashed var(--bs-border-color); border-radius: 10px;
+    background: var(--bs-tertiary-bg);
+  }
 </style>
 {% endblock %}
 
@@ -126,6 +228,8 @@
   </form>
 
   {% if pending_orders %}
+  <div class="pr-band"><i class="bi bi-hourglass-split"></i> Pending Results ({{ pending_orders|length }})</div>
+  <div class="pr-card">
   <table class="pr-table">
     <colgroup>
       <col style="width: 40px;">
@@ -180,6 +284,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}
   <div class="pr-empty">
     <i class="bi bi-check2-circle fs-3 d-block mb-2"></i>

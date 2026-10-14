@@ -3,32 +3,149 @@
 
 {% block head %}
 <style>
-.sr-page { max-width: 100%; margin: 0 auto; padding: 10px 20px 30px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 1rem; color: #212529; }
-.sr-header { border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
-.sr-title { font-size: 1.15rem; font-weight: 700; margin: 0;
-            text-transform: uppercase; letter-spacing: 0.02em; }
-.sr-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
-.sr-filter { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
-.sr-filter input { padding: 5px 10px; border: 1px solid #6c757d;
-                   font-size: 0.85rem; height: 32px; box-sizing: border-box; width: 280px; }
-.sr-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
-  font-weight: 600; border: 1px solid #212529; background: #fff; color: #212529;
-  text-decoration: none; cursor: pointer; border-radius: 4px;
-  text-transform: uppercase; letter-spacing: 0.03em; height: 32px;
-  line-height: 1.9; box-sizing: border-box; }
-.sr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.sr-btn-primary:hover { background: #146c43; }
-.sr-btn-sm { padding: 2px 10px; font-size: 0.7rem; height: 26px; line-height: 1.6; }
-.sr-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
-.sr-table thead th { background: #212529; color: #fff; padding: 5px 8px;
-                     text-align: left; font-size: 0.7rem;
-                     text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #0a58ca; }
-.sr-table tbody td { padding: 5px 8px; border: 1px solid #adb5bd;
-                     vertical-align: middle; font-size: 0.95rem; }
-.sr-table tbody tr:hover { background: #f8f9fa; }
-.sr-empty { padding: 30px; text-align: center; color: #6c757d;
-            border: 1px dashed #adb5bd; }
+  /* ============ Page ============ */
+  .sr-page {
+    padding: 4px 10px 24px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.95rem;
+    color: var(--bs-body-color);
+  }
+
+  /* ============ Header ============ */
+  .sr-header {
+    border-bottom: 1px solid var(--bs-border-color);
+    padding-bottom: 8px; margin-bottom: 12px;
+  }
+  .sr-title {
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.015em;
+    margin: 0; display: flex; align-items: center; gap: 10px;
+  }
+  .sr-title i { color: var(--brand-primary); }
+  .sr-sub { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
+
+  /* ============ Filter card ============ */
+  .sr-filter {
+    display: flex; gap: 8px; align-items: center;
+    padding: 12px 14px; margin-bottom: 12px;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    padding-top: 40px;
+  }
+  .sr-filter::before {
+    content: "\f4fe  Search";
+    font-family: 'bootstrap-icons', 'Segoe UI', Arial, sans-serif;
+    position: absolute; top: 0; left: 0; right: 0;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    color: #1d4ed8;
+    background: #dbeafe;
+  }
+  [data-bs-theme="dark"] .sr-filter::before { color: #dbeafe; background: #1e3a8a; }
+
+  .sr-filter input {
+    padding: 7px 11px;
+    border: 2px solid #1a1a1a; border-radius: 6px;
+    font-size: 0.9rem; height: 36px; box-sizing: border-box; width: 320px;
+    background: #f3f8ff; color: var(--bs-body-color);
+  }
+  .sr-filter input:focus {
+    outline: none; border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  }
+  [data-bs-theme="dark"] .sr-filter input { border-color: #000; background: #1a2433; color: #e8eaee; }
+
+  /* ============ Buttons ============ */
+  .sr-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; font-size: 0.84rem; font-weight: 600;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg); color: var(--bs-body-color);
+    text-decoration: none; cursor: pointer; border-radius: 6px;
+    letter-spacing: 0.02em;
+    transition: background .12s;
+  }
+  .sr-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
+  .sr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
+  .sr-btn-primary:hover { background: #146c43; color: #fff; }
+  .sr-btn-sm { padding: 5px 11px; font-size: 0.78rem; border-radius: 6px; }
+
+  /* ============ Band + card wrapper ============ */
+  .sr-band {
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; gap: 8px;
+    background: #fef3c7; color: #b45309;
+    margin-top: 4px;
+  }
+  .sr-band i { font-size: 1rem; }
+  [data-bs-theme="dark"] .sr-band { background: #78350f; color: #fef3c7; }
+
+  .sr-card {
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  /* ============ Table ============ */
+  .sr-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border: 2px solid #1a1a1a; border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.9rem; background: var(--bs-body-bg);
+  }
+  .sr-table thead th {
+    background: #1a1a1a; color: #fff;
+    padding: 9px 12px; text-align: left;
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    border-bottom: 2px solid #000;
+    border-right: 1px solid #333846;
+    white-space: nowrap;
+  }
+  .sr-table thead th:last-child { border-right: none; }
+  .sr-table tbody td {
+    padding: 6px 12px;
+    border-bottom: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    vertical-align: middle; font-size: 0.9rem;
+  }
+  .sr-table tbody td:last-child { border-right: none; }
+  .sr-table tbody tr:last-child td { border-bottom: none; }
+  .sr-table tbody tr:hover td { background: var(--bs-tertiary-bg); }
+  .sr-table code {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.85rem; padding: 1px 5px; border-radius: 4px;
+    background: var(--bs-tertiary-bg); color: var(--brand-primary);
+    border: 1px solid var(--bs-border-color);
+  }
+  [data-bs-theme="dark"] .sr-table { border-color: #000; }
+  [data-bs-theme="dark"] .sr-table tbody td { border-color: #2a2f3a; }
+
+  /* Badge */
+  .sr-badge-pending {
+    display: inline-block; padding: 3px 10px;
+    background: #ffc107; color: #664d03;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border-radius: 999px;
+  }
+
+  /* ============ Empty ============ */
+  .sr-empty {
+    padding: 34px; text-align: center;
+    color: var(--bs-secondary-color); font-style: italic;
+    border: 1px dashed var(--bs-border-color); border-radius: 10px;
+    background: var(--bs-tertiary-bg);
+  }
 </style>
 {% endblock %}
 
@@ -47,6 +164,8 @@
   </form>
 
   {% if orders %}
+  <div class="sr-band"><i class="bi bi-inbox"></i> Awaiting Sample ({{ orders|length }})</div>
+  <div class="sr-card">
   <table class="sr-table">
     <thead>
       <tr>
@@ -67,7 +186,7 @@
         <td>{{ o.patient.patient_code }}</td>
         <td>{{ o.created_at | localtime('%d-%b-%Y %I:%M %p') }}</td>
         <td class="text-center">{{ o.top_level_items | length }}</td>
-        <td><span style="padding:2px 8px; border-radius:10px; background:#fff3cd; color:#664d03; font-size:0.78rem; font-weight:700;">SAMPLE TO COME</span></td>
+        <td><span class="sr-badge-pending">Sample To Come</span></td>
         <td class="text-end">
           <form method="POST" action="{{ url_for('lab.mark_received', order_id=o.id) }}"
                 style="display:inline;">
@@ -80,6 +199,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}
   <div class="sr-empty">
     <i class="bi bi-inbox fs-3 d-block mb-2"></i>
