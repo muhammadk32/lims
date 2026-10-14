@@ -1,151 +1,46 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}Dashboard — LabMS{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-5 px-4">
+<div class="container-fluid" style="padding: 6px 10px 20px;">
+  <div class="dash-wrap">
 
-  <div style="max-width: 900px; margin: 0 auto;">
-
-    {# ============ WELCOME ============ #}
-    <div class="mb-5">
-      <h1 class="fw-bold mb-2" style="font-size: 2rem;">
-        Welcome back, {{ current_user.full_name }} 👋
-      </h1>
-      <p class="text-muted mb-0">
-        {{ current_user.role_label }} · {{ now.strftime('%A, %d %B %Y') if now else '' }}
+    <header class="dash-head">
+      <h1>Welcome back, {{ current_user.full_name }} 👋</h1>
+      <p class="dash-sub">
+        {{ current_user.role_label }}{% if now %} · {{ now.strftime('%A, %d %B %Y') }}{% endif %}
       </p>
-    </div>
+    </header>
 
-    {# ============ QUICK LINKS ============ #}
-    <div class="mb-5">
-      <p class="text-uppercase text-muted small fw-semibold mb-3" style="letter-spacing: 0.08em;">
-        Quick actions
-      </p>
 
-      <div class="row g-3">
+    <div class="qa-rows">
 
-        <div class="col-md-6">
-          <a href="{{ url_for('orders.new_order') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-person-plus text-primary" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">New Registration</div>
-                <div class="text-muted small">Register a patient and order tests</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
-        <div class="col-md-6">
-          <a href="{{ url_for('results.index') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-clipboard-check text-warning" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">
-                  Enter Results
-                  {% if stats.pending_results %}
-                    <span class="badge bg-warning text-dark ms-2">{{ stats.pending_results }}</span>
-                  {% endif %}
-                </div>
-                <div class="text-muted small">Pending results awaiting entry</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
-        <div class="col-md-6">
-          <a href="{{ url_for('lab.verify_queue') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-clipboard2-check text-success" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">Verify Reports</div>
-                <div class="text-muted small">Pathologist verification queue</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
-        <div class="col-md-6">
-          <a href="{{ url_for('billing.index') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-cash-coin text-danger" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">
-                  Cash Summary
-                  {% if stats.unpaid_orders %}
-                    <span class="badge bg-danger ms-2">{{ stats.unpaid_orders }}</span>
-                  {% endif %}
-                </div>
-                <div class="text-muted small">Payments and unpaid invoices</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
-        <div class="col-md-6">
-          <a href="{{ url_for('orders.list_orders') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-journal-text text-secondary" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">Daily Ledger</div>
-                <div class="text-muted small">Today's registrations and history</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
-        <div class="col-md-6">
-          <a href="{{ url_for('patients.list_patients') }}"
-             class="d-flex align-items-center justify-content-between text-decoration-none p-3 rounded-3 border bg-body h-100 dashboard-tile">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-people text-info" style="font-size: 1.5rem;"></i>
-              <div>
-                <div class="fw-semibold text-body">Patient Directory</div>
-                <div class="text-muted small">All registered patients</div>
-              </div>
-            </div>
-            <i class="bi bi-chevron-right text-muted"></i>
-          </a>
-        </div>
-
+      <div class="qa-row">
+        <span class="qa-cat">Operation</span>
+        <a class="qa-item" href="{{ url_for('orders.new_order') }}">New Registration</a>
+        <a class="qa-item" href="{{ url_for('orders.list_orders') }}">Daily Ledger</a>
+        <a class="qa-item" href="{{ url_for('reports.index') }}">Test Reports</a>
       </div>
-    </div>
 
-    {# ============ TODAY AT A GLANCE ============ #}
-    <div>
-      <p class="text-uppercase text-muted small fw-semibold mb-3" style="letter-spacing: 0.08em;">
-        Today at a glance
-      </p>
-
-      <div class="d-flex flex-wrap gap-4 text-muted small">
-        <div>
-          <span class="fw-semibold text-body">{{ stats.revenue_today | money }}</span>
-          <span class="ms-1">revenue</span>
-        </div>
-        <div>
-          <span class="fw-semibold text-body">{{ stats.orders_today }}</span>
-          <span class="ms-1">registrations</span>
-        </div>
-        <div>
-          <span class="fw-semibold text-body">{{ stats.pending_results }}</span>
-          <span class="ms-1">pending results</span>
-        </div>
-        <div>
-          <span class="fw-semibold text-body">{{ stats.unpaid_orders }}</span>
-          <span class="ms-1">unpaid invoices</span>
-        </div>
+      <div class="qa-row">
+        <span class="qa-cat">Laboratory</span>
+        <a class="qa-item" href="{{ url_for('lab.receiving') }}">Sample Receiving</a>
+        <a class="qa-item" href="{{ url_for('lab.in_process') }}">Test in Process</a>
+        <a class="qa-item" href="{{ url_for('results.index') }}">Result Entry</a>
+        <a class="qa-item" href="{{ url_for('lab.verify_queue') }}">Verification &amp; Approval</a>
       </div>
+
+      <div class="qa-row">
+        <span class="qa-cat">Reports</span>
+        <a class="qa-item" href="{{ url_for('billing.index') }}">Cash Summary</a>
+        <a class="qa-item" href="{{ url_for('analytics.due') }}">Due Collection</a>
+        <a class="qa-item" href="{{ url_for('analytics.commissions') }}">Referral Commission</a>
+        <a class="qa-item" href="{{ url_for('analytics.index') }}">All Reports</a>
+      </div>
+
+
+
     </div>
 
   </div>
@@ -154,13 +49,86 @@
 
 {% block head %}
 <style>
-  .dashboard-tile {
-    transition: background-color 0.12s, border-color 0.12s, transform 0.12s;
+  .dash-wrap { max-width: none; margin: 0; padding: 0; }
+
+  .dash-head h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 2px; }
+  .dash-sub { font-size: 0.88rem; color: var(--bs-secondary-color); margin: 0 0 8px; }
+  .dash-h2 {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--bs-secondary-color);
+    margin: 0 0 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--bs-border-color);
   }
-  .dashboard-tile:hover {
-    background-color: var(--bs-tertiary-bg) !important;
-    border-color: var(--bs-primary) !important;
+
+  /* ---- Row layout ---- */
+  .qa-rows { display: flex; flex-direction: column; gap: 14px; }
+
+  .qa-row {
+    display: grid;
+    grid-template-columns: 190px repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .qa-row:last-child { border-bottom: none; }
+  @media (max-width: 1100px) { .qa-row { grid-template-columns: 180px repeat(3, 1fr); } }
+
+  /* ---- Category button (orange 3D pill) ---- */
+  .qa-cat {
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 20px;
+    padding: 14px 16px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(180deg, #f0a24c 0%, #d97a12 100%);
+    border: 1px solid #c2610a;
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,.18),
+      inset 0 1px 0 rgba(255,255,255,.35),
+      0 3px 6px rgba(0,0,0,.15);
+    text-shadow: 0 1px 1px rgba(0,0,0,.18);
+    user-select: none;
+  }
+
+
+  /* ---- Item button (light blue 3D pill) ---- */
+  .qa-item {
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 14px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e3a63;
+    background: linear-gradient(180deg, #ffffff 0%, #cfdcec 100%);
+    border: 1px solid #9fb3c9;
+    box-shadow:
+      inset 0 -3px 0 rgba(30,58,99,.10),
+      inset 0 1px 0 rgba(255,255,255,.9),
+      0 2px 3px rgba(0,0,0,.08);
+    transition: transform .08s, box-shadow .08s, color .12s;
+  }
+  .qa-item:hover {
+    color: #0d2a4d;
     transform: translateY(-1px);
+    box-shadow:
+      inset 0 -3px 0 rgba(30,58,99,.15),
+      inset 0 1px 0 rgba(255,255,255,.95),
+      0 4px 8px rgba(0,0,0,.12);
   }
+  .qa-item:active { transform: translateY(0); }
+
+  /* Dark theme */
+  [data-bs-theme="dark"] .qa-item {
+    color: #dbe7f5;
+    background: linear-gradient(180deg, #26303d 0%, #1a222d 100%);
+    border-color: #35404f;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05), 0 2px 3px rgba(0,0,0,.35);
+  }
+  [data-bs-theme="dark"] .qa-item:hover { color: #ffffff; }
 </style>
 {% endblock %}

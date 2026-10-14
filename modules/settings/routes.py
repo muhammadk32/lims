@@ -575,23 +575,21 @@ def laboratories():
     from flask import request as _rq
 
     q_search = _rq.args.get('q', '').strip()
-    view_type = (_rq.args.get('type') or 'all').strip().lower()
-    if view_type not in ('all', 'referrer', 'partner'):
-        view_type = 'all'
 
-    query = Laboratory.query
+    base = Laboratory.query
     if q_search:
-        query = query.filter(Laboratory.name.ilike(f'%{q_search}%'))
-    if view_type == 'partner':
-        query = query.filter(Laboratory.is_partner_lab == True)  # noqa: E712
-    elif view_type == 'referrer':
-        query = query.filter(Laboratory.is_partner_lab == False)  # noqa: E712
+        base = base.filter(Laboratory.name.ilike(f'%{q_search}%'))
 
-    rows = query.order_by(Laboratory.name.asc()).all()
+    rows_ref = (base.filter(Laboratory.is_partner_lab == False)  # noqa: E712
+                    .order_by(Laboratory.name.asc()).all())
+    rows_out = (base.filter(Laboratory.is_partner_lab == True)   # noqa: E712
+                    .order_by(Laboratory.name.asc()).all())
 
     return render_template('settings/laboratories.html',
-                           rows=rows, q_search=q_search,
-                           view_type=view_type)
+                           rows_ref=rows_ref,
+                           rows_out=rows_out,
+                           q_search=q_search,
+                           view_type='all')
 
 
 @settings_bp.route('/laboratories/create', methods=['POST'])

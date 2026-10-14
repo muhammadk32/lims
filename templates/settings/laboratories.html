@@ -3,64 +3,154 @@
 
 {% block head %}
 <style>
-.lab-page { max-width: 1400px; margin: 0 auto; padding: 8px 18px 24px;
-            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+.lab-page {
+  max-width: 1400px; margin: 0 auto; padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.9rem;
+            color: var(--bs-body-color); }
 .lab-header { display: flex; justify-content: space-between; align-items: flex-end;
-              border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 8px; }
-.lab-title { font-size: 1.15rem; font-weight: 700; margin: 0;
-             text-transform: uppercase; letter-spacing: 0.02em; }
-.lab-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
+              border-bottom: 1px solid var(--bs-border-color);
+              padding-bottom: 6px; margin-bottom: 8px; }
+.lab-title { font-size: 1.05rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+.lab-sub { font-size: 0.72rem; color: var(--bs-secondary-color); margin-top: 1px; }
 
-.lab-toolbar { display: flex; gap: 8px; align-items: end; margin-bottom: 10px; }
-.lab-toolbar input { padding: 4px 10px; border: 1px solid #6c757d;
-                     font-size: 0.82rem; height: 30px; box-sizing: border-box; width: 280px; }
-.lab-toolbar input:focus { outline: none; border-color: #198754; }
+.lab-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+  background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color);
+  border-radius: 12px; padding: 12px 14px; }
+.lab-toolbar input, .lab-toolbar select { padding: 7px 11px;
+  border: 1px solid var(--bs-border-color); background: var(--bs-body-bg);
+  color: var(--bs-body-color); border-radius: 8px;
+  font-size: 0.82rem; height: 34px; box-sizing: border-box; }
+.lab-toolbar input { width: 300px; }
+.lab-toolbar input:focus, .lab-toolbar select:focus { outline: none;
+  border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(13,110,253,.15); }
 
-.lab-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
-  font-weight: 600; border: 1px solid #212529; background: #fff; color: #212529;
-  text-decoration: none; cursor: pointer; border-radius: 0;
-  text-transform: uppercase; letter-spacing: 0.03em; height: 30px;
-  line-height: 1.8; box-sizing: border-box; }
-.lab-btn:hover { background: #f1f3f5; }
-.lab-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.lab-btn-primary:hover { background: #146c43; }
-.lab-btn-sm { padding: 2px 10px; font-size: 0.68rem; height: 24px; line-height: 1.7; }
-.lab-btn-warn { border-color: #ffc107; color: #664d03; }
-.lab-btn-danger { border-color: #dc3545; color: #dc3545; }
+.lab-btn { display: inline-flex; align-items: center; gap: 5px;
+  padding: 0 14px; font-size: 0.74rem; font-weight: 600;
+  border: 1px solid var(--bs-border-color); background: var(--bs-body-bg);
+  color: var(--bs-body-color); text-decoration: none; cursor: pointer;
+  border-radius: 8px; text-transform: uppercase; letter-spacing: 0.03em;
+  height: 34px; box-sizing: border-box; transition: all .15s; }
+.lab-btn:hover { background: var(--bs-tertiary-bg); }
+.lab-btn-primary { background: var(--brand-primary); border-color: var(--brand-primary); color: #fff; }
+.lab-btn-primary:hover { filter: brightness(0.92); background: var(--brand-primary); color: #fff; }
+.lab-btn-sm { padding: 0 8px; font-size: 0.68rem; height: 26px; border-radius: 6px; }
+.lab-btn-warn { border-color: #ffc107; color: #b8860b; background: transparent; }
+.lab-btn-warn:hover { background: rgba(255,193,7,.15); }
+.lab-btn-danger { border-color: #dc3545; color: #dc3545; background: transparent; }
 .lab-btn-danger:hover { background: #dc3545; color: #fff; }
 
-.lab-add { background: #f8f9fa; border: 1px solid #dee2e6;
-           padding: 10px 12px; margin-bottom: 10px; }
-.lab-add-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1.5fr 2fr 1fr 1fr auto;
-                gap: 10px; align-items: end; }
-.lab-field label { display: block; font-size: 0.6rem; font-weight: 700;
+.lab-add { background: var(--bs-tertiary-bg); border: 1px solid var(--bs-border-color);
+           border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+.lab-add-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr));
+                gap: 12px; align-items: end; }
+.lab-field label { display: block; font-size: 0.6rem; font-weight: 600;
                    text-transform: uppercase; letter-spacing: 0.06em;
-                   color: #6c757d; margin-bottom: 2px; }
-.lab-field input, .lab-field textarea { width: 100%; padding: 3px 8px;
-                   border: 1px solid #6c757d; font-size: 0.82rem;
-                   background: #fff; height: 28px; box-sizing: border-box; }
-.lab-field input:focus, .lab-field textarea:focus { outline: none; border-color: #198754; }
+                   color: var(--bs-secondary-color); margin-bottom: 5px; }
+.lab-field input, .lab-field textarea { width: 100%; padding: 7px 10px;
+                   border: 1px solid var(--bs-border-color); border-radius: 8px;
+                   font-size: 0.82rem; background: var(--bs-body-bg);
+                   color: var(--bs-body-color); height: 34px;
+                   box-sizing: border-box; transition: all .15s; }
+.lab-field--check { display:flex; align-items:center; gap:8px; height:34px;
+                    padding:7px 10px; border:1px solid var(--bs-border-color);
+                    border-radius:8px; background:var(--bs-body-bg);
+                    font-size:0.78rem; color:var(--bs-body-color); box-sizing:border-box; }
+.lab-field--check input[type="checkbox"] { width:auto; height:auto; margin:0; }
+.lab-field input:focus, .lab-field textarea:focus { outline: none;
+                   border-color: var(--brand-primary); box-shadow: 0 0 0 3px rgba(13,110,253,.15); }
 
-.lab-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529; }
-.lab-table thead th { background: #212529; color: #fff; font-size: 0.65rem;
-  font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-  padding: 6px 8px; text-align: left; border-right: 1px solid #343a40; }
-.lab-table tbody td { padding: 5px 8px; border-bottom: 1px solid #dee2e6;
-  border-right: 1px solid #dee2e6; vertical-align: middle; }
-.lab-table tbody tr.inactive { background: #f8f9fa; color: #adb5bd; }
-.lab-table tbody tr.inactive a { color: #adb5bd; }
+.lab-table { width: 100%; border-collapse: separate; border-spacing: 0;
+  border: 1px solid var(--bs-border-color); border-radius: 12px;
+  overflow: hidden; background: var(--bs-body-bg); }
+.lab-table thead th { background: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color); font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px;
+  text-align: left; white-space: nowrap;
+  border-bottom: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-color); }
+.lab-table thead th:last-child { border-right: none; }
+.lab-table thead th.num { text-align: right; }
+.lab-table thead th.center { text-align: center; }
+.lab-table tbody td { padding: 6px 10px; font-size: 0.85rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-color); vertical-align: middle; }
+.lab-table tbody td:last-child { border-right: none; }
+.lab-table tbody td.num { text-align: right; }
+.lab-table tbody td.center { text-align: center; }
+.lab-table tbody tr:last-child td { border-bottom: none; }
+.lab-table tbody tr:hover td { background: var(--bs-tertiary-bg); }
+.lab-table tbody tr.inactive td { color: var(--bs-secondary-color); opacity: .65; }
 .lab-table .num { text-align: right; font-family: Consolas, Monaco, monospace; }
 .lab-table .center { text-align: center; }
-.lab-table .pill { display: inline-block; padding: 1px 6px; font-size: 0.62rem;
-  font-weight: 700; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
-.pill-active { background: #198754; color: #fff; }
-.pill-inactive { background: #adb5bd; color: #fff; }
-.lab-table .edit-input { width: 100%; padding: 2px 6px; border: 1px solid #adb5bd;
-                         font-size: 0.8rem; height: 24px; box-sizing: border-box; }
-.lab-table .edit-input:focus { outline: none; border-color: #198754; }
+.lab-table .pill { display: inline-block; padding: 3px 10px; font-size: 0.62rem;
+  font-weight: 700; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+.pill-active { background: rgba(25,135,84,.15); color: #198754; }
+[data-bs-theme="dark"] .pill-active { background: rgba(34,197,94,.2); color: #4ade80; }
+.pill-inactive { background: rgba(108,117,125,.2); color: var(--bs-secondary-color); }
+.lab-table .edit-input { width: 100%; padding: 4px 8px;
+  border: 1px solid var(--bs-border-color); border-radius: 6px;
+  font-size: 0.85rem; height: 28px; box-sizing: border-box;
+  background: var(--bs-body-bg); color: var(--bs-body-color);
+  transition: all .15s; }
+.lab-table .edit-input::placeholder { color: var(--bs-secondary-color); opacity: .6; }
+.lab-table .edit-input:focus { outline: none; border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(13,110,253,.15); }
 
-.lab-empty { padding: 24px; text-align: center; color: #6c757d;
-             border: 1px dashed #adb5bd; }
+.lab-table td.actions { white-space: nowrap; }
+.lab-table td.actions form { display: inline-block; margin: 0 2px 0 0; }
+.lab-table td.actions .lab-btn-sm { height: 26px; width: 30px; padding: 0;
+  justify-content: center; }
+
+.lab-empty { padding: 20px; text-align: center; font-size: 0.82rem;
+             color: var(--bs-secondary-color);
+             border: 1px dashed var(--bs-border-color); border-radius: 12px;
+             background: var(--bs-tertiary-bg); }
+
+/* ---- Split panels: Reference | Outsourced ---- */
+.lab-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px)  { .lab-split { grid-template-columns: 1fr; } }
+
+.lab-panel { background: var(--bs-body-bg);
+             border: 1px solid var(--bs-border-color); border-radius: 12px;
+             overflow: hidden; }
+.lab-panel-head { display:flex; align-items:center; justify-content:space-between;
+                  padding: 12px 16px; cursor: pointer; user-select: none;
+                  background: var(--bs-tertiary-bg);
+                  border-bottom: 1px solid var(--bs-border-color); }
+.lab-panel-head h2 { font-size: 0.95rem; font-weight: 600; margin: 0;
+                     letter-spacing: .01em; text-transform: uppercase; }
+.lab-panel-head .count { font-size: 0.72rem; font-weight: 600;
+                         color: var(--bs-secondary-color);
+                         background: var(--bs-body-bg);
+                         border: 1px solid var(--bs-border-color);
+                         padding: 2px 8px; border-radius: 999px; }
+.lab-panel-head .chev { transition: transform .2s; color: var(--bs-secondary-color); }
+.lab-panel.collapsed .lab-panel-head .chev { transform: rotate(-90deg); }
+.lab-panel-body { padding: 8px 10px; }
+.lab-panel.collapsed .lab-panel-body { display: none; }
+
+.lab-panel .lab-add { margin-bottom: 8px; }
+.lab-panel .lab-add-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+.lab-panel .lab-table thead th { font-size: 0.62rem; padding: 5px 7px; }
+.lab-panel .lab-table tbody td { padding: 2px 6px; font-size: 0.78rem; line-height: 1.15; }
+.lab-panel .lab-table .edit-input { height: 22px; font-size: 0.78rem; padding: 1px 5px; }
+.lab-panel .lab-table td.actions .lab-btn-sm { height: 22px; width: 22px; padding: 0; }
+.lab-panel .lab-table .pill { padding: 1px 6px; font-size: 0.56rem; }
+.lab-panel .lab-table td.actions form { margin: 0 1px 0 0; }
+/* ---- Panel accents ---- */
+#panel-reference  { border-top: 3px solid #2563eb; }
+#panel-reference  .lab-panel-head { background: rgba(37,99,235,.10); }
+#panel-reference  .lab-panel-head h2,
+#panel-reference  .lab-panel-head .chev { color: #2563eb; }
+#panel-reference  .lab-panel-head .count {
+  border-color: rgba(37,99,235,.35); color: #2563eb; }
+
+#panel-outsourced { border-top: 3px solid #d97706; }
+#panel-outsourced .lab-panel-head { background: rgba(217,119,6,.10); }
+#panel-outsourced .lab-panel-head h2,
+#panel-outsourced .lab-panel-head .chev { color: #d97706; }
+#panel-outsourced .lab-panel-head .count {
+  border-color: rgba(217,119,6,.35); color: #d97706; }
 </style>
 {% endblock %}
 
@@ -70,145 +160,168 @@
   <div class="lab-header">
     <div>
       <h1 class="lab-title"><i class="bi bi-building"></i> Laboratories</h1>
-      <div class="lab-sub">External labs / companies — discount and commission rates</div>
+      <div class="lab-sub">External labs / companies — reference &amp; outsourced</div>
     </div>
   </div>
 
   <form method="GET" action="{{ url_for('settings.laboratories') }}" class="lab-toolbar">
     <input type="text" name="q" value="{{ q_search }}" placeholder="Search by name...">
-    <select name="type" onchange="this.form.submit()">
-      <option value="all"      {% if view_type == "all" %}selected{% endif %}>All labs</option>
-      <option value="referrer" {% if view_type == "referrer" %}selected{% endif %}>Referrers only</option>
-      <option value="partner"  {% if view_type == "partner" %}selected{% endif %}>Partner labs only</option>
-    </select>
     <button type="submit" class="lab-btn">Search</button>
     {% if q_search %}<a href="{{ url_for('settings.laboratories') }}" class="lab-btn">Clear</a>{% endif %}
   </form>
 
-  <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
-    <div class="lab-add-grid">
-      <div class="lab-field">
-        <label>Name *</label>
-        <input type="text" name="name" required>
-      </div>
-      <div class="lab-field">
-        <label>Contact person</label>
-        <input type="text" name="contact_person">
-      </div>
-      <div class="lab-field">
-        <label>Phone</label>
-        <input type="text" name="phone">
-      </div>
-      <div class="lab-field">
-        <label>Email</label>
-        <input type="email" name="email">
-      </div>
-      <div class="lab-field">
-        <label>Address</label>
-        <input type="text" name="address">
-      </div>
-      <div class="lab-field">
-        <label>Discount %</label>
-        <input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0">
-      </div>
-      <div class="lab-field">
-        <label>Commission %</label>
-        <input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0">
-      </div>
-      <div class="lab-field">
-        <label>Partner Lab?</label>
-        <label style="display:flex;align-items:center;gap:6px;font-weight:400;">
-          <input type="checkbox" name="is_partner_lab" value="1">
-          <span>Yes — we send outsourced tests here</span>
-        </label>
-      </div>
-      <div class="lab-field">
-        <label>Default Max Discount % (partner labs only)</label>
-        <input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35">
-      </div>
-      <div class="lab-field">
-        <button type="submit" class="lab-btn lab-btn-primary">
-          <i class="bi bi-plus-lg"></i> Add
-        </button>
-      </div>
-    </div>
-  </form>
+  <div class="lab-split">
 
-  {% if rows %}
-  <table class="lab-table">
-    <thead>
-      <tr>
-        <th style="width:22%;">Name</th>
-        <th style="width:14%;">Contact</th>
-        <th style="width:12%;">Phone</th>
-        <th style="width:15%;">Email</th>
-        {% if view_type != 'partner' %}
-        <th style="width:12%;" class="num">Discount %</th>
-        <th style="width:12%;" class="num">Commission %</th>
-        {% endif %}
-        {% if view_type != 'referrer' %}
-        <th style="width:8%;" class="center">Partner</th>
-        <th style="width:10%;" class="num">Max Disc %</th>
-        {% endif %}
-        <th style="width:8%;" class="center">Used</th>
-        <th style="width:5%;" class="center">Active</th>
-        <th style="width:14%;" class="center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for r in rows %}
-      <tr class="{% if not r.is_active %}inactive{% endif %}">
-        <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
-          <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
-          <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
-          <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
-          <td><input type="email" name="email" value="{{ r.email or '' }}" class="edit-input"></td>
-          {% if view_type != 'partner' %}
-          <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
-          <td class="num"><input type="number" name="commission_percent" value="{{ r.commission_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
-          {% endif %}
-          {% if view_type != 'referrer' %}
-          <td class="center">
-            <input type="checkbox" name="is_partner_lab" value="1" {% if r.is_partner_lab %}checked{% endif %}>
-          </td>
-          <td class="num">
-            <input type="number" name="default_max_discount_percent" value="{{ r.default_max_discount_percent if r.default_max_discount_percent is not none else '' }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;" placeholder="—">
-          </td>
-          {% endif %}
-          <td class="center num">{{ r.times_used or 0 }}</td>
-          <td class="center">
-            <span class="pill {% if r.is_active %}pill-active{% else %}pill-inactive{% endif %}">
-              {% if r.is_active %}On{% else %}Off{% endif %}
-            </span>
-          </td>
-          <td class="center">
-            <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save changes">
-              <i class="bi bi-check-lg"></i>
-            </button>
+    <!-- ============================== REFERENCE ============================== -->
+    <section class="lab-panel" id="panel-reference">
+      <header class="lab-panel-head" onclick="document.getElementById('panel-reference').classList.toggle('collapsed')">
+        <h2><i class="bi bi-people-fill"></i> Reference Laboratories</h2>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="count">{{ rows_ref|length }}</span>
+          <i class="bi bi-chevron-down chev"></i>
+        </div>
+      </header>
+      <div class="lab-panel-body">
+
+        <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
+          <input type="hidden" name="is_partner_lab" value="">
+          <div class="lab-add-grid">
+            <div class="lab-field"><label>Name *</label><input type="text" name="name" required></div>
+            <div class="lab-field"><label>Contact person</label><input type="text" name="contact_person"></div>
+            <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
+            <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
+            <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
+            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
+            <div class="lab-field"><label>Commission %</label><input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0"></div>
+            <div class="lab-field" style="display:flex;align-items:flex-end;"><button type="submit" class="lab-btn lab-btn-primary" style="width:100%;justify-content:center;"><i class="bi bi-plus-lg"></i> Add</button></div>
+          </div>
         </form>
-            <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
-              <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle active">
-                <i class="bi bi-power"></i>
-              </button>
-            </form>
-            <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;"
-                  onsubmit="return confirm('Delete {{ r.name }}?');">
-              <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete">
-                <i class="bi bi-trash"></i>
-              </button>
-            </form>
-          </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <div class="lab-empty">
-    <i class="bi bi-building fs-3 d-block mb-2"></i>
-    <div style="font-weight:600;">No laboratories yet</div>
-    <div>Add one above to get started.</div>
-  </div>
-  {% endif %}
 
+        {% if rows_ref %}
+        <table class="lab-table">
+          <thead>
+            <tr>
+              <th style="width:30%;">Name</th>
+              <th style="width:20%;">Contact</th>
+              <th style="width:18%;">Phone</th>
+              <th style="width:12%;" class="num">Disc %</th>
+              <th style="width:12%;" class="num">Comm %</th>
+              <th style="width:8%;"  class="center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rows_ref %}
+            <tr class="{% if not r.is_active %}inactive{% endif %}">
+              <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
+                <input type="hidden" name="is_partner_lab" value="">
+                <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
+                <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
+                <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
+                <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+                <td class="num"><input type="number" name="commission_percent" value="{{ r.commission_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+                <td class="center actions">
+                  <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save"><i class="bi bi-check-lg"></i></button>
+              </form>
+                  <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
+                    <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle"><i class="bi bi-power"></i></button>
+                  </form>
+                  <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;" onsubmit="return confirm('Delete {{ r.name }}?');">
+                    <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="lab-empty">
+          <i class="bi bi-people fs-3 d-block mb-2"></i>
+          <div style="font-weight:600;">No reference laboratories</div>
+          <div>Add one above.</div>
+        </div>
+        {% endif %}
+
+      </div>
+    </section>
+
+    <!-- ============================== OUTSOURCED ============================== -->
+    <section class="lab-panel" id="panel-outsourced">
+      <header class="lab-panel-head" onclick="document.getElementById('panel-outsourced').classList.toggle('collapsed')">
+        <h2><i class="bi bi-box-seam"></i> Outsourced Laboratories</h2>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="count">{{ rows_out|length }}</span>
+          <i class="bi bi-chevron-down chev"></i>
+        </div>
+      </header>
+      <div class="lab-panel-body">
+
+        <form method="POST" action="{{ url_for('settings.laboratory_create') }}" class="lab-add">
+          <input type="hidden" name="is_partner_lab" value="1">
+          <div class="lab-add-grid">
+            <div class="lab-field"><label>Name *</label><input type="text" name="name" required></div>
+            <div class="lab-field"><label>Contact person</label><input type="text" name="contact_person"></div>
+            <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
+            <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
+            <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
+            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
+            <div class="lab-field"><label>Max Disc %</label><input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35"></div>
+            <div class="lab-field" style="display:flex;align-items:flex-end;"><button type="submit" class="lab-btn lab-btn-primary" style="width:100%;justify-content:center;"><i class="bi bi-plus-lg"></i> Add</button></div>
+          </div>
+        </form>
+
+        {% if rows_out %}
+        <table class="lab-table">
+          <thead>
+            <tr>
+              <th style="width:28%;">Name</th>
+              <th style="width:18%;">Contact</th>
+              <th style="width:16%;">Phone</th>
+              <th style="width:12%;" class="num">Disc %</th>
+              <th style="width:12%;" class="num">Max Disc %</th>
+              <th style="width:8%;"  class="center">Active</th>
+              <th style="width:10%;" class="center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rows_out %}
+            <tr class="{% if not r.is_active %}inactive{% endif %}">
+              <form method="POST" action="{{ url_for('settings.laboratory_edit', lid=r.id) }}">
+                <input type="hidden" name="is_partner_lab" value="1">
+                <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
+                <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
+                <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
+                <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+                <td class="num"><input type="number" name="default_max_discount_percent" value="{{ r.default_max_discount_percent if r.default_max_discount_percent is not none else '' }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;" placeholder="—"></td>
+                <td class="center">
+                  <span class="pill {% if r.is_active %}pill-active{% else %}pill-inactive{% endif %}">
+                    {% if r.is_active %}On{% else %}Off{% endif %}
+                  </span>
+                </td>
+                <td class="center actions">
+                  <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save"><i class="bi bi-check-lg"></i></button>
+              </form>
+                  <form method="POST" action="{{ url_for('settings.laboratory_toggle', lid=r.id) }}" style="display:inline;">
+                    <button type="submit" class="lab-btn lab-btn-sm lab-btn-warn" title="Toggle"><i class="bi bi-power"></i></button>
+                  </form>
+                  <form method="POST" action="{{ url_for('settings.laboratory_delete', lid=r.id) }}" style="display:inline;" onsubmit="return confirm('Delete {{ r.name }}?');">
+                    <button type="submit" class="lab-btn lab-btn-sm lab-btn-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                  </form>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="lab-empty">
+          <i class="bi bi-box-seam fs-3 d-block mb-2"></i>
+          <div style="font-weight:600;">No outsourced laboratories</div>
+          <div>Add one above.</div>
+        </div>
+        {% endif %}
+
+      </div>
+    </section>
+
+  </div>
 </div>
 {% endblock %}
