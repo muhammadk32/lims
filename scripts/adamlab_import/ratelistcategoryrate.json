@@ -1,0 +1,1626 @@
+[
+ {
+  "companycode": 1,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 1,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 2,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 1451,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 2,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 1452,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 3,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 2451,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 3451,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 3452,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 3453,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 3454,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 3455,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 3456,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 3457,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 3458,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 4,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 3459,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 4451,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 4452,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 4453,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 4454,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 4455,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 4456,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 4457,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 4458,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 5,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 4459,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5451,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5452,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5453,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5454,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5455,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5456,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5457,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5458,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 6,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5459,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5460,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5461,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5462,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5463,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5464,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5465,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5466,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5467,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 7,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5468,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5469,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5470,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5471,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5472,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5473,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5474,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5475,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5476,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 8,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5477,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5478,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5479,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5480,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5481,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5482,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5483,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5484,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5485,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 9,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5486,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5487,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5488,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5489,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5490,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5491,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5492,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5493,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5494,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 10,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5495,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 3,
+  "ratepercent": 55.0,
+  "recordnumber": 5496,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 8,
+  "ratepercent": 55.0,
+  "recordnumber": 5497,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 6,
+  "ratepercent": 55.0,
+  "recordnumber": 5498,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 7,
+  "ratepercent": 55.0,
+  "recordnumber": 5499,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 4,
+  "ratepercent": 55.0,
+  "recordnumber": 5500,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 1,
+  "ratepercent": 55.0,
+  "recordnumber": 5501,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 2,
+  "ratepercent": 55.0,
+  "recordnumber": 5502,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 9,
+  "ratepercent": 55.0,
+  "recordnumber": 5503,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 11,
+  "sectioncode": 5,
+  "ratepercent": 55.0,
+  "recordnumber": 5504,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 5505,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 5506,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 5507,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 5508,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 5509,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 5510,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 5511,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 5512,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 12,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 5513,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 6451,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 6452,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 6453,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 6454,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 6455,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 6456,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 6457,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 6458,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 13,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 6459,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 7451,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 7452,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 7453,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 7454,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 7455,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 7456,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 7457,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 7458,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 14,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 7459,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8451,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8452,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8453,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8454,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8455,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8456,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8457,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8458,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 15,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8459,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8460,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8461,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8462,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8463,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8464,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8465,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8466,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8467,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 16,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8468,
+  "commission": 45.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8469,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8470,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8471,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8472,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8473,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8474,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8475,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8476,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 18,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8477,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8478,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8487,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8488,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8489,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8490,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8491,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8492,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8493,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 20,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8494,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8495,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8496,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8497,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8498,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8499,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8500,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8501,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8502,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 22,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8503,
+  "commission": 30.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8504,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8505,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8506,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8507,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8508,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8509,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8510,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8511,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 21,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8512,
+  "commission": 50.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 8,
+  "ratepercent": -10.0,
+  "recordnumber": 8513,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 3,
+  "ratepercent": -10.0,
+  "recordnumber": 8514,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8515,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 7,
+  "ratepercent": -10.0,
+  "recordnumber": 8516,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 4,
+  "ratepercent": -10.0,
+  "recordnumber": 8517,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8518,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 1,
+  "ratepercent": -10.0,
+  "recordnumber": 8519,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 2,
+  "ratepercent": -10.0,
+  "recordnumber": 8520,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 23,
+  "sectioncode": 9,
+  "ratepercent": -10.0,
+  "recordnumber": 8521,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 3,
+  "ratepercent": 0.0,
+  "recordnumber": 8522,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8523,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8524,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8525,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8526,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8527,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8528,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 24,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8529,
+  "commission": 10.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 3,
+  "ratepercent": 35.0,
+  "recordnumber": 8530,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 8,
+  "ratepercent": 35.0,
+  "recordnumber": 8531,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 6,
+  "ratepercent": 35.0,
+  "recordnumber": 8532,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 7,
+  "ratepercent": 35.0,
+  "recordnumber": 8533,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 4,
+  "ratepercent": 35.0,
+  "recordnumber": 8534,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 5,
+  "ratepercent": 35.0,
+  "recordnumber": 8535,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 1,
+  "ratepercent": 35.0,
+  "recordnumber": 8536,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 2,
+  "ratepercent": 35.0,
+  "recordnumber": 8537,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 29,
+  "sectioncode": 9,
+  "ratepercent": 35.0,
+  "recordnumber": 8538,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 32,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 9530,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 3,
+  "ratepercent": 40.0,
+  "recordnumber": 10530,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 8,
+  "ratepercent": 40.0,
+  "recordnumber": 10531,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 10532,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 1,
+  "ratepercent": 40.0,
+  "recordnumber": 10533,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 2,
+  "ratepercent": 40.0,
+  "recordnumber": 10534,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 33,
+  "sectioncode": 9,
+  "ratepercent": 40.0,
+  "recordnumber": 10535,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 1,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 298,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 1,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 299,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 8,
+  "ratepercent": 0.0,
+  "recordnumber": 8479,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 1,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 396,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 1,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 404,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 8480,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 1,
+  "sectioncode": 6,
+  "ratepercent": 0.0,
+  "recordnumber": 389,
+  "commission": 0.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 7,
+  "ratepercent": 0.0,
+  "recordnumber": 8481,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 4,
+  "ratepercent": 0.0,
+  "recordnumber": 8482,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 5,
+  "ratepercent": 0.0,
+  "recordnumber": 8483,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 1,
+  "ratepercent": 0.0,
+  "recordnumber": 8484,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 2,
+  "ratepercent": 0.0,
+  "recordnumber": 8485,
+  "commission": 40.0,
+  "flag": null
+ },
+ {
+  "companycode": 19,
+  "sectioncode": 9,
+  "ratepercent": 0.0,
+  "recordnumber": 8486,
+  "commission": 40.0,
+  "flag": null
+ }
+]

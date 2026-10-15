@@ -1,0 +1,4460 @@
+[
+ {
+  "code": 41519,
+  "testname": " Skin Scrapping For Fungus",
+  "rate": 700,
+  "newrate": 800
+ },
+ {
+  "code": 42096,
+  "testname": "**RBC Morphology",
+  "rate": 550,
+  "newrate": 300
+ },
+ {
+  "code": 97,
+  "testname": "**WBC Morphology",
+  "rate": 400,
+  "newrate": 300
+ },
+ {
+  "code": 41603,
+  "testname": "170Hydroxy Progesterone (OHP)",
+  "rate": 3600,
+  "newrate": 2500
+ },
+ {
+  "code": 17,
+  "testname": "VMA (24 Hrs Urine)",
+  "rate": 2400,
+  "newrate": 2000
+ },
+ {
+  "code": 47407,
+  "testname": "24 Hours Urinary Specific Gravity",
+  "rate": 600,
+  "newrate": 200
+ },
+ {
+  "code": 1037,
+  "testname": "24 Hrs Urinary Metanephrine",
+  "rate": 900,
+  "newrate": 1800
+ },
+ {
+  "code": 47236,
+  "testname": "24 Hrs Urinary Normetanephrine",
+  "rate": 900,
+  "newrate": 1800
+ },
+ {
+  "code": 41677,
+  "testname": "24 hrs Urinary Potassium ",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 350,
+  "testname": "24 hrs Urinary Sodium ",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 42043,
+  "testname": "250Hydroxy Vit0D3 Level",
+  "rate": 2750,
+  "newrate": 2000
+ },
+ {
+  "code": 47462,
+  "testname": "3gAllergy Specfic igE Universal Food Allergens Profile",
+  "rate": 6050,
+  "newrate": 0
+ },
+ {
+  "code": 47463,
+  "testname": "3gAllergy Specfic igE Universal Inhalant Allergens Profile",
+  "rate": 6050,
+  "newrate": 0
+ },
+ {
+  "code": 353,
+  "testname": "Urine Sugar",
+  "rate": 300,
+  "newrate": 150
+ },
+ {
+  "code": 1113,
+  "testname": "A/G Ratio",
+  "rate": 550,
+  "newrate": 500
+ },
+ {
+  "code": 41568,
+  "testname": "Abdominal Fluid  For C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41543,
+  "testname": "Abdominal Fluid  For Malignant Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 930,
+  "testname": "Wound Swab For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41466,
+  "testname": "Abdominal Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 42120,
+  "testname": "Water C/S",
+  "rate": 5500,
+  "newrate": 0
+ },
+ {
+  "code": 41491,
+  "testname": "Abdominal Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41706,
+  "testname": "ABGS (Arterial Blood Gases)",
+  "rate": 1100,
+  "newrate": 0
+ },
+ {
+  "code": 834,
+  "testname": "Absolute Eosinophil Count",
+  "rate": 350,
+  "newrate": 350
+ },
+ {
+  "code": 41537,
+  "testname": "Absolute Neutrophil Count",
+  "rate": 350,
+  "newrate": 350
+ },
+ {
+  "code": 835,
+  "testname": "Acetyl Choline Receptor Antibody (AChR Abs)",
+  "rate": 9000,
+  "newrate": 5000
+ },
+ {
+  "code": 311,
+  "testname": "Acid Phosphatase Total",
+  "rate": 1100,
+  "newrate": 1800
+ },
+ {
+  "code": 41803,
+  "testname": "ACTH (Adrenocorticotropic Hormone)",
+  "rate": 3000,
+  "newrate": 2500
+ },
+ {
+  "code": 41754,
+  "testname": "Adenosine Deaminase (ADA0CSF)",
+  "rate": 4000,
+  "newrate": 4000
+ },
+ {
+  "code": 41753,
+  "testname": "Adenosine Deaminase (ADA0FLUID)",
+  "rate": 4000,
+  "newrate": 4000
+ },
+ {
+  "code": 41718,
+  "testname": "Adenosine Deaminase (ADA0Serum)",
+  "rate": 4000,
+  "newrate": 4000
+ },
+ {
+  "code": 41514,
+  "testname": "Vitrous Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 42127,
+  "testname": "AFP Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 842,
+  "testname": "Urine For Reducing Substance",
+  "rate": 300,
+  "newrate": 300
+ },
+ {
+  "code": 1111,
+  "testname": "Albumin (serum)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 698,
+  "testname": "Albumin / Creatinine Ratio.",
+  "rate": 1100,
+  "newrate": 1000
+ },
+ {
+  "code": 312,
+  "testname": "Aldolase(Serum)",
+  "rate": 1500,
+  "newrate": 1600
+ },
+ {
+  "code": 440,
+  "testname": "Aldosterone Level (Serum)",
+  "rate": 3650,
+  "newrate": 2800
+ },
+ {
+  "code": 47543,
+  "testname": "Aldosterone/Direct Renin Ratio",
+  "rate": 7800,
+  "newrate": 0
+ },
+ {
+  "code": 42128,
+  "testname": "ALK Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 174,
+  "testname": "Alkaline Phosphatase (ALP)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 533,
+  "testname": "Alpha Anti Trypsin (Blood)",
+  "rate": 2000,
+  "newrate": 2000
+ },
+ {
+  "code": 467,
+  "testname": "Alpha Fetoprotein (AFP)",
+  "rate": 2200,
+  "newrate": 1500
+ },
+ {
+  "code": 209,
+  "testname": "Ammonia (NH3)",
+  "rate": 1350,
+  "newrate": 1500
+ },
+ {
+  "code": 306,
+  "testname": "Amylase",
+  "rate": 950,
+  "newrate": 1000
+ },
+ {
+  "code": 42166,
+  "testname": "Urine for protein Electrophoresis",
+  "rate": 8900,
+  "newrate": 0
+ },
+ {
+  "code": 12,
+  "testname": "Amylase (Fluid)",
+  "rate": 950,
+  "newrate": 1000
+ },
+ {
+  "code": 307,
+  "testname": "ANA (Anti Nuclear Antibody) Qualitative",
+  "rate": 1000,
+  "newrate": 1500
+ },
+ {
+  "code": 42115,
+  "testname": "ANA Profile (Immunofluorescence)",
+  "rate": 4450,
+  "newrate": 6000
+ },
+ {
+  "code": 41598,
+  "testname": "Angiotensin Converting Enzyme (ACE) Level",
+  "rate": 3650,
+  "newrate": 3000
+ },
+ {
+  "code": 41788,
+  "testname": "Anion Gap (Serum)",
+  "rate": 650,
+  "newrate": 0
+ },
+ {
+  "code": 47239,
+  "testname": "Anti Aquaporin 4 Ab by Serum (NMO)",
+  "rate": 8350,
+  "newrate": 0
+ },
+ {
+  "code": 47238,
+  "testname": "Anti Aquaporin 4 Ab CSF (NMO)",
+  "rate": 8350,
+  "newrate": 0
+ },
+ {
+  "code": 132,
+  "testname": "Anti Body Screening",
+  "rate": 1100,
+  "newrate": null
+ },
+ {
+  "code": 421,
+  "testname": "Anti Cardiolipin IgG",
+  "rate": 3650,
+  "newrate": 2500
+ },
+ {
+  "code": 422,
+  "testname": "Anti Cardiolipin IgM",
+  "rate": 3650,
+  "newrate": 2500
+ },
+ {
+  "code": 814,
+  "testname": "Anti CCP (Cyclic Citrullinated Peptide)",
+  "rate": 3300,
+  "newrate": 2000
+ },
+ {
+  "code": 41607,
+  "testname": "Anti Centromers Anti Bodies",
+  "rate": 1650,
+  "newrate": 2500
+ },
+ {
+  "code": 41609,
+  "testname": "Anti Delta Virus",
+  "rate": 2400,
+  "newrate": 1600
+ },
+ {
+  "code": 530,
+  "testname": "Anti ds DNA (Immunofluorescence)",
+  "rate": 5000,
+  "newrate": 1500
+ },
+ {
+  "code": 817,
+  "testname": "Anti Endomysial IgA",
+  "rate": 2050,
+  "newrate": 1700
+ },
+ {
+  "code": 871,
+  "testname": "Anti Endomysial IgG Abs",
+  "rate": 2450,
+  "newrate": 1700
+ },
+ {
+  "code": 41574,
+  "testname": "Anti Epstein Barr Virus (EBV) Ig G",
+  "rate": 1400,
+  "newrate": 0
+ },
+ {
+  "code": 42170,
+  "testname": "Anti Epstein Barr Virus (EBV) Ig M",
+  "rate": 1400,
+  "newrate": 0
+ },
+ {
+  "code": 592,
+  "testname": "Anti Gliadin IgA",
+  "rate": 1100,
+  "newrate": 2000
+ },
+ {
+  "code": 42169,
+  "testname": "Anti Gliadin IgG",
+  "rate": 2400,
+  "newrate": 2000
+ },
+ {
+  "code": 1064,
+  "testname": "Anti Gliadin IgM",
+  "rate": 1100,
+  "newrate": 2000
+ },
+ {
+  "code": 830,
+  "testname": "Anti H Pylori Screening",
+  "rate": 350,
+  "newrate": 1000
+ },
+ {
+  "code": 460,
+  "testname": "Anti HAV IgG",
+  "rate": 2200,
+  "newrate": 1400
+ },
+ {
+  "code": 449,
+  "testname": "Anti HAV IgM",
+  "rate": 2200,
+  "newrate": 1400
+ },
+ {
+  "code": 47480,
+  "testname": "Anti HBc (Total)",
+  "rate": 1950,
+  "newrate": 1400
+ },
+ {
+  "code": 545,
+  "testname": "Anti HBc IgG",
+  "rate": 1950,
+  "newrate": 1400
+ },
+ {
+  "code": 452,
+  "testname": "Anti HBc IgM",
+  "rate": 2150,
+  "newrate": 1400
+ },
+ {
+  "code": 454,
+  "testname": "Anti HBe",
+  "rate": 2150,
+  "newrate": 1400
+ },
+ {
+  "code": 465,
+  "testname": "Anti HBs Antibody",
+  "rate": 1700,
+  "newrate": 1400
+ },
+ {
+  "code": 455,
+  "testname": "Anti HCV (ELISA)",
+  "rate": 2000,
+  "newrate": 1500
+ },
+ {
+  "code": 47217,
+  "testname": "Anti HCV Screening",
+  "rate": 350,
+  "newrate": 500
+ },
+ {
+  "code": 47461,
+  "testname": "Anti HDV",
+  "rate": 2400,
+  "newrate": 1600
+ },
+ {
+  "code": 457,
+  "testname": "Anti HEV IgG",
+  "rate": 2200,
+  "newrate": 1400
+ },
+ {
+  "code": 461,
+  "testname": "Anti HEV IgM",
+  "rate": 2200,
+  "newrate": 1400
+ },
+ {
+  "code": 548,
+  "testname": "Anti Histoplasma Abs.",
+  "rate": 2000,
+  "newrate": 0
+ },
+ {
+  "code": 458,
+  "testname": "Anti HIV 0 1 & 2 (ELISA)",
+  "rate": 2200,
+  "newrate": 1500
+ },
+ {
+  "code": 829,
+  "testname": "Anti HIV 0 1 & 2 Screening",
+  "rate": 550,
+  "newrate": 500
+ },
+ {
+  "code": 47240,
+  "testname": "Anti Islet Cells Antibodies",
+  "rate": 1000,
+  "newrate": 0
+ },
+ {
+  "code": 47476,
+  "testname": "Anti Leptospiral Ig G",
+  "rate": 3300,
+  "newrate": 2500
+ },
+ {
+  "code": 47477,
+  "testname": "Anti Leptospiral Ig M",
+  "rate": 3300,
+  "newrate": 2500
+ },
+ {
+  "code": 41786,
+  "testname": "Anti LKM (Anti Liver Kidney Microsomal Antibody)",
+  "rate": 2100,
+  "newrate": 2000
+ },
+ {
+  "code": 47415,
+  "testname": "Anti MOG Antibody",
+  "rate": 6950,
+  "newrate": 0
+ },
+ {
+  "code": 41707,
+  "testname": "Anti Mullerian Hormone (AMH)",
+  "rate": 3850,
+  "newrate": 6000
+ },
+ {
+  "code": 47412,
+  "testname": "Anti Neuronal Profile",
+  "rate": 6700,
+  "newrate": 0
+ },
+ {
+  "code": 414,
+  "testname": "Anti Neutrophil Cytoplasmic Antibodies",
+  "rate": 2000,
+  "newrate": 0
+ },
+ {
+  "code": 41845,
+  "testname": "Anti Nuclear Antibody (ANA) Quantitative ",
+  "rate": 2450,
+  "newrate": 1500
+ },
+ {
+  "code": 564,
+  "testname": "Anti Phospholipid IgG",
+  "rate": 2650,
+  "newrate": 1800
+ },
+ {
+  "code": 565,
+  "testname": "Anti Phospholipid IgM",
+  "rate": 2650,
+  "newrate": 1800
+ },
+ {
+  "code": 611,
+  "testname": "Anti Reticular Antibodies",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 547,
+  "testname": "Anti Scl070",
+  "rate": 2650,
+  "newrate": 2000
+ },
+ {
+  "code": 546,
+  "testname": "Anti Sperm Antibodies",
+  "rate": 3300,
+  "newrate": 2500
+ },
+ {
+  "code": 47230,
+  "testname": "Anti Streptolysine O Titre (ASOT)",
+  "rate": 900,
+  "newrate": 0
+ },
+ {
+  "code": 119,
+  "testname": "Anti Thrombin",
+  "rate": 1650,
+  "newrate": 3500
+ },
+ {
+  "code": 557,
+  "testname": "Anti Thyroglobulin Antibodies (Anti0Tg)",
+  "rate": 1250,
+  "newrate": 1500
+ },
+ {
+  "code": 855,
+  "testname": "Anti Tissue Transglutaminase IgA",
+  "rate": 1650,
+  "newrate": 1600
+ },
+ {
+  "code": 858,
+  "testname": "Anti Tissue Transglutaminase IgG",
+  "rate": 1850,
+  "newrate": 1600
+ },
+ {
+  "code": 700,
+  "testname": "Anti Tissue Transglutaminase IgM",
+  "rate": 1850,
+  "newrate": 1600
+ },
+ {
+  "code": 41814,
+  "testname": "Anti TSH Receptor Antibodies (TRAB) ",
+  "rate": 3450,
+  "newrate": 0
+ },
+ {
+  "code": 47416,
+  "testname": "Anti VGKC Associated Protein",
+  "rate": 8000,
+  "newrate": 0
+ },
+ {
+  "code": 47406,
+  "testname": "Antibody Identification",
+  "rate": 4300,
+  "newrate": 0
+ },
+ {
+  "code": 47633,
+  "testname": "Anti0GBM",
+  "rate": 3650,
+  "newrate": 3000
+ },
+ {
+  "code": 47628,
+  "testname": "Anti0SARS0CoV02 S (Spike Protein Antibody)",
+  "rate": 2500,
+  "newrate": 1800
+ },
+ {
+  "code": 41621,
+  "testname": "Anti0SS (LA)",
+  "rate": 2200,
+  "newrate": 2000
+ },
+ {
+  "code": 47237,
+  "testname": "Anti0SS (RO)",
+  "rate": 2200,
+  "newrate": 2000
+ },
+ {
+  "code": 47467,
+  "testname": "Apolipoprotein A1",
+  "rate": 3000,
+  "newrate": 0
+ },
+ {
+  "code": 47242,
+  "testname": "APT Test",
+  "rate": 900,
+  "newrate": 0
+ },
+ {
+  "code": 88,
+  "testname": "APTT (Activated Partial Thromboplastin Time)",
+  "rate": 650,
+  "newrate": 600
+ },
+ {
+  "code": 235,
+  "testname": "Ascitic Fluid  For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 227,
+  "testname": "Ascitic Fluid C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41512,
+  "testname": "Vitrous Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 844,
+  "testname": "Urine for pH",
+  "rate": 200,
+  "newrate": 200
+ },
+ {
+  "code": 41445,
+  "testname": "Ascitic Fluid For AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41469,
+  "testname": "Ascitic Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41783,
+  "testname": "Ascitic Fluid for Triglycerides",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 42165,
+  "testname": "Urine for Myoglobin",
+  "rate": 1400,
+  "newrate": 2000
+ },
+ {
+  "code": 47268,
+  "testname": "Autoimmune Encephilitis Antibodies Profile (CSF)",
+  "rate": 22350,
+  "newrate": 0
+ },
+ {
+  "code": 47275,
+  "testname": "Autoimmune Encephilitis Antibodies Profile (Serum)",
+  "rate": 22350,
+  "newrate": 0
+ },
+ {
+  "code": 47243,
+  "testname": "Autoimmune Liver Disease Profile",
+  "rate": 7700,
+  "newrate": 0
+ },
+ {
+  "code": 994,
+  "testname": "B20Microglobulin",
+  "rate": 2450,
+  "newrate": 2500
+ },
+ {
+  "code": 877,
+  "testname": "Barr Bodies (Buccal Smear)",
+  "rate": 1350,
+  "newrate": 1200
+ },
+ {
+  "code": 42029,
+  "testname": "Bas#",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 42129,
+  "testname": "BCL2 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 41906,
+  "testname": "BCR0ABL by PCR",
+  "rate": 18700,
+  "newrate": 0
+ },
+ {
+  "code": 41851,
+  "testname": "Urine for Hemoglobin  (Spot/Random)",
+  "rate": 300,
+  "newrate": 200
+ },
+ {
+  "code": 77,
+  "testname": "Urine for Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 47330,
+  "testname": "Beta 2 Glycoprotein01 Ig G",
+  "rate": 2400,
+  "newrate": 0
+ },
+ {
+  "code": 47331,
+  "testname": "Beta 2 Glycoprotein01 Ig M",
+  "rate": 2400,
+  "newrate": 0
+ },
+ {
+  "code": 41835,
+  "testname": "Beta D Glucan",
+  "rate": 6050,
+  "newrate": 0
+ },
+ {
+  "code": 476,
+  "testname": "Beta HCG (Serum)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 949,
+  "testname": "Urine For Drug Screen",
+  "rate": 3500,
+  "newrate": 2000
+ },
+ {
+  "code": 41715,
+  "testname": "Bicarbonates  (HCO3)",
+  "rate": 350,
+  "newrate": 350
+ },
+ {
+  "code": 843,
+  "testname": "Bile Acid",
+  "rate": 650,
+  "newrate": 1000
+ },
+ {
+  "code": 974,
+  "testname": "Bile Salt",
+  "rate": 850,
+  "newrate": 300
+ },
+ {
+  "code": 47313,
+  "testname": "Bilirubin (Direct + Indirect)",
+  "rate": 800,
+  "newrate": 400
+ },
+ {
+  "code": 171,
+  "testname": "Bilirubin Direct",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 183,
+  "testname": "Bilirubin Indirect",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 1106,
+  "testname": "Bilirubin Total",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 114,
+  "testname": "Bleeding Time",
+  "rate": 400,
+  "newrate": 300
+ },
+ {
+  "code": 849,
+  "testname": "Block For Review",
+  "rate": 2750,
+  "newrate": 4000
+ },
+ {
+  "code": 41569,
+  "testname": "Uretheral Swab For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47493,
+  "testname": "Tracheal Secretion for C/S (Anaerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42045,
+  "testname": "Blood Complete Examination",
+  "rate": 650,
+  "newrate": 450
+ },
+ {
+  "code": 47334,
+  "testname": "Blood Gases+ S\\Elect + HB",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 135,
+  "testname": "Blood Glucose (Fasting)",
+  "rate": 300,
+  "newrate": 150
+ },
+ {
+  "code": 136,
+  "testname": "Blood Glucose (Random)",
+  "rate": 300,
+  "newrate": 150
+ },
+ {
+  "code": 41921,
+  "testname": "Blood Group & Rh Factor",
+  "rate": 550,
+  "newrate": 300
+ },
+ {
+  "code": 47494,
+  "testname": "Tracheal Secretion for C/S (Aerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41548,
+  "testname": "Body Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41470,
+  "testname": "Body Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41900,
+  "testname": "Tissue For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 1004,
+  "testname": "Bone Marrow (Slides For Review)",
+  "rate": 2750,
+  "newrate": 5000
+ },
+ {
+  "code": 47544,
+  "testname": "Bone Marrow Aspirate & Trephine Biopsy (Procedure Only)",
+  "rate": 10000,
+  "newrate": 0
+ },
+ {
+  "code": 47545,
+  "testname": "Bone Marrow Aspirate (Procedure Only)",
+  "rate": 5000,
+  "newrate": 0
+ },
+ {
+  "code": 1003,
+  "testname": "Bone Marrow Aspiration Procedure and Reporting",
+  "rate": 7150,
+  "newrate": 0
+ },
+ {
+  "code": 41667,
+  "testname": "Bone Marrow Biopsy Procedure with Trephine and Reporting",
+  "rate": 11550,
+  "newrate": 0
+ },
+ {
+  "code": 41669,
+  "testname": "Bone Marrow Slide & Block",
+  "rate": 1100,
+  "newrate": 5000
+ },
+ {
+  "code": 41471,
+  "testname": "Bronchial washing ( BAL) For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41523,
+  "testname": "Bronchial Washing For  Analysis C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47496,
+  "testname": "Tip for C/S (Anaerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47495,
+  "testname": "Tip for C/S (Aerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41553,
+  "testname": "Tip For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 250,
+  "testname": "Bronchial Washing For Cytology.",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41447,
+  "testname": "Bronchial Wasing For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 3000
+ },
+ {
+  "code": 59,
+  "testname": "Throat Swab For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42001,
+  "testname": "Brucella abortus Antibodies",
+  "rate": 1100,
+  "newrate": 900
+ },
+ {
+  "code": 42013,
+  "testname": "Brucella Melitansis Antibodies",
+  "rate": 1100,
+  "newrate": 900
+ },
+ {
+  "code": 186,
+  "testname": "BUN (Blood Urea Nitrogen)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 47483,
+  "testname": "BUN / Creatinine Ratio",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 543,
+  "testname": "c 0 ANCA",
+  "rate": 3650,
+  "newrate": 3500
+ },
+ {
+  "code": 314,
+  "testname": "C Peptide Level",
+  "rate": 2850,
+  "newrate": 2000
+ },
+ {
+  "code": 47547,
+  "testname": "C2 Monitoring",
+  "rate": 6050,
+  "newrate": 0
+ },
+ {
+  "code": 495,
+  "testname": "C3 (Complement Level 3)",
+  "rate": 1450,
+  "newrate": 1000
+ },
+ {
+  "code": 496,
+  "testname": "C4 (Complement Level 4)",
+  "rate": 1450,
+  "newrate": 1000
+ },
+ {
+  "code": 469,
+  "testname": "CA 125",
+  "rate": 3300,
+  "newrate": 1800
+ },
+ {
+  "code": 41526,
+  "testname": "CA 1503",
+  "rate": 2700,
+  "newrate": 2000
+ },
+ {
+  "code": 473,
+  "testname": "CA01909",
+  "rate": 3650,
+  "newrate": 2500
+ },
+ {
+  "code": 42007,
+  "testname": "CALCITONIN",
+  "rate": 5500,
+  "newrate": 5000
+ },
+ {
+  "code": 41793,
+  "testname": "Calcium (Fluid)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 10,
+  "testname": "Urine For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 588,
+  "testname": "Urine For Bile Pigment",
+  "rate": 550,
+  "newrate": 300
+ },
+ {
+  "code": 1006,
+  "testname": "Calcium/Creatinine Ratio",
+  "rate": 1200,
+  "newrate": 800
+ },
+ {
+  "code": 41919,
+  "testname": "Calprotectin (Stool)",
+  "rate": 4200,
+  "newrate": 6000
+ },
+ {
+  "code": 995,
+  "testname": "Urine for Barbiturates (BAR)",
+  "rate": 1500,
+  "newrate": 1300
+ },
+ {
+  "code": 480,
+  "testname": "Carbamazepine (Tegretol)",
+  "rate": 1350,
+  "newrate": 1300
+ },
+ {
+  "code": 210,
+  "testname": "Cardiac  Enzymes",
+  "rate": 2200,
+  "newrate": 1100
+ },
+ {
+  "code": 590,
+  "testname": "Urine For Amino Acid ",
+  "rate": 2200,
+  "newrate": 1800
+ },
+ {
+  "code": 41570,
+  "testname": "Catecholamines(Serum)",
+  "rate": 3000,
+  "newrate": 0
+ },
+ {
+  "code": 41511,
+  "testname": "Synovial Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 965,
+  "testname": "CBC For (Dengue)",
+  "rate": 90,
+  "newrate": 90
+ },
+ {
+  "code": 42131,
+  "testname": "CD010 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42132,
+  "testname": "CD0117 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47352,
+  "testname": "CD0138 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42133,
+  "testname": "CD015 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42134,
+  "testname": "CD020 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42135,
+  "testname": "CD03 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42136,
+  "testname": "CD030 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42148,
+  "testname": "CD034 Immunohistochemistry",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 47351,
+  "testname": "CD038 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42137,
+  "testname": "CD04 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42130,
+  "testname": "CD05 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47353,
+  "testname": "CD056 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42138,
+  "testname": "CD07 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42139,
+  "testname": "CD08 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 468,
+  "testname": "CEA (Carcinoembryonic Antigen)",
+  "rate": 2600,
+  "newrate": 1800
+ },
+ {
+  "code": 415,
+  "testname": "Ceruloplasmin",
+  "rate": 1750,
+  "newrate": 1400
+ },
+ {
+  "code": 41585,
+  "testname": "Urine For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41578,
+  "testname": "Urine For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41795,
+  "testname": "Chloride (Fluid)",
+  "rate": 250,
+  "newrate": 350
+ },
+ {
+  "code": 202,
+  "testname": "Chloride (Serum)",
+  "rate": 450,
+  "newrate": 350
+ },
+ {
+  "code": 218,
+  "testname": "Cholesterol",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 41772,
+  "testname": "Cholinestrase (Serum)",
+  "rate": 2900,
+  "newrate": 2200
+ },
+ {
+  "code": 42140,
+  "testname": "Chromogranin Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 938,
+  "testname": "Chromosome Analysis for Haematological Disorder (Cytogenetics)",
+  "rate": 13200,
+  "newrate": 0
+ },
+ {
+  "code": 5,
+  "testname": "Urine C/E",
+  "rate": 350,
+  "newrate": 250
+ },
+ {
+  "code": 42149,
+  "testname": "CK Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42141,
+  "testname": "CK020 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42142,
+  "testname": "CK07 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 115,
+  "testname": "Clotting Time",
+  "rate": 350,
+  "newrate": 300
+ },
+ {
+  "code": 520,
+  "testname": "CMV IgG (Cytomegalovirus)",
+  "rate": 1400,
+  "newrate": 1300
+ },
+ {
+  "code": 521,
+  "testname": "CMV IgM (Cytomegalovirus)",
+  "rate": 1400,
+  "newrate": 1300
+ },
+ {
+  "code": 42117,
+  "testname": "CMV PCR Quantitative ",
+  "rate": 10000,
+  "newrate": 0
+ },
+ {
+  "code": 47286,
+  "testname": "Coagulation Profile",
+  "rate": 1000,
+  "newrate": 1000
+ },
+ {
+  "code": 41542,
+  "testname": "Urine  For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 1010,
+  "testname": "Cold Agglutination Test",
+  "rate": 700,
+  "newrate": 1000
+ },
+ {
+  "code": 42081,
+  "testname": "Components Separation ",
+  "rate": 1500,
+  "newrate": 0
+ },
+ {
+  "code": 41513,
+  "testname": "Synovial Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41582,
+  "testname": "Swab For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 112,
+  "testname": "Coombs Test (Direct)",
+  "rate": 1000,
+  "newrate": 500
+ },
+ {
+  "code": 113,
+  "testname": "Coombs Test (Indirect)",
+  "rate": 1200,
+  "newrate": 500
+ },
+ {
+  "code": 196,
+  "testname": "Uric Acid Urine (Spot / Random)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 208,
+  "testname": "Copper (Serum)",
+  "rate": 1800,
+  "newrate": 1600
+ },
+ {
+  "code": 47643,
+  "testname": "Cord Blood Gases",
+  "rate": 1100,
+  "newrate": 0
+ },
+ {
+  "code": 41525,
+  "testname": "Stool For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47309,
+  "testname": "Coronavirus Antibody (SARS0Cov02)",
+  "rate": 1850,
+  "newrate": 1800
+ },
+ {
+  "code": 392,
+  "testname": "Cortisol (AM)",
+  "rate": 1350,
+  "newrate": 1200
+ },
+ {
+  "code": 393,
+  "testname": "Cortisol (PM)",
+  "rate": 1350,
+  "newrate": 1200
+ },
+ {
+  "code": 47612,
+  "testname": "COVID019 0 VAC0SPUTNIK0V DOSE I",
+  "rate": 6134,
+  "newrate": 0
+ },
+ {
+  "code": 47613,
+  "testname": "COVID019 0 VAC0SPUTNIK0V DOSE II",
+  "rate": 6134,
+  "newrate": 0
+ },
+ {
+  "code": 42098,
+  "testname": "COVID019 (CoronaVirus) PCR Qualitative",
+  "rate": 6500,
+  "newrate": 6500
+ },
+ {
+  "code": 47610,
+  "testname": "Covid019 Antigen",
+  "rate": 2500,
+  "newrate": 0
+ },
+ {
+  "code": 211,
+  "testname": "CPK",
+  "rate": 600,
+  "newrate": 500
+ },
+ {
+  "code": 47218,
+  "testname": "Creatine Kinase0MB (CK0MB)",
+  "rate": 1350,
+  "newrate": 700
+ },
+ {
+  "code": 187,
+  "testname": "Creatinine",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 356,
+  "testname": "Uric Acid (24 Hrs Urine)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 188,
+  "testname": "Creatinine Clearance",
+  "rate": 1100,
+  "newrate": 900
+ },
+ {
+  "code": 47637,
+  "testname": "Creatinine Clearance ",
+  "rate": 1100,
+  "newrate": 900
+ },
+ {
+  "code": 198,
+  "testname": "Urea Urine (Spot / Random)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 873,
+  "testname": "Cross Match With Chromatographic  Screening ",
+  "rate": 3300,
+  "newrate": 3500
+ },
+ {
+  "code": 319,
+  "testname": "Cross Match With ELISA",
+  "rate": 6000,
+  "newrate": 3500
+ },
+ {
+  "code": 42039,
+  "testname": "CRP Latex (Quantitative)",
+  "rate": 1000,
+  "newrate": 1000
+ },
+ {
+  "code": 47456,
+  "testname": "CRP Quantitative (hs)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 121,
+  "testname": "Cryoglobulins",
+  "rate": 1100,
+  "newrate": 1800
+ },
+ {
+  "code": 41762,
+  "testname": "Cryptococcal Ag",
+  "rate": 1000,
+  "newrate": 0
+ },
+ {
+  "code": 47460,
+  "testname": "Sputum for C/S (Anaerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41472,
+  "testname": "CSF Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41448,
+  "testname": "CSF For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 53,
+  "testname": "Sputum For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 928,
+  "testname": "CSF for C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 56,
+  "testname": "Sputum For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 258,
+  "testname": "CSF For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 571,
+  "testname": "CSF For Lactate Level",
+  "rate": 1500,
+  "newrate": 1500
+ },
+ {
+  "code": 51,
+  "testname": "Semen For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 485,
+  "testname": "Cyclosporine Level",
+  "rate": 6500,
+  "newrate": 5500
+ },
+ {
+  "code": 41455,
+  "testname": "Cystic Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41508,
+  "testname": "Pus Swab For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41580,
+  "testname": "Cystic Fluid For C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41594,
+  "testname": "Pus For Fungus C/S",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 41546,
+  "testname": "Cystic Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41479,
+  "testname": "Cystic Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 104,
+  "testname": "D0Dimer",
+  "rate": 2650,
+  "newrate": 2000
+ },
+ {
+  "code": 884,
+  "testname": "Dengue (IgG) by ELISA",
+  "rate": 1000,
+  "newrate": 1200
+ },
+ {
+  "code": 882,
+  "testname": "Dengue (IgM) by ELISA",
+  "rate": 1000,
+  "newrate": 1200
+ },
+ {
+  "code": 687,
+  "testname": "Dengue Ns1 by ELISA",
+  "rate": 1300,
+  "newrate": 1800
+ },
+ {
+  "code": 688,
+  "testname": "Dengue Profile (Screening)",
+  "rate": 1200,
+  "newrate": 0
+ },
+ {
+  "code": 47634,
+  "testname": "Desmin Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 400,
+  "testname": "DHEA SO4",
+  "rate": 2150,
+  "newrate": 1600
+ },
+ {
+  "code": 479,
+  "testname": "Digoxin",
+  "rate": 1600,
+  "newrate": 1200
+ },
+ {
+  "code": 85,
+  "testname": "DLC (Differential Leukocyte Count)",
+  "rate": 400,
+  "newrate": 300
+ },
+ {
+  "code": 47404,
+  "testname": "Doorstep Service For Covid 19 ( Urgent) ",
+  "rate": 2000,
+  "newrate": 0
+ },
+ {
+  "code": 41449,
+  "testname": "Ear Swab For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 1200
+ },
+ {
+  "code": 903,
+  "testname": "Pus For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41473,
+  "testname": "Ear Swab For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41613,
+  "testname": "Echinococcus granulosis Ig G",
+  "rate": 3200,
+  "newrate": 2000
+ },
+ {
+  "code": 41823,
+  "testname": "eGFR with Creatinine",
+  "rate": 650,
+  "newrate": 800
+ },
+ {
+  "code": 47231,
+  "testname": "Electrolyte for Dengue",
+  "rate": 700,
+  "newrate": 900
+ },
+ {
+  "code": 41859,
+  "testname": "ENA QUANTRIX 25 IgG",
+  "rate": 6500,
+  "newrate": 0
+ },
+ {
+  "code": 42028,
+  "testname": "Eos#",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 354,
+  "testname": "Urea (24 Hrs Urine)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 41813,
+  "testname": "ER/PR",
+  "rate": 6600,
+  "newrate": 10000
+ },
+ {
+  "code": 709,
+  "testname": "Erythropoietin",
+  "rate": 6600,
+  "newrate": 5000
+ },
+ {
+  "code": 86,
+  "testname": "ESR",
+  "rate": 300,
+  "newrate": 200
+ },
+ {
+  "code": 398,
+  "testname": "Estradiol (E2)",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 47549,
+  "testname": "External Surveillance Report (1 Specimen)",
+  "rate": 880,
+  "newrate": 0
+ },
+ {
+  "code": 47550,
+  "testname": "External Surveillance Report (10 Specimen)",
+  "rate": 8800,
+  "newrate": 0
+ },
+ {
+  "code": 47551,
+  "testname": "External Surveillance Report (2 Specimen)",
+  "rate": 1760,
+  "newrate": 0
+ },
+ {
+  "code": 47552,
+  "testname": "External Surveillance Report (3 Specimen)",
+  "rate": 2640,
+  "newrate": 0
+ },
+ {
+  "code": 47553,
+  "testname": "External Surveillance Report (4 Specimen)",
+  "rate": 3520,
+  "newrate": 0
+ },
+ {
+  "code": 47554,
+  "testname": "External Surveillance Report (5 Specimen)",
+  "rate": 4400,
+  "newrate": 0
+ },
+ {
+  "code": 47555,
+  "testname": "External Surveillance Report (6 Specimen)",
+  "rate": 5280,
+  "newrate": 0
+ },
+ {
+  "code": 47556,
+  "testname": "External Surveillance Report (7 Specimen)",
+  "rate": 6160,
+  "newrate": 0
+ },
+ {
+  "code": 47557,
+  "testname": "External Surveillance Report (8 Specimen)",
+  "rate": 7040,
+  "newrate": 0
+ },
+ {
+  "code": 47565,
+  "testname": "External Surveillance Report (9 Specimen)",
+  "rate": 7920,
+  "newrate": 0
+ },
+ {
+  "code": 41632,
+  "testname": "Eye Swab (Left) for ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41631,
+  "testname": "Eye Swab (Right) for ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41498,
+  "testname": "Pus For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41600,
+  "testname": "Factor II Level",
+  "rate": 2150,
+  "newrate": 0
+ },
+ {
+  "code": 41601,
+  "testname": "Factor IX Level",
+  "rate": 2150,
+  "newrate": 1600
+ },
+ {
+  "code": 47439,
+  "testname": "Factor V Leiden Screening",
+  "rate": 5400,
+  "newrate": 0
+ },
+ {
+  "code": 47438,
+  "testname": "Factor V Level",
+  "rate": 2150,
+  "newrate": 1600
+ },
+ {
+  "code": 609,
+  "testname": "Factor VIII Level",
+  "rate": 2150,
+  "newrate": 1600
+ },
+ {
+  "code": 610,
+  "testname": "Factor X Level",
+  "rate": 2150,
+  "newrate": 0
+ },
+ {
+  "code": 41602,
+  "testname": "Factor XIII Level",
+  "rate": 2150,
+  "newrate": 0
+ },
+ {
+  "code": 90,
+  "testname": "FDPs ",
+  "rate": 1450,
+  "newrate": 2000
+ },
+ {
+  "code": 47329,
+  "testname": "Bone Marrow Biopsy Procedure and Reporting",
+  "rate": 11550,
+  "newrate": 0
+ },
+ {
+  "code": 501,
+  "testname": "Ferritin",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 89,
+  "testname": "Fibrinogen",
+  "rate": 1550,
+  "newrate": 1200
+ },
+ {
+  "code": 932,
+  "testname": "Pleural Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41446,
+  "testname": "Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 237,
+  "testname": "Pleural Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47234,
+  "testname": "Fluid For Albumin",
+  "rate": 950,
+  "newrate": 400
+ },
+ {
+  "code": 267,
+  "testname": "Fluid For Analysis C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41800,
+  "testname": "Fluid For Biochemistry",
+  "rate": 700,
+  "newrate": 0
+ },
+ {
+  "code": 41497,
+  "testname": "Pleural Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 47348,
+  "testname": "Fluid for Creatinine",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 910,
+  "testname": "Peritoneal Fluid Hematoma For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42092,
+  "testname": "Fluid for Protein",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 866,
+  "testname": "Fluid for Specific Gravity",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 47347,
+  "testname": "Fluid for Urea",
+  "rate": 500,
+  "newrate": 400
+ },
+ {
+  "code": 348,
+  "testname": "FNAC Procedure ",
+  "rate": 2750,
+  "newrate": 3000
+ },
+ {
+  "code": 969,
+  "testname": "FNAC Procedure & Reporting",
+  "rate": 2750,
+  "newrate": 3000
+ },
+ {
+  "code": 42143,
+  "testname": "FNAC Slides for  Reporting",
+  "rate": 2750,
+  "newrate": 3000
+ },
+ {
+  "code": 481,
+  "testname": "Folate Level (Folic Acid)",
+  "rate": 1500,
+  "newrate": 1500
+ },
+ {
+  "code": 47632,
+  "testname": "Free Androgen Index (FAI)",
+  "rate": 4200,
+  "newrate": 0
+ },
+ {
+  "code": 361,
+  "testname": "Sugar Fasting (Urine)",
+  "rate": 300,
+  "newrate": 150
+ },
+ {
+  "code": 47546,
+  "testname": "Free Protein0S",
+  "rate": 4600,
+  "newrate": 0
+ },
+ {
+  "code": 389,
+  "testname": "Free T3",
+  "rate": 1800,
+  "newrate": 1000
+ },
+ {
+  "code": 386,
+  "testname": "Free T4",
+  "rate": 1800,
+  "newrate": 1000
+ },
+ {
+  "code": 408,
+  "testname": "Free Testosterone",
+  "rate": 2600,
+  "newrate": 1800
+ },
+ {
+  "code": 385,
+  "testname": "FSH",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41634,
+  "testname": "Fungal Culture",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 41639,
+  "testname": "Fungal Stain",
+  "rate": 650,
+  "newrate": 600
+ },
+ {
+  "code": 47255,
+  "testname": "Fusidic Acid",
+  "rate": 1000,
+  "newrate": 0
+ },
+ {
+  "code": 100,
+  "testname": "G6 PD Test (Qualitative)",
+  "rate": 1650,
+  "newrate": 1300
+ },
+ {
+  "code": 575,
+  "testname": "Galactomannan",
+  "rate": 4400,
+  "newrate": 0
+ },
+ {
+  "code": 47638,
+  "testname": "Gall Stone Analysis",
+  "rate": 2450,
+  "newrate": 1400
+ },
+ {
+  "code": 1119,
+  "testname": "Gamma GT",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 1023,
+  "testname": "Gastrin Level",
+  "rate": 5000,
+  "newrate": 4000
+ },
+ {
+  "code": 41496,
+  "testname": "Peritoneal Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 47320,
+  "testname": "GCT (100g 0 2 sample) DRZAAR",
+  "rate": 800,
+  "newrate": 600
+ },
+ {
+  "code": 139,
+  "testname": "GCT (Glucose Challange Test) e 50 Gram Glucose",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41630,
+  "testname": "Geimsa Stain",
+  "rate": 300,
+  "newrate": 0
+ },
+ {
+  "code": 41351,
+  "testname": "GeneXpert MTB/RIF Assay ",
+  "rate": 4150,
+  "newrate": 0
+ },
+ {
+  "code": 488,
+  "testname": "Gentamycin Level",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 42144,
+  "testname": "GFAP Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47321,
+  "testname": "Glucose (2 Hours Post Parandial)",
+  "rate": 400,
+  "newrate": 0
+ },
+ {
+  "code": 41796,
+  "testname": "Glucose (Fluid)",
+  "rate": 300,
+  "newrate": 0
+ },
+ {
+  "code": 11117,
+  "testname": "Glucose by Glucometer",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 42145,
+  "testname": "GMS Immunohistochemistry",
+  "rate": 550,
+  "newrate": 0
+ },
+ {
+  "code": 41369,
+  "testname": "Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 47408,
+  "testname": "Group Testing COVID019 PCR Qualitative",
+  "rate": 6500,
+  "newrate": 6500
+ },
+ {
+  "code": 395,
+  "testname": "Growth Hormone",
+  "rate": 1750,
+  "newrate": 1500
+ },
+ {
+  "code": 47317,
+  "testname": "GTT (2 Sample 0 75 Gram Glucose)",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 138,
+  "testname": "GTT (3 Sample0 75 Gram Glucose for Pregnancy)",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 164,
+  "testname": "GTT (Glucose Tolerance Test) e 100 Gram Glucose",
+  "rate": 1100,
+  "newrate": 0
+ },
+ {
+  "code": 893,
+  "testname": "H pylori Ig G ELISA",
+  "rate": 1900,
+  "newrate": 1200
+ },
+ {
+  "code": 861,
+  "testname": "H Pylori Ig M ELISA",
+  "rate": 1900,
+  "newrate": 1200
+ },
+ {
+  "code": 47223,
+  "testname": "H. pylori Ig A ELISA",
+  "rate": 1900,
+  "newrate": 1200
+ },
+ {
+  "code": 42078,
+  "testname": "Haemoglobin",
+  "rate": 350,
+  "newrate": 200
+ },
+ {
+  "code": 47571,
+  "testname": "Haemolysis Screen",
+  "rate": 3000,
+  "newrate": 0
+ },
+ {
+  "code": 47256,
+  "testname": "Haemosidrenuria",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 934,
+  "testname": "Peritoneal Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 418,
+  "testname": "Haptoglobin",
+  "rate": 1100,
+  "newrate": 1500
+ },
+ {
+  "code": 527,
+  "testname": "HbA1C",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 453,
+  "testname": "HBe Ag (ELISA)",
+  "rate": 2150,
+  "newrate": 1300
+ },
+ {
+  "code": 448,
+  "testname": "HBs Ag (ELISA)",
+  "rate": 1350,
+  "newrate": 1500
+ },
+ {
+  "code": 802,
+  "testname": "HBs Ag Screening",
+  "rate": 350,
+  "newrate": 500
+ },
+ {
+  "code": 504,
+  "testname": "HBV PCR Qualitative",
+  "rate": 6500,
+  "newrate": 4500
+ },
+ {
+  "code": 511,
+  "testname": "HBV PCR Quantitative",
+  "rate": 9500,
+  "newrate": 7000
+ },
+ {
+  "code": 47630,
+  "testname": "HBV PCR Quantitative & Qualitative ",
+  "rate": 8500,
+  "newrate": 0
+ },
+ {
+  "code": 101,
+  "testname": "HCT (Hematocrit)",
+  "rate": 350,
+  "newrate": 250
+ },
+ {
+  "code": 512,
+  "testname": "HCV Genotyping by PCR",
+  "rate": 9500,
+  "newrate": 7000
+ },
+ {
+  "code": 502,
+  "testname": "HCV PCR Qualitative",
+  "rate": 6500,
+  "newrate": 4500
+ },
+ {
+  "code": 505,
+  "testname": "HCV PCR Quantitative",
+  "rate": 8500,
+  "newrate": 7000
+ },
+ {
+  "code": 47631,
+  "testname": "HCV PCR Quantitative & Qualitative",
+  "rate": 8500,
+  "newrate": 0
+ },
+ {
+  "code": 220,
+  "testname": "HDL (Cholesterol)",
+  "rate": 550,
+  "newrate": 600
+ },
+ {
+  "code": 851,
+  "testname": "HDV PCR Qualitative",
+  "rate": 6500,
+  "newrate": 5000
+ },
+ {
+  "code": 852,
+  "testname": "HDV PCR Quantitative",
+  "rate": 10200,
+  "newrate": 7000
+ },
+ {
+  "code": 45,
+  "testname": "Helicobacter pylori Antigen (Stool)",
+  "rate": 1650,
+  "newrate": 2000
+ },
+ {
+  "code": 6,
+  "testname": "Hemoglobin (HB)",
+  "rate": 350,
+  "newrate": 200
+ },
+ {
+  "code": 537,
+  "testname": "Hemoglobin Electrophoresis",
+  "rate": 2550,
+  "newrate": 2000
+ },
+ {
+  "code": 47644,
+  "testname": "Spot urine for magnesium",
+  "rate": 600,
+  "newrate": 500
+ },
+ {
+  "code": 42146,
+  "testname": "HEP Par01 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42147,
+  "testname": "HER 2 NEO Immunohistochemistry",
+  "rate": 7150,
+  "newrate": 0
+ },
+ {
+  "code": 41815,
+  "testname": "HER02 neu",
+  "rate": 7150,
+  "newrate": 0
+ },
+ {
+  "code": 42116,
+  "testname": "Herpes (HSV 1&2) PCR Qualitative",
+  "rate": 6900,
+  "newrate": 0
+ },
+ {
+  "code": 522,
+  "testname": "Herpes (HSV) Ig G",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 523,
+  "testname": "Herpes (HSV) Ig M",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 4,
+  "testname": "Histopathology 2 Block",
+  "rate": 3300,
+  "newrate": 2500
+ },
+ {
+  "code": 42151,
+  "testname": "Histopathology 3 Block",
+  "rate": 3850,
+  "newrate": 3500
+ },
+ {
+  "code": 341,
+  "testname": "Histopathology 4 Block",
+  "rate": 4950,
+  "newrate": 4500
+ },
+ {
+  "code": 1000,
+  "testname": "Histopathology Single Block",
+  "rate": 2200,
+  "newrate": 1800
+ },
+ {
+  "code": 42152,
+  "testname": "Histopathology Slides & Block",
+  "rate": 1100,
+  "newrate": 4000
+ },
+ {
+  "code": 41782,
+  "testname": "HIV RNA by PCR (Quantitative)",
+  "rate": 10100,
+  "newrate": 0
+ },
+ {
+  "code": 41924,
+  "testname": "HLA 1 & 2 (Donor) HLA Tissue Typing",
+  "rate": 28500,
+  "newrate": 0
+ },
+ {
+  "code": 41925,
+  "testname": "HLA 1 & 2 (Patient) HLA Tissue Typing",
+  "rate": 28500,
+  "newrate": 0
+ },
+ {
+  "code": 948,
+  "testname": "HLA0B27 Gene",
+  "rate": 12350,
+  "newrate": 6000
+ },
+ {
+  "code": 412,
+  "testname": "Homocystine Level",
+  "rate": 1700,
+  "newrate": 1500
+ },
+ {
+  "code": 41773,
+  "testname": "Human Ig G04",
+  "rate": 8500,
+  "newrate": 0
+ },
+ {
+  "code": 41450,
+  "testname": "HVS For AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41509,
+  "testname": "Pericardial Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41474,
+  "testname": "HVS For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41456,
+  "testname": "Hydrocele Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41510,
+  "testname": "Pericardial Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42077,
+  "testname": "Oral Swab C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41545,
+  "testname": "Hydrocele Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41480,
+  "testname": "Hydrocele Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 497,
+  "testname": "Ig A (Immunoglobulin A)",
+  "rate": 900,
+  "newrate": 1200
+ },
+ {
+  "code": 500,
+  "testname": "Ig E (Immunoglobulin E)",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 498,
+  "testname": "Ig G (Immunoglobulin G)",
+  "rate": 900,
+  "newrate": 1200
+ },
+ {
+  "code": 499,
+  "testname": "Ig M (Immunoglobulin M)",
+  "rate": 900,
+  "newrate": 1200
+ },
+ {
+  "code": 47263,
+  "testname": "IgG Index ",
+  "rate": 8500,
+  "newrate": 0
+ },
+ {
+  "code": 47446,
+  "testname": "IL0 6 (Serum)",
+  "rate": 1800,
+  "newrate": 0
+ },
+ {
+  "code": 47481,
+  "testname": "Immature Platelet Fraction (IPF)",
+  "rate": 650,
+  "newrate": 0
+ },
+ {
+  "code": 340,
+  "testname": "Immunocytochemistry",
+  "rate": 3000,
+  "newrate": 0
+ },
+ {
+  "code": 1027,
+  "testname": "Immunoglobulins (Iga,Igg,Igm)",
+  "rate": 4000,
+  "newrate": 3600
+ },
+ {
+  "code": 47626,
+  "testname": "Immunohistochemistry Stain S0100 ",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47627,
+  "testname": "Immunohistochemistry Stain SOX010",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 41741,
+  "testname": "India Ink Stain",
+  "rate": 300,
+  "newrate": 0
+ },
+ {
+  "code": 47226,
+  "testname": "Influenza Antigen Profile",
+  "rate": 2750,
+  "newrate": 0
+ },
+ {
+  "code": 47433,
+  "testname": "Influenza Viruses RNA by PCR",
+  "rate": 9650,
+  "newrate": 0
+ },
+ {
+  "code": 205,
+  "testname": "Inorganic Phosphorus (PO4)",
+  "rate": 500,
+  "newrate": 400
+ },
+ {
+  "code": 396,
+  "testname": "Insulin (Fasting)",
+  "rate": 2450,
+  "newrate": 1500
+ },
+ {
+  "code": 862,
+  "testname": "Insulin Growth Factor01(Igf01)",
+  "rate": 6800,
+  "newrate": 3000
+ },
+ {
+  "code": 881,
+  "testname": "Ionized Calcium",
+  "rate": 900,
+  "newrate": 900
+ },
+ {
+  "code": 308,
+  "testname": "Iron",
+  "rate": 550,
+  "newrate": 500
+ },
+ {
+  "code": 41844,
+  "testname": "JAK02 Mutation By PCR",
+  "rate": 9000,
+  "newrate": 0
+ },
+ {
+  "code": 41475,
+  "testname": "Joint  Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 925,
+  "testname": "Joint Fluid C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41495,
+  "testname": "Nasal Secretion For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41451,
+  "testname": "Joint Fluid For AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 1062,
+  "testname": "Nasal Secretion C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47475,
+  "testname": "Kappa Lambda Ratio",
+  "rate": 6000,
+  "newrate": 0
+ },
+ {
+  "code": 585,
+  "testname": "Ketone (Serum)",
+  "rate": 900,
+  "newrate": 300
+ },
+ {
+  "code": 47449,
+  "testname": "Spot Protein / Creatinine Ratio Urine",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 441,
+  "testname": "Nasal Screation C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41566,
+  "testname": "Milk(Right) For C/S",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 41452,
+  "testname": "Knee Joint Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41476,
+  "testname": "Knee Joint Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 549,
+  "testname": "Lactate Level",
+  "rate": 1100,
+  "newrate": 1500
+ },
+ {
+  "code": 1028,
+  "testname": "LDH (CSF)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 1029,
+  "testname": "LDH (Fluid)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 213,
+  "testname": "LDH (Serum)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 840,
+  "testname": "LE Cell",
+  "rate": 650,
+  "newrate": 1100
+ },
+ {
+  "code": 424,
+  "testname": "Lead Level",
+  "rate": 9350,
+  "newrate": 0
+ },
+ {
+  "code": 351,
+  "testname": "Sodium Urine (Spot / Random)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 169,
+  "testname": "LFT FOR DENGUE",
+  "rate": 900,
+  "newrate": 1200
+ },
+ {
+  "code": 384,
+  "testname": "LH",
+  "rate": 1550,
+  "newrate": 1200
+ },
+ {
+  "code": 892,
+  "testname": "Lipase (Fluid)",
+  "rate": 900,
+  "newrate": 900
+ },
+ {
+  "code": 316,
+  "testname": "Lipase (Serum)",
+  "rate": 900,
+  "newrate": 900
+ },
+ {
+  "code": 216,
+  "testname": "Lipid Profile",
+  "rate": 2000,
+  "newrate": 1200
+ },
+ {
+  "code": 41965,
+  "testname": "Lipoprotein A",
+  "rate": 1450,
+  "newrate": 1800
+ },
+ {
+  "code": 207,
+  "testname": "Lithium",
+  "rate": 1200,
+  "newrate": 900
+ },
+ {
+  "code": 42119,
+  "testname": "Liver Function Test (LFTs)",
+  "rate": 1350,
+  "newrate": 1200
+ },
+ {
+  "code": 178,
+  "testname": "Liver Function Test (LFTs) with Direct Bilirubin",
+  "rate": 2100,
+  "newrate": 0
+ },
+ {
+  "code": 47611,
+  "testname": "Liver Function Test (LFTs) with GGT",
+  "rate": 1570,
+  "newrate": 0
+ },
+ {
+  "code": 1032,
+  "testname": "Lupus  Anticoagulant Abs",
+  "rate": 3000,
+  "newrate": 2500
+ },
+ {
+  "code": 42026,
+  "testname": "Lym#",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 206,
+  "testname": "Magnesium",
+  "rate": 600,
+  "newrate": 500
+ },
+ {
+  "code": 22,
+  "testname": "Reducing Substances (Urine)",
+  "rate": 300,
+  "newrate": 300
+ },
+ {
+  "code": 41794,
+  "testname": "Magnesium (Fluid)",
+  "rate": 600,
+  "newrate": 400
+ },
+ {
+  "code": 96,
+  "testname": "Malarial Parasite (M.P) by Smear",
+  "rate": 550,
+  "newrate": 0
+ },
+ {
+  "code": 111,
+  "testname": "Malarial Parasite (M.P) ICT",
+  "rate": 400,
+  "newrate": 300
+ },
+ {
+  "code": 42155,
+  "testname": "Malignant Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 47401,
+  "testname": "Mantoux Test",
+  "rate": 600,
+  "newrate": 0
+ },
+ {
+  "code": 1035,
+  "testname": "Measles IgG",
+  "rate": 2000,
+  "newrate": 1800
+ },
+ {
+  "code": 1034,
+  "testname": "Measles IgM",
+  "rate": 2000,
+  "newrate": 1800
+ },
+ {
+  "code": 42097,
+  "testname": "Metamyelocytes",
+  "rate": 900,
+  "newrate": 0
+ },
+ {
+  "code": 20,
+  "testname": "Protein (24 Hrs Urine)",
+  "rate": 550,
+  "newrate": 500
+ },
+ {
+  "code": 26,
+  "testname": "Potassium Urine (Spot / Random)",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 291,
+  "testname": "Milk Analysis One Side",
+  "rate": 1500,
+  "newrate": 1000
+ },
+ {
+  "code": 271,
+  "testname": "Milk For Cytology",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 41477,
+  "testname": "Milk For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41567,
+  "testname": "Milk(Leftt) For C/S",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 41502,
+  "testname": "Knee Joint  Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42027,
+  "testname": "Mon#",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 334,
+  "testname": "Mono Spot Test",
+  "rate": 900,
+  "newrate": 5000
+ },
+ {
+  "code": 47563,
+  "testname": "Monomeric Prolactin",
+  "rate": 1750,
+  "newrate": 0
+ },
+ {
+  "code": 47219,
+  "testname": "Phosphate (24 Hour Urine)",
+  "rate": 500,
+  "newrate": 400
+ },
+ {
+  "code": 503,
+  "testname": "MTB PCR Qualitative",
+  "rate": 4400,
+  "newrate": 4000
+ },
+ {
+  "code": 570,
+  "testname": "Mumps IgG",
+  "rate": 2150,
+  "newrate": 1800
+ },
+ {
+  "code": 1039,
+  "testname": "Mumps IgM",
+  "rate": 2150,
+  "newrate": 1800
+ },
+ {
+  "code": 619,
+  "testname": "Mycodot by ICT",
+  "rate": 700,
+  "newrate": 1000
+ },
+ {
+  "code": 806,
+  "testname": "Mycodot Ig G ELISA",
+  "rate": 1500,
+  "newrate": 1000
+ },
+ {
+  "code": 805,
+  "testname": "Mycodot Ig M ELISA",
+  "rate": 1500,
+  "newrate": 1000
+ },
+ {
+  "code": 41832,
+  "testname": "Mycoplasma Ig G ELISA",
+  "rate": 1650,
+  "newrate": 2000
+ },
+ {
+  "code": 41833,
+  "testname": "Mycoplasma Ig M ELISA",
+  "rate": 1650,
+  "newrate": 2000
+ },
+ {
+  "code": 30,
+  "testname": "Myoglobin",
+  "rate": 1400,
+  "newrate": 2000
+ },
+ {
+  "code": 41517,
+  "testname": "Nail For  Fungal Examination",
+  "rate": 650,
+  "newrate": 600
+ },
+ {
+  "code": 41501,
+  "testname": "Knee Joint  Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 273,
+  "testname": "Joint Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41465,
+  "testname": "Nasal Secretion For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41494,
+  "testname": "Joint Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41490,
+  "testname": "Nasal Secretion For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 42025,
+  "testname": "Neu#",
+  "rate": 100,
+  "newrate": 0
+ },
+ {
+  "code": 47413,
+  "testname": "NMDA Receptor Ig G (CSF)",
+  "rate": 11100,
+  "newrate": 0
+ },
+ {
+  "code": 47414,
+  "testname": "NMDA Receptor Ig G (Serum)",
+  "rate": 11100,
+  "newrate": 0
+ },
+ {
+  "code": 47257,
+  "testname": "Nmp22 (Nuclear Matrix Protein)",
+  "rate": 3500,
+  "newrate": 0
+ },
+ {
+  "code": 463,
+  "testname": "Non0HDL (LDL) Cholesterol",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 539,
+  "testname": "Oligoclonal Bands",
+  "rate": 7400,
+  "newrate": 0
+ },
+ {
+  "code": 37,
+  "testname": "Oxalate (24 Urine)",
+  "rate": 3300,
+  "newrate": 2000
+ },
+ {
+  "code": 41507,
+  "testname": "Hydrocele Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 372,
+  "testname": "Osmolality (Serum)",
+  "rate": 1100,
+  "newrate": 1200
+ },
+ {
+  "code": 13,
+  "testname": "Osmolality Urine (Spot / Random)",
+  "rate": 1100,
+  "newrate": 1200
+ },
+ {
+  "code": 1042,
+  "testname": "Opiates (Urine)",
+  "rate": 1600,
+  "newrate": 1300
+ },
+ {
+  "code": 542,
+  "testname": "p 0 ANCA",
+  "rate": 3650,
+  "newrate": 3500
+ },
+ {
+  "code": 47636,
+  "testname": "p40 Immunohistochemistry Stain",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42156,
+  "testname": "P53 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47400,
+  "testname": "P63 Immunohistochemistry Stain",
+  "rate": 2000,
+  "newrate": 0
+ },
+ {
+  "code": 47440,
+  "testname": "Pancreatic Elastase01 (Stool)",
+  "rate": 6000,
+  "newrate": 0
+ },
+ {
+  "code": 347,
+  "testname": "Pap Smear",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 876,
+  "testname": "Parathyroid Hormone",
+  "rate": 1550,
+  "newrate": 1500
+ },
+ {
+  "code": 405,
+  "testname": "Parathyroid hormone (intact)",
+  "rate": 2750,
+  "newrate": 1500
+ },
+ {
+  "code": 41760,
+  "testname": "PAS Stain",
+  "rate": 350,
+  "newrate": 0
+ },
+ {
+  "code": 42157,
+  "testname": "PAX 5 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 41462,
+  "testname": "Pericardial Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41551,
+  "testname": "Pericardial Fluid For  C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41506,
+  "testname": "Hydrocele Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 73,
+  "testname": "HVS For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41544,
+  "testname": "Pericardial Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41486,
+  "testname": "Pericardial Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 9,
+  "testname": "Peripheral Blood Film ",
+  "rate": 550,
+  "newrate": 300
+ },
+ {
+  "code": 927,
+  "testname": "Peritoneal Fluid C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41454,
+  "testname": "Peritoneal Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41518,
+  "testname": "Hair For Fungus C/S",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 41590,
+  "testname": "Gauze Piece For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 266,
+  "testname": "Peritoneal Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41478,
+  "testname": "Peritoneal Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 947,
+  "testname": "Fluid For Fungus C/S",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 42020,
+  "testname": "pH",
+  "rate": 200,
+  "newrate": 200
+ },
+ {
+  "code": 47259,
+  "testname": "Phenobarbitone",
+  "rate": 1500,
+  "newrate": 2000
+ },
+ {
+  "code": 1045,
+  "testname": "Phenytoin (Dilantin)",
+  "rate": 1450,
+  "newrate": 1400
+ },
+ {
+  "code": 510,
+  "testname": "Morphine Derivatives (Urine)",
+  "rate": 1500,
+  "newrate": 1400
+ },
+ {
+  "code": 47260,
+  "testname": "Plasma Alcohol (Ethanol)",
+  "rate": 2550,
+  "newrate": 0
+ },
+ {
+  "code": 47614,
+  "testname": "Plasma FDPs (D0Dimer)",
+  "rate": 2650,
+  "newrate": 2000
+ },
+ {
+  "code": 42114,
+  "testname": "Plasma Renin (Direct)",
+  "rate": 3850,
+  "newrate": 0
+ },
+ {
+  "code": 47345,
+  "testname": "Platelet Count",
+  "rate": 400,
+  "newrate": 250
+ },
+ {
+  "code": 324,
+  "testname": "Platelete (Manual Separation)",
+  "rate": 1500,
+  "newrate": 0
+ },
+ {
+  "code": 915,
+  "testname": "Pleural Fluid C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41457,
+  "testname": "Pleural Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41680,
+  "testname": "Fluid for C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41520,
+  "testname": "Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 42076,
+  "testname": "Fluid C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 242,
+  "testname": "Pleural Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41481,
+  "testname": "Pleural Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 42071,
+  "testname": "Pleural fluid for malignant cell",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 201,
+  "testname": "Potassium",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41797,
+  "testname": "Potassium (Fluid)",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 534,
+  "testname": "Microalbuminuria Urine (Spot / Random)",
+  "rate": 900,
+  "newrate": 1000
+ },
+ {
+  "code": 331,
+  "testname": "Pregnancy Test (ICT)",
+  "rate": 350,
+  "newrate": 250
+ },
+ {
+  "code": 941,
+  "testname": "pro BNP",
+  "rate": 3100,
+  "newrate": 2500
+ },
+ {
+  "code": 413,
+  "testname": "Procalcitonin (PCT)",
+  "rate": 3650,
+  "newrate": 0
+ },
+ {
+  "code": 388,
+  "testname": "Progesterone",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 387,
+  "testname": "Prolactin",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 529,
+  "testname": "Microalbuminuria (24 Hrs Urine)",
+  "rate": 900,
+  "newrate": 1000
+ },
+ {
+  "code": 536,
+  "testname": "Protein Electrophoresis ",
+  "rate": 1450,
+  "newrate": 1500
+ },
+ {
+  "code": 117,
+  "testname": "Protein0C",
+  "rate": 4600,
+  "newrate": 3000
+ },
+ {
+  "code": 87,
+  "testname": "Prothrombin Time (PT With INR)",
+  "rate": 600,
+  "newrate": 500
+ },
+ {
+  "code": 474,
+  "testname": "PSA (Prostate Specific Antigen)",
+  "rate": 2000,
+  "newrate": 1400
+ },
+ {
+  "code": 42153,
+  "testname": "PSA Immunohistochemistry",
+  "rate": 2000,
+  "newrate": 0
+ },
+ {
+  "code": 41458,
+  "testname": "Pus For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41633,
+  "testname": "Eye Swab C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 936,
+  "testname": "Ear Swab For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 64,
+  "testname": "Pus For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41505,
+  "testname": "Cystic Fluid For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41482,
+  "testname": "Pus For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41461,
+  "testname": "Pus Swab For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41504,
+  "testname": "Cystic Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41485,
+  "testname": "Pus Swab For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 47350,
+  "testname": "Quantiferon TB (IGRA) Gold",
+  "rate": 9000,
+  "newrate": 8000
+ },
+ {
+  "code": 702,
+  "testname": "RA Factor Qualitative",
+  "rate": 700,
+  "newrate": 0
+ },
+ {
+  "code": 42015,
+  "testname": "RA Factor Quantitative",
+  "rate": 950,
+  "newrate": 1000
+ },
+ {
+  "code": 390,
+  "testname": "Red Cell (R.B.Cs) Folate Level",
+  "rate": 1700,
+  "newrate": 1500
+ },
+ {
+  "code": 1043,
+  "testname": "Reducing Substance (Stool)",
+  "rate": 300,
+  "newrate": 300
+ },
+ {
+  "code": 42163,
+  "testname": "Magnesium (24 Hours Urine)",
+  "rate": 600,
+  "newrate": 500
+ },
+ {
+  "code": 694,
+  "testname": "Renal Function Test (RFTs)",
+  "rate": 1100,
+  "newrate": 1000
+ },
+ {
+  "code": 47276,
+  "testname": "Reticulocytes",
+  "rate": 450,
+  "newrate": 300
+ },
+ {
+  "code": 116,
+  "testname": "Rh Antibodies",
+  "rate": 1100,
+  "newrate": 500
+ },
+ {
+  "code": 47405,
+  "testname": "Rh. Anti body Titration",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 47566,
+  "testname": "Ristocetin Cofactor Assay",
+  "rate": 1950,
+  "newrate": 0
+ },
+ {
+  "code": 854,
+  "testname": "RNP/Sm Antibodies",
+  "rate": 2000,
+  "newrate": 2000
+ },
+ {
+  "code": 326,
+  "testname": "RPR Syphilis ",
+  "rate": 1500,
+  "newrate": 1200
+ },
+ {
+  "code": 516,
+  "testname": "Rubella Ig G ELISA",
+  "rate": 1100,
+  "newrate": 1200
+ },
+ {
+  "code": 517,
+  "testname": "Rubella Ig M ELISA",
+  "rate": 1350,
+  "newrate": 1200
+ },
+ {
+  "code": 41912,
+  "testname": "SAAG (serum ascites albumin gradient)",
+  "rate": 800,
+  "newrate": 0
+ },
+ {
+  "code": 42154,
+  "testname": "SALL 4 Immunohistochemistry",
+  "rate": 2200,
+  "newrate": 0
+ },
+ {
+  "code": 42100,
+  "testname": "Sample Collection for Covid 19",
+  "rate": 500,
+  "newrate": 0
+ },
+ {
+  "code": 41464,
+  "testname": "Semen  For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 0
+ },
+ {
+  "code": 49,
+  "testname": "Semen Analysis C/E",
+  "rate": 2000,
+  "newrate": 1000
+ },
+ {
+  "code": 1018,
+  "testname": "Cvp Tip For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41488,
+  "testname": "Semen For Gram Stain",
+  "rate": 400,
+  "newrate": 0
+ },
+ {
+  "code": 47261,
+  "testname": "Serum Androstendione Level",
+  "rate": 2500,
+  "newrate": 0
+ },
+ {
+  "code": 47451,
+  "testname": "Serum Anti Nuclear Antibody (ANA) Quantitative ",
+  "rate": 2450,
+  "newrate": 1500
+ },
+ {
+  "code": 199,
+  "testname": "Serum Electrolytes",
+  "rate": 1100,
+  "newrate": 900
+ },
+ {
+  "code": 41756,
+  "testname": "Serum Free Light Chain (Kappa & Lambda)",
+  "rate": 6000,
+  "newrate": 0
+ },
+ {
+  "code": 47437,
+  "testname": "Serum Immunofixation Electrophoresis",
+  "rate": 6600,
+  "newrate": 0
+ },
+ {
+  "code": 42159,
+  "testname": "Sex Hormone Binding Globulin (SHBG)",
+  "rate": 1800,
+  "newrate": 1800
+ },
+ {
+  "code": 173,
+  "testname": "SGOT (AST)",
+  "rate": 400,
+  "newrate": 350
+ },
+ {
+  "code": 172,
+  "testname": "SGPT (ALT)",
+  "rate": 400,
+  "newrate": 350
+ },
+ {
+  "code": 41599,
+  "testname": "Slide For Review Histopathology",
+  "rate": 2750,
+  "newrate": 4000
+ },
+ {
+  "code": 42150,
+  "testname": "SMA Immunohistochemistry",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 47399,
+  "testname": "Smooth Muscle Actin",
+  "rate": 2200,
+  "newrate": 2200
+ },
+ {
+  "code": 200,
+  "testname": "Sodium",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41791,
+  "testname": "Sodium (Fluid)",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 582,
+  "testname": "Legionella Antigen (Urine)",
+  "rate": 5400,
+  "newrate": 0
+ },
+ {
+  "code": 360,
+  "testname": "Ketones (Urine)",
+  "rate": 300,
+  "newrate": 150
+ },
+ {
+  "code": 47235,
+  "testname": "Spot Urinary Phosphate",
+  "rate": 450,
+  "newrate": 400
+ },
+ {
+  "code": 41614,
+  "testname": "Hemosiderin (Urine)",
+  "rate": 1650,
+  "newrate": 1500
+ },
+ {
+  "code": 933,
+  "testname": "CSF For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 631,
+  "testname": "Sputum For AFB Smear / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 253,
+  "testname": "CSF For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41493,
+  "testname": "CSF Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 52,
+  "testname": "Sputum For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41571,
+  "testname": "Sputum For Fungus examination",
+  "rate": 700,
+  "newrate": 0
+ },
+ {
+  "code": 41468,
+  "testname": "Sputum For Gram Stain",
+  "rate": 400,
+  "newrate": 600
+ },
+ {
+  "code": 629,
+  "testname": "Stone Analysis",
+  "rate": 2450,
+  "newrate": 1400
+ },
+ {
+  "code": 47482,
+  "testname": "Stool culture for E. coli O157",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 40,
+  "testname": "Stool For C/E",
+  "rate": 650,
+  "newrate": 499
+ },
+ {
+  "code": 41674,
+  "testname": "Cornial Scraping C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 47262,
+  "testname": "Stool for Clostridium Difficile Ag",
+  "rate": 3000,
+  "newrate": 5000
+ },
+ {
+  "code": 46,
+  "testname": "Stool For Occult Blood",
+  "rate": 350,
+  "newrate": 300
+ },
+ {
+  "code": 44,
+  "testname": "Stool for pH",
+  "rate": 300,
+  "newrate": 200
+ },
+ {
+  "code": 42164,
+  "testname": "Free Cortisol (24 Hours Urine)",
+  "rate": 2450,
+  "newrate": 0
+ },
+ {
+  "code": 42121,
+  "testname": "Surveillance Report (1 Specimen)",
+  "rate": 880,
+  "newrate": 0
+ },
+ {
+  "code": 42123,
+  "testname": "Surveillance Report (10 Specimen)",
+  "rate": 8800,
+  "newrate": 0
+ },
+ {
+  "code": 47469,
+  "testname": "Surveillance Report (2 Specimen)",
+  "rate": 1760,
+  "newrate": 0
+ },
+ {
+  "code": 42124,
+  "testname": "Surveillance Report (20 Specimen)",
+  "rate": 17600,
+  "newrate": 0
+ },
+ {
+  "code": 47470,
+  "testname": "Surveillance Report (3 Specimen)",
+  "rate": 2640,
+  "newrate": 0
+ },
+ {
+  "code": 47471,
+  "testname": "Surveillance Report (4 Specimen)",
+  "rate": 3520,
+  "newrate": 0
+ },
+ {
+  "code": 42126,
+  "testname": "Surveillance Report (40 Specimen)",
+  "rate": 35200,
+  "newrate": 0
+ },
+ {
+  "code": 42122,
+  "testname": "Surveillance Report (5 Specimen)",
+  "rate": 4400,
+  "newrate": 0
+ },
+ {
+  "code": 42125,
+  "testname": "Surveillance Report (6 Specimen)",
+  "rate": 5280,
+  "newrate": 0
+ },
+ {
+  "code": 47473,
+  "testname": "Surveillance Report (7 Specimen)",
+  "rate": 6160,
+  "newrate": 0
+ },
+ {
+  "code": 47472,
+  "testname": "Surveillance Report (8 Specimen)",
+  "rate": 7040,
+  "newrate": 0
+ },
+ {
+  "code": 47474,
+  "testname": "Surveillance Report (9 Specimen)",
+  "rate": 7920,
+  "newrate": 0
+ },
+ {
+  "code": 41625,
+  "testname": "Conjunctival Swab Right side for C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 42158,
+  "testname": "Synaptophysin  Immunohistochemistry",
+  "rate": 4000,
+  "newrate": 0
+ },
+ {
+  "code": 926,
+  "testname": "Synovial Fluid C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41463,
+  "testname": "Synovial Fluid For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41624,
+  "testname": "Conjunctival Swab Left side for C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41552,
+  "testname": "Catheter Tip For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41547,
+  "testname": "Synovial Fluid For Cytology",
+  "rate": 1400,
+  "newrate": 1000
+ },
+ {
+  "code": 41487,
+  "testname": "Synovial Fluid For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 944,
+  "testname": "Syphilis (VDRL) Screening",
+  "rate": 1400,
+  "newrate": 800
+ },
+ {
+  "code": 381,
+  "testname": "T3",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 382,
+  "testname": "T4 ",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 41618,
+  "testname": "Tacrolimus",
+  "rate": 6050,
+  "newrate": 6000
+ },
+ {
+  "code": 380,
+  "testname": "TFTs",
+  "rate": 2550,
+  "newrate": 2400
+ },
+ {
+  "code": 41894,
+  "testname": "Therapeutic (Phlebotomy)",
+  "rate": 1000,
+  "newrate": 0
+ },
+ {
+  "code": 41459,
+  "testname": "Throat Swab For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 42118,
+  "testname": "Bronchoalveolar Lavage C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41483,
+  "testname": "Throat Swab For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41761,
+  "testname": "Thyroid Cyst Fluid For C/E",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41938,
+  "testname": "Thyroid Function Test (FT3,FT4,TSH) ",
+  "rate": 3850,
+  "newrate": 2800
+ },
+ {
+  "code": 47316,
+  "testname": "Thyroid Function Test (T3,T4,TSH) ",
+  "rate": 2550,
+  "newrate": 2400
+ },
+ {
+  "code": 41821,
+  "testname": "Thyroid Peroxidase Antibodies (Anti0TPO)",
+  "rate": 1000,
+  "newrate": 1800
+ },
+ {
+  "code": 309,
+  "testname": "TIBC",
+  "rate": 800,
+  "newrate": 600
+ },
+ {
+  "code": 47457,
+  "testname": "Bronchial Washing for C/S (Anaerobic)",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41500,
+  "testname": "Bronchial Washing For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41573,
+  "testname": "Bronchial Washing For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41560,
+  "testname": "Tissue For AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 47464,
+  "testname": "Bone For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 515,
+  "testname": "Torch Profile ",
+  "rate": 6600,
+  "newrate": 6400
+ },
+ {
+  "code": 204,
+  "testname": "Total Calcium",
+  "rate": 550,
+  "newrate": 0
+ },
+ {
+  "code": 1110,
+  "testname": "Total Protein",
+  "rate": 450,
+  "newrate": 300
+ },
+ {
+  "code": 91,
+  "testname": "Total RBCs",
+  "rate": 350,
+  "newrate": 200
+ },
+ {
+  "code": 404,
+  "testname": "Total Testosterone",
+  "rate": 1550,
+  "newrate": 1200
+ },
+ {
+  "code": 518,
+  "testname": "Toxoplasma Ig G ELISA",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 519,
+  "testname": "Toxoplasma Ig M ELISA",
+  "rate": 1400,
+  "newrate": 1200
+ },
+ {
+  "code": 878,
+  "testname": "TPHA",
+  "rate": 1350,
+  "newrate": 800
+ },
+ {
+  "code": 41521,
+  "testname": "Body Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41740,
+  "testname": "Blood Anaerobic for C/S ",
+  "rate": 2200,
+  "newrate": 1200
+ },
+ {
+  "code": 41453,
+  "testname": "Tracheal Tube Secretion for AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 257,
+  "testname": "Tracheal Tube Secretion for Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 317,
+  "testname": "Transferrin Saturation",
+  "rate": 1100,
+  "newrate": 1000
+ },
+ {
+  "code": 219,
+  "testname": "Triglycerides",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 41910,
+  "testname": "Troponin0I (Quantitative0hs)",
+  "rate": 1450,
+  "newrate": 1400
+ },
+ {
+  "code": 41911,
+  "testname": "Troponin0I Qualitative",
+  "rate": 1100,
+  "newrate": 0
+ },
+ {
+  "code": 383,
+  "testname": "TSH ",
+  "rate": 1100,
+  "newrate": 800
+ },
+ {
+  "code": 41559,
+  "testname": "T0Spot TB Test",
+  "rate": 8250,
+  "newrate": 0
+ },
+ {
+  "code": 185,
+  "testname": "Urea",
+  "rate": 500,
+  "newrate": 400
+ },
+ {
+  "code": 125,
+  "testname": "Eosinophil Count (Urine)",
+  "rate": 1320,
+  "newrate": 400
+ },
+ {
+  "code": 191,
+  "testname": "Creatinine Urine (Spot / Random)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 41739,
+  "testname": "Blood Aerobic for C/S ",
+  "rate": 2200,
+  "newrate": 1200
+ },
+ {
+  "code": 47310,
+  "testname": "Urethral Smear for Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 310,
+  "testname": "Uric Acid",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 355,
+  "testname": "Creatinine (24 Hrs Urine)",
+  "rate": 500,
+  "newrate": 400
+ },
+ {
+  "code": 1054,
+  "testname": "Uric Acid / Creatinine Ratio",
+  "rate": 600,
+  "newrate": 800
+ },
+ {
+  "code": 358,
+  "testname": "Copper (24 Hrs Urine)",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 1127,
+  "testname": "Urinary Protein",
+  "rate": 300,
+  "newrate": 300
+ },
+ {
+  "code": 1009,
+  "testname": "Cocaine (Urine)",
+  "rate": 2000,
+  "newrate": 1450
+ },
+ {
+  "code": 47232,
+  "testname": "Citrate (24 Urine)",
+  "rate": 3000,
+  "newrate": 2500
+ },
+ {
+  "code": 47452,
+  "testname": "Chloride  (Spot Urine)",
+  "rate": 550,
+  "newrate": 350
+ },
+ {
+  "code": 41549,
+  "testname": "Aspirate For C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41436,
+  "testname": "Chloride  (24 Hours Urine)",
+  "rate": 550,
+  "newrate": 350
+ },
+ {
+  "code": 1008,
+  "testname": "Catecholamines(24Hrs Urine)",
+  "rate": 3300,
+  "newrate": 0
+ },
+ {
+  "code": 1007,
+  "testname": "Cannabinoids (Urine)",
+  "rate": 1600,
+  "newrate": 1300
+ },
+ {
+  "code": 41492,
+  "testname": "Ascitic Fluid For AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 364,
+  "testname": "Calcium Urine (Spot / Random)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 352,
+  "testname": "Calcium Urine (24 hrs)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 470,
+  "testname": "Beta0HCG (Urine)",
+  "rate": 1650,
+  "newrate": 0
+ },
+ {
+  "code": 15,
+  "testname": "Benzodiazepines (Urine)",
+  "rate": 1500,
+  "newrate": 1300
+ },
+ {
+  "code": 11,
+  "testname": "Bence Jones Protein (Urine)",
+  "rate": 450,
+  "newrate": 600
+ },
+ {
+  "code": 988,
+  "testname": "Amylase (24Hrs Urine)",
+  "rate": 950,
+  "newrate": 1000
+ },
+ {
+  "code": 47344,
+  "testname": "Albumin (Qualitative 0 Urine)",
+  "rate": 300,
+  "newrate": 400
+ },
+ {
+  "code": 402,
+  "testname": "5 HIAA (24 Hrs Urine)",
+  "rate": 4150,
+  "newrate": 3300
+ },
+ {
+  "code": 939,
+  "testname": "Valproic Acid (Epival)",
+  "rate": 1450,
+  "newrate": 1400
+ },
+ {
+  "code": 41694,
+  "testname": "Vancomycin",
+  "rate": 1450,
+  "newrate": 1400
+ },
+ {
+  "code": 560,
+  "testname": "Varicella Zoster Virus Ig G ELISA",
+  "rate": 3400,
+  "newrate": 3500
+ },
+ {
+  "code": 41611,
+  "testname": "Varicella Zoster Virus Ig M ELISA",
+  "rate": 3950,
+  "newrate": 3500
+ },
+ {
+  "code": 41774,
+  "testname": "Venous Blood Gases (VBGs)",
+  "rate": 1100,
+  "newrate": 0
+ },
+ {
+  "code": 391,
+  "testname": "Vitamin B12",
+  "rate": 1650,
+  "newrate": 1800
+ },
+ {
+  "code": 41489,
+  "testname": "Vitreous Fluid (Eye) For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 41467,
+  "testname": "Vitreous For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 931,
+  "testname": "Ascitic Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 41596,
+  "testname": "AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 47450,
+  "testname": "VLDL ( Cholesterol )",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 223,
+  "testname": "VLDL (Cholesterol)",
+  "rate": 550,
+  "newrate": 400
+ },
+ {
+  "code": 532,
+  "testname": "170Ketosteroids (24 Hrs Urine)",
+  "rate": 1650,
+  "newrate": 2500
+ },
+ {
+  "code": 41675,
+  "testname": "Von Willebrand Factor Antigen",
+  "rate": 2150,
+  "newrate": 1800
+ },
+ {
+  "code": 42099,
+  "testname": "VTM0Virus Inactivation & Transportation Medium ",
+  "rate": 900,
+  "newrate": 0
+ },
+ {
+  "code": 41515,
+  "testname": "Abdominal Fluid For  C/S",
+  "rate": 1650,
+  "newrate": 1200
+ },
+ {
+  "code": 7,
+  "testname": "WBC (TLC)",
+  "rate": 400,
+  "newrate": 250
+ },
+ {
+  "code": 47417,
+  "testname": "WBC Morphology",
+  "rate": 400,
+  "newrate": 300
+ },
+ {
+  "code": 41460,
+  "testname": "Wound Aspirate For  AFB Stain / ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41777,
+  "testname": "Wound Swab for AFB /ZN Stain",
+  "rate": 700,
+  "newrate": 400
+ },
+ {
+  "code": 41516,
+  "testname": "Abdominal Fluid For  AFB C/S",
+  "rate": 3950,
+  "newrate": 3000
+ },
+ {
+  "code": 41484,
+  "testname": "Wound Swab For Gram Stain",
+  "rate": 400,
+  "newrate": 400
+ },
+ {
+  "code": 47484,
+  "testname": "Zinc Level",
+  "rate": 2850,
+  "newrate": 2500
+ }
+]

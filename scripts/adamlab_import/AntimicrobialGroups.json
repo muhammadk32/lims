@@ -1,0 +1,272 @@
+[
+ {
+  "Code": 1,
+  "Name": "B-LACTAM / B-LACTAMASE INHIBITOR COMBINATIONS",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "kashif",
+  "ModifiedDate": "2023-05-15 01:42:00",
+  "sortorder": 1
+ },
+ {
+  "Code": 2,
+  "Name": "CEPHEMS & CEPHALOSPORINS",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "kashif",
+  "ModifiedDate": "2023-05-08 23:45:00",
+  "sortorder": 2
+ },
+ {
+  "Code": 3,
+  "Name": "AMINOGLYCOSIDES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "admin",
+  "ModifiedDate": "2020-08-19 13:44:00",
+  "sortorder": 7
+ },
+ {
+  "Code": 5,
+  "Name": "QUINOLONE",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 4
+ },
+ {
+  "Code": 6,
+  "Name": "CARBAPENEMS",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 11:56:00",
+  "sortorder": 5
+ },
+ {
+  "Code": 7,
+  "Name": "MACROLIDES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 6
+ },
+ {
+  "Code": 8,
+  "Name": "ANTI MICROBIALS",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "admin",
+  "ModifiedDate": "2017-06-14 16:40:00",
+  "sortorder": 7
+ },
+ {
+  "Code": 9,
+  "Name": "MACROLIDES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 8
+ },
+ {
+  "Code": 10,
+  "Name": "TETRACYCLINE",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 9
+ },
+ {
+  "Code": 11,
+  "Name": "QUINOLONES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 10
+ },
+ {
+  "Code": 12,
+  "Name": "FLUOROQUINOLONES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 12:01:00",
+  "sortorder": 10
+ },
+ {
+  "Code": 13,
+  "Name": "ANTI-FOLATES",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "dr.farhan",
+  "ModifiedDate": "2020-09-03 17:17:00",
+  "sortorder": 12
+ },
+ {
+  "Code": 14,
+  "Name": "MISCELLANEOUS",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": "kashif",
+  "ModifiedDate": "2023-05-08 23:49:00",
+  "sortorder": 6
+ },
+ {
+  "Code": 15,
+  "Name": "New Group",
+  "CreatedBy": null,
+  "CreatedDate": null,
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 2
+ },
+ {
+  "Code": 16,
+  "Name": "CEFSPAM",
+  "CreatedBy": "israr",
+  "CreatedDate": "2015-06-26 21:23:00",
+  "ModifiedBy": "kashif",
+  "ModifiedDate": "2023-05-08 23:43:00",
+  "sortorder": 0
+ },
+ {
+  "Code": 17,
+  "Name": "ZENACEF",
+  "CreatedBy": "israr",
+  "CreatedDate": "2015-06-26 21:24:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 18,
+  "Name": "AMINOPENICILLINS",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:20:00",
+  "ModifiedBy": "khaliladl",
+  "ModifiedDate": "2025-10-02 13:32:00",
+  "sortorder": 1
+ },
+ {
+  "Code": 19,
+  "Name": "2nd GENERATION",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:22:00",
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 11:55:00",
+  "sortorder": 3
+ },
+ {
+  "Code": 20,
+  "Name": "1st GENERATION",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:23:00",
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 11:55:00",
+  "sortorder": 2
+ },
+ {
+  "Code": 21,
+  "Name": "3rd GENERATION",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:24:00",
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 11:55:00",
+  "sortorder": 4
+ },
+ {
+  "Code": 22,
+  "Name": "MONOBACTAMS",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:31:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 23,
+  "Name": "POLYPEPTIDE ANTIBIOTICS",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:34:00",
+  "ModifiedBy": "admin",
+  "ModifiedDate": "2018-01-30 18:34:00",
+  "sortorder": 0
+ },
+ {
+  "Code": 24,
+  "Name": "PRISTINAMYCINS",
+  "CreatedBy": "admin",
+  "CreatedDate": "2018-01-30 18:35:00",
+  "ModifiedBy": "MianJamshaid",
+  "ModifiedDate": "2018-05-28 11:59:00",
+  "sortorder": 8
+ },
+ {
+  "Code": 25,
+  "Name": "Neu#",
+  "CreatedBy": "admin",
+  "CreatedDate": "2019-11-01 20:22:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 26,
+  "Name": "Azithromycin",
+  "CreatedBy": "saeed",
+  "CreatedDate": "2020-06-10 11:10:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 27,
+  "Name": "ANTI-FUNGALS",
+  "CreatedBy": "MAQSOOD",
+  "CreatedDate": "2020-08-20 12:47:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 45
+ },
+ {
+  "Code": 28,
+  "Name": "GLYCOPEPTIDES",
+  "CreatedBy": "MAQSOOD",
+  "CreatedDate": "2020-08-20 13:12:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 88
+ },
+ {
+  "Code": 29,
+  "Name": "PENICILLIN",
+  "CreatedBy": "kashif",
+  "CreatedDate": "2023-05-08 23:40:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 30,
+  "Name": "FOLATE PATHWAY INHIBITORS",
+  "CreatedBy": "kashif",
+  "CreatedDate": "2023-05-08 23:48:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ },
+ {
+  "Code": 31,
+  "Name": "COMBINATION",
+  "CreatedBy": "khaliladl",
+  "CreatedDate": "2025-10-02 15:10:00",
+  "ModifiedBy": null,
+  "ModifiedDate": null,
+  "sortorder": 0
+ }
+]

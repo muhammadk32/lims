@@ -1,0 +1,308 @@
+[
+ {
+  "ID": 1,
+  "Description": "DAILY",
+  "ReportDate": "1",
+  "ReportTime": 0
+ },
+ {
+  "ID": 2,
+  "Description": "AFTER ONE DAY",
+  "ReportDate": "1",
+  "ReportTime": 0
+ },
+ {
+  "ID": 3,
+  "Description": "AFTER TWO DAYS",
+  "ReportDate": "2",
+  "ReportTime": 0
+ },
+ {
+  "ID": 4,
+  "Description": "Ist & 3rd WEDNESDAY",
+  "ReportDate": "5",
+  "ReportTime": 0
+ },
+ {
+  "ID": 5,
+  "Description": "MONDAY & THURSDAY",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 6,
+  "Description": "MONDAY",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 7,
+  "Description": "ON CALL",
+  "ReportDate": "30",
+  "ReportTime": 0
+ },
+ {
+  "ID": 8,
+  "Description": "SAME DAY",
+  "ReportDate": "1",
+  "ReportTime": 0
+ },
+ {
+  "ID": 9,
+  "Description": "SATURDAY",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 10,
+  "Description": "TUESDAY & FRIDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 11,
+  "Description": "TUESDAY ",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 12,
+  "Description": "TUESDAY & FRIDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 13,
+  "Description": "WEDNESDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 14,
+  "Description": "AFTER 6 WEEKS",
+  "ReportDate": "42",
+  "ReportTime": 0
+ },
+ {
+  "ID": 15,
+  "Description": "TUESDAY & SATURDAY",
+  "ReportDate": "4",
+  "ReportTime": 0
+ },
+ {
+  "ID": 16,
+  "Description": "AFTER THREE DAYS",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 17,
+  "Description": "AFTER FOUR DAYS",
+  "ReportDate": "4",
+  "ReportTime": 0
+ },
+ {
+  "ID": 18,
+  "Description": "AFTER FIVE DAYS",
+  "ReportDate": "5",
+  "ReportTime": 0
+ },
+ {
+  "ID": 19,
+  "Description": "AFTER ONE WEEK",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 20,
+  "Description": "MONDAY, WEDNESDAY & FRIDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 21,
+  "Description": "TUESDAY, THURSDAY & FRIDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 22,
+  "Description": "TUESDAY & SATURDAY",
+  "ReportDate": "3",
+  "ReportTime": 0
+ },
+ {
+  "ID": 23,
+  "Description": "THURSDAY",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 24,
+  "Description": "FRIDAY",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 25,
+  "Description": "NEXT DAY",
+  "ReportDate": "1",
+  "ReportTime": 0
+ },
+ {
+  "ID": 26,
+  "Description": "AFTER TWO WEEKS",
+  "ReportDate": "14",
+  "ReportTime": 0
+ },
+ {
+  "ID": 27,
+  "Description": "AFTER 6 DAYS",
+  "ReportDate": "6",
+  "ReportTime": 0
+ },
+ {
+  "ID": 28,
+  "Description": "AFTER 8 WEEKS",
+  "ReportDate": "56",
+  "ReportTime": 0
+ },
+ {
+  "ID": 30,
+  "Description": "AFTER 10 WEEKS",
+  "ReportDate": "70",
+  "ReportTime": 0
+ },
+ {
+  "ID": 31,
+  "Description": "AFTER 7 DAYS",
+  "ReportDate": "7",
+  "ReportTime": 0
+ },
+ {
+  "ID": 32,
+  "Description": "AFTER 8 DAYS",
+  "ReportDate": "8",
+  "ReportTime": 0
+ },
+ {
+  "ID": 33,
+  "Description": "AFTER 9 DAYS",
+  "ReportDate": "9",
+  "ReportTime": 0
+ },
+ {
+  "ID": 34,
+  "Description": "AFTER 10 DAYS",
+  "ReportDate": "10",
+  "ReportTime": 0
+ },
+ {
+  "ID": 35,
+  "Description": "Same Day After 1 Hour",
+  "ReportDate": "0",
+  "ReportTime": 60
+ },
+ {
+  "ID": 36,
+  "Description": "Same Day After 2 Hour",
+  "ReportDate": "0",
+  "ReportTime": 120
+ },
+ {
+  "ID": 37,
+  "Description": "Same Day After 3 Hour",
+  "ReportDate": "0",
+  "ReportTime": 180
+ },
+ {
+  "ID": 38,
+  "Description": "Same Day After 4 Hour",
+  "ReportDate": "0",
+  "ReportTime": 240
+ },
+ {
+  "ID": 39,
+  "Description": "Same Day After 5 Hour",
+  "ReportDate": "0",
+  "ReportTime": 300
+ },
+ {
+  "ID": 40,
+  "Description": "Same Day After 6 Hour",
+  "ReportDate": "0",
+  "ReportTime": 360
+ },
+ {
+  "ID": 41,
+  "Description": "Same Day After 7 Hour",
+  "ReportDate": "0",
+  "ReportTime": 420
+ },
+ {
+  "ID": 42,
+  "Description": "Same Day After 8 Hour",
+  "ReportDate": "0",
+  "ReportTime": 480
+ },
+ {
+  "ID": 43,
+  "Description": "Same Day After 9 Hour",
+  "ReportDate": "0",
+  "ReportTime": 540
+ },
+ {
+  "ID": 44,
+  "Description": "Same Day After 10 Hour",
+  "ReportDate": "0",
+  "ReportTime": 600
+ },
+ {
+  "ID": 45,
+  "Description": "Same Day After 11 Hour",
+  "ReportDate": "0",
+  "ReportTime": 660
+ },
+ {
+  "ID": 46,
+  "Description": "Same Day After 12 Hour",
+  "ReportDate": "0",
+  "ReportTime": 720
+ },
+ {
+  "ID": 47,
+  "Description": "AFTER THREE WEEKS",
+  "ReportDate": "21",
+  "ReportTime": 0
+ },
+ {
+  "ID": 48,
+  "Description": "AFTER FOUR WEEKS",
+  "ReportDate": "28",
+  "ReportTime": 0
+ },
+ {
+  "ID": 49,
+  "Description": "AFTER FIVE WEEKS",
+  "ReportDate": "35",
+  "ReportTime": 0
+ },
+ {
+  "ID": 50,
+  "Description": "AFTER 7 WEEKS",
+  "ReportDate": "49",
+  "ReportTime": 0
+ },
+ {
+  "ID": 51,
+  "Description": "AFTER 9 WEEKS",
+  "ReportDate": "63",
+  "ReportTime": 0
+ },
+ {
+  "ID": 52,
+  "Description": "After 22 Days",
+  "ReportDate": "22",
+  "ReportTime": 0
+ }
+]

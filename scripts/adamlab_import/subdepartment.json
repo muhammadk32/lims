@@ -1,0 +1,272 @@
+[
+ {
+  "subdepartmentname": "Bio Chemistry",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 1,
+  "createddate": "2014-05-17 14:43:00",
+  "createdby": "admin",
+  "modifiedby": "khaliladl",
+  "modifieddate": "2023-04-10 18:05:00"
+ },
+ {
+  "subdepartmentname": "ELISA VIRAL MARKERS",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 2,
+  "createddate": "2014-05-17 15:56:00",
+  "createdby": "admin",
+  "modifiedby": "mehboob",
+  "modifieddate": "2014-06-09 22:11:00"
+ },
+ {
+  "subdepartmentname": "HORMONES",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 3,
+  "createddate": "2014-05-27 19:14:00",
+  "createdby": "admin",
+  "modifiedby": "majid",
+  "modifieddate": "2014-06-28 15:06:00"
+ },
+ {
+  "subdepartmentname": "ELISA BACTERIAL MARKERS",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 4,
+  "createddate": "2014-05-27 19:46:00",
+  "createdby": "tufail",
+  "modifiedby": "mehboob",
+  "modifieddate": "2014-06-09 22:10:00"
+ },
+ {
+  "subdepartmentname": "ELISA OTHERS",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 5,
+  "createddate": "2014-05-27 19:58:00",
+  "createdby": "tufail",
+  "modifiedby": "mehboob",
+  "modifieddate": "2014-06-09 22:11:00"
+ },
+ {
+  "subdepartmentname": "VITAMINS",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 6,
+  "createddate": "2014-05-27 20:15:00",
+  "createdby": "tufail",
+  "modifiedby": "majid",
+  "modifieddate": "2014-06-10 15:07:00"
+ },
+ {
+  "subdepartmentname": "Daily Work Sheet",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 7,
+  "createddate": "2014-05-27 20:16:00",
+  "createdby": "tufail",
+  "modifiedby": "admin",
+  "modifieddate": "2020-09-05 16:05:00"
+ },
+ {
+  "subdepartmentname": "R I D",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 8,
+  "createddate": "2014-05-27 20:18:00",
+  "createdby": "tufail",
+  "modifiedby": "mehboob",
+  "modifieddate": "2014-06-09 22:08:00"
+ },
+ {
+  "subdepartmentname": "Hb A1C Department",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 9,
+  "createddate": "2014-05-27 20:54:00",
+  "createdby": "admin",
+  "modifiedby": "MAQSOOD",
+  "modifieddate": "2021-01-29 19:56:00"
+ },
+ {
+  "subdepartmentname": "CBC Department",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 10,
+  "createddate": "2014-05-27 20:55:00",
+  "createdby": "admin",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "Manual ELISA",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 11,
+  "createddate": "2014-05-28 11:09:00",
+  "createdby": "tufail",
+  "modifiedby": "MAQSOOD",
+  "modifieddate": "2021-01-26 12:43:00"
+ },
+ {
+  "subdepartmentname": "Molecular Biology Department (PCR)",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 12,
+  "createddate": "2014-05-28 19:19:00",
+  "createdby": "shamshad",
+  "modifiedby": "shamshad",
+  "modifieddate": "2014-09-03 16:32:00"
+ },
+ {
+  "subdepartmentname": "RIA",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 13,
+  "createddate": "2014-06-03 22:08:00",
+  "createdby": "mehboob",
+  "modifiedby": "majid",
+  "modifieddate": "2014-06-11 11:27:00"
+ },
+ {
+  "subdepartmentname": "COAGULATION PROFILE",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 14,
+  "createddate": "2014-06-06 21:35:00",
+  "createdby": "wadood",
+  "modifiedby": "tufail",
+  "modifieddate": "2014-12-31 13:04:00"
+ },
+ {
+  "subdepartmentname": "R-CH MANNUAL WORK",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 15,
+  "createddate": "2014-06-06 21:39:00",
+  "createdby": "wadood",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "USER DAILY WORK SHEET",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 16,
+  "createddate": "2014-06-06 22:31:00",
+  "createdby": "wadood",
+  "modifiedby": "admin",
+  "modifieddate": "2020-09-05 16:06:00"
+ },
+ {
+  "subdepartmentname": "HB. ELECTROPHORESIS",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 17,
+  "createddate": "2014-06-09 10:25:00",
+  "createdby": "tufail",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "BETA HCG",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 18,
+  "createddate": "2014-07-25 15:42:00",
+  "createdby": "wadoods",
+  "modifiedby": "wadoods",
+  "modifieddate": "2014-07-25 15:42:00"
+ },
+ {
+  "subdepartmentname": "IMMUNOGLOBULINS",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 19,
+  "createddate": "2014-09-01 20:52:00",
+  "createdby": "wadoods",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "RIA (NEW PARAMETERS)",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 20,
+  "createddate": "2014-09-08 11:59:00",
+  "createdby": "tufail",
+  "modifiedby": "wadoods",
+  "modifieddate": "2015-01-03 12:13:00"
+ },
+ {
+  "subdepartmentname": "PCR",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 21,
+  "createddate": "2014-09-13 11:04:00",
+  "createdby": "shamshad",
+  "modifiedby": "shamshad",
+  "modifieddate": "2014-12-30 15:18:00"
+ },
+ {
+  "subdepartmentname": "TISSU,CARDIO",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 22,
+  "createddate": "2014-12-17 16:39:00",
+  "createdby": "tufail",
+  "modifiedby": "tufail",
+  "modifieddate": "2015-02-20 16:06:00"
+ },
+ {
+  "subdepartmentname": "Cardiology",
+  "status": "I",
+  "flag": null,
+  "subdepartmentcode": 23,
+  "createddate": "2017-11-08 08:58:00",
+  "createdby": "admin",
+  "modifiedby": "admin",
+  "modifieddate": "2017-11-08 09:06:00"
+ },
+ {
+  "subdepartmentname": "Microbiology Section",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 24,
+  "createddate": "2020-08-31 13:45:00",
+  "createdby": "MAQSOOD",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "ABGs (Arterial Blood Gases)",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 25,
+  "createddate": "2023-04-10 18:04:00",
+  "createdby": "khaliladl",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "HPLC (High Performance Liquid Chromatography",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 26,
+  "createddate": "2023-04-10 18:08:00",
+  "createdby": "khaliladl",
+  "modifiedby": null,
+  "modifieddate": null
+ },
+ {
+  "subdepartmentname": "CLIA (Chemiluminescence Immunoassay))",
+  "status": "A",
+  "flag": null,
+  "subdepartmentcode": 27,
+  "createddate": "2023-04-10 18:11:00",
+  "createdby": "khaliladl",
+  "modifiedby": null,
+  "modifieddate": null
+ }
+]

@@ -1,0 +1,356 @@
+[
+ {
+  "bacteriacode": 1,
+  "bacterianame": "Staphylococcus aureus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 2,
+  "bacterianame": "Staphylococcus albus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 3,
+  "bacterianame": "Staphylococcus saprophyticus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 4,
+  "bacterianame": "Streptococcus pyogenes",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 5,
+  "bacterianame": "Streptococcus viridans",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 6,
+  "bacterianame": "Streptococcus pneumoniae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 7,
+  "bacterianame": "Streptococcus faecalis (Entero cocci)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 8,
+  "bacterianame": "Streptococcus agalactiae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 9,
+  "bacterianame": "Corynebacterum diphtheriae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 10,
+  "bacterianame": "Listeria monocytogenes",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 11,
+  "bacterianame": "Clostidium botulinum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 12,
+  "bacterianame": "Clostidium tetabu",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 13,
+  "bacterianame": "Clostidium perfringens",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 14,
+  "bacterianame": "Clostidium difficile",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 15,
+  "bacterianame": "Clostidium tetani",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 16,
+  "bacterianame": "Haemophilus influenzae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 17,
+  "bacterianame": "Haemophilus influenzae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 18,
+  "bacterianame": "Haemophilus aegyptius",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 19,
+  "bacterianame": "Haemophilus ducreyi",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 20,
+  "bacterianame": "Bacillus anthracis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 21,
+  "bacterianame": "Bordetella pertussis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 22,
+  "bacterianame": "Brucella species",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 23,
+  "bacterianame": "Yersinia pestis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 24,
+  "bacterianame": "Yersinia pseudo-tuberculosis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 25,
+  "bacterianame": "Yersinia enterocolitica",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 26,
+  "bacterianame": "Francise tularensis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 27,
+  "bacterianame": "Bacterioides species",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 28,
+  "bacterianame": "Klebsiella pneumoniae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 29,
+  "bacterianame": "Klebsiella rihinoscleromaties",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 30,
+  "bacterianame": "Proteus species ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 31,
+  "bacterianame": "Escherichia coli",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 32,
+  "bacterianame": "Pseusdomonas aeruginosa",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 33,
+  "bacterianame": "pseudomonas pseudmallei",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 34,
+  "bacterianame": "proteus vulgaris",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 35,
+  "bacterianame": "proteus mirabilis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 36,
+  "bacterianame": "protius rettgeri",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 37,
+  "bacterianame": "shigella species",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 38,
+  "bacterianame": "salmonella apecies",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 39,
+  "bacterianame": "virbrio cholerae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 40,
+  "bacterianame": "vibrio parahaemolyticus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 41,
+  "bacterianame": "legionella pneumophila",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 42,
+  "bacterianame": "neisseria meningitidis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 43,
+  "bacterianame": "nsisseria gonorrhoeae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 44,
+  "bacterianame": "mycobatctrium tuberculosis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 45,
+  "bacterianame": "mycobatctrium ulcerans",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 46,
+  "bacterianame": "mycobatctrium leprae",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 47,
+  "bacterianame": "treponema pallidum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 48,
+  "bacterianame": "treponema pertenum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 49,
+  "bacterianame": "treponema carateum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 50,
+  "bacterianame": "leptospira interrogans",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 51,
+  "bacterianame": "borrelia vincenti",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 52,
+  "bacterianame": "borrelia duttoni",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 53,
+  "bacterianame": "borrelia recurrentis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 54,
+  "bacterianame": "spirillum minus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 55,
+  "bacterianame": "baratonella bacilliformis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 56,
+  "bacterianame": "rickettsia species",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 57,
+  "bacterianame": "chlamydia species",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 58,
+  "bacterianame": "calmmatobacterium granulomatis",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "bacteriacode": 59,
+  "bacterianame": "candida albicans",
+  "status": "A",
+  "flag": null
+ }
+]

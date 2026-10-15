@@ -1,0 +1,101 @@
+[
+ {
+  "rlcattname": "Routine Test",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 1,
+  "createddate": "2020-09-08 16:00:00",
+  "createdby": "admin",
+  "modifiedby": "Saqib Hameed",
+  "modifieddate": "2020-09-09 17:25:00",
+  "sortorder": 1
+ },
+ {
+  "rlcattname": "Special Test",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 2,
+  "createddate": "2020-09-09 17:25:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": null,
+  "modifieddate": null,
+  "sortorder": 2
+ },
+ {
+  "rlcattname": "Blood Grouping",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 3,
+  "createddate": "2020-09-09 17:26:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": null,
+  "modifieddate": null,
+  "sortorder": 4
+ },
+ {
+  "rlcattname": "Out side Tests",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 4,
+  "createddate": "2020-09-09 17:26:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": null,
+  "modifieddate": null,
+  "sortorder": 3
+ },
+ {
+  "rlcattname": "PCR Test",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 5,
+  "createddate": "2020-09-09 17:27:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": "IRFANMALIK",
+  "modifieddate": "2021-10-02 15:22:00",
+  "sortorder": 5
+ },
+ {
+  "rlcattname": "Covid 19 PCR",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 6,
+  "createddate": "2020-09-09 17:27:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": null,
+  "modifieddate": null,
+  "sortorder": 6
+ },
+ {
+  "rlcattname": "Discounted Price",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 7,
+  "createddate": "2020-09-28 11:31:00",
+  "createdby": "admin",
+  "modifiedby": "admin",
+  "modifieddate": "2020-09-28 11:36:00",
+  "sortorder": 7
+ },
+ {
+  "rlcattname": "Coronavirus  Antibody",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 8,
+  "createddate": "2020-09-29 11:22:00",
+  "createdby": "Saqib Hameed",
+  "modifiedby": "Saqib Hameed",
+  "modifieddate": "2020-09-29 11:29:00",
+  "sortorder": 8
+ },
+ {
+  "rlcattname": "VACCINE",
+  "status": "A",
+  "flag": null,
+  "rlcatcode": 9,
+  "createddate": "2021-02-16 17:33:00",
+  "createdby": "admin",
+  "modifiedby": null,
+  "modifieddate": null,
+  "sortorder": null
+ }
+]

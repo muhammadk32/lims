@@ -1,0 +1,5294 @@
+[
+ {
+  "testcode": 41353,
+  "resultcode": 3814,
+  "resultname": "24 Hrs Urine",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3815,
+  "resultname": "ANY",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 112,
+  "resultcode": 2067,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 112,
+  "resultcode": 2068,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 113,
+  "resultcode": 2069,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 113,
+  "resultcode": 2070,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41372,
+  "resultcode": 1868,
+  "resultname": "\"A\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41372,
+  "resultcode": 1869,
+  "resultname": "\"B\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41372,
+  "resultcode": 1871,
+  "resultname": "\"O\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41373,
+  "resultcode": 1872,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41373,
+  "resultcode": 1873,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47269,
+  "resultcode": 2896,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 814,
+  "resultcode": 3974,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47269,
+  "resultcode": 2897,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3816,
+  "resultname": "Ascitic Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41931,
+  "resultcode": 2767,
+  "resultname": "\"A\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41931,
+  "resultcode": 2768,
+  "resultname": "\"B\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3817,
+  "resultname": "Aspirate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3818,
+  "resultname": "Bile Aspirate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3819,
+  "resultname": "blood",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3820,
+  "resultname": "Blood (Aerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3821,
+  "resultname": "Blood (Anaerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3822,
+  "resultname": "Blood from Left side (Aerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3823,
+  "resultname": "Blood from Left side (Anaerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3824,
+  "resultname": "Blood from Right side (Aerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 816,
+  "resultcode": 2062,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 816,
+  "resultcode": 2063,
+  "resultname": "Few",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11,
+  "resultcode": 2050,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11,
+  "resultcode": 2051,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41948,
+  "resultcode": 2675,
+  "resultname": "Intercourse",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 96,
+  "resultcode": 2466,
+  "resultname": "Not seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 447,
+  "resultcode": 2155,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 447,
+  "resultcode": 2156,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 448,
+  "resultcode": 6344,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 448,
+  "resultcode": 6345,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 457,
+  "resultcode": 7359,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3825,
+  "resultname": "Blood from Right side (Anaerobic)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3826,
+  "resultname": "Branula Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31225,
+  "resultcode": 1906,
+  "resultname": "Normal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31225,
+  "resultcode": 1907,
+  "resultname": "Abnormal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31225,
+  "resultcode": 1908,
+  "resultname": "30 min",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31227,
+  "resultcode": 1981,
+  "resultname": "Creamy White",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31227,
+  "resultcode": 1982,
+  "resultname": "Off White",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31227,
+  "resultcode": 1983,
+  "resultname": "White",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31228,
+  "resultcode": 1912,
+  "resultname": "Normal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31228,
+  "resultcode": 1913,
+  "resultname": "Abnormal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41423,
+  "resultcode": 1914,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41423,
+  "resultcode": 1915,
+  "resultname": "Absent",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41341,
+  "resultcode": 1985,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41341,
+  "resultcode": 1986,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21166,
+  "resultcode": 1918,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21166,
+  "resultcode": 1919,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3827,
+  "resultname": "Breast Abscess",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3828,
+  "resultname": "Bronchial Washing",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41352,
+  "resultcode": 2031,
+  "resultname": "No micro-organisms seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41351,
+  "resultcode": 1960,
+  "resultname": "No AFB seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3829,
+  "resultname": "Bronchoalveolar Lavage",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41550,
+  "resultcode": 2343,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41550,
+  "resultcode": 2344,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41550,
+  "resultcode": 2345,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41351,
+  "resultcode": 1961,
+  "resultname": "Positive for Acid Fast Bacilli ------   +++ /HPF",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41351,
+  "resultcode": 1962,
+  "resultname": "No Acid Fast Bacilli seen in the smear examined.\nPositive for fungal hyphae---------      +  / HPF (OIF).",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 331,
+  "resultcode": 2164,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 331,
+  "resultcode": 2165,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 46,
+  "resultcode": 1965,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 46,
+  "resultcode": 1966,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 842,
+  "resultcode": 2060,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 842,
+  "resultcode": 2061,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3830,
+  "resultname": "Catheter Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3831,
+  "resultname": "Chest Tube Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 803,
+  "resultcode": 2858,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 816,
+  "resultcode": 2064,
+  "resultname": "Moderate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 816,
+  "resultcode": 2065,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 45,
+  "resultcode": 2058,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3832,
+  "resultname": "Chocolate Cyst",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 803,
+  "resultcode": 2859,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 45,
+  "resultcode": 2059,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 973,
+  "resultcode": 2052,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31227,
+  "resultcode": 1984,
+  "resultname": "Grey",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 973,
+  "resultcode": 2053,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 974,
+  "resultcode": 2054,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 974,
+  "resultcode": 2055,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 856,
+  "resultcode": 2073,
+  "resultname": "fsfsfsadfsdfsadfsdf",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41324,
+  "resultcode": 2074,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41324,
+  "resultcode": 2075,
+  "resultname": "01",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41325,
+  "resultcode": 2274,
+  "resultname": "Variable",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41326,
+  "resultcode": 2077,
+  "resultname": "Dark Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41326,
+  "resultcode": 2078,
+  "resultname": "Light Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41326,
+  "resultcode": 2079,
+  "resultname": "Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41327,
+  "resultcode": 2080,
+  "resultname": "Irregular",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41327,
+  "resultcode": 2081,
+  "resultname": "Oval",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3833,
+  "resultname": "CSF",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3834,
+  "resultname": "CVP Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41325,
+  "resultcode": 2275,
+  "resultname": "cm³",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 307,
+  "resultcode": 2107,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 307,
+  "resultcode": 2108,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41659,
+  "resultcode": 2159,
+  "resultname": "Hypoplastic and megaloblastic.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41660,
+  "resultcode": 2160,
+  "resultname": "Active and all stages of maturation seen. Blast cells",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41662,
+  "resultcode": 2161,
+  "resultname": "Normal in number and platelets are normal on smear.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41663,
+  "resultcode": 2162,
+  "resultname": "Not increased in number.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41664,
+  "resultcode": 2163,
+  "resultname": "No E/M cells seen. No Haemoparasites, storage cell seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 331,
+  "resultcode": 2166,
+  "resultname": "Eqouivocal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3835,
+  "resultname": "D.J Stent",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41530,
+  "resultcode": 2682,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41530,
+  "resultcode": 2683,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41371,
+  "resultcode": 2167,
+  "resultname": "Normocytic Normochromic",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3836,
+  "resultname": "E.T.T Secretion",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 944,
+  "resultcode": 2862,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 944,
+  "resultcode": 2863,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 111,
+  "resultcode": 2864,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 111,
+  "resultcode": 2865,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41374,
+  "resultcode": 2276,
+  "resultname": "Reaction between recipient serum and donor red blood cells are compatible at immedicate spin, liss and coomb`s phase.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41374,
+  "resultcode": 2277,
+  "resultname": "Reaction between recipient serum and donor red blood cells are incompatible at immedicate spin, liss and coomb`s phase.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 631,
+  "resultcode": 2866,
+  "resultname": "No AFB Seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3837,
+  "resultname": "E.T.T Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41956,
+  "resultcode": 2686,
+  "resultname": "Non-Reactive ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41956,
+  "resultcode": 2687,
+  "resultname": "Reactive ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41957,
+  "resultcode": 2688,
+  "resultname": "Non-Reactive ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41957,
+  "resultcode": 2689,
+  "resultname": "Reactive ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41996,
+  "resultcode": 2716,
+  "resultname": "Fit",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41996,
+  "resultcode": 2717,
+  "resultname": "UnFit",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3838,
+  "resultname": "Ear Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3839,
+  "resultname": "Eye Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41592,
+  "resultcode": 2377,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 76,
+  "resultcode": 2375,
+  "resultname": "No Acid Fast Bacilli seen on the smear examined.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 76,
+  "resultcode": 2376,
+  "resultname": "Acid Fast Bacilli seen on the smear examined.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41592,
+  "resultcode": 2378,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41994,
+  "resultcode": 2714,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41994,
+  "resultcode": 2715,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 814,
+  "resultcode": 3975,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 702,
+  "resultcode": 3976,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42113,
+  "resultcode": 2867,
+  "resultname": "six",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42113,
+  "resultcode": 2868,
+  "resultname": "seven",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 702,
+  "resultcode": 3977,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47343,
+  "resultcode": 3978,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47343,
+  "resultcode": 3979,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47309,
+  "resultcode": 4034,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47309,
+  "resultcode": 4035,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 868,
+  "resultcode": 2387,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42162,
+  "resultcode": 4036,
+  "resultname": "Rough",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42162,
+  "resultcode": 4037,
+  "resultname": "Smooth",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41997,
+  "resultcode": 2706,
+  "resultname": "Daewoo Express Pakistan",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41997,
+  "resultcode": 2707,
+  "resultname": "Daewoo/Metro Pakistan",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41931,
+  "resultcode": 2769,
+  "resultname": "\"O\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41931,
+  "resultcode": 2770,
+  "resultname": "\"AB\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 116,
+  "resultcode": 2771,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3840,
+  "resultname": "Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 868,
+  "resultcode": 2388,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3841,
+  "resultname": "Follicular Cyst",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3842,
+  "resultname": "HVS",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3843,
+  "resultname": "Injection",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3844,
+  "resultname": "Joint Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3845,
+  "resultname": "Mouth Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3846,
+  "resultname": "Nail Scrapping",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41592,
+  "resultcode": 2379,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 457,
+  "resultcode": 7360,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 461,
+  "resultcode": 7357,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42113,
+  "resultcode": 2869,
+  "resultname": "eight",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42113,
+  "resultcode": 2870,
+  "resultname": "nine",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 116,
+  "resultcode": 2772,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41656,
+  "resultcode": 2776,
+  "resultname": "Right Site",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 804,
+  "resultcode": 2385,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 465,
+  "resultcode": 4106,
+  "resultname": "Immune",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 465,
+  "resultcode": 4107,
+  "resultname": "Non-Immune",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47654,
+  "resultcode": 4108,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 454,
+  "resultcode": 2392,
+  "resultname": "Reactive\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 454,
+  "resultcode": 2393,
+  "resultname": "Non-Reactive\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 451,
+  "resultcode": 2394,
+  "resultname": "Reactive\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 451,
+  "resultcode": 2395,
+  "resultname": "Non-Reactive\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 545,
+  "resultcode": 2396,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 545,
+  "resultcode": 2397,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 452,
+  "resultcode": 2398,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 452,
+  "resultcode": 2399,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42162,
+  "resultcode": 4038,
+  "resultname": "Granular",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41333,
+  "resultcode": 4040,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41334,
+  "resultcode": 4041,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41332,
+  "resultcode": 4042,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31249,
+  "resultcode": 2871,
+  "resultname": "Normal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2959,
+  "resultname": "No microorganism seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41932,
+  "resultcode": 2412,
+  "resultname": "\"Positive\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41932,
+  "resultcode": 2413,
+  "resultname": "\"Negative\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2960,
+  "resultname": "Gram positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2961,
+  "resultname": "Gram positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2962,
+  "resultname": "Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2963,
+  "resultname": "Gram negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 422,
+  "resultcode": 2425,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 422,
+  "resultcode": 2426,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 421,
+  "resultcode": 2427,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 421,
+  "resultcode": 2428,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3847,
+  "resultname": "Nasal Polyp",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3848,
+  "resultname": "NG Tube",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3849,
+  "resultname": "Penile Abscess",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41330,
+  "resultcode": 4044,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41331,
+  "resultcode": 4045,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41335,
+  "resultcode": 4046,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41336,
+  "resultcode": 4047,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 861,
+  "resultcode": 4048,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 861,
+  "resultcode": 4049,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47654,
+  "resultcode": 4109,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2964,
+  "resultname": "Gram positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 448,
+  "resultcode": 6346,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3220,
+  "resultname": "1.005",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3221,
+  "resultname": "1.010",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3222,
+  "resultname": "1.015",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3223,
+  "resultname": "1.020",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3224,
+  "resultname": "1.025",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11112,
+  "resultcode": 3225,
+  "resultname": "1.030",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11113,
+  "resultcode": 3226,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 804,
+  "resultcode": 2386,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 806,
+  "resultcode": 3416,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 456,
+  "resultcode": 2400,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47282,
+  "resultcode": 4008,
+  "resultname": "1/2  1/4  1/8  1/16  1/32  1/64  1/128\r\n +    +    +    +     +      +     -",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 456,
+  "resultcode": 2401,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41656,
+  "resultcode": 2777,
+  "resultname": "Left site",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 806,
+  "resultcode": 3417,
+  "resultname": "positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 830,
+  "resultcode": 4050,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 830,
+  "resultcode": 4051,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47,
+  "resultcode": 3218,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47,
+  "resultcode": 3219,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11113,
+  "resultcode": 3227,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11114,
+  "resultcode": 3228,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11114,
+  "resultcode": 3229,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 455,
+  "resultcode": 6362,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2459,
+  "resultname": "Within limits",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2460,
+  "resultname": "Oligo spermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2461,
+  "resultname": "Astheno spermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2462,
+  "resultname": "Oligoasthenozoospermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2463,
+  "resultname": "Azoospermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2464,
+  "resultname": "Necrospermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41539,
+  "resultcode": 2465,
+  "resultname": "Haematospermia",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 806,
+  "resultcode": 3418,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3850,
+  "resultname": "Peritonial Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3851,
+  "resultname": "Semen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3852,
+  "resultname": "Serum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2497,
+  "resultname": "1.000\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2498,
+  "resultname": "1.005\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2499,
+  "resultname": "1.010\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2500,
+  "resultname": "1.015\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2501,
+  "resultname": "1.020\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2502,
+  "resultname": "1.025\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41897,
+  "resultcode": 2503,
+  "resultname": "1.030\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11119,
+  "resultcode": 3241,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11119,
+  "resultcode": 3242,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11119,
+  "resultcode": 3243,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11119,
+  "resultcode": 3244,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11117,
+  "resultcode": 2547,
+  "resultname": "NiL",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11117,
+  "resultcode": 2548,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11117,
+  "resultcode": 2549,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11117,
+  "resultcode": 2550,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11117,
+  "resultcode": 2551,
+  "resultname": "++++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11118,
+  "resultcode": 2556,
+  "resultname": "NiL",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11118,
+  "resultcode": 2557,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11118,
+  "resultcode": 2558,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11118,
+  "resultcode": 2559,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 455,
+  "resultcode": 6363,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 455,
+  "resultcode": 6364,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 458,
+  "resultcode": 6355,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 458,
+  "resultcode": 6356,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47223,
+  "resultcode": 6358,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47223,
+  "resultcode": 6359,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 893,
+  "resultcode": 6360,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3853,
+  "resultname": "Skin Scrapping",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3854,
+  "resultname": "Skin Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3855,
+  "resultname": "Slides",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3856,
+  "resultname": "Smear from Oral",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3857,
+  "resultname": "Sputum",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3858,
+  "resultname": "Stomach",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3859,
+  "resultname": "Stool",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3860,
+  "resultname": "Synovial Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41995,
+  "resultcode": 2712,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41995,
+  "resultcode": 2713,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 15,
+  "resultcode": 4064,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 583,
+  "resultcode": 2730,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 583,
+  "resultcode": 2731,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 583,
+  "resultcode": 2732,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 620,
+  "resultcode": 2733,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 620,
+  "resultcode": 2734,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 620,
+  "resultcode": 2735,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 700,
+  "resultcode": 2736,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 700,
+  "resultcode": 2737,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 858,
+  "resultcode": 2740,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 858,
+  "resultcode": 2741,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 855,
+  "resultcode": 2742,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 855,
+  "resultcode": 2743,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 147,
+  "resultcode": 2750,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 147,
+  "resultcode": 2751,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 1007,
+  "resultcode": 2752,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 1007,
+  "resultcode": 2753,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 987,
+  "resultcode": 2754,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 987,
+  "resultcode": 2755,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 530,
+  "resultcode": 2756,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 530,
+  "resultcode": 2757,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 940,
+  "resultcode": 2758,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 940,
+  "resultcode": 2759,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2965,
+  "resultname": "Gram positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42083,
+  "resultcode": 2851,
+  "resultname": "Positive ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2261,
+  "resultname": "Loose",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2262,
+  "resultname": "Solid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2263,
+  "resultname": "Samiformed",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2264,
+  "resultname": "Watery",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2265,
+  "resultname": "Formed",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2266,
+  "resultname": "Hard",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21161,
+  "resultcode": 2267,
+  "resultname": "Liquid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3861,
+  "resultname": "Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3862,
+  "resultname": "Tissue Biopsy",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3863,
+  "resultname": "Tongue Scrapping ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41471,
+  "resultcode": 2966,
+  "resultname": "Gram positive cocci and Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 15,
+  "resultcode": 4065,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3864,
+  "resultname": "Tracheal Secretion",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3865,
+  "resultname": "Umbilical Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3866,
+  "resultname": "Umbilical Tip",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3867,
+  "resultname": "Urethral Smear",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3868,
+  "resultname": "Urethral Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3869,
+  "resultname": "Urine",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3870,
+  "resultname": "Water",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3871,
+  "resultname": "Whole Blood",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2814,
+  "resultname": "Whole Blood",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2815,
+  "resultname": "Packed Red Cells",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2816,
+  "resultname": "Platelets Concentrate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2817,
+  "resultname": "Platelets Mega Unit",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2818,
+  "resultname": "Fresh Frozen Plasma (FFPs)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2819,
+  "resultname": "Cryoprecipitate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2820,
+  "resultname": "P 24",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41738,
+  "resultcode": 2821,
+  "resultname": "Platelet rich Plasma-PRP",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3872,
+  "resultname": "Wound Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42161,
+  "resultcode": 3945,
+  "resultname": "Calcium Oxalate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42161,
+  "resultcode": 3946,
+  "resultname": "Uric Acid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42161,
+  "resultcode": 3947,
+  "resultname": "Tricalcium Phosphate",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47721,
+  "resultcode": 4199,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42017,
+  "resultcode": 2848,
+  "resultname": "Not seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42017,
+  "resultcode": 2849,
+  "resultname": "Trophozoites and gametocytes of P.falciparum/vivax seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42083,
+  "resultcode": 2852,
+  "resultname": "Negative ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41947,
+  "resultcode": 2853,
+  "resultname": "Masturbation ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41947,
+  "resultcode": 2854,
+  "resultname": "Intercourse ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3873,
+  "resultname": "Bronchoalveolar Lavage",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3874,
+  "resultname": "Knee Joint Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3875,
+  "resultname": "Pleural Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3876,
+  "resultname": "Pus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3877,
+  "resultname": "Joint Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3878,
+  "resultname": "Throat Swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3879,
+  "resultname": "Pericardial Fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3880,
+  "resultname": "Nasal secretion",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3881,
+  "resultname": "Nasal swab",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41353,
+  "resultcode": 3882,
+  "resultname": "Vitreous fluid",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47574,
+  "resultcode": 4066,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41612,
+  "resultcode": 3911,
+  "resultname": "Donor cells are compatible with recipient`s serum.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47721,
+  "resultcode": 4200,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41921,
+  "resultcode": 4201,
+  "resultname": "\"O\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47312,
+  "resultcode": 3894,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3962,
+  "resultname": "1 - 2",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3963,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3964,
+  "resultname": "2 - 4",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3965,
+  "resultname": "4 - 6",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3966,
+  "resultname": "6 - 8",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3967,
+  "resultname": "8 - 10",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3968,
+  "resultname": "12 - 15",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3969,
+  "resultname": "15 - 20",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3970,
+  "resultname": "20 - 25",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11127,
+  "resultcode": 3971,
+  "resultname": "Numerous",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47606,
+  "resultcode": 4069,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47577,
+  "resultcode": 4072,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47578,
+  "resultcode": 4073,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47581,
+  "resultcode": 4076,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47582,
+  "resultcode": 4077,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47583,
+  "resultcode": 4078,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47584,
+  "resultcode": 4079,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47609,
+  "resultcode": 4103,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47586,
+  "resultcode": 4081,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47587,
+  "resultcode": 4082,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47588,
+  "resultcode": 4083,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47590,
+  "resultcode": 4085,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47592,
+  "resultcode": 4088,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47594,
+  "resultcode": 4090,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47597,
+  "resultcode": 4093,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47598,
+  "resultcode": 4094,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47602,
+  "resultcode": 4098,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47603,
+  "resultcode": 4099,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47605,
+  "resultcode": 4101,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47656,
+  "resultcode": 4112,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47656,
+  "resultcode": 4113,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47657,
+  "resultcode": 4114,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47657,
+  "resultcode": 4115,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47659,
+  "resultcode": 4116,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47659,
+  "resultcode": 4117,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47660,
+  "resultcode": 4118,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47660,
+  "resultcode": 4119,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47662,
+  "resultcode": 4120,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 893,
+  "resultcode": 6361,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 360,
+  "resultcode": 3235,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 360,
+  "resultcode": 3236,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 360,
+  "resultcode": 3237,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47662,
+  "resultcode": 4121,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47663,
+  "resultcode": 4122,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47663,
+  "resultcode": 4123,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47664,
+  "resultcode": 4126,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11122,
+  "resultcode": 3249,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11122,
+  "resultcode": 3250,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11122,
+  "resultcode": 3251,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11122,
+  "resultcode": 3252,
+  "resultname": "++++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47664,
+  "resultcode": 4127,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47665,
+  "resultcode": 4128,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47665,
+  "resultcode": 4129,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47666,
+  "resultcode": 4130,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47666,
+  "resultcode": 4131,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47667,
+  "resultcode": 4132,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47667,
+  "resultcode": 4133,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47668,
+  "resultcode": 4134,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47668,
+  "resultcode": 4135,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47669,
+  "resultcode": 4136,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47669,
+  "resultcode": 4137,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47670,
+  "resultcode": 4138,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47670,
+  "resultcode": 4139,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47671,
+  "resultcode": 4140,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41372,
+  "resultcode": 1870,
+  "resultname": "\"AB\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47600,
+  "resultcode": 4096,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47655,
+  "resultcode": 4110,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47671,
+  "resultcode": 4141,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41527,
+  "resultcode": 4147,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11123,
+  "resultcode": 3253,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11123,
+  "resultcode": 3254,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11123,
+  "resultcode": 3255,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11124,
+  "resultcode": 3256,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41378,
+  "resultcode": 3257,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3260,
+  "resultname": "1 - 2",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 1170,
+  "resultcode": 2011,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 1170,
+  "resultcode": 2012,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41527,
+  "resultcode": 4148,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41529,
+  "resultcode": 4149,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41358,
+  "resultcode": 2017,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41358,
+  "resultcode": 2018,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3322,
+  "resultname": "1 - 2",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3323,
+  "resultname": "2 - 3",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3324,
+  "resultname": "4 - 6",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3325,
+  "resultname": "6 - 8",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3326,
+  "resultname": "8 - 10",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3327,
+  "resultname": "15 - 20",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41529,
+  "resultcode": 4150,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 995,
+  "resultcode": 4152,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 995,
+  "resultcode": 4153,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41536,
+  "resultcode": 4154,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41536,
+  "resultcode": 4155,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 894,
+  "resultcode": 2680,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 894,
+  "resultcode": 2681,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41533,
+  "resultcode": 4158,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41533,
+  "resultcode": 4159,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41535,
+  "resultcode": 4160,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41535,
+  "resultcode": 4161,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41531,
+  "resultcode": 4162,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41531,
+  "resultcode": 4163,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41528,
+  "resultcode": 4164,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41378,
+  "resultcode": 3258,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41378,
+  "resultcode": 3259,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3261,
+  "resultname": "Numerous ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3262,
+  "resultname": "2 - 4",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41741,
+  "resultcode": 2885,
+  "resultname": "Negative for Cryptococcus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41741,
+  "resultcode": 2886,
+  "resultname": "Positive for Cryptococcus",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41741,
+  "resultcode": 2887,
+  "resultname": "No Fungal spores or hyphae seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41639,
+  "resultcode": 2888,
+  "resultname": "No Fungal Hyphae & spores seen on Lactophenol Cotton blue stain",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41639,
+  "resultcode": 2889,
+  "resultname": "Fungal Hyphae & spores seen on Lactophenol Cotton blue stain",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3263,
+  "resultname": "4 - 6",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3264,
+  "resultname": "8 - 10",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3265,
+  "resultname": "12 - 15",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3266,
+  "resultname": "15 - 20",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2926,
+  "resultname": "No microorganism seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2927,
+  "resultname": "Gram positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2928,
+  "resultname": "Gram positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2929,
+  "resultname": "Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2930,
+  "resultname": "Gram negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2931,
+  "resultname": "Gram positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2932,
+  "resultname": "Gram positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2933,
+  "resultname": "Gram negative intracellular diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41491,
+  "resultcode": 2934,
+  "resultname": "Gram positive cocci and Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2943,
+  "resultname": "No microorganism seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2944,
+  "resultname": "Gram positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2945,
+  "resultname": "Gram positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2946,
+  "resultname": "Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2947,
+  "resultname": "Gram negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2948,
+  "resultname": "Gram positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2949,
+  "resultname": "Gram positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41469,
+  "resultcode": 2950,
+  "resultname": "Gram positive cocci and Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2951,
+  "resultname": "No microorganism seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2952,
+  "resultname": "Gram positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2953,
+  "resultname": "Gram positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2954,
+  "resultname": "Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2955,
+  "resultname": "Gram negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2956,
+  "resultname": "Gram positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2957,
+  "resultname": "Gram positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41470,
+  "resultcode": 2958,
+  "resultname": "Gram positive cocci and Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2967,
+  "resultname": "No microorganism seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2968,
+  "resultname": "Gram positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2969,
+  "resultname": "Gram positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2970,
+  "resultname": "Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2971,
+  "resultname": "Gram negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2972,
+  "resultname": "Gram positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2973,
+  "resultname": "Gram positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2974,
+  "resultname": "Gram negative intracellular diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41472,
+  "resultcode": 2975,
+  "resultname": "Gram positive cocci and Gram negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 31247,
+  "resultcode": 3267,
+  "resultname": "20 - 25",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41528,
+  "resultcode": 4165,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 518,
+  "resultcode": 4166,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 518,
+  "resultcode": 4167,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 518,
+  "resultcode": 4168,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3331,
+  "resultname": "Cystine Crystal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3332,
+  "resultname": "Uric Acid (1 - 2)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3333,
+  "resultname": "Uric Acid (2 - 3)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3334,
+  "resultname": "Uric Acid (6 - 8)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3335,
+  "resultname": "Uric Acid (Many)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3336,
+  "resultname": "Calcium Oxalate (1 - 2)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3337,
+  "resultname": "Calcium Oxalate (2 - 3)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3338,
+  "resultname": "Calcium Oxalate (4 - 6)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3339,
+  "resultname": "Calcium Oxalate (8 - 10)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3340,
+  "resultname": "Calcium Oxalate (Many)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3341,
+  "resultname": "Triple Phosphate (1 - 2)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3342,
+  "resultname": "Triple Phosphate (2 - 4)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3343,
+  "resultname": "Triple Phosphate (4 - 6)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3344,
+  "resultname": "Triple Phosphate (6 - 8)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41944,
+  "resultcode": 3345,
+  "resultname": "Triple Phosphate (Many)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41427,
+  "resultcode": 3365,
+  "resultname": "+",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41427,
+  "resultcode": 3366,
+  "resultname": "++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41427,
+  "resultcode": 3367,
+  "resultname": "+++",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3368,
+  "resultname": "Urates ( + )\t",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3369,
+  "resultname": "Urates ( ++ )",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3370,
+  "resultname": "Urates ( +++ )",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3328,
+  "resultname": "20 - 25",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3329,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11128,
+  "resultcode": 3330,
+  "resultname": "Numerous ",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 519,
+  "resultcode": 4169,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 519,
+  "resultcode": 4170,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 519,
+  "resultcode": 4171,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 516,
+  "resultcode": 4172,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 516,
+  "resultcode": 4173,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 516,
+  "resultcode": 4174,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 517,
+  "resultcode": 4184,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 517,
+  "resultcode": 4185,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3371,
+  "resultname": "Phosphates ( + )",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3372,
+  "resultname": "Phosphates ( ++ )",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11131,
+  "resultcode": 3373,
+  "resultname": "Phosphates ( +++ )",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21160,
+  "resultcode": 3374,
+  "resultname": "Foul",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21160,
+  "resultcode": 3375,
+  "resultname": "Fecal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41328,
+  "resultcode": 3376,
+  "resultname": "Semi Formed",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41328,
+  "resultcode": 3377,
+  "resultname": "Formed",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41328,
+  "resultcode": 3378,
+  "resultname": "Loose",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11120,
+  "resultcode": 3379,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11120,
+  "resultcode": 3380,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21164,
+  "resultcode": 3381,
+  "resultname": "Present",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21164,
+  "resultcode": 3382,
+  "resultname": "Nill",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21171,
+  "resultcode": 3383,
+  "resultname": "Numerous",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21171,
+  "resultcode": 3384,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21171,
+  "resultcode": 3385,
+  "resultname": "1 - 2",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21171,
+  "resultcode": 3386,
+  "resultname": "2 - 4",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21171,
+  "resultcode": 3387,
+  "resultname": "6 - 8",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21172,
+  "resultcode": 3388,
+  "resultname": "1 - 2",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21172,
+  "resultcode": 3389,
+  "resultname": "2 - 4",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21172,
+  "resultcode": 3390,
+  "resultname": "4 - 6",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21172,
+  "resultcode": 3391,
+  "resultname": "6 - 8",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21172,
+  "resultcode": 3392,
+  "resultname": "8 - 10",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 326,
+  "resultcode": 3394,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 326,
+  "resultcode": 3395,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 829,
+  "resultcode": 3396,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 829,
+  "resultcode": 3397,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 802,
+  "resultcode": 5203,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 802,
+  "resultcode": 5204,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47217,
+  "resultcode": 5201,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47217,
+  "resultcode": 5202,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 517,
+  "resultcode": 4186,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 520,
+  "resultcode": 4187,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 520,
+  "resultcode": 4188,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 884,
+  "resultcode": 3407,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 884,
+  "resultcode": 3408,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 884,
+  "resultcode": 3409,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 882,
+  "resultcode": 3410,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 882,
+  "resultcode": 3411,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 882,
+  "resultcode": 3412,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47332,
+  "resultcode": 3957,
+  "resultname": "Pale Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47332,
+  "resultcode": 3958,
+  "resultname": "Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47332,
+  "resultcode": 3959,
+  "resultname": "Reddish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47332,
+  "resultcode": 3960,
+  "resultname": "Dark Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 520,
+  "resultcode": 4189,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 521,
+  "resultcode": 4190,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 521,
+  "resultcode": 4191,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 521,
+  "resultcode": 4192,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 522,
+  "resultcode": 4193,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 522,
+  "resultcode": 4194,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 522,
+  "resultcode": 4195,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 523,
+  "resultcode": 4196,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 523,
+  "resultcode": 4197,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 523,
+  "resultcode": 4198,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41921,
+  "resultcode": 4204,
+  "resultname": "\"B\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47729,
+  "resultcode": 6209,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47729,
+  "resultcode": 6210,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47730,
+  "resultcode": 6213,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47730,
+  "resultcode": 6214,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47731,
+  "resultcode": 6215,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47731,
+  "resultcode": 6216,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47732,
+  "resultcode": 6219,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47732,
+  "resultcode": 6220,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21162,
+  "resultcode": 6224,
+  "resultname": "Acidic",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21162,
+  "resultcode": 6225,
+  "resultname": "Alkaline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21162,
+  "resultcode": 6226,
+  "resultname": "Neutral",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11116,
+  "resultcode": 6227,
+  "resultname": "5.0",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41658,
+  "resultcode": 2158,
+  "resultname": "Normocellular bone marrow fragments and cell trails",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41682,
+  "resultcode": 3952,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41682,
+  "resultcode": 3953,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41921,
+  "resultcode": 4202,
+  "resultname": "\"A\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41921,
+  "resultcode": 4203,
+  "resultname": "\"AB\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11116,
+  "resultcode": 6228,
+  "resultname": "6.0",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41845,
+  "resultcode": 4015,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41845,
+  "resultcode": 4016,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47579,
+  "resultcode": 4074,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47580,
+  "resultcode": 4075,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47601,
+  "resultcode": 4097,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47655,
+  "resultcode": 4111,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11116,
+  "resultcode": 6229,
+  "resultname": "7.0",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11116,
+  "resultcode": 6230,
+  "resultname": "8.0",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11116,
+  "resultcode": 6231,
+  "resultname": "9.0",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41426,
+  "resultcode": 6256,
+  "resultname": "Rare",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41426,
+  "resultcode": 6257,
+  "resultname": "Few",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41426,
+  "resultcode": 6258,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41426,
+  "resultcode": 6259,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11132,
+  "resultcode": 6252,
+  "resultname": "Rare",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11132,
+  "resultcode": 6253,
+  "resultname": "Few",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11132,
+  "resultcode": 6254,
+  "resultname": "Many",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11132,
+  "resultcode": 6255,
+  "resultname": "Nil",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41945,
+  "resultcode": 6330,
+  "resultname": "Granular",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41945,
+  "resultcode": 6331,
+  "resultname": "Hyaline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41945,
+  "resultcode": 6332,
+  "resultname": "Epithelial",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41945,
+  "resultcode": 6333,
+  "resultname": "Waxy",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41945,
+  "resultcode": 6334,
+  "resultname": "WBC (Pus)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 461,
+  "resultcode": 7358,
+  "resultname": "Non Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2129,
+  "resultname": "Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2130,
+  "resultname": "Light Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2131,
+  "resultname": "Pale Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2132,
+  "resultname": "Dark Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2133,
+  "resultname": "Reddish Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2134,
+  "resultname": "Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2135,
+  "resultname": "Orange",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2136,
+  "resultname": "Light Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2137,
+  "resultname": "Dark Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2138,
+  "resultname": "Greenish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2139,
+  "resultname": "Reddish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2140,
+  "resultname": "Brownish Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2141,
+  "resultname": "Whitish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2142,
+  "resultname": "Greenish Brown",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2143,
+  "resultname": "Watery",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 21159,
+  "resultcode": 2144,
+  "resultname": "Brownish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2145,
+  "resultname": "Cellular",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2146,
+  "resultname": "Hyaline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2147,
+  "resultname": "Epithelial",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2148,
+  "resultname": "WBCs",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2149,
+  "resultname": "RBCs",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41386,
+  "resultcode": 2150,
+  "resultname": "Granular",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47270,
+  "resultcode": 2898,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47270,
+  "resultcode": 2899,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47271,
+  "resultcode": 2900,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47271,
+  "resultcode": 2901,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47272,
+  "resultcode": 2902,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47272,
+  "resultcode": 2903,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47273,
+  "resultcode": 2904,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47273,
+  "resultcode": 2905,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47274,
+  "resultcode": 2906,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47274,
+  "resultcode": 2907,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41466,
+  "resultcode": 3116,
+  "resultname": "No AFB Seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41466,
+  "resultcode": 3117,
+  "resultname": "Positive for AFB (+)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41466,
+  "resultcode": 3118,
+  "resultname": "Positive for AFB (++)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41466,
+  "resultcode": 3119,
+  "resultname": "Positive for AFB (+++)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47575,
+  "resultcode": 4067,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41422,
+  "resultcode": 3120,
+  "resultname": "No AFB Seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41422,
+  "resultcode": 3121,
+  "resultname": "Positive for AFB (+)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41422,
+  "resultcode": 3122,
+  "resultname": "Positive for AFB (++)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41422,
+  "resultcode": 3123,
+  "resultname": "Positive for AFB (+++)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47589,
+  "resultcode": 4084,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47312,
+  "resultcode": 3893,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4000,
+  "resultname": "Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4001,
+  "resultname": "Light Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4002,
+  "resultname": "Pale Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4003,
+  "resultname": "Dark Yellow",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4004,
+  "resultname": "Straw",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4005,
+  "resultname": "Reddish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4006,
+  "resultname": "Watery",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 11111,
+  "resultcode": 4007,
+  "resultname": "Pinkish",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47447,
+  "resultcode": 4017,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47447,
+  "resultcode": 4018,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47447,
+  "resultcode": 4019,
+  "resultname": "Equivocal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47448,
+  "resultcode": 4023,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47448,
+  "resultcode": 4024,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47448,
+  "resultcode": 4025,
+  "resultname": "Equivocal",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47607,
+  "resultcode": 4070,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47576,
+  "resultcode": 4071,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47595,
+  "resultcode": 4091,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47604,
+  "resultcode": 4100,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 535,
+  "resultcode": 2338,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 535,
+  "resultcode": 2339,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 535,
+  "resultcode": 2340,
+  "resultname": "Positive Anti-Centromere Abs",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41922,
+  "resultcode": 2342,
+  "resultname": "Negative (Weak \"D\" expression)",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41948,
+  "resultcode": 2674,
+  "resultname": "Masturbation",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41532,
+  "resultcode": 2684,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41532,
+  "resultcode": 2685,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41978,
+  "resultcode": 2708,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41978,
+  "resultcode": 2709,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41993,
+  "resultcode": 2710,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41993,
+  "resultcode": 2711,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3980,
+  "resultname": "No Microorganism seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3981,
+  "resultname": "Gram Positive cocci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3982,
+  "resultname": "Gram Positive rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3983,
+  "resultname": "Gram Negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3984,
+  "resultname": "Gram Negative coccobacilli seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3985,
+  "resultname": "Gram Positive yeast seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3986,
+  "resultname": "Gram Positive diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3987,
+  "resultname": "Gram Negative intracellular diplococci seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 41369,
+  "resultcode": 3988,
+  "resultname": "Gram Positive cocci and Gram Negative rods seen",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 453,
+  "resultcode": 4029,
+  "resultname": "Borderline",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 453,
+  "resultcode": 4030,
+  "resultname": "Non-Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 453,
+  "resultcode": 4031,
+  "resultname": "Reactive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47451,
+  "resultcode": 4052,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47451,
+  "resultcode": 4053,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 406,
+  "resultcode": 4054,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 406,
+  "resultcode": 4055,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 407,
+  "resultcode": 4056,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 407,
+  "resultcode": 4057,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47558,
+  "resultcode": 4058,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47558,
+  "resultcode": 4059,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47562,
+  "resultcode": 4060,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47562,
+  "resultcode": 4061,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47591,
+  "resultcode": 4087,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47593,
+  "resultcode": 4089,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47596,
+  "resultcode": 4092,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47599,
+  "resultcode": 4095,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47585,
+  "resultcode": 4102,
+  "resultname": "< 0.35",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 564,
+  "resultcode": 2744,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 564,
+  "resultcode": 2745,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 565,
+  "resultcode": 2746,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 565,
+  "resultcode": 2747,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47314,
+  "resultcode": 3895,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47314,
+  "resultcode": 3896,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47315,
+  "resultcode": 3897,
+  "resultname": "Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47315,
+  "resultcode": 3898,
+  "resultname": "Not Detected",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 460,
+  "resultcode": 3901,
+  "resultname": "Negative\r\n",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 460,
+  "resultcode": 3902,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 449,
+  "resultcode": 3903,
+  "resultname": "Negative",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 449,
+  "resultcode": 3904,
+  "resultname": "Positive",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47311,
+  "resultcode": 3905,
+  "resultname": "\"A\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47311,
+  "resultcode": 3906,
+  "resultname": "\"B\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47311,
+  "resultcode": 3907,
+  "resultname": "\"O\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 47311,
+  "resultcode": 3908,
+  "resultname": "\"AB\"",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3930,
+  "resultname": "Adequate on smear.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3931,
+  "resultname": "Increased on smear.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3932,
+  "resultname": "Decreased on smear.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3933,
+  "resultname": "Normal in size and shape.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3934,
+  "resultname": "Platelet clumps seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3935,
+  "resultname": "Platelet anisocytosis seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 42075,
+  "resultcode": 3936,
+  "resultname": "Giant platelets seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 97,
+  "resultcode": 3937,
+  "resultname": "No immature cell seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 97,
+  "resultcode": 3938,
+  "resultname": "Atypical cell s seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 97,
+  "resultcode": 3939,
+  "resultname": "Hypersegmented neutrophils seen.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 97,
+  "resultcode": 3940,
+  "resultname": "Neutrophils sre showing mild left shift.",
+  "status": "A",
+  "flag": null
+ },
+ {
+  "testcode": 97,
+  "resultcode": 3941,
+  "resultname": "Normal morphology. No atypical/blast cells seen.",
+  "status": "A",
+  "flag": null
+ }
+]
