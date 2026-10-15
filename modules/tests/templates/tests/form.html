@@ -21,9 +21,9 @@
         <h2>Identity</h2>
         <div class="tf-grid">
           <div class="tf-field"><label>Code *</label>
-            <input type="text" name="code" required value="{{ form.code if form else (test.code if test else '') }}" placeholder="CBC"></div>
+            <input type="text" name="code" required value="{{ form.code if form else (test.code if test else '') }}"></div>
           <div class="tf-field tf-span-2"><label>Test Name *</label>
-            <input type="text" name="name" required value="{{ form.name if form else (test.name if test else '') }}" placeholder="Complete Blood Count"></div>
+            <input type="text" name="name" required value="{{ form.name if form else (test.name if test else '') }}"></div>
 
           {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
           <div class="tf-field"><label>Category</label>
@@ -34,10 +34,34 @@
               {% endfor %}
             </select></div>
           <div class="tf-field"><label>Sample Type</label>
-            <input type="text" name="sample_type" value="{{ form.sample_type if form else (test.sample_type if test else '') }}" placeholder="EDTA whole blood"></div>
-          <div class="tf-field"><label>Unit</label>
-            <input type="text" name="unit" value="{{ form.unit if form else (test.unit if test else '') }}" placeholder="mg/dL"></div>
-        </div>
+            <input type="text" name="sample_type" value="{{ form.sample_type if form else (test.sample_type if test else '') }}"></div>
+                    <div class="tf-field"><label>Unit</label>
+            <input type="text" name="unit" value="{{ form.unit or (test.unit if test else '') }}"></div>
+
+          <div class="tf-field"><label>Test Type</label>
+            <select name="test_type">
+              <option value="single" {% if (form.get('test_type') if form is mapping else 'single')=='single' %}selected{% endif %}>Single</option>
+              <option value="panel"  {% if (form.get('test_type') if form is mapping else '')=='panel' %}selected{% endif %}>Panel (Group)</option>
+            </select></div>
+
+          <div class="tf-field tf-span-2" style="grid-column: span 3;">
+            <label style="display:flex;align-items:center;gap:10px;text-transform:none;font-size:0.9rem;font-weight:600;">
+              <input type="checkbox" name="parameter_only" id="parameter_only" value="1"
+                     {% if (form.get('parameter_only') if form is mapping else False) %}checked{% endif %}
+                     style="width:16px;height:16px;">
+              <span><strong>Parameter Only</strong> — this row is an analyte inside another test, not orderable on its own</span>
+            </label>
+
+            <div id="parentTestWrap" style="margin:6px 0 0 26px; display:none;">
+              <label style="font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--bs-secondary-color);">Parent Test</label>
+              <select name="parent_test_id" style="width:100%;padding:8px 11px;border:2px solid #1a1a1a;border-radius:6px;background:#f6fff0;">
+                <option value="">— Select parent test —</option>
+                {% for t in (all_tests or []) %}
+                <option value="{{ t.id }}" {% if (form.get('parent_test_id')|string if form is mapping else '')==t.id|string %}selected{% endif %}>{{ t.code }} — {{ t.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div></div>
       </section>
 
       <section class="tf-section">
@@ -48,7 +72,7 @@
           <div class="tf-field"><label>Turnaround (hrs)</label>
             <input type="number" min="1" name="turnaround_hours" value="{{ form.turnaround_hours if form else (test.turnaround_hours if test else 24) }}"></div>
           <div class="tf-field"><label>Normal Range</label>
-            <input type="text" name="normal_range" value="{{ form.normal_range if form else (test.normal_range if test else '') }}" placeholder="70 – 100"></div>
+            <input type="text" name="normal_range" value="{{ form.normal_range if form else (test.normal_range if test else '') }}"></div>
         </div>
       </section>
 
@@ -81,7 +105,7 @@
       <section class="tf-section">
         <h2>Notes</h2>
         <div class="tf-field">
-          <textarea name="description" rows="2" placeholder="Optional description">{{ form.description if form else (test.description if test else '') }}</textarea>
+          <textarea name="description" rows="2">{{ form.description if form else (test.description if test else '') }}</textarea>
         </div>
       </section>
 

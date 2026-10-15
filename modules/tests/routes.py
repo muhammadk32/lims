@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_
 from extensions import db
 from . import tests_bp
-from .models import Test, TestCategory, TestReferenceRange
+from .models import Test, TestCategory, TestReferenceRange, TestParameter
 from . import services as svc
 from core.decorators import permission_required
 from core.audit import log_action
@@ -79,6 +79,8 @@ def index():
         category_id = request.args.get('category', type=int)
         status_filter = request.args.get('status', 'active').strip()
         page = request.args.get('page', 1, type=int)
+        type_filter = request.args.get('type_filter', '').strip()
+        specimen_id = request.args.get('specimen', type=int)
 
         query = Test.query
         if status_filter == 'active':
@@ -91,13 +93,37 @@ def index():
             query = query.filter(or_(Test.name.ilike(like), Test.code.ilike(like)))
         if category_id:
             query = query.filter(Test.category_id == category_id)
+        if specimen_id:
+            query = query.filter(Test.specimen_id == specimen_id)
 
+        if type_filter == 'panel':
+            query = query.filter(Test.is_panel == True)  # noqa: E712
+        elif type_filter == 'plain':
+            from sqlalchemy import exists as _ex
+            from .models import PanelParameter as _PP, TestParameter as _TP
+            query = (query.filter(Test.is_panel == False)  # noqa: E712
+                          .filter(~_ex().where(_PP.test_id == Test.id))
+                          .filter(~_ex().where(_TP.test_id == Test.id)))
+        elif type_filter == 'child':
+            from sqlalchemy import exists as _ex
+            from .models import PanelParameter as _PP
+            query = (query.filter(Test.is_panel == False)  # noqa: E712
+                          .filter(_ex().where(_PP.test_id == Test.id)))
+        elif type_filter == 'analyte':
+            from sqlalchemy import exists as _ex
+            from .models import TestParameter as _TP
+            query = query.filter(_ex().where(_TP.test_id == Test.id))
+
+        from modules.tests.models import Specimen
         ctx.update({
-            'tests': query.order_by(Test.name).paginate(page=page, per_page=15, error_out=False),
+            'tests': query.order_by(Test.code.asc()).paginate(page=page, per_page=15, error_out=False),
             'categories': TestCategory.query.order_by(TestCategory.name).all(),
+            'specimens': Specimen.query.filter_by(is_active=True).order_by(Specimen.name).all(),
             'q': q,
             'category_id': category_id,
             'status_filter': status_filter,
+            'type_filter': type_filter,
+            'specimen_id': specimen_id,
         })
 
     elif tab == 'formats':
@@ -224,7 +250,7 @@ def list_tests():
     if category_id:
         query = query.filter(Test.category_id == category_id)
 
-    tests = query.order_by(Test.name).paginate(page=page, per_page=15, error_out=False)
+    tests = query.order_by(Test.code.asc()).paginate(page=page, per_page=15, error_out=False)
     categories = TestCategory.query.order_by(TestCategory.name).all()
 
     return render_template(
@@ -250,17 +276,57 @@ def new_test():
 
         if not code or not name:
             flash('Code and Name are required.', 'danger')
-            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form())
+            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form(), all_tests=Test.query.filter_by(is_active=True).order_by(Test.name).all())
 
         # Duplicate check
         if Test.query.filter_by(code=code).first():
             flash(f'A test with code "{code}" already exists.', 'danger')
-            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form())
+            return render_template('tests/form.html', test=None, categories=categories, form=request.form, labs=_labs_for_test_form(), all_tests=Test.query.filter_by(is_active=True).order_by(Test.name).all())
 
         category = None
         cat_id = request.form.get('category_id', type=int)
         if cat_id:
             category = TestCategory.query.get(cat_id)
+
+        # ---- Parameter Only path ----
+        if request.form.get('parameter_only'):
+            parent_id = request.form.get('parent_test_id', type=int)
+            if not parent_id:
+                flash('Pick a Parent Test when creating a Parameter.', 'danger')
+                return render_template('tests/form.html', test=None, categories=categories,
+                                       form=request.form, labs=_labs_for_test_form(),
+                                       all_tests=Test.query.filter_by(is_active=True).order_by(Test.name).all())
+            parent = Test.query.get(parent_id)
+            if not parent:
+                flash('Parent test not found.', 'danger')
+                return render_template('tests/form.html', test=None, categories=categories,
+                                       form=request.form, labs=_labs_for_test_form(),
+                                       all_tests=Test.query.filter_by(is_active=True).order_by(Test.name).all())
+
+            from sqlalchemy import func
+            max_sort = db.session.query(func.coalesce(func.max(TestParameter.sort_order), 0)) \
+                                 .filter(TestParameter.test_id == parent.id).scalar() or 0
+
+            param = TestParameter(
+                test_id=parent.id,
+                name=name,
+                report_name=name,
+                unit=request.form.get('unit', '').strip() or None,
+                is_editable=True,
+                sort_order=max_sort + 1,
+                is_active=True,
+            )
+            db.session.add(param)
+            db.session.commit()
+
+            log_action('create', 'test_parameter', param.id,
+                       f'Added parameter {param.name} to {parent.code} - {parent.name}')
+            flash(f'Parameter "{name}" added to {parent.name}.', 'success')
+            return redirect(url_for('tests.view_test', test_id=parent.id))
+
+        # ---- Normal test / panel path ----
+        test_type = (request.form.get('test_type') or 'single').strip().lower()
+        is_panel = (test_type == 'panel')
 
         test = Test(
             code=code,
@@ -272,6 +338,7 @@ def new_test():
             description=request.form.get('description', '').strip() or None,
             turnaround_hours=request.form.get('turnaround_hours', type=int) or 24,
             is_outsourced=bool(request.form.get('is_outsourced')),
+            is_panel=is_panel,
             max_discount_percent=(
                 request.form.get('max_discount_percent', type=float)
                 if request.form.get('is_outsourced') else None
@@ -285,12 +352,14 @@ def new_test():
         db.session.add(test)
         db.session.commit()
 
-        log_action('create', 'test', test.id, f'Created test {test.code} — {test.name}')
-
-        flash(f'Test "{test.name}" created.', 'success')
+        kind = 'panel' if is_panel else 'test'
+        log_action('create', 'test', test.id, f'Created {kind} {test.code} - {test.name}')
+        flash(f'{"Panel" if is_panel else "Test"} "{test.name}" created.', 'success')
+        if is_panel:
+            return redirect(url_for('test_settings.panel_edit', panel_id=test.id))
         return redirect(url_for('tests.list_tests'))
 
-    return render_template('tests/form.html', test=None, categories=categories, form={}, labs=_labs_for_test_form())
+    return render_template('tests/form.html', test=None, categories=categories, form={}, labs=_labs_for_test_form(), all_tests=Test.query.filter_by(is_active=True).order_by(Test.name).all())
 
 
 # ---------- View ----------

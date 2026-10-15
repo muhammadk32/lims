@@ -72,6 +72,15 @@ class Test(BaseModel):
 
     turnaround_hours = db.Column(db.Integer, default=24)
     sample_type = db.Column(db.String(120), nullable=True)  # e.g. EDTA whole blood
+
+    # Structured specimen link (AdamLab specimencode)
+    specimen_id = db.Column(
+        db.Integer,
+        db.ForeignKey('specimens.id'),
+        nullable=True,
+        index=True,
+    )
+    specimen_ref = db.relationship('Specimen', foreign_keys=[specimen_id])
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
     # ---------- Outsourced / referral test ----------
