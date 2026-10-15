@@ -1,0 +1,194 @@
+
+
+# ============================================================
+# IMPORTED FROM ADAMLAB (SQL Server) — hybrid schema additions
+# ============================================================
+
+class SpecimenCategory(BaseModel):
+    __tablename__ = 'specimen_categories'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)  # adamlab scategorycode
+    name = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class Specimen(BaseModel):
+    __tablename__ = 'specimens'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)  # adamlab specimencode
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('specimen_categories.id'), nullable=True)
+    category = db.relationship('SpecimenCategory')
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class LabDepartment(BaseModel):
+    __tablename__ = 'lab_departments'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class LabSection(BaseModel):
+    __tablename__ = 'lab_sections'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    department_id = db.Column(db.Integer, db.ForeignKey('lab_departments.id'), nullable=True)
+    department = db.relationship('LabDepartment')
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class SubDepartment(BaseModel):
+    __tablename__ = 'sub_departments'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class SubDepartmentTest(BaseModel):
+    __tablename__ = 'sub_department_tests'
+    sub_department_id = db.Column(db.Integer, db.ForeignKey('sub_departments.id', ondelete='CASCADE'), nullable=False, index=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
+    sort_order = db.Column(db.Integer, default=0, nullable=False)
+    sub_department = db.relationship('SubDepartment')
+    test = db.relationship('Test')
+
+
+class TestParameter(BaseModel):
+    """AdamLab TestParameter — per-test analyte row (child of Test).
+
+    This is different from PanelParameter: a panel links to standalone Tests.
+    TestParameter represents an *analyte inside a single test* (e.g. WBC,
+    Neutrophils inside a CBC). Carries its own unit, format, and formula.
+    """
+    __tablename__ = 'test_parameters'
+    adamlab_id = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    report_name = db.Column(db.String(120), nullable=True)
+    unit = db.Column(db.String(60), nullable=True)
+    template_id = db.Column(db.Integer, nullable=True)
+    is_editable = db.Column(db.Boolean, nullable=False, default=True)
+    format = db.Column(db.String(20), nullable=True)
+    parameter_name = db.Column(db.String(60), nullable=True)
+    parameter_code = db.Column(db.Integer, nullable=True)
+    sort_order = db.Column(db.Integer, default=0, nullable=False)
+    is_calculated = db.Column(db.Boolean, nullable=False, default=False)
+    formula = db.Column(db.String(500), nullable=True)
+    critical_low = db.Column(db.Float, nullable=True)
+    critical_high = db.Column(db.Float, nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+    test = db.relationship('Test', backref=db.backref('parameters', cascade='all, delete-orphan'))
+
+
+class TestParameterNormalValue(BaseModel):
+    __tablename__ = 'test_parameter_normal_values'
+    adamlab_id = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    parameter_id = db.Column(db.Integer, db.ForeignKey('test_parameters.id', ondelete='CASCADE'), nullable=False, index=True)
+    gender = db.Column(db.Integer, nullable=False, default=1)   # 0=any, 1=male, 2=female (adamlab convention)
+    age_min = db.Column(db.Integer, nullable=True)
+    age_max = db.Column(db.Integer, nullable=True)
+    age_type = db.Column(db.String(20), nullable=True)          # years|months|days
+    value_from = db.Column(db.Float, nullable=True)
+    value_to = db.Column(db.Float, nullable=True)
+    text_value = db.Column(db.Text, nullable=True)
+    remarks = db.Column(db.Text, nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+    parameter = db.relationship('TestParameter', backref=db.backref('normal_values', cascade='all, delete-orphan'))
+
+
+class TestDefaultResult(BaseModel):
+    __tablename__ = 'test_default_results'
+    adamlab_resultcode = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
+    result_name = db.Column(db.String(255), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+    test = db.relationship('Test', backref=db.backref('default_results', cascade='all, delete-orphan'))
+
+
+class TestRemarkTemplate(BaseModel):
+    __tablename__ = 'test_remark_templates'
+    adamlab_recordid = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
+    remarks = db.Column(db.Text, nullable=True)
+    fixed_remarks = db.Column(db.Text, nullable=True)
+    test = db.relationship('Test', backref=db.backref('remark_templates', cascade='all, delete-orphan'))
+
+
+class TestDay(BaseModel):
+    __tablename__ = 'test_days'
+    adamlab_id = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    description = db.Column(db.String(120), nullable=False)
+    report_date = db.Column(db.String(60), nullable=True)
+    report_time = db.Column(db.Integer, nullable=True)
+
+
+class TestCutoff(BaseModel):
+    __tablename__ = 'test_cutoffs'
+    test_code = db.Column(db.String(60), nullable=True, index=True)
+    parameter = db.Column(db.String(120), nullable=False)
+    cutoff_value = db.Column(db.String(80), nullable=True)
+
+
+class RateCategory(BaseModel):
+    __tablename__ = 'rate_categories'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(120), nullable=False)
+    sort_order = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class RateCategoryRate(BaseModel):
+    __tablename__ = 'rate_category_rates'
+    rate_category_id = db.Column(db.Integer, db.ForeignKey('rate_categories.id', ondelete='CASCADE'), nullable=False, index=True)
+    company_code = db.Column(db.Integer, nullable=True, index=True)
+    section_code = db.Column(db.Integer, nullable=True, index=True)
+    rate_percent = db.Column(db.Numeric(18, 0), nullable=True)
+    commission = db.Column(db.Numeric(8, 0), nullable=True)
+    rate_category = db.relationship('RateCategory', backref=db.backref('rates', cascade='all, delete-orphan'))
+
+
+class RateCategoryTest(BaseModel):
+    __tablename__ = 'rate_category_tests'
+    rate_category_id = db.Column(db.Integer, db.ForeignKey('rate_categories.id', ondelete='CASCADE'), nullable=False, index=True)
+    test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
+    sort_order = db.Column(db.Integer, default=0)
+    rate_category = db.relationship('RateCategory')
+    test = db.relationship('Test')
+
+
+class AntimicrobialGroup(BaseModel):
+    __tablename__ = 'antimicrobial_groups'
+    code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(150), nullable=False)
+    sort_order = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class Antimicrobial(BaseModel):
+    __tablename__ = 'antimicrobials'
+    adamlab_id = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    code = db.Column(db.Integer, nullable=True, index=True)
+    name = db.Column(db.String(150), nullable=False)
+    short_name = db.Column(db.String(10), nullable=True)
+    shortcut_name = db.Column(db.String(15), nullable=True)
+    sort_order = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class CultureBacterium(BaseModel):
+    __tablename__ = 'culture_bacteria'
+    adamlab_code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(500), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class CultureMedicine(BaseModel):
+    __tablename__ = 'culture_medicines'
+    adamlab_code = db.Column(db.Integer, unique=True, nullable=True, index=True)
+    name = db.Column(db.String(120), nullable=True)
+    short_name = db.Column(db.String(40), nullable=True)
+    resistant = db.Column(db.Integer, nullable=True)
+    lab_code = db.Column(db.Integer, nullable=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
