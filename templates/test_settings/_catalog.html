@@ -39,25 +39,6 @@
       <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Paused only</option>
       <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
     </select>
-  </div>
-    <div class="lt-field">
-    <label>Type</label>
-    <select name="type_filter">
-      <option value="" {% if not type_filter %}selected{% endif %}>All</option>
-      <option value="panel" {% if type_filter == 'panel' %}selected{% endif %}>Panels (P)</option>
-      <option value="child" {% if type_filter == 'child' %}selected{% endif %}>Children (C)</option>
-      <option value="analyte" {% if type_filter == 'analyte' %}selected{% endif %}>With Analytes (A)</option>
-      <option value="plain" {% if type_filter == 'plain' %}selected{% endif %}>Standalone (T)</option>
-    </select>
-  </div>
-  <div class="lt-field">
-    <label>Specimen</label>
-    <select name="specimen">
-      <option value="">All</option>
-      {% for s in specimens %}
-      <option value="{{ s.id }}" {% if specimen_id == s.id %}selected{% endif %}>{{ s.name }}</option>
-      {% endfor %}
-    </select>
   </div><div class="lt-field">
     <button type="submit" class="lt-btn lt-btn-primary">
       <i class="bi bi-funnel"></i> Filter
