@@ -160,6 +160,14 @@ class Test(BaseModel):
         """Human-readable label for the result format."""
         return RESULT_FORMAT_MAP.get(self.result_format, self.result_format)
 
+    @property
+    def sub_departments(self):
+        """Lab sub-departments this test belongs to (via SubDepartmentTest)."""
+        rows = (SubDepartmentTest.query
+                .filter(SubDepartmentTest.test_id == self.id)
+                .all())
+        return [r.sub_department for r in rows if r.sub_department]
+
     def __repr__(self):
         kind = 'PANEL' if self.is_panel else 'TEST'
         return f'<Test {self.code} ({kind}) — {self.name}>'
