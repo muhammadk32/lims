@@ -1,48 +1,178 @@
-﻿{# ============ RATE LISTS TAB ============ #}
-<div class="ts-header">
-  <div>
-    <h2 class="ts-title"><i class="bi bi-cash-stack"></i> Rate Lists</h2>
-    <div class="ts-subtitle">Rate categories — pricing groups used in referrals &amp; billing</div>
-  </div>
-  <div class="ts-count">{{ rate_categories|length }} categor{{ 'y' if rate_categories|length == 1 else 'ies' }}</div>
-</div>
+﻿{# ============ RATE LISTS (AdamLab Setup Sub Rate List style) ============ #}
+<style>
+.rl-page { font-size: 0.92rem; }
+.rl-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid #212529; }
+.rl-head h2 { font-size:1.35rem; font-weight:700; margin:0; text-transform:uppercase; letter-spacing:0.02em; }
 
-{% if rate_categories %}
-<table class="ts-table">
-  <thead>
-    <tr>
-      <th style="width: 60px;">#</th>
-      <th style="width: 90px;">Code</th>
-      <th>Name</th>
-      <th class="center" style="width: 120px;">Tests</th>
-      <th class="center" style="width: 120px;">Rates</th>
-      <th class="center" style="width: 140px;">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for c in rate_categories %}
-    <tr>
-      <td class="center muted">{{ loop.index }}</td>
-      <td><code>{{ c.code }}</code></td>
-      <td><span class="name">{{ c.name }}</span></td>
-      <td class="center">
-        <span class="ts-badge {% if rate_test_counts.get(c.id, 0) > 0 %}ts-badge-cyan{% else %}ts-badge-grey{% endif %}">
-          {{ rate_test_counts.get(c.id, 0) }}
-        </span>
-      </td>
-      <td class="center">{{ c.rates|length }}</td>
-      <td class="center">
-        <a href="/tests/?tab=rates&cat={{ c.id }}" class="ts-icon-btn" title="Edit">
-          <i class="bi bi-pencil"></i>
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<div class="ts-empty">
-  <i class="bi bi-cash-stack fs-3 d-block mb-2"></i>
-  <div>No rate categories imported.</div>
+.rl-filter {
+  background:#f8f9fa; border:2px solid #212529; border-radius:12px;
+  padding:12px 14px; margin-bottom:12px;
+  display:grid; grid-template-columns: repeat(5, 1fr) auto;
+  gap:10px; align-items:end;
+}
+.rl-filter label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; color:#6c757d; margin-bottom:4px; letter-spacing:0.04em; }
+.rl-filter input, .rl-filter select {
+  width:100%; padding:6px 10px; border:1px solid #ced4da; border-radius:8px;
+  font-size:0.9rem; height:34px; background:#fff;
+}
+.rl-filter input:focus, .rl-filter select:focus { outline:none; border-color:#0d6efd; box-shadow:0 0 0 3px rgba(13,110,253,.15); }
+
+.rl-table { width:100%; border-collapse:separate; border-spacing:0; font-size:0.92rem;
+  border:2px solid #212529; border-radius:12px; overflow:hidden; }
+
+.rl-table thead th {
+  background:#1a1a1a; color:#fff;
+  padding:12px 12px; text-align:left;
+  font-weight:700; font-size:0.82rem;
+  text-transform:uppercase; letter-spacing:0.06em;
+  border-bottom:2px solid #000;
+  border-right:1px solid #333846;
+}
+.rl-table thead th:last-child { border-right:none; }
+.rl-table thead th:first-child { border-top-left-radius:11px; }
+.rl-table thead th:last-child  { border-top-right-radius:11px; }
+
+.rl-table tbody td {
+  padding:10px 12px; border-bottom:1px solid #212529; border-right:1px solid #212529;
+  vertical-align:middle;
+}
+.rl-table tbody td:last-child { border-right:none; }
+.rl-table tbody tr:last-child td { border-bottom:none; }
+.rl-table tbody tr:nth-child(even) td { background:#f5f9ff; }
+.rl-table tbody tr:nth-child(odd)  td { background:#ffffff; }
+.rl-table tbody tr:hover td { background:#eaf2ff; }
+.rl-table .inactive td { color:#adb5bd; background:#f8f9fa !important; }
+
+.rl-badge {
+  display:inline-block; padding:3px 10px;
+  font-size:0.78rem; font-weight:700; text-transform:uppercase;
+  border-radius:999px; letter-spacing:0.03em;
+}
+.rl-badge-a { background:#198754; color:#fff; }
+.rl-badge-i { background:#6c757d; color:#fff; }
+
+/* action pill buttons */
+.rl-actions { display:flex; gap:6px; align-items:center; flex-wrap:nowrap; }
+.rl-actions form { margin:0; display:inline; }
+.rl-actions a, .rl-actions button {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:32px; height:32px; padding:0;
+  border:none; border-radius:999px;
+  cursor:pointer; text-decoration:none;
+  font-size:1rem; transition: all .15s;
+}
+.rl-actions a:hover, .rl-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+.rl-actions .edit-btn    { background:#e7f1ff; color:#0d6efd; }
+.rl-actions .edit-btn:hover { background:#0d6efd; color:#fff; }
+.rl-actions .detail-btn  { background:#e7f7ee; color:#198754; }
+.rl-actions .detail-btn:hover { background:#198754; color:#fff; }
+.rl-actions .copy-btn    { background:#eef0f2; color:#495057; }
+.rl-actions .copy-btn:hover { background:#6c757d; color:#fff; }
+.rl-actions .history-btn { background:#e5f7fa; color:#0dcaf0; }
+.rl-actions .history-btn:hover { background:#0dcaf0; color:#fff; }
+.rl-actions .toggle-btn  { background:#fff8e1; color:#b8860b; }
+.rl-actions .toggle-btn:hover { background:#ffc107; color:#000; }
+.rl-actions .danger      { background:#fdecef; color:#dc3545; }
+.rl-actions .danger:hover { background:#dc3545; color:#fff; }
+</style>
+
+<div class="rl-page">
+  <div class="rl-head">
+    <h2><i class="bi bi-list-ol"></i> Master Rate List</h2>
+    <a href="{{ url_for('tests.rate_list_new') }}" class="btn btn-sm btn-primary">
+      <i class="bi bi-plus-lg"></i> Add
+    </a>
+  </div>
+
+  <form method="GET" action="{{ url_for('tests.index') }}" class="rl-filter">
+    <input type="hidden" name="tab" value="rates">
+    <div><label>Search</label><input type="text" name="q" value="{{ q or '' }}"></div>
+    <div><label>Type</label>
+      <select name="rt">
+        <option value="">All</option>
+        <option value="rate" {% if rt=='rate' %}selected{% endif %}>Rate</option>
+        <option value="commission" {% if rt=='commission' %}selected{% endif %}>Commission</option>
+        <option value="both" {% if rt=='both' %}selected{% endif %}>Both</option>
+      </select>
+    </div>
+    <div><label>Status</label>
+      <select name="status">
+        <option value="active" {% if status_filter=='active' %}selected{% endif %}>Active</option>
+        <option value="inactive" {% if status_filter=='inactive' %}selected{% endif %}>Inactive</option>
+        <option value="all" {% if status_filter=='all' %}selected{% endif %}>All</option>
+      </select>
+    </div>
+    <div><label>Description</label><input type="text" name="desc" value="{{ desc or '' }}"></div>
+    <div style="display:flex;gap:4px;">
+      <button class="btn btn-sm btn-primary">Search</button>
+      <a href="{{ url_for('tests.index', tab='rates') }}" class="btn btn-sm btn-outline-secondary">Reset</a>
+    </div>
+  </form>
+
+  {% if rate_categories %}
+  <table class="rl-table">
+    <thead>
+      <tr>
+        <th style="width:60px;">#</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th style="width:100px;">Type</th>
+        <th class="text-center" style="width:80px;">Tests</th>
+        <th class="text-center" style="width:70px;">Status</th>
+        <th style="width:320px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in rate_categories %}
+      <tr class="{% if not c.is_active %}inactive{% endif %}">
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ c.name }}</strong> <small class="text-muted">({{ c.code or '—' }})</small></td>
+        <td>{{ c.description or '' }}</td>
+        <td>{{ c.rate_type or '—' }}</td>
+        <td class="text-center">
+          <span class="rl-badge rl-badge-a">{{ rate_test_counts.get(c.id, 0) }}</span>
+        </td>
+        <td class="text-center">
+          {% if c.is_active %}<span class="rl-badge rl-badge-a">A</span>
+          {% else %}<span class="rl-badge rl-badge-i">I</span>{% endif %}
+        </td>
+        <td>
+          <div class="rl-actions">
+            <a href="{{ url_for('tests.index', tab='rates', edit=c.id) }}" class="edit-btn" title="Edit">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="{{ url_for('tests.index', tab='rates', cat=c.id) }}" class="detail-btn" title="Rate Detail">
+              <i class="bi bi-list-check"></i>
+            </a>
+            <form method="POST" action="{{ url_for('tests.rate_list_copy', cat_id=c.id) }}">
+              <button type="submit" class="copy-btn" title="Copy" onclick="return confirm('Copy this rate list?');">
+                <i class="bi bi-files"></i>
+              </button>
+            </form>
+            <a href="{{ url_for('audit.index', q=c.name, entity='rate_category') }}" class="history-btn" title="History" target="_blank">
+              <i class="bi bi-clock-history"></i>
+            </a>
+            <form method="POST" action="{{ url_for('tests.rate_list_toggle', cat_id=c.id) }}">
+              <button type="submit" class="toggle-btn" title="{{ 'Disable' if c.is_active else 'Enable' }}">
+                <i class="bi bi-{{ 'pause-fill' if c.is_active else 'play-fill' }}"></i>
+              </button>
+            </form>
+            <form method="POST" action="{{ url_for('tests.rate_list_delete', cat_id=c.id) }}"
+                  onsubmit="return confirm('Delete this rate list?');">
+              <button type="submit" class="danger" title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="alert alert-info">No rate lists yet.</div>
+  {% endif %}
 </div>
-{% endif %}

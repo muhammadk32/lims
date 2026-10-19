@@ -1,0 +1,105 @@
+﻿{# ============ RATE LIST — EDIT (header only) ============ #}
+<style>
+.rle-page { max-width:680px; }
+.rle-card {
+  background:#fff; border:2px solid #212529; border-radius:12px;
+  padding:22px 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.rle-head {
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:2px solid #212529; padding-bottom:10px; margin-bottom:18px;
+}
+.rle-head h2 { font-size:1.25rem; font-weight:700; margin:0; }
+.rle-back {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:5px 12px; border:1px solid #212529; border-radius:6px;
+  background:#fff; color:#212529; font-size:0.82rem; text-decoration:none;
+  font-weight:600;
+}
+.rle-back:hover { background:#212529; color:#fff; }
+.rle-row { display:grid; grid-template-columns:160px 1fr; gap:12px; align-items:center; margin-bottom:14px; }
+.rle-row label {
+  font-size:0.82rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.04em; color:#495057;
+}
+.rle-row label.required::before { content:'* '; color:#dc3545; }
+.rle-row input[type="text"],
+.rle-row select {
+  width:100%; padding:8px 12px;
+  border:2px solid #212529; border-radius:8px;
+  font-size:0.92rem; background:#f8f9fa; color:#212529;
+}
+.rle-row input[type="text"]:focus,
+.rle-row select:focus { outline:none; border-color:#0d6efd; background:#fff; box-shadow:0 0 0 3px rgba(13,110,253,.15); }
+.rle-hint { font-size:0.72rem; color:#dc3545; margin-top:3px; display:block; }
+.rle-inline { display:flex; align-items:center; gap:10px; }
+.rle-inline .form-check { margin:0; }
+.rle-actions { display:flex; gap:10px; justify-content:flex-end; border-top:2px solid #212529; padding-top:14px; margin-top:18px; }
+.rle-btn { padding:8px 20px; border:2px solid #212529; border-radius:8px; font-weight:600; font-size:0.88rem; cursor:pointer; }
+.rle-btn-primary { background:#212529; color:#fff; }
+.rle-btn-primary:hover { background:#0d6efd; border-color:#0d6efd; }
+.rle-btn-cancel { background:#fff; color:#212529; text-decoration:none; display:inline-flex; align-items:center; }
+.rle-btn-cancel:hover { background:#f1f3f5; }
+</style>
+
+<div class="rle-page">
+  <div class="rle-card">
+    <div class="rle-head">
+      <h2><i class="bi bi-pencil-square"></i> Edit Rate List</h2>
+      <a href="{{ url_for('tests.index', tab='rates') }}" class="rle-back">
+        <i class="bi bi-arrow-left"></i> Back
+      </a>
+    </div>
+
+    <form method="POST" action="{{ url_for('tests.rate_list_save', cat_id=rate_category.id) }}">
+      <div class="rle-row">
+        <label class="required">Name</label>
+        <div>
+          <input type="text" name="name" value="{{ rate_category.name }}" required>
+          <span class="rle-hint">Field cannot be blank</span>
+        </div>
+      </div>
+
+      <div class="rle-row">
+        <label>Description</label>
+        <div>
+          <input type="text" name="description" value="{{ rate_category.description or '' }}">
+        </div>
+      </div>
+
+      <div class="rle-row">
+        <label>Standard Rate List</label>
+        <div class="rle-inline">
+          <select name="parent_rate_category_id" style="flex:1;">
+            <option value="">— none —</option>
+            {% for rc in parent_options %}
+            <option value="{{ rc.id }}" {% if rate_category.parent_rate_category_id == rc.id %}selected{% endif %}>
+              {{ rc.name }}{% if rc.code %} ({{ rc.code }}){% endif %}
+            </option>
+            {% endfor %}
+          </select>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_standard" value="1"
+                   id="isStandard" {% if rate_category.is_standard %}checked{% endif %}>
+            <label class="form-check-label" for="isStandard" style="font-size:0.86rem;">Standard</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="rle-row">
+        <label>Status</label>
+        <div>
+          <select name="is_active">
+            <option value="1" {% if rate_category.is_active %}selected{% endif %}>Active</option>
+            <option value="0" {% if not rate_category.is_active %}selected{% endif %}>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rle-actions">
+        <a href="{{ url_for('tests.index', tab='rates') }}" class="rle-btn rle-btn-cancel">Cancel</a>
+        <button type="submit" class="rle-btn rle-btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
+</div>

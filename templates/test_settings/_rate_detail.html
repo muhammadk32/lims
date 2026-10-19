@@ -1,0 +1,112 @@
+﻿{# ============ RATE DETAIL (overview grid) ============ #}
+<style>
+.rd-page { max-width:1000px; margin:0 auto; }
+.rd-head {
+  display:flex; justify-content:space-between; align-items:center;
+  border-bottom:2px solid #212529; padding-bottom:8px; margin-bottom:14px;
+}
+.rd-head h2 { font-size:1.25rem; font-weight:700; margin:0; }
+.rd-back {
+  padding:6px 14px; border:2px solid #212529; border-radius:8px;
+  background:#fff; color:#212529; text-decoration:none; font-weight:600; font-size:0.82rem;
+}
+.rd-back:hover { background:#212529; color:#fff; }
+.rd-table {
+  width:100%; border-collapse:separate; border-spacing:0;
+  border:2px solid #212529; border-radius:12px; overflow:hidden;
+  background:#fff; font-size:0.9rem;
+}
+.rd-table thead th {
+  background:#212529; color:#fff; padding:10px 12px;
+  text-align:left; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.05em; font-size:0.78rem;
+}
+.rd-table tbody td {
+  padding:8px 12px; border-bottom:1px solid #212529; border-right:1px solid #212529;
+  vertical-align:middle;
+}
+.rd-table tbody td:last-child { border-right:none; }
+.rd-table tbody tr:last-child td { border-bottom:none; }
+.rd-table tbody tr:nth-child(even) td { background:#f5f9ff; }
+.rd-table tbody tr:hover td { background:#eaf2ff; }
+.rd-input {
+  width:100%; padding:5px 9px; border:2px solid #212529; border-radius:6px;
+  font-size:0.88rem; background:#fff;
+}
+.rd-input:focus { outline:none; border-color:#0d6efd; box-shadow:0 0 0 3px rgba(13,110,253,.15); }
+.rd-btn {
+  padding:5px 12px; border:1px solid #212529; border-radius:6px;
+  font-weight:600; font-size:0.78rem; cursor:pointer;
+  background:#fff; color:#212529; text-decoration:none; display:inline-block;
+}
+.rd-btn:hover { background:#212529; color:#fff; }
+.rd-btn-primary { background:#0d6efd; border-color:#0d6efd; color:#fff; }
+.rd-btn-primary:hover { filter:brightness(0.92); }
+.rd-badge {
+  display:inline-block; padding:2px 8px; border-radius:999px;
+  font-size:0.72rem; font-weight:700; background:#e7f1ff; color:#0d6efd;
+}
+</style>
+
+<div class="rd-page">
+  <div class="rd-head">
+    <h2><i class="bi bi-list-ol"></i> Rate Detail — All Rate Lists</h2>
+    <a href="{{ url_for('tests.index', tab='rates') }}" class="rd-back">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
+
+  <table class="rd-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th style="width:120px;">Discount %</th>
+        <th style="width:120px;">Commission %</th>
+        <th style="width:100px;" class="text-center">Tests</th>
+        <th style="width:240px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rate_detail_rows %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ row.cat.name }}</strong></td>
+        <td>
+          {% if row.rate %}
+          <form method="POST" action="{{ url_for('tests.rate_list_save_inline_rate', cat_id=row.cat.id, rate_id=row.rate.id) }}" style="display:flex;gap:4px;">
+            <input type="number" step="0.01" name="rate_percent" value="{{ row.rate.rate_percent or 0 }}" class="rd-input">
+          {% else %}
+          <form method="POST" action="{{ url_for('tests.rate_list_add_rate', cat_id=row.cat.id) }}" style="display:flex;gap:4px;">
+            <input type="hidden" name="section_code" value="1">
+            <input type="number" step="0.01" name="rate_percent" value="0" class="rd-input">
+          {% endif %}
+            <button type="submit" class="rd-btn" title="Save">✓</button>
+          </form>
+        </td>
+        <td>
+          {% if row.rate %}
+          <form method="POST" action="{{ url_for('tests.rate_list_save_inline_rate', cat_id=row.cat.id, rate_id=row.rate.id) }}" style="display:flex;gap:4px;">
+            <input type="hidden" name="rate_percent" value="{{ row.rate.rate_percent or 0 }}">
+            <input type="number" step="0.01" name="commission" value="{{ row.rate.commission or 0 }}" class="rd-input">
+          {% else %}
+          <form method="POST" action="{{ url_for('tests.rate_list_add_rate', cat_id=row.cat.id) }}" style="display:flex;gap:4px;">
+            <input type="hidden" name="section_code" value="1">
+            <input type="hidden" name="rate_percent" value="0">
+            <input type="number" step="0.01" name="commission" value="0" class="rd-input">
+          {% endif %}
+            <button type="submit" class="rd-btn" title="Save">✓</button>
+          </form>
+        </td>
+        <td class="text-center">
+          <span class="rd-badge">{{ row.tests }}</span>
+        </td>
+        <td>
+          <a href="{{ url_for('tests.index', tab='rates', cat=row.cat.id) }}" class="rd-btn">Detail</a>
+          <a href="{{ url_for('tests.index', tab='rates', cat=row.cat.id) }}" class="rd-btn rd-btn-primary">Update</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

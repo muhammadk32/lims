@@ -571,6 +571,7 @@ def pcr_templates():
 @settings_bp.route('/laboratories')
 @login_required
 def laboratories():
+    from modules.tests.models import RateCategory
     from modules.laboratories.models import Laboratory
     from flask import request as _rq
 
@@ -596,7 +597,8 @@ def laboratories():
                            rows_out=rows_out,
                            q_search=q_search,
                            view_type='all',
-                           view=view)
+                           view=view,
+                             rate_categories=RateCategory.query.filter_by(is_active=True).order_by(RateCategory.code.asc()).all())
 
 
 @settings_bp.route('/laboratories/create', methods=['POST'])
@@ -616,6 +618,11 @@ def laboratory_create():
     if existing:
         flash(f'Laboratory "{name}" already exists.', 'warning')
         return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
+    def _i(k):
+        try:
+            return int(_rq.form.get(k) or 0) or None
+        except (ValueError, TypeError):
+            return None
 
     def _f(k):
         try:

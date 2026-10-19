@@ -25,7 +25,11 @@
     {% elif tab == 'panels' %}
       {% include 'test_settings/_panels.html' %}
     {% elif tab == 'rates' %}
-      {% include 'test_settings/_rate_lists.html' %}
+      {% if detail_mode %}{% include 'test_settings/_rate_detail.html' %}
+      {% elif parent_options is defined and rate_category %}{% include 'test_settings/_rate_list_edit.html' %}
+      {% elif dept_rows %}{% include 'test_settings/_rate_dept_grid.html' %}
+      {% elif rate_category %}{% include 'test_settings/_rate_list_edit.html' %}
+      {% else %}{% include 'test_settings/_rate_lists.html' %}{% endif %}
     {% elif tab == 'units' %}
       {% include 'test_settings/_units.html' %}
     {% elif tab == 'bulk' %}

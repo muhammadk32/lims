@@ -5,7 +5,9 @@ from flask_login import login_required, current_user
 from sqlalchemy import or_
 from extensions import db
 from . import tests_bp
-from .models import Test, TestCategory, TestReferenceRange, TestParameter
+from .models import (Test, TestCategory, TestReferenceRange, TestParameter,
+                     RateCategory, RateCategoryTest, RateCategoryRate,
+                     RateCategoryDeptRate, PanelParameter, Specimen)
 from . import services as svc
 from core.decorators import permission_required
 from core.audit import log_action
@@ -100,21 +102,16 @@ def index():
             query = query.filter(Test.is_panel == True)  # noqa: E712
         elif type_filter == 'plain':
             from sqlalchemy import exists as _ex
-            from .models import PanelParameter as _PP, TestParameter as _TP
             query = (query.filter(Test.is_panel == False)  # noqa: E712
                           .filter(~_ex().where(_PP.test_id == Test.id))
                           .filter(~_ex().where(_TP.test_id == Test.id)))
         elif type_filter == 'child':
             from sqlalchemy import exists as _ex
-            from .models import PanelParameter as _PP
             query = (query.filter(Test.is_panel == False)  # noqa: E712
                           .filter(_ex().where(_PP.test_id == Test.id)))
         elif type_filter == 'analyte':
             from sqlalchemy import exists as _ex
-            from .models import TestParameter as _TP
             query = query.filter(_ex().where(_TP.test_id == Test.id))
-
-        from modules.tests.models import Specimen
         ctx.update({
             'tests': query.order_by(Test.code.asc()).paginate(page=page, per_page=15, error_out=False),
             'categories': TestCategory.query.order_by(TestCategory.name).all(),
@@ -180,19 +177,153 @@ def index():
 
     elif tab == 'rates':
         from sqlalchemy import func
-        from .models import RateCategory, RateCategoryTest, RateCategoryRate
-        cats = RateCategory.query.order_by(RateCategory.code.asc()).all()
-        test_counts = dict(
-            db.session.query(RateCategoryTest.rate_category_id, func.count(RateCategoryTest.id))
-            .group_by(RateCategoryTest.rate_category_id).all()
-        )
-        ctx.update({
-            'rate_categories': cats,
-            'rate_test_counts': test_counts,
-        })
+        # models already imported at module level
+        cat_id = request.args.get('cat', type=int)
+        edit_id = request.args.get('edit', type=int)
+        detail = request.args.get('detail', type=int)
+        dept = request.args.get('dept', type=int)
+
+        if edit_id:
+            cat = RateCategory.query.get_or_404(edit_id)
+            parent_options = (RateCategory.query
+                              .filter(RateCategory.id != cat.id,
+                                      RateCategory.is_active == True)  # noqa: E712
+                              .order_by(RateCategory.code.asc()).all())
+            ctx.update({
+                'rate_category': cat,
+                'parent_options': parent_options,
+            })
+            return render_template('test_settings/shell.html', **ctx)
+
+        if detail:
+            cats = RateCategory.query.order_by(RateCategory.code.asc()).all()
+            # for each category: sum of tests + first rate row
+            data = []
+            for c in cats:
+                first_rate = (RateCategoryRate.query
+                              .filter_by(rate_category_id=c.id)
+                              .order_by(RateCategoryRate.section_code.asc().nulls_last(),
+                                        RateCategoryRate.id.asc()).first())
+                n_tests = (RateCategoryTest.query
+                           .filter_by(rate_category_id=c.id)
+                           .with_entities(RateCategoryTest.test_id).distinct().count())
+                data.append({
+                    'cat': c,
+                    'rate': first_rate,
+                    'tests': n_tests,
+                })
+            ctx.update({
+                'rate_detail_rows': data,
+                'detail_mode': True,
+            })
+            return render_template('test_settings/shell.html', **ctx)
+
+        if cat_id:
+            cat = RateCategory.query.get_or_404(cat_id)
+            # main dept grid — always shown for rate_category
+            depts = TestCategory.query.order_by(TestCategory.name.asc()).all()
+            drs = {d.department_id: d for d in
+                   RateCategoryDeptRate.query.filter_by(rate_category_id=cat.id).all()}
+            dept_rows = []
+            for d in depts:
+                dr = drs.get(d.id)
+                if not dr:
+                    dr = RateCategoryDeptRate(
+                        rate_category_id=cat.id, department_id=d.id,
+                        discount_percent=0, commission_percent=0,
+                    )
+                    db.session.add(dr)
+                dept_rows.append({'dept': d, 'dr': dr})
+            db.session.commit()
+
+            selected_dept = None
+            dept_tests = []
+            if dept:
+                selected_dept = TestCategory.query.get(dept)
+                if selected_dept:
+                    # get dept rate + commission
+                    dr = RateCategoryDeptRate.query.filter_by(
+                        rate_category_id=cat.id, department_id=dept).first()
+                    disc_pct = (dr.discount_percent or 0) if dr else 0
+                    comm_pct = (dr.commission_percent or 0) if dr else 0
+                    # tests in this department (via category_id)
+                    tests = (Test.query
+                             .filter_by(category_id=dept)
+                             .filter(Test.is_active == True)  # noqa: E712
+                             .order_by(Test.code.asc()).all())
+                    # existing rate-list test links for this rate category
+                    linked_ids = {r[0] for r in
+                        db.session.query(RateCategoryTest.test_id)
+                        .filter_by(rate_category_id=cat.id).all()}
+                    for t in tests:
+                        price = float(t.price or 0)
+                        dept_tests.append({
+                            'test': t,
+                            'discount_amt': round(price * disc_pct / 100.0, 2),
+                            'commission_amt': round(price * comm_pct / 100.0, 2),
+                            'linked': t.id in linked_ids,
+                        })
+
+            ctx.update({
+                'rate_category': cat,
+                'dept_rows': dept_rows,
+                'selected_dept': selected_dept,
+                'selected_dept_id': dept,
+                'dept_tests': dept_tests,
+            })
+            return render_template('test_settings/shell.html', **ctx)
+            rates = (RateCategoryRate.query
+                     .filter_by(rate_category_id=cat.id)
+                     .order_by(RateCategoryRate.section_code.asc().nulls_last(),
+                               RateCategoryRate.id.asc()).all())
+            linked_tests = (RateCategoryTest.query
+                            .filter_by(rate_category_id=cat.id)
+                            .order_by(RateCategoryTest.sort_order.asc()).all())
+            # test picker: active tests not yet in this category
+            used_ids = [lt.test_id for lt in linked_tests]
+            available = (Test.query
+                         .filter(Test.is_active == True)  # noqa: E712
+                         .filter(~Test.id.in_(used_ids) if used_ids else Test.id > 0)
+                         .order_by(Test.code.asc()).limit(200).all())
+            parent_options = (RateCategory.query
+                              .filter(RateCategory.id != cat.id,
+                                      RateCategory.is_active == True)  # noqa: E712
+                              .order_by(RateCategory.code.asc()).all())
+            ctx.update({
+                'rate_category': cat,
+                'rates': rates,
+                'linked_tests': linked_tests,
+                'available_tests': available,
+                'parent_options': parent_options,
+            })
+        else:
+            q = request.args.get('q', '').strip()
+            rt = request.args.get('rt', '').strip()
+            status_filter = request.args.get('status', 'active').strip()
+            desc = request.args.get('desc', '').strip()
+            query = RateCategory.query
+            if status_filter == 'active':
+                query = query.filter(RateCategory.is_active == True)  # noqa: E712
+            elif status_filter == 'inactive':
+                query = query.filter(RateCategory.is_active == False)  # noqa: E712
+            if q:
+                query = query.filter(RateCategory.name.ilike(f'%{q}%'))
+            if rt:
+                query = query.filter(RateCategory.rate_type == rt)
+            if desc:
+                query = query.filter(RateCategory.description.ilike(f'%{desc}%'))
+            cats = query.order_by(RateCategory.code.asc()).all()
+            test_counts = dict(
+                db.session.query(RateCategoryTest.rate_category_id, func.count(func.distinct(RateCategoryTest.test_id)))
+                .group_by(RateCategoryTest.rate_category_id).all()
+            )
+            ctx.update({
+                'rate_categories': cats,
+                'rate_test_counts': test_counts,
+                'q': q, 'rt': rt, 'status_filter': status_filter, 'desc': desc,
+            })
 
     elif tab == 'panels':
-        from modules.tests import PanelParameter
         from sqlalchemy import func
         q = request.args.get('q', '').strip()
         query = Test.query.filter(Test.is_active == True, Test.is_panel == True)  # noqa: E712
@@ -482,7 +613,6 @@ def toggle_active(test_id):
     """Pause or resume a test. Paused tests are hidden from
     registration but stay in the catalog and past orders."""
     from core.decorators import admin_required
-    from .models import Test
 
     if current_user.role != 'admin':
         flash('Only admins can pause or resume tests.', 'danger')
@@ -548,7 +678,6 @@ def edit_ranges_gender(test_id, gender):
     editing = None
     edit_id = request.args.get("edit", type=int)
     if edit_id:
-        from .models import TestReferenceRange
         editing = TestReferenceRange.query.get(edit_id)
 
     return render_template(
@@ -561,7 +690,6 @@ def edit_ranges_gender(test_id, gender):
 @login_required
 @permission_required("manage_tests")
 def delete_range_row(range_id):
-    from .models import TestReferenceRange
     r = TestReferenceRange.query.get_or_404(range_id)
     test_id, gender = r.test_id, r.gender or "any"
     svc.delete_range_row(range_id, current_user)
@@ -573,7 +701,6 @@ def delete_range_row(range_id):
 @login_required
 @permission_required("manage_tests")
 def update_range(range_id):
-    from .models import TestReferenceRange
     r = TestReferenceRange.query.get_or_404(range_id)
     test_id, gender = r.test_id, r.gender or "any"
     svc.update_range_row(range_id, request.form, current_user)
@@ -582,3 +709,292 @@ def update_range(range_id):
                             test_id=test_id, gender=gender))
 
 
+
+# ============================================================
+# Rate list editor routes
+# ============================================================
+@tests_bp.route('/rate-lists/<int:cat_id>/save', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_save(cat_id):
+    cat = RateCategory.query.get_or_404(cat_id)
+    cat.name = (request.form.get('name') or cat.name).strip()
+    cat.description = (request.form.get('description') or '').strip() or None
+    try:
+        _pid = int(request.form.get('parent_rate_category_id') or 0) or None
+    except (ValueError, TypeError):
+        _pid = None
+    cat.parent_rate_category_id = _pid
+    cat.is_standard = bool(request.form.get('is_standard'))
+    cat.is_active = (request.form.get('is_active') or '1') == '1'
+    try:
+        cat.code = int(request.form.get('code') or 0) or None
+    except (ValueError, TypeError):
+        pass
+    db.session.commit()
+    log_action('update', 'rate_category', cat.id, f'Updated rate list {cat.name}')
+    flash('Rate list saved.', 'success')
+    return redirect(url_for('tests.index', tab='rates', cat=cat.id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/add-rate', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_add_rate(cat_id):
+    RateCategory.query.get_or_404(cat_id)
+    def _n(k):
+        try: return float(request.form.get(k) or 0)
+        except: return 0.0
+    def _i(k):
+        try: return int(request.form.get(k) or 0) or None
+        except: return None
+    db.session.add(RateCategoryRate(
+        rate_category_id=cat_id,
+        section_code=_i('section_code'),
+        rate_percent=_n('rate_percent'),
+        commission=_n('commission'),
+    ))
+    db.session.commit()
+    flash('Rate added.', 'success')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/delete-rate/<int:rate_id>', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_delete_rate(cat_id, rate_id):
+    r = RateCategoryRate.query.filter_by(id=rate_id, rate_category_id=cat_id).first_or_404()
+    db.session.delete(r)
+    db.session.commit()
+    flash('Rate deleted.', 'info')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/add-test', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_add_test(cat_id):
+    RateCategory.query.get_or_404(cat_id)
+    q = (request.form.get('test_q') or '').strip()
+    if q:
+        # first match by code or name
+        t = (Test.query
+             .filter(or_(Test.code == q, Test.code.ilike(f'%{q}%'), Test.name.ilike(f'%{q}%')))
+             .filter(Test.is_active == True)  # noqa: E712
+             .first())
+        if not t:
+            flash(f'No active test matches "{q}".', 'warning')
+            return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+        exists = RateCategoryTest.query.filter_by(rate_category_id=cat_id, test_id=t.id).first()
+        if exists:
+            flash(f'Test already in this rate list: {t.code} {t.name}', 'info')
+        else:
+            db.session.add(RateCategoryTest(
+                rate_category_id=cat_id, test_id=t.id,
+                sort_order=RateCategoryTest.query.filter_by(rate_category_id=cat_id).count() + 1,
+            ))
+            db.session.commit()
+            flash(f'Added {t.code} - {t.name}.', 'success')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/delete-test/<int:link_id>', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_delete_test(cat_id, link_id):
+    ln = RateCategoryTest.query.filter_by(id=link_id, rate_category_id=cat_id).first_or_404()
+    db.session.delete(ln)
+    db.session.commit()
+    flash('Test removed from rate list.', 'info')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+
+# ============================================================
+# Rate list — new / copy / toggle / delete
+# ============================================================
+@tests_bp.route('/rate-lists/new', methods=['GET', 'POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_new():
+    if request.method == 'POST':
+        name = (request.form.get('name') or '').strip()
+        if not name:
+            flash('Name is required.', 'danger')
+            return redirect(url_for('tests.rate_list_new'))
+        try:
+            code = int(request.form.get('code') or 0) or None
+        except (ValueError, TypeError):
+            code = None
+        cat = RateCategory(
+            code=code,
+            name=name,
+            description=(request.form.get('description') or '').strip() or None,
+            rate_type=(request.form.get('rate_type') or '').strip() or None,
+            is_active=True,
+        )
+        db.session.add(cat)
+        db.session.commit()
+        log_action('create', 'rate_category', cat.id, f'Created rate list {cat.name}')
+        flash(f'Rate list "{cat.name}" created.', 'success')
+        return redirect(url_for('tests.index', tab='rates', cat=cat.id))
+    return render_template('test_settings/shell.html', tab='rates',
+                           rate_category_new=True,
+                           all_tests=Test.query.filter_by(is_active=True).all())
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/copy', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_copy(cat_id):
+    src = RateCategory.query.get_or_404(cat_id)
+    new = RateCategory(
+        name=f'{src.name} (copy)',
+        description=src.description,
+        rate_type=src.rate_type,
+        is_active=True,
+    )
+    db.session.add(new)
+    db.session.flush()
+    seen = set()
+    for r in RateCategoryRate.query.filter_by(rate_category_id=src.id).all():
+        db.session.add(RateCategoryRate(
+            rate_category_id=new.id,
+            company_code=r.company_code,
+            section_code=r.section_code,
+            rate_percent=r.rate_percent,
+            commission=r.commission,
+        ))
+    for t in RateCategoryTest.query.filter_by(rate_category_id=src.id).order_by(RateCategoryTest.sort_order).all():
+        if t.test_id in seen: continue
+        seen.add(t.test_id)
+        db.session.add(RateCategoryTest(
+            rate_category_id=new.id, test_id=t.test_id, sort_order=t.sort_order,
+        ))
+    db.session.commit()
+    flash(f'Copied {src.name} → {new.name}.', 'success')
+    return redirect(url_for('tests.index', tab='rates', cat=new.id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/toggle', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_toggle(cat_id):
+    cat = RateCategory.query.get_or_404(cat_id)
+    cat.is_active = not cat.is_active
+    db.session.commit()
+    flash(f'Rate list "{cat.name}" {"enabled" if cat.is_active else "disabled"}.', 'info')
+    return redirect(url_for('tests.index', tab='rates'))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/delete', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_delete(cat_id):
+    cat = RateCategory.query.get_or_404(cat_id)
+    name = cat.name
+    db.session.delete(cat)
+    db.session.commit()
+    log_action('delete', 'rate_category', cat_id, f'Deleted rate list {name}')
+    flash(f'Rate list "{name}" deleted.', 'info')
+    return redirect(url_for('tests.index', tab='rates'))
+
+@tests_bp.route('/rate-lists/<int:cat_id>/rate/<int:rate_id>/save-inline', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_save_inline_rate(cat_id, rate_id):
+    r = RateCategoryRate.query.filter_by(id=rate_id, rate_category_id=cat_id).first_or_404()
+    try:
+        if request.form.get('rate_percent') is not None:
+            r.rate_percent = float(request.form.get('rate_percent') or 0)
+        if request.form.get('commission') is not None:
+            r.commission = float(request.form.get('commission') or 0)
+    except (ValueError, TypeError):
+        pass
+    db.session.commit()
+    flash('Rate updated.', 'success')
+    return redirect(url_for('tests.index', tab='rates', detail=1))
+
+@tests_bp.route('/rate-lists/<int:cat_id>/dept/<int:dept_id>/save', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_dept_save(cat_id, dept_id):
+    dr = RateCategoryDeptRate.query.filter_by(
+        rate_category_id=cat_id, department_id=dept_id).first()
+    if not dr:
+        dr = RateCategoryDeptRate(
+            rate_category_id=cat_id, department_id=dept_id,
+            discount_percent=0, commission_percent=0)
+        db.session.add(dr)
+    try:
+        dr.discount_percent = float(request.form.get('discount_percent') or 0)
+    except (ValueError, TypeError):
+        pass
+    try:
+        dr.commission_percent = float(request.form.get('commission_percent') or 0)
+    except (ValueError, TypeError):
+        pass
+    db.session.commit()
+    flash('Department rate saved.', 'success')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+@tests_bp.route('/rate-lists/<int:cat_id>/toggle-test/<int:test_id>', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_toggle_test(cat_id, test_id):
+    RateCategory.query.get_or_404(cat_id)
+    Test.query.get_or_404(test_id)
+    ln = RateCategoryTest.query.filter_by(
+        rate_category_id=cat_id, test_id=test_id).first()
+    if ln:
+        db.session.delete(ln)
+        db.session.commit()
+        flash('Test removed from rate list.', 'info')
+    else:
+        so = RateCategoryTest.query.filter_by(rate_category_id=cat_id).count() + 1
+        db.session.add(RateCategoryTest(
+            rate_category_id=cat_id, test_id=test_id, sort_order=so))
+        db.session.commit()
+        flash('Test added to rate list.', 'success')
+    # return to same dept view
+    dept = request.form.get('dept') or request.args.get('dept')
+    if dept:
+        return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept))
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+@tests_bp.route('/rate-lists/<int:cat_id>/bulk-toggle-dept/<int:dept_id>', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_bulk_toggle_dept(cat_id, dept_id):
+    RateCategory.query.get_or_404(cat_id)
+    action = request.form.get('action', 'add')  # 'add' or 'remove'
+    tests = (Test.query
+             .filter_by(category_id=dept_id)
+             .filter(Test.is_active == True).all())  # noqa: E712
+    test_ids = [t.id for t in tests]
+    if not test_ids:
+        flash('No tests in this department.', 'info')
+        return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept_id))
+
+    if action == 'add':
+        existing = {r[0] for r in
+            db.session.query(RateCategoryTest.test_id)
+            .filter_by(rate_category_id=cat_id)
+            .filter(RateCategoryTest.test_id.in_(test_ids)).all()}
+        added = 0
+        so = RateCategoryTest.query.filter_by(rate_category_id=cat_id).count()
+        for tid in test_ids:
+            if tid in existing: continue
+            so += 1
+            db.session.add(RateCategoryTest(
+                rate_category_id=cat_id, test_id=tid, sort_order=so))
+            added += 1
+        db.session.commit()
+        flash(f'Added {added} test(s) to rate list.', 'success')
+    elif action == 'remove':
+        n = (RateCategoryTest.query
+             .filter_by(rate_category_id=cat_id)
+             .filter(RateCategoryTest.test_id.in_(test_ids))
+             .delete(synchronize_session=False))
+        db.session.commit()
+        flash(f'Removed {n} test(s) from rate list.', 'info')
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept_id))

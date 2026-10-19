@@ -1,0 +1,157 @@
+﻿{# ============ RATE LIST — DEPT GRID + TESTS PANEL ============ #}
+<style>
+.rdg-wrap { max-width:1400px; margin:0 auto; padding:8px 4px; }
+.rdg-head { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #212529; padding-bottom:8px; margin-bottom:12px; }
+.rdg-head h2 { font-size:1.2rem; font-weight:700; margin:0; }
+.rdg-btn { padding:6px 14px; border:2px solid #212529; border-radius:8px; background:#fff; color:#212529; font-weight:600; font-size:0.8rem; text-decoration:none; cursor:pointer; }
+.rdg-btn:hover { background:#212529; color:#fff; }
+
+.rdg-split { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+@media (max-width:1100px) { .rdg-split { grid-template-columns: 1fr; } }
+.rdg-panel { border:2px solid #212529; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.rdg-panel-title { background:#212529; color:#fff; padding:8px 12px; font-weight:700; font-size:0.86rem; text-transform:uppercase; letter-spacing:0.05em; }
+.rdg-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+.rdg-table thead th { background:#f1f3f5; padding:7px 10px; text-align:left; font-weight:700; font-size:0.76rem; text-transform:uppercase; border-bottom:2px solid #212529; border-right:1px solid #212529; }
+.rdg-table thead th:last-child { border-right:none; }
+.rdg-table tbody td { padding:5px 10px; border-bottom:1px solid #212529; border-right:1px solid #212529; vertical-align:middle; }
+.rdg-table tbody td:last-child { border-right:none; }
+.rdg-table tbody tr:last-child td { border-bottom:none; }
+.rdg-table tbody tr.active td { background:#fff8e1; }
+.rdg-table tbody tr:hover td { background:#eaf2ff; }
+.rdg-input { width:74px; padding:3px 7px; border:1px solid #212529; border-radius:6px; text-align:right; font-size:0.82rem; }
+.rdg-sbtn { padding:2px 9px; font-size:0.72rem; border:1px solid #212529; border-radius:5px; background:#fff; cursor:pointer; text-decoration:none; color:#212529; }
+.rdg-sbtn:hover { background:#212529; color:#fff; }
+.rdg-sbtn-blue { background:#0d6efd; border-color:#0d6efd; color:#fff; }
+.rdg-sbtn-blue:hover { filter:brightness(0.92); }
+.rdg-info { padding:18px; font-size:0.84rem; color:#6c757d; text-align:center; }
+</style>
+
+<div class="rdg-wrap">
+  <div class="rdg-head">
+    <h2><i class="bi bi-diagram-3"></i> {{ rate_category.name }} — Department Rates</h2>
+    <a href="{{ url_for('tests.index', tab='rates') }}" class="rdg-btn">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+  </div>
+
+  <div class="rdg-split">
+
+    {# LEFT: departments #}
+    <div class="rdg-panel">
+      <div class="rdg-panel-title">RateList Category</div>
+      <table class="rdg-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th style="width:90px;">Discount %</th>
+            <th style="width:90px;">Commission %</th>
+            <th style="width:80px;" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in dept_rows %}
+          <tr class="{% if selected_dept_id == row.dept.id %}active{% endif %}">
+            <td>{{ row.dept.name }}</td>
+            <td>
+              <form method="POST" action="{{ url_for('tests.rate_dept_save', cat_id=rate_category.id, dept_id=row.dept.id) }}" style="display:inline;">
+                <input type="number" step="0.01" name="discount_percent" value="{{ row.dr.discount_percent or 0 }}" class="rdg-input">
+            </td>
+            <td>
+                <input type="number" step="0.01" name="commission_percent" value="{{ row.dr.commission_percent or 0 }}" class="rdg-input">
+            </td>
+            <td class="text-center" style="white-space:nowrap;">
+                <a href="{{ url_for('tests.index', tab='rates', cat=rate_category.id, dept=row.dept.id) }}" class="rdg-sbtn">Detail</a>
+                <button type="submit" class="rdg-sbtn rdg-sbtn-blue">Update</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {# RIGHT: tests inside selected department #}
+    <div class="rdg-panel">
+      <div class="rdg-panel-title">
+        {% if selected_dept %}
+          Selected Tests — {{ selected_dept.name }}
+        {% else %}
+          Selected Tests
+        {% endif %}
+      </div>
+      {% if not selected_dept %}
+        <div class="rdg-info">
+          <i class="bi bi-info-circle"></i><br>
+          Click <strong>Detail</strong> on a department to see its tests.
+        </div>
+      {% elif not dept_tests %}
+        <div class="rdg-info">No tests in this department.</div>
+      {% else %}
+        <table class="rdg-table">
+          <thead>
+            <tr>
+              <th style="width:34px;">
+                <input type="checkbox" id="masterCheck"
+                       title="Select/deselect all tests in this department"
+                       style="cursor:pointer; width:16px; height:16px;">
+              </th>
+              <th>Selected Test Name</th>
+              <th style="width:80px;">Lab Rate</th>
+              <th style="width:80px;">Dis. Amt</th>
+              <th style="width:80px;">Commission</th>
+              <th style="width:70px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in dept_tests %}
+            <tr class="{% if not row.linked %}text-muted{% endif %}">
+              <td>
+                <form method="POST" action="{{ url_for('tests.rate_list_toggle_test', cat_id=rate_category.id, test_id=row.test.id) }}" style="display:inline;" onsubmit="this.querySelector('button').disabled=true;">
+                  <input type="hidden" name="dept" value="{{ selected_dept.id }}">
+                  <input type="checkbox" {% if row.linked %}checked{% endif %}
+                         onchange="this.form.submit();"
+                         style="cursor:pointer; width:16px; height:16px;">
+                  <button type="submit" style="display:none;"></button>
+                </form>
+              </td>
+              <td>{{ row.test.name }}</td>
+              <td class="text-end">{{ row.test.price or 0 }}</td>
+              <td class="text-end">{{ row.discount_amt or 0 }}</td>
+              <td class="text-end">{{ row.commission_amt or 0 }}</td>
+              <td class="text-end">
+                <a href="{{ url_for('tests.view_test', test_id=row.test.id) }}" class="rdg-sbtn" target="_blank">Update</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var master = document.getElementById('masterCheck');
+  if (!master) return;
+  var url = "{{ url_for('tests.rate_list_bulk_toggle_dept', cat_id=rate_category.id, dept_id=selected_dept.id) if selected_dept else '' }}";
+  var allChecked = {{ 'true' if dept_tests and dept_tests|selectattr('linked')|list|length == dept_tests|length else 'false' }};
+  master.checked = allChecked;
+
+  master.addEventListener('change', function() {
+    if (!url) return;
+    var action = master.checked ? 'add' : 'remove';
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    var inp = document.createElement('input');
+    inp.type = 'hidden';
+    inp.name = 'action';
+    inp.value = action;
+    form.appendChild(inp);
+    document.body.appendChild(form);
+    form.submit();
+  });
+})();
+</script>

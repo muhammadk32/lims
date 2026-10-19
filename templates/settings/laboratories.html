@@ -266,6 +266,7 @@
               <th style="width:20%;">Contact</th>
               <th style="width:18%;">Phone</th>
               <th style="width:12%;" class="num">Disc %</th>
+              <th style="width:14%;">Rate List</th>
               <th style="width:12%;" class="num">Comm %</th>
               <th style="width:8%;"  class="center">Actions</th>
             </tr>
@@ -280,6 +281,12 @@
                 <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
                 <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
                 <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+                <td><select name="rate_category_id" class="edit-input">
+                    <option value="">— none —</option>
+                    {% for rc in rate_categories %}
+                    <option value="{{ rc.id }}" {% if r.rate_category_id == rc.id %}selected{% endif %}>{{ rc.name }}</option>
+                    {% endfor %}
+                  </select></td>
                 <td class="num"><input type="number" name="commission_percent" value="{{ r.commission_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
                 <td class="center actions">
                   <button type="submit" class="lab-btn lab-btn-sm lab-btn-primary" title="Save"><i class="bi bi-check-lg"></i></button>
@@ -328,8 +335,7 @@
               <th style="width:28%;">Name</th>
               <th style="width:18%;">Contact</th>
               <th style="width:16%;">Phone</th>
-              <th style="width:12%;" class="num">Disc %</th>
-              <th style="width:12%;" class="num">Max Disc %</th>
+              
               <th style="width:8%;"  class="center">Active</th>
               <th style="width:10%;" class="center">Actions</th>
             </tr>
@@ -343,8 +349,7 @@
                 <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
                 <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
                 <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
-                <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
-                <td class="num"><input type="number" name="default_max_discount_percent" value="{{ r.default_max_discount_percent if r.default_max_discount_percent is not none else '' }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;" placeholder="—"></td>
+                
                 <td class="center">
                   <span class="pill {% if r.is_active %}pill-active{% else %}pill-inactive{% endif %}">
                     {% if r.is_active %}On{% else %}Off{% endif %}

@@ -463,8 +463,28 @@ class RateCategory(BaseModel):
     __tablename__ = 'rate_categories'
     code = db.Column(db.Integer, unique=True, nullable=True, index=True)
     name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    rate_type = db.Column(db.String(20), nullable=True)  # 'rate' | 'commission' | 'both'
+    parent_rate_category_id = db.Column(db.Integer, db.ForeignKey('rate_categories.id'), nullable=True)
+    is_standard = db.Column(db.Boolean, nullable=False, default=False)
+    parent = db.relationship('RateCategory', remote_side='RateCategory.id', foreign_keys=[parent_rate_category_id])
     sort_order = db.Column(db.Integer, default=0)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
+class RateCategoryDeptRate(BaseModel):
+    """Per-(rate list × department) discount + commission."""
+    __tablename__ = 'rate_category_dept_rates'
+    rate_category_id = db.Column(db.Integer, db.ForeignKey('rate_categories.id', ondelete='CASCADE'), nullable=False, index=True)
+    department_id = db.Column(db.Integer, db.ForeignKey('test_categories.id'), nullable=False, index=True)
+    discount_percent = db.Column(db.Float, nullable=False, default=0.0)
+    commission_percent = db.Column(db.Float, nullable=False, default=0.0)
+    rate_category = db.relationship('RateCategory')
+    department = db.relationship('TestCategory')
+
+    __table_args__ = (
+        db.UniqueConstraint('rate_category_id', 'department_id', name='uq_rc_dept'),
+    )
 
 
 class RateCategoryRate(BaseModel):
