@@ -998,3 +998,35 @@ def rate_list_bulk_toggle_dept(cat_id, dept_id):
         db.session.commit()
         flash(f'Removed {n} test(s) from rate list.', 'info')
     return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept_id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/test-override/<int:test_id>', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def rate_test_save_override(cat_id, test_id):
+    from .models import RateCategoryTest, RateCategoryDeptRate, Test as _T
+    rct = RateCategoryTest.query.filter_by(rate_category_id=cat_id, test_id=test_id).first()
+    if not rct:
+        flash('Test not in this rate list.', 'warning')
+        return redirect(request.referrer or url_for('tests.index', tab='rates', cat=cat_id))
+    t = _T.query.get(test_id)
+    # find the dept rate to know default
+    dr = RateCategoryDeptRate.query.filter_by(rate_category_id=cat_id, department_id=t.category_id).first() if t and t.category_id else None
+    default_pct = (dr.discount_percent or 0) if dr else 0
+    raw_amt = (request.form.get('discount_amount_override') or '').strip()
+    if raw_amt == '':
+        rct.discount_percent = None  # fall back to dept
+    else:
+        try:
+            amt = float(raw_amt)
+            price = float(t.price or 0) if t else 0
+            pct = (amt / price * 100.0) if price > 0 else 0.0
+            rct.discount_percent = round(pct, 2)
+        except (ValueError, TypeError):
+            pass
+    db.session.commit()
+    flash('Test override saved.', 'success')
+    dept = request.form.get('dept')
+    if dept:
+        return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept))
+    return redirect(url_for('tests.index', tab='rates', cat=cat_id))
