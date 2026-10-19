@@ -648,6 +648,12 @@ def laboratory_create():
     )
     db.session.add(lab)
     db.session.commit()
+    try:
+        from modules.laboratories.services import sync_lab_rate_list
+        sync_lab_rate_list(lab)
+    except Exception as _e:
+        db.session.rollback()
+        print(f'[lab-create] rate list sync failed: {_e}')
     flash(f'Laboratory "{name}" added.', 'success')
     _view = 'out' if lab.is_partner_lab else 'ref'
     return redirect(url_for('settings.laboratories', view=_view))
@@ -682,6 +688,12 @@ def laboratory_edit(lid):
     )
     lab.commission_percent = _f('commission_percent')
     db.session.commit()
+    try:
+        from modules.laboratories.services import sync_lab_rate_list
+        sync_lab_rate_list(lab)
+    except Exception as _e:
+        db.session.rollback()
+        print(f'[lab-edit] rate list sync failed: {_e}')
     flash(f'Laboratory "{lab.name}" updated.', 'success')
     return redirect(url_for('settings.laboratories', view=(request.form.get('view') or request.args.get('view') or 'ref')))
 
