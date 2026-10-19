@@ -440,6 +440,20 @@
     return Math.max(0, Math.min(100, v));
   }
 
+  function _testPct(testId) {
+    var labId = (document.getElementById('laboratoryId') || {}).value;
+    if (!labId) return 0;
+    var map = (window.LAB_RATE_MAP || {})[labId] || {};
+    return Number(map[String(testId)] || 0);
+  }
+
+  function _labHasRateList() {
+    var labId = (document.getElementById('laboratoryId') || {}).value;
+    if (!labId) return false;
+    var m = (window.LAB_RATE_MAP || {})[labId];
+    return !!m && Object.keys(m).length > 0;
+  }
+
   function _companyRate(price, pct) {
     return Math.round((Number(price) || 0) * (1 - pct / 100) * 100) / 100;
   }
@@ -456,7 +470,7 @@
       parameter_count: t.parameter_count || 0,
       sample_type: t.sample_type || '',
       reporting_date: rpt.toISOString().slice(0, 16),
-      company_rate: _companyRate(t.price, pct),
+      company_rate: _companyRate(t.price, _labHasRateList() ? _testPct(t.id) : pct),
       is_outsourced: !!t.is_outsourced,
       max_discount_percent: (t.max_discount_percent != null) ? Number(t.max_discount_percent) : null,
     });
@@ -472,8 +486,10 @@
 
   function refreshCompanyRates() {
     const pct = _pct();
+    const usingRates = _labHasRateList();
     state.selectedTests.forEach(t => {
-      t.company_rate = _companyRate(t.price, pct);
+      var p = usingRates ? _testPct(t.id) : pct;
+      t.company_rate = _companyRate(t.price, p);
     });
     renderSelectedTests();
   }
