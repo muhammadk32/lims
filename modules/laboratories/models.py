@@ -34,6 +34,15 @@ class Laboratory(BaseModel):
     default_max_discount_percent = db.Column(db.Float, nullable=True)
 
     is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+    # Default rate category (rate list) for this lab/company
+    rate_category_id = db.Column(
+        db.Integer,
+        db.ForeignKey('rate_categories.id'),
+        nullable=True,
+        index=True,
+    )
+    rate_category = db.relationship('RateCategory', foreign_keys=[rate_category_id])
     times_used = db.Column(db.Integer, nullable=False, default=0)
     last_used_at = db.Column(db.DateTime, nullable=True)
 

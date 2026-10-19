@@ -226,6 +226,17 @@ def create_order(patient, tests, form, user):
     from modules.orders.discounts import apply_discounts
     apply_discounts(order)
 
+    # NEW: rate-category override — apply BEFORE order-level discount recompute
+    from modules.orders.rate_resolver import resolve_rate_for_order
+    _rate_pct, _comm_pct = resolve_rate_for_order(order)
+    if _rate_pct > 0:
+        for it in order.top_level_items:
+            base = float(it.price or 0.0)
+            disc = round(base * (_rate_pct / 100.0), 2)
+            it.applied_discount_pct = _rate_pct
+            it.applied_discount_amount = disc
+            it.discount_source = 'rate_category'
+
     order.recompute_total()
 
     # Guard: flag when 100 percent discount wipes the entire total
@@ -270,6 +281,11 @@ def create_order(patient, tests, form, user):
                 order.commission_amount = round(max(0.0, _amt), 2)
         except Exception as _e:
             print(f'[orders.services] commission calc failed: {_e}')
+
+    # ---------- Rate-category commission override ----------
+    if _comm_pct > 0:
+        order.commission_amount = round(
+            (order.subtotal or 0) * (_comm_pct / 100.0), 2)
 
     # ---------- Referral suggestion cache ----------
     # Store the free-text name in the suggestions table for the typeahead.
@@ -512,6 +528,17 @@ def update_order(order, form, new_test_ids, user):
     # NEW: per-item discounts (respects outsourced caps)
     from modules.orders.discounts import apply_discounts
     apply_discounts(order)
+
+    # NEW: rate-category override — apply BEFORE order-level discount recompute
+    from modules.orders.rate_resolver import resolve_rate_for_order
+    _rate_pct, _comm_pct = resolve_rate_for_order(order)
+    if _rate_pct > 0:
+        for it in order.top_level_items:
+            base = float(it.price or 0.0)
+            disc = round(base * (_rate_pct / 100.0), 2)
+            it.applied_discount_pct = _rate_pct
+            it.applied_discount_amount = disc
+            it.discount_source = 'rate_category'
 
     order.recompute_total()
 
