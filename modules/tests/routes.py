@@ -65,7 +65,7 @@ def index():
     )
 
     tab = request.args.get('tab', 'catalog').strip().lower()
-    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'units', 'bulk', 'previews')
+    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'units', 'bulk', 'previews', 'rates')
     if tab not in valid_tabs:
         tab = 'catalog'
 
@@ -176,6 +176,19 @@ def index():
             'categories': cats,
             'test_counts': counts,
             'uncategorized': uncategorized,
+        })
+
+    elif tab == 'rates':
+        from sqlalchemy import func
+        from .models import RateCategory, RateCategoryTest, RateCategoryRate
+        cats = RateCategory.query.order_by(RateCategory.code.asc()).all()
+        test_counts = dict(
+            db.session.query(RateCategoryTest.rate_category_id, func.count(RateCategoryTest.id))
+            .group_by(RateCategoryTest.rate_category_id).all()
+        )
+        ctx.update({
+            'rate_categories': cats,
+            'rate_test_counts': test_counts,
         })
 
     elif tab == 'panels':

@@ -227,7 +227,7 @@
 
     <!-- Lab Test Settings (top-level dropdown, admin only) -->
     {% if current_user.role == 'admin' %}
-    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','units','bulk','previews'] or request.path.startswith('/settings/tests') %}
+    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','units','bulk','previews','rates'] or request.path.startswith('/settings/tests') %}
     <div class="topnav-item tn-tests">
       <button type="button" class="topnav-link {% if lts_active %}active{% endif %}">
         <i class="bi bi-sliders2"></i>
@@ -262,6 +262,10 @@
         <a href="{{ url_for('tests.index', tab='previews') }}"
            class="dropdown-item {% if request.args.get('tab') == 'previews' %}active{% endif %}">
           <i class="bi bi-eye"></i> Previews
+        </a>
+        <a href="{{ url_for('tests.index', tab='rates') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'rates' %}active{% endif %}">
+          <i class="bi bi-cash-stack"></i> Rate Lists
         </a>
       </div>
     </div>

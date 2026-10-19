@@ -1,0 +1,48 @@
+﻿{# ============ RATE LISTS TAB ============ #}
+<div class="ts-header">
+  <div>
+    <h2 class="ts-title"><i class="bi bi-cash-stack"></i> Rate Lists</h2>
+    <div class="ts-subtitle">Rate categories — pricing groups used in referrals &amp; billing</div>
+  </div>
+  <div class="ts-count">{{ rate_categories|length }} categor{{ 'y' if rate_categories|length == 1 else 'ies' }}</div>
+</div>
+
+{% if rate_categories %}
+<table class="ts-table">
+  <thead>
+    <tr>
+      <th style="width: 60px;">#</th>
+      <th style="width: 90px;">Code</th>
+      <th>Name</th>
+      <th class="center" style="width: 120px;">Tests</th>
+      <th class="center" style="width: 120px;">Rates</th>
+      <th class="center" style="width: 140px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in rate_categories %}
+    <tr>
+      <td class="center muted">{{ loop.index }}</td>
+      <td><code>{{ c.code }}</code></td>
+      <td><span class="name">{{ c.name }}</span></td>
+      <td class="center">
+        <span class="ts-badge {% if rate_test_counts.get(c.id, 0) > 0 %}ts-badge-cyan{% else %}ts-badge-grey{% endif %}">
+          {{ rate_test_counts.get(c.id, 0) }}
+        </span>
+      </td>
+      <td class="center">{{ c.rates|length }}</td>
+      <td class="center">
+        <a href="/tests/?tab=rates&cat={{ c.id }}" class="ts-icon-btn" title="Edit">
+          <i class="bi bi-pencil"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="ts-empty">
+  <i class="bi bi-cash-stack fs-3 d-block mb-2"></i>
+  <div>No rate categories imported.</div>
+</div>
+{% endif %}
