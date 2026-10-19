@@ -28,6 +28,43 @@ def _get_order_or_404(order_id):
         abort(404)
     return order
 
+def build_lab_rate_map():
+    """Return {lab_id_str: {test_id_str: discount_pct}} for all labs with rate lists."""
+    from modules.tests.models import RateCategoryTest, RateCategoryDeptRate, Test
+    from modules.laboratories.models import Laboratory
+
+    labs = Laboratory.query.filter(Laboratory.rate_category_id.isnot(None)).all()
+    if not labs:
+        return {}
+
+    rc_ids = {lab.rate_category_id for lab in labs}
+
+    dept_cache = {}
+    test_cache = {}
+    for rc in rc_ids:
+        dept_cache[rc] = {r.department_id: float(r.discount_percent or 0)
+                          for r in RateCategoryDeptRate.query.filter_by(rate_category_id=rc).all()}
+        test_cache[rc] = {r.test_id: float(r.discount_percent)
+                          for r in RateCategoryTest.query.filter_by(rate_category_id=rc).all()
+                          if r.discount_percent is not None}
+
+    test_dept = {t.id: t.category_id
+                 for t in Test.query.filter(Test.category_id.isnot(None)).all()}
+
+    result = {}
+    for lab in labs:
+        rc = lab.rate_category_id
+        dept_map = dept_cache.get(rc, {})
+        test_map = test_cache.get(rc, {})
+        per_test = {}
+        for tid, dept_id in test_dept.items():
+            pct = test_map[tid] if tid in test_map else dept_map.get(dept_id, 0.0)
+            if pct and pct > 0:
+                per_test[str(tid)] = pct
+        result[str(lab.id)] = per_test
+    return result
+
+
 
 # ============================================================
 # DAILY LEDGER
@@ -130,6 +167,7 @@ def new_order():
 
     return render_template(
         'orders/new.html',
+        rate_map=build_lab_rate_map(),
         config=get_form_config(),
         doctors=q.get_doctors(),
         payment_methods=PaymentMethod.CHOICES,

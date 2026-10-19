@@ -453,6 +453,7 @@
     var m = (window.LAB_RATE_MAP || {})[labId];
     return !!m && Object.keys(m).length > 0;
   }
+  window._labHasRateList = _labHasRateList;
 
   function _companyRate(price, pct) {
     return Math.round((Number(price) || 0) * (1 - pct / 100) * 100) / 100;
@@ -576,6 +577,9 @@
     const subtotal = state.selectedTests.reduce(
       (s, t) => s + (Number(t.price) || 0), 0
     );
+    const rateListDiscount = state.selectedTests.reduce(
+      (s, t) => s + (Number(t.price) || 0) - (Number(t.company_rate != null ? t.company_rate : t.price) || 0), 0
+    );
     const roundedSubtotal = roundMoney(subtotal);
     $sumSubtotal.value = fmt(roundedSubtotal);
 
@@ -624,9 +628,12 @@
       }
     });
 
-    let discountValue = roundMoney(cappedDiscount);
+    let discountValue = roundMoney(cappedDiscount + rateListDiscount);
     if (discountValue > roundedSubtotal) discountValue = roundedSubtotal;
     const roundedDiscount = discountValue;
+    if (window._labHasRateList && window._labHasRateList() && $discountAmount) {
+      $discountAmount.value = roundedDiscount.toFixed(2);
+    }
 
     // ---- Show / hide the cap warning banner ----
     let banner = document.getElementById('capWarningBanner');
@@ -646,12 +653,9 @@
       banner.style.display = 'none';
     }
 
-    if (roundedDiscount > 0) {
-      $discountRow.style.display = 'flex';
-      $sumDiscount.value = '−' + fmt(roundedDiscount);
-    } else {
-      $discountRow.style.display = 'none';
-    }
+    // bottom discount line removed — value shown in Discount Rs field
+    if ($discountRow) { $discountRow.classList.add('d-none'); $discountRow.style.display = 'none'; }
+    if ($sumDiscount) $sumDiscount.value = roundedDiscount > 0 ? ('−' + fmt(roundedDiscount)) : '0';
 
     const total = Math.max(0, roundedSubtotal - roundedDiscount);
     $sumTotal.value = fmt(total);

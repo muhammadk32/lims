@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<script>window.LAB_RATE_MAP = {{ rate_map|default({})|tojson }};</script>
 <div class="rec-page" id="recPage" data-currency="{{ config.currency_symbol }}">
 
   
@@ -314,10 +315,13 @@
             {% if 'discount_percent' in config.visible_fields %}
             <div class="col-md-3 rec-field">
               <label for="discountPercentInput">Discount %</label>
+              <small class="text-info" id="rateListHint" style="display:none; font-size:0.7rem;">
+                <i class="bi bi-info-circle"></i> Managed by lab rate list
+              </small>
               <div class="input-group input-group-sm">
                 <input type="number" name="discount_percent" id="discountPercentInput"
                        class="form-control" step="0.01" min="0" max="100"
-                       value="0" placeholder="0">
+                       value="0" placeholder="0" data-rate-managed="1">
                 <span class="input-group-text">%</span>
               </div>
             </div>
@@ -331,7 +335,7 @@
                 <span class="input-group-text">{{ config.currency_symbol }}</span>
                 <input type="number" name="discount_amount" id="discountAmountInput"
                        class="form-control" step="0.01" min="0"
-                       value="0" placeholder="0.00">
+                       value="0" placeholder="0.00" data-rate-managed="1">
               </div>
             </div>
             {% endif %}
@@ -483,4 +487,29 @@
     </div>
   </div>
 </div>
+<script>
+(function() {
+  function syncRateManagedFields() {
+    var labId = document.getElementById('laboratoryId');
+    var labSelected = labId && labId.value && labId.value !== '';
+    document.querySelectorAll('[data-rate-managed]').forEach(function(el) {
+      if (labSelected) {
+        // do not reset value — leaving it alone so rate-list mirror can write
+        el.setAttribute('disabled', 'disabled');
+        el.classList.add('bg-light');
+        el.title = 'Managed by lab rate list — not editable';
+      } else {
+        el.removeAttribute('disabled');
+        el.classList.remove('bg-light');
+        el.title = '';
+      }
+    });
+    var hint = document.getElementById('rateListHint');
+    if (hint) hint.style.display = labSelected ? '' : 'none';
+  }
+  window.syncRateManagedFields = syncRateManagedFields;
+  document.addEventListener('DOMContentLoaded', syncRateManagedFields);
+  setInterval(syncRateManagedFields, 300);
+})();
+</script>
 {% endblock %}

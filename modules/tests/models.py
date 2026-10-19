@@ -502,6 +502,8 @@ class RateCategoryTest(BaseModel):
     rate_category_id = db.Column(db.Integer, db.ForeignKey('rate_categories.id', ondelete='CASCADE'), nullable=False, index=True)
     test_id = db.Column(db.Integer, db.ForeignKey('tests.id', ondelete='CASCADE'), nullable=False, index=True)
     sort_order = db.Column(db.Integer, default=0)
+    discount_percent = db.Column(db.Float, nullable=True)
+    commission_percent = db.Column(db.Float, nullable=True)
     rate_category = db.relationship('RateCategory')
     test = db.relationship('Test')
 
