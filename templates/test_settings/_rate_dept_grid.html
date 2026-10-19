@@ -79,6 +79,7 @@
           Selected Tests
         {% endif %}
       </div>
+        <div class="rdg-search" style="padding:8px 10px;border-bottom:1px solid #212529;background:#f8f9fa;"><input type="text" id="testSearchBox" placeholder="Search tests..." style="width:100%;padding:6px 10px;border:1px solid #212529;border-radius:6px;font-size:0.85rem;" onkeyup="if(typeof filterTestRows===&#39;function&#39;){filterTestRows(this.value);}"></div>
       {% if not selected_dept %}
         <div class="rdg-info">
           <i class="bi bi-info-circle"></i><br>
@@ -104,7 +105,7 @@
           </thead>
           <tbody>
             {% for row in dept_tests %}
-            <tr class="{% if not row.linked %}text-muted{% endif %}">
+            <tr class="test-row {% if not row.linked %}text-muted{% endif %}" data-search="{{ (row.test.code ~ ' ' ~ row.test.name)|lower }}">
               <td>
                 <form method="POST" action="{{ url_for('tests.rate_list_toggle_test', cat_id=rate_category.id, test_id=row.test.id) }}" style="display:inline;" onsubmit="this.querySelector('button').disabled=true;">
                   <input type="hidden" name="dept" value="{{ selected_dept.id }}">
@@ -154,4 +155,18 @@
     form.submit();
   });
 })();
+</script>
+<script>
+function filterTestRows(q) {
+  var rows = document.querySelectorAll('.test-row');
+  var needle = (q || '').toLowerCase().trim();
+  var shown = 0;
+  rows.forEach(function(r) {
+    var hay = r.getAttribute('data-search') || '';
+    if (!needle || hay.indexOf(needle) !== -1) { r.style.display = ''; shown++; }
+    else { r.style.display = 'none'; }
+  });
+  var counter = document.getElementById('testSearchCount');
+  if (counter) counter.textContent = shown;
+}
 </script>
