@@ -637,7 +637,7 @@ def laboratory_create():
         email=(_rq.form.get('email') or '').strip() or None,
         address=(_rq.form.get('address') or '').strip() or None,
         notes=(_rq.form.get('notes') or '').strip() or None,
-        discount_percent=_f('discount_percent'),
+        discount_percent=0.0,
         commission_percent=_f('commission_percent'),
         is_partner_lab=bool(_rq.form.get('is_partner_lab')),
         default_max_discount_percent=(
@@ -674,7 +674,7 @@ def laboratory_edit(lid):
     lab.email = (_rq.form.get('email') or '').strip() or None
     lab.address = (_rq.form.get('address') or '').strip() or None
     lab.notes = (_rq.form.get('notes') or '').strip() or None
-    lab.discount_percent = _f('discount_percent')
+    # lab.discount_percent: read-only, derived from rate list (kept for fallback)
     lab.is_partner_lab = bool(_rq.form.get('is_partner_lab'))
     lab.default_max_discount_percent = (
         _f('default_max_discount_percent')

@@ -280,7 +280,7 @@
                 <td><input type="text" name="name" value="{{ r.name }}" class="edit-input"></td>
                 <td><input type="text" name="contact_person" value="{{ r.contact_person or '' }}" class="edit-input"></td>
                 <td><input type="text" name="phone" value="{{ r.phone or '' }}" class="edit-input"></td>
-                <td class="num"><input type="number" name="discount_percent" value="{{ r.discount_percent }}" step="0.01" min="0" max="100" class="edit-input" style="text-align:right;"></td>
+                <td class="num"><span class="disc-display">{{ r.discount_percent or 0 }}%</span></td>
                 <td><select name="rate_category_id" class="edit-input">
                     <option value="">— none —</option>
                     {% for rc in rate_categories %}
@@ -403,7 +403,7 @@
             <div class="lab-field"><label>Phone</label><input type="text" name="phone"></div>
             <div class="lab-field"><label>Email</label><input type="email" name="email"></div>
             <div class="lab-field" style="grid-column:span 2;"><label>Address</label><input type="text" name="address"></div>
-            <div class="lab-field"><label>Discount %</label><input type="number" name="discount_percent" step="0.01" min="0" max="100" value="0"></div>
+            
             <div class="lab-field" id="modalCommissionWrap"><label>Commission %</label><input type="number" name="commission_percent" step="0.01" min="0" max="100" value="0"></div>
             <div class="lab-field" id="modalMaxDiscWrap" style="display:none;"><label>Max Disc %</label><input type="number" name="default_max_discount_percent" step="0.01" min="0" max="100" placeholder="e.g. 35"></div>
           </div>
