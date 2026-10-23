@@ -227,7 +227,7 @@
 
     <!-- Lab Test Settings (top-level dropdown, admin only) -->
     {% if current_user.role == 'admin' %}
-    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','units','bulk','previews','rates'] or request.path.startswith('/settings/tests') %}
+    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','packages','units','bulk','previews','rates'] or request.path.startswith('/settings/tests') %}
     <div class="topnav-item tn-tests">
       <button type="button" class="topnav-link {% if lts_active %}active{% endif %}">
         <i class="bi bi-sliders2"></i>
@@ -250,6 +250,10 @@
         <a href="{{ url_for('tests.index', tab='panels') }}"
            class="dropdown-item {% if request.args.get('tab') == 'panels' %}active{% endif %}">
           <i class="bi bi-collection"></i> Panels
+        </a>
+        <a href="{{ url_for('tests.index', tab='packages') }}"
+           class="dropdown-item {% if request.args.get('tab') == 'packages' %}active{% endif %}">
+          <i class="bi bi-box-seam"></i> Packages
         </a>
         <a href="{{ url_for('tests.index', tab='units') }}"
            class="dropdown-item {% if request.args.get('tab') == 'units' %}active{% endif %}">

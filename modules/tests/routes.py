@@ -67,7 +67,7 @@ def index():
     )
 
     tab = request.args.get('tab', 'catalog').strip().lower()
-    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'units', 'bulk', 'previews', 'rates')
+    valid_tabs = ('catalog', 'formats', 'categories', 'panels', 'packages', 'units', 'bulk', 'previews', 'rates')
     if tab not in valid_tabs:
         tab = 'catalog'
 
@@ -327,6 +327,7 @@ def index():
         from sqlalchemy import func
         q = request.args.get('q', '').strip()
         query = Test.query.filter(Test.is_active == True, Test.is_panel == True)  # noqa: E712
+        query = query.filter((Test.result_format != 'package') | (Test.result_format.is_(None)))
         if q:
             like = f'%{q}%'
             query = query.filter(or_(Test.code.ilike(like), Test.name.ilike(like)))
@@ -348,6 +349,24 @@ def index():
             'categories': TestCategory.query.order_by(TestCategory.name.asc()).all(),
             'standalone_tests': standalone_tests,
             'total_panels': len(panels),
+        })
+
+    elif tab == 'packages':
+        from sqlalchemy import func
+        q = request.args.get('q', '').strip()
+        query = Test.query.filter(Test.is_active == True, Test.result_format == 'package')
+        if q:
+            like = f'%{q}%'
+            query = query.filter(or_(Test.code.ilike(like), Test.name.ilike(like)))
+        packages = query.order_by(Test.name.asc()).all()
+        pkg_counts = dict(
+            db.session.query(PanelParameter.panel_id, func.count(PanelParameter.id))
+            .group_by(PanelParameter.panel_id).all()
+        )
+        ctx.update({
+            'packages': packages,
+            'pkg_counts': pkg_counts,
+            'total_packages': len(packages),
         })
 
     # 'units' and 'bulk' need no extra context

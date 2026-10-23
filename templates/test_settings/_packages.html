@@ -1,0 +1,87 @@
+<style>
+.ts-table { border:2px solid #212529 !important; border-radius:10px; overflow:hidden; }
+.ts-table thead th { border-right:1px solid #444 !important; }
+.ts-table tbody td { border-bottom:1px solid #212529 !important; border-right:1px solid #212529 !important; }
+.ts-table tbody td:last-child { border-right:none !important; }
+.ts-table tbody tr:nth-child(even) td { background:#f7f9fc !important; }
+.ts-table tbody tr:hover td { background:#eaf2ff !important; }
+</style>
+﻿{# ============ PACKAGES TAB ============ #}
+<div class="ts-header">
+  <div>
+    <h2 class="ts-title"><i class="bi bi-box-seam"></i> Health Packages</h2>
+    <div class="ts-subtitle">Pre-built health screening bundles — Overseas, Cardiac, Diabetes, etc.</div>
+  </div>
+  <div class="ts-count">{{ packages|length }} package{{ 's' if packages|length != 1 }}</div>
+</div>
+
+<table class="ts-kpi">
+  <tr>
+    <td><div class="ts-kpi-label">Total Packages</div><div class="ts-kpi-value">{{ total_packages }}</div></td>
+    <td colspan="2" style="padding:4px 10px;">
+      <form method="GET" action="/tests/" style="display:flex;gap:6px;align-items:center;">
+        <input type="hidden" name="tab" value="packages">
+        <input type="text" name="q" class="form-control form-control-sm"
+               placeholder="Search packages..." value="{{ request.args.get('q','') }}"
+               style="border-radius:0; font-size:0.82rem;">
+        <button type="submit" class="ts-btn"><i class="bi bi-search"></i></button>
+      </form>
+    </td>
+    <td style="text-align:right;">
+      <a href="/tests/new" class="ts-btn ts-btn-primary">
+        <i class="bi bi-plus-lg"></i> New Package
+      </a>
+    </td>
+  </tr>
+</table>
+
+<div class="ts-section">
+  <span>All Health Packages</span>
+  <span style="font-weight:400; text-transform:none; letter-spacing:0; opacity:0.85; font-size:0.7rem;">
+    One price for the bundle — children are free
+  </span>
+</div>
+
+{% if packages %}
+<table class="ts-table">
+  <thead>
+    <tr>
+      <th class="center" style="width:50px;">#</th>
+      <th style="width:100px;">Code</th>
+      <th>Package Name</th>
+      <th class="center" style="width:100px;">Tests</th>
+      <th class="end" style="width:100px;">Price</th>
+      <th class="center" style="width:120px;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in packages %}
+    <tr>
+      <td class="center muted">{{ loop.index }}</td>
+      <td><code>{{ p.code }}</code></td>
+      <td><div class="name"><i class="bi bi-box-seam text-warning"></i> {{ p.name }}</div></td>
+      <td class="center">
+        <span class="ts-badge ts-badge-cyan">{{ pkg_counts.get(p.id, 0) }}</span>
+      </td>
+      <td class="num">{{ p.price | money }}</td>
+      <td class="center">
+        <div class="ts-actions">
+          <a href="/settings/tests/panels/{{ p.id }}/edit" class="ts-icon-btn" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </a>
+          <a href="/tests/{{ p.id }}" class="ts-icon-btn" title="View">
+            <i class="bi bi-eye"></i>
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="ts-empty">
+  <i class="bi bi-box-seam fs-3 d-block mb-2"></i>
+  <div class="fw-semibold">No packages yet</div>
+  <div class="small mb-3">Health packages bundle several tests under one price.</div>
+</div>
+{% endif %}
