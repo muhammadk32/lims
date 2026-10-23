@@ -1132,12 +1132,27 @@ def rate_list_export_preview(cat_id):
     if run:
         dept_rates = {d.department_id: d for d in
                       RateCategoryDeptRate.query.filter_by(rate_category_id=cat.id).all()}
+        # child-only test ids (excluded from printing)
+        from modules.tests.models import PanelParameter
+        child_ids = {r[0] for r in db.session.query(PanelParameter.test_id).distinct().all()}
         q = (RateCategoryTest.query
              .filter_by(rate_category_id=cat.id)
              .order_by(RateCategoryTest.sort_order.asc()))
         for rct in q.all():
             t = Test.query.get(rct.test_id)
             if not t: continue
+            # skip child-only tests (analytes inside a parent — never orderable)
+            if t.id in child_ids: continue
+            # hide **-prefixed junk names and '<Type>' placeholders
+            nm = (t.name or '').strip()
+            if nm.startswith('**'): continue
+            if nm in ('<Type>', ''): continue
+            # skip 0-price non-parent, non-package rows (AdamLab label/analyte junk)
+            price_v = float(t.price or 0)
+            if price_v == 0 and not t.is_panel:
+                # allow if it's a package
+                if (t.result_format or '').lower() != 'package':
+                    continue
             if department_id and t.category_id != department_id: continue
             if category_id and t.category_id != category_id: continue
             dept = TestCategory.query.get(t.category_id) if t.category_id else None
