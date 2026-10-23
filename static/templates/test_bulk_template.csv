@@ -1,0 +1,5 @@
+﻿code,name,category,price,unit,sample_type,turnaround_hours,normal_range,is_panel,result_format,description
+CBC001,Complete Blood Count,Hematology,650,mg/dL,EDTA whole blood,24,70 - 100,0,numeric,Basic CBC panel
+LFT001,Liver Function Test,Routine Chemistry,1500,,3-5cc Clotted Blood or Serum,24,,0,numeric,
+TSH001,Thyroid Stimulating Hormone,Hormones,2000,uIU/mL,3-5cc Clotted Blood or Serum,24,0.4 - 4.0,0,numeric,
+PANEL01,Basic Metabolic Panel,Routine Chemistry,3000,,3-5cc Clotted Blood or Serum,24,,1,panel,Panel of 8 tests

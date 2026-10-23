@@ -1191,3 +1191,93 @@ def rate_list_export_preview(cat_id):
         print('DEBUG first row keys:', list(rows[0].keys()))
         print('DEBUG first row:', rows[0])
     return render_template('test_settings/_rate_list_export.html', **ctx)
+
+@tests_bp.route('/bulk-import', methods=['POST'])
+@login_required
+@permission_required('manage_tests')
+def bulk_import():
+    import csv, io
+    from .models import Test, TestCategory
+    from extensions import db
+
+    file = request.files.get('csv_file')
+    if not file or not file.filename.endswith('.csv'):
+        flash('Please upload a .csv file.', 'danger')
+        return redirect(url_for('tests.index', tab='bulk'))
+
+    try:
+        content = file.read().decode('utf-8-sig')
+    except UnicodeDecodeError:
+        content = file.read().decode('latin-1')
+
+    reader = csv.DictReader(io.StringIO(content))
+    required = {'code', 'name'}
+    if not required.issubset(set(reader.fieldnames or [])):
+        flash(f'CSV missing required columns: {", ".join(required - set(reader.fieldnames or []))}', 'danger')
+        return redirect(url_for('tests.index', tab='bulk'))
+
+    created = updated = errors = 0
+    error_list = []
+
+    for idx, row in enumerate(reader, start=2):
+        code = (row.get('code') or '').strip().upper()
+        name = (row.get('name') or '').strip()
+        if not code or not name:
+            errors += 1
+            error_list.append(f'Row {idx}: code/name required')
+            continue
+
+        cat = None
+        cat_name = (row.get('category') or '').strip()
+        if cat_name:
+            cat = TestCategory.query.filter_by(name=cat_name).first()
+            if not cat:
+                # create the category if it doesn't exist
+                cat = TestCategory(name=cat_name)
+                db.session.add(cat)
+                db.session.flush()
+
+        existing = Test.query.filter_by(code=code).first()
+        is_new = existing is None
+        t = existing or Test(code=code)
+
+        t.name = name
+        t.category_id = cat.id if cat else None
+        try:
+            t.price = float(row.get('price') or 0)
+        except (ValueError, TypeError):
+            t.price = 0
+        t.unit = (row.get('unit') or '').strip() or None
+        t.sample_type = (row.get('sample_type') or '').strip() or None
+        try:
+            t.turnaround_hours = int(row.get('turnaround_hours') or 24)
+        except (ValueError, TypeError):
+            t.turnaround_hours = 24
+        t.normal_range = (row.get('normal_range') or '').strip() or None
+        t.description = (row.get('description') or '').strip() or None
+        t.is_panel = (str(row.get('is_panel', '0')).strip() in ('1', 'true', 'yes', 'y'))
+        rf = (row.get('result_format') or 'numeric').strip().lower()
+        if rf not in ('numeric','qualitative','semi_quant','titre','pcr','histopath','culture','microscopy','panel'):
+            rf = 'numeric'
+        t.result_format = rf
+        t.is_active = True
+
+        if is_new:
+            db.session.add(t)
+            created += 1
+        else:
+            updated += 1
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Import failed: {e}', 'danger')
+        return redirect(url_for('tests.index', tab='bulk'))
+
+    msg = f'Imported: {created} new, {updated} updated, {errors} skipped'
+    flash(msg, 'success' if errors == 0 else 'warning')
+    if error_list:
+        flash('; '.join(error_list[:5]), 'warning')
+
+    return redirect(url_for('tests.index', tab='catalog'))

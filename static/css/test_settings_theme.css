@@ -1,0 +1,539 @@
+﻿
+/* ============================================================
+   LAB TEST SETTINGS THEME — scoped
+   Applies to: /tests/?tab=* pages + Lab Test Settings nav dropdown
+   ============================================================ */
+
+:root {
+  --theme-primary: #1a3d7c;
+  --theme-accent: #0d6efd;
+  --theme-gold: #ffd166;
+  --theme-gold-dark: #ffb703;
+  --theme-border-dark: #212529;
+}
+
+/* ===== tables ===== */
+table.lt-table, table.ts-table, table.rl-table, table.rdg-table,
+table.rle-table, table.rlk-table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid var(--theme-border-dark) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+table.lt-table thead th, table.ts-table thead th, table.rl-table thead th,
+table.rdg-table thead th, table.rle-table thead th, table.rlk-table thead th {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  color: #fff !important;
+  padding: 10px 12px !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border-right: 1px solid var(--theme-border-dark) !important;
+  border-bottom: 2px solid var(--theme-border-dark) !important;
+}
+
+table.lt-table thead th:last-child, table.ts-table thead th:last-child,
+table.rl-table thead th:last-child, table.rdg-table thead th:last-child,
+table.rle-table thead th:last-child, table.rlk-table thead th:last-child {
+  border-right: none !important;
+}
+
+table.lt-table tbody td, table.ts-table tbody td, table.rl-table tbody td,
+table.rdg-table tbody td, table.rle-table tbody td, table.rlk-table tbody td {
+  padding: 8px 12px !important;
+  border-bottom: 1px solid var(--theme-border-dark) !important;
+  border-right: 1px solid var(--theme-border-dark) !important;
+  vertical-align: middle;
+}
+
+table.lt-table tbody td:last-child, table.ts-table tbody td:last-child,
+table.rl-table tbody td:last-child, table.rdg-table tbody td:last-child,
+table.rle-table tbody td:last-child, table.rlk-table tbody td:last-child {
+  border-right: none !important;
+}
+
+table.lt-table tbody tr:last-child td, table.ts-table tbody tr:last-child td,
+table.rl-table tbody tr:last-child td, table.rdg-table tbody tr:last-child td,
+table.rle-table tbody tr:last-child td, table.rlk-table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+table.lt-table tbody tr:nth-child(even) td, table.ts-table tbody tr:nth-child(even) td,
+table.rl-table tbody tr:nth-child(even) td, table.rdg-table tbody tr:nth-child(even) td,
+table.rle-table tbody tr:nth-child(even) td, table.rlk-table tbody tr:nth-child(even) td {
+  background: #f7f9fc !important;
+}
+
+table.lt-table tbody tr:hover td, table.ts-table tbody tr:hover td,
+table.rl-table tbody tr:hover td, table.rdg-table tbody tr:hover td,
+table.rle-table tbody tr:hover td, table.rlk-table tbody tr:hover td {
+  background: #eaf2ff !important;
+}
+
+/* ===== buttons in lab test settings ===== */
+.ts-btn, .lt-btn, .rl-btn, .rdg-sbtn, .rle-btn {
+  border-radius: 8px !important;
+  border-width: 2px !important;
+  font-weight: 700 !important;
+}
+
+.ts-btn-primary, .lt-btn-primary, .rle-btn-primary {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  border-color: var(--theme-primary) !important;
+  color: #fff !important;
+}
+
+.ts-btn-primary:hover, .lt-btn-primary:hover, .rle-btn-primary:hover {
+  filter: brightness(1.15);
+}
+
+/* ===== filter strips ===== */
+.lt-filter, .rl-filter, .rle-filters, .rdg-search {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border: 2px solid var(--theme-primary) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+}
+
+/* ===== Lab Test Settings topnav dropdown ===== */
+.topnav-item.tn-tests .topnav-dropdown {
+  border: 2px solid var(--theme-primary) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+  overflow: hidden;
+}
+
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item {
+  border-bottom: 1px solid #dee2e6;
+  transition: background 0.1s;
+}
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item:last-child {
+  border-bottom: none;
+}
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item:hover {
+  background: linear-gradient(135deg, #e7f1ff 0%, #d0e2ff 100%);
+  color: var(--theme-primary) !important;
+}
+.topnav-item.tn-tests .topnav-dropdown .dropdown-item.active {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  color: #fff !important;
+}
+
+/* ===== tab-strip bullets (bulk nav items) ===== */
+.lts-tab {
+  border-radius: 8px 8px 0 0 !important;
+  border: 2px solid var(--theme-primary) !important;
+  border-bottom: none !important;
+  font-weight: 700;
+  color: var(--theme-primary) !important;
+}
+.lts-tab.active {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  color: #fff !important;
+}
+
+/* ===== page header for test settings ===== */
+.lt-header {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--theme-primary) !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.lt-header .lt-title, .lt-header .lt-title i,
+.lt-header .lt-subtitle {
+  color: #fff !important;
+}
+.lt-header .lt-title i { color: var(--theme-gold) !important; }
+
+.ts-header {
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+  color: #fff !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--theme-primary) !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.ts-header .ts-title, .ts-header .ts-title i, .ts-header .ts-subtitle,
+.ts-header .ts-count {
+  color: #fff !important;
+}
+.ts-header .ts-title i { color: var(--theme-gold) !important; }
+
+/* ===== KPI strips ===== */
+
+
+
+.ts-kpi .ts-kpi-label {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: #6c757d !important;
+  letter-spacing: 0.05em;
+}
+.ts-kpi .ts-kpi-value {
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  color: #1a3d7c !important;
+}
+
+/* ===== forms inside lab test settings ===== */
+.lt-page .form-control, .lt-page .form-select,
+.bulk-card .form-control, .bulk-card .form-select {
+  border: 2px solid #ced4da !important;
+  border-radius: 8px !important;
+}
+.lt-page .form-control:focus, .lt-page .form-select:focus {
+  border-color: var(--theme-accent) !important;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+}
+
+/* ===== info / warning strips ===== */
+.alert, .bi-info, .bulk-info {
+  border-radius: 10px !important;
+  border-width: 2px !important;
+}
+
+
+/* ===== formats + previews tables ===== */
+table.tf-table, table.fp-ast {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+table.tf-table thead th, table.fp-ast thead th {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 10px 12px !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border-right: 1px solid #212529 !important;
+  border-bottom: 2px solid #212529 !important;
+}
+table.tf-table thead th:last-child, table.fp-ast thead th:last-child {
+  border-right: none !important;
+}
+table.tf-table tbody td, table.fp-ast tbody td {
+  padding: 8px 12px !important;
+  border-bottom: 1px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+}
+table.tf-table tbody td:last-child, table.fp-ast tbody td:last-child {
+  border-right: none !important;
+}
+table.tf-table tbody tr:last-child td, table.fp-ast tbody tr:last-child td {
+  border-bottom: none !important;
+}
+table.tf-table tbody tr:nth-child(even) td, table.fp-ast tbody tr:nth-child(even) td {
+  background: #f7f9fc !important;
+}
+table.tf-table tbody tr:hover td, table.fp-ast tbody tr:hover td {
+  background: #eaf2ff !important;
+}
+
+
+/* ===== absolute override: every thead th in Lab Test Settings ===== */
+.lts-content table thead th,
+.lt-page table thead th,
+.lts-page table thead th {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  border-right: 1px solid #212529 !important;
+  border-bottom: 2px solid #212529 !important;
+  border-top: none !important;
+  border-left: none !important;
+  padding: 10px 12px !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.lts-content table thead th:last-child,
+.lt-page table thead th:last-child,
+.lts-page table thead th:last-child {
+  border-right: none !important;
+}
+
+
+/* ===== NUCLEAR: every thead th in test settings, no exceptions ===== */
+.lts-content thead th,
+.lts-page thead th,
+.lt-page thead th,
+.lt-page thead > tr > th,
+.lts-content thead > tr > th {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  background-color: #1a3d7c !important;
+  background-image: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #ffffff !important;
+  border-top: 2px solid #212529 !important;
+  border-bottom: 2px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+  border-left: none !important;
+  padding: 10px 12px !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.lts-content thead th:last-child,
+.lts-page thead th:last-child,
+.lt-page thead th:last-child,
+.lts-content thead > tr > th:last-child {
+  border-right: 2px solid #212529 !important;
+}
+.lts-content thead th.num,
+.lts-content thead th.center,
+.lts-content thead th.end,
+.lts-content thead th[class] {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  background-color: #1a3d7c !important;
+  color: #ffffff !important;
+}
+
+
+/* ===== section strip bars above tables (formats, panels, etc.) ===== */
+.tf-section, .ts-section, .rl-section, .fmt-strip {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 10px 16px !important;
+  border: 2px solid #212529 !important;
+  border-bottom: none !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.82rem !important;
+}
+/* generic fallback: any dark strip immediately above a table */
+.lts-content > div > div[style*="background:#1a1a1a"],
+.lts-content > div > div[style*="background: #1a1a1a"],
+.lts-content > div > div[style*="#1a1a1a"] {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+
+/* ===== Test Formats tab header ===== */
+.tf-header {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.tf-header .tf-title,
+.tf-header .tf-title i {
+  color: #fff !important;
+}
+.tf-header .tf-title i { color: #ffd166 !important; }
+.tf-header .tf-subtitle,
+.tf-header .tf-count {
+  color: #fff !important;
+  opacity: 0.92;
+}
+
+/* ===== Test Formats filter strip ===== */
+.tf-filter {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+}
+
+/* Also cover .rl-header (rate detail/edit) and rdg/rle variants */
+.rl-header, .rle-head, .rdg-head, .rlk-header {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.rl-header h2, .rle-head h2, .rdg-head h2,
+.rl-header h1, .rle-head h1, .rdg-head h1 {
+  color: #fff !important;
+}
+.rl-header i, .rle-head i, .rdg-head i {
+  color: #ffd166 !important;
+}
+
+
+/* ===== Rate list tab: page header ===== */
+.rl-head {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.rl-head h2,
+.rl-head h2 strong,
+.rl-head h2 i {
+  color: #fff !important;
+}
+.rl-head h2 i { color: #ffd166 !important; }
+
+/* The Add button keeps its normal look */
+.rl-head .btn-primary {
+  color: #fff !important;
+}
+
+/* Filter strip already covered by .rl-filter, ensure it's consistent */
+.rl-filter {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 12px !important;
+}
+
+/* Also target any h2 sitting directly in .rl-page that says "MASTER RATE LIST" */
+.rl-page > h2,
+.rl-page > .rl-head h2 {
+  color: #fff !important;
+}
+
+/* Wrap any plain h2 in rl-page that's not already inside rl-head */
+.rl-page > h2 {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%);
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 2px solid #1a3d7c;
+  margin: 0 0 14px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.rl-page > h2 i {
+  color: #ffd166 !important;
+}
+
+
+/* ===== Format Previews header ===== */
+.fp-header {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.fp-header .fp-title,
+.fp-header .fp-title i {
+  color: #fff !important;
+}
+.fp-header .fp-title i { color: #ffd166 !important; }
+.fp-header .fp-subtitle {
+  color: rgba(255,255,255,0.9) !important;
+}
+.fp-header .fp-btn-primary {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #fff !important;
+  font-weight: 700;
+}
+.fp-header .fp-btn-primary:hover {
+  background: #ffd166 !important;
+  border-color: #ffd166 !important;
+  color: #1a1a1a !important;
+}
+
+/* ===== Format Preview cards ===== */
+.fp-card {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  margin-bottom: 12px;
+}
+.fp-card-hd {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 10px 14px !important;
+  font-weight: 800 !important;
+  font-size: 0.86rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid #212529 !important;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.fp-card-hd .fp-tag {
+  background: #ffd166 !important;
+  color: #1a1a1a !important;
+  padding: 2px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.66rem !important;
+  font-weight: 800 !important;
+}
+.fp-card-bd {
+  padding: 12px 16px !important;
+}
+.fp-card-bd .fp-row {
+  border-bottom: 1px solid #dee2e6 !important;
+  padding: 6px 0 !important;
+}
+.fp-card-bd .fp-row:last-child {
+  border-bottom: none !important;
+}
+.fp-card-ft {
+  background: #f7f9fc !important;
+  border-top: 2px solid #212529 !important;
+  padding: 8px 14px !important;
+  font-size: 0.78rem !important;
+  color: #495057 !important;
+}
+
+
+/* ===== KPI strip: strong dark border ===== */
+table.ts-kpi {
+  border: 3px solid #1a1a1a !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15) !important;
+  background: #fff !important;
+  width: 100%;
+}
+table.ts-kpi td {
+  border: none !important;
+  border-right: 2px solid #1a1a1a !important;
+  padding: 14px 18px !important;
+  vertical-align: middle !important;
+  background: #fff !important;
+}
+table.ts-kpi td:last-child {
+  border-right: none !important;
+}
+table.ts-kpi .ts-kpi-label {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  color: #6c757d !important;
+  letter-spacing: 0.06em;
+}
+table.ts-kpi .ts-kpi-value {
+  font-size: 1.35rem !important;
+  font-weight: 900 !important;
+  color: #1a3d7c !important;
+  margin-top: 4px;
+}

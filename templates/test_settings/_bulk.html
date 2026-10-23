@@ -1,9 +1,184 @@
-{# ============ BULK TAB (stub) ============ #}
-<div class="ts-stub">
-  <i class="bi bi-upload ts-stub-icon"></i>
-  <div class="ts-stub-title">Bulk Actions</div>
-  <div class="ts-stub-text">Import from Excel/CSV, export the catalog, run cleanup tools.</div>
-  <div class="ts-stub-badge">
-    <i class="bi bi-hourglass-split"></i> Coming in a future update
+﻿{# ============ BULK ACTIONS TAB ============ #}
+<style>
+.bi-hero {
+  background:linear-gradient(135deg,#1a3d7c 0%,#0d6efd 100%);
+  color:#fff; border-radius:14px; padding:18px 24px;
+  margin-bottom:18px; box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  display:flex; align-items:center; gap:14px;
+}
+.bi-hero .icon { font-size:2rem; opacity:0.9; }
+.bi-hero h3 { margin:0; font-size:1.2rem; font-weight:800; letter-spacing:0.02em; }
+.bi-hero p { margin:2px 0 0; font-size:0.85rem; opacity:0.9; }
+
+.bi-steps {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+  margin-bottom:20px;
+}
+.bi-step {
+  background:#fff; border:2px solid #1a3d7c; border-radius:12px;
+  padding:16px 18px; position:relative;
+  box-shadow:0 2px 6px rgba(0,0,0,0.06);
+  transition:transform .15s, box-shadow .15s;
+}
+.bi-step:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+.bi-step .num {
+  position:absolute; top:-12px; left:16px;
+  width:32px; height:32px; border-radius:50%;
+  background:linear-gradient(135deg,#ffd166 0%,#ffb703 100%);
+  color:#1a1a1a; font-weight:800; font-size:0.95rem;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+.bi-step .label {
+  font-weight:800; font-size:0.9rem; text-transform:uppercase;
+  color:#1a3d7c; letter-spacing:0.04em; margin-top:8px;
+}
+.bi-step .desc {
+  font-size:0.8rem; color:#6c757d; margin-top:6px; line-height:1.4;
+}
+
+.bi-actions {
+  display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;
+}
+.bi-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px; border:2px solid #1a3d7c; border-radius:8px;
+  background:#fff; color:#1a3d7c; font-weight:700; font-size:0.85rem;
+  cursor:pointer; text-decoration:none; transition:all .12s;
+}
+.bi-btn:hover { background:#1a3d7c; color:#fff; }
+.bi-btn-primary {
+  background:linear-gradient(135deg,#1a3d7c 0%,#0d6efd 100%);
+  color:#fff; border-color:#1a3d7c;
+}
+.bi-btn-primary:hover { filter:brightness(1.15); color:#fff; }
+
+.bi-info {
+  background:linear-gradient(135deg,#fff8e1 0%,#fff3cd 100%);
+  border-left:5px solid #ffc107; border-radius:8px;
+  padding:14px 18px; margin-bottom:18px;
+  font-size:0.85rem; color:#664d03;
+}
+.bi-info strong { color:#664d03; font-weight:800; }
+.bi-info code {
+  background:#fff; padding:2px 6px; border-radius:4px;
+  border:1px solid #ffc107; font-size:0.78rem;
+}
+.bi-info ul { margin:6px 0 0 18px; padding:0; }
+.bi-info li { margin-bottom:3px; }
+
+.bi-upload {
+  border:2.5px dashed #adb5bd; border-radius:12px;
+  padding:26px 20px; text-align:center; background:#f8f9fa;
+  margin-bottom:16px; cursor:pointer; transition:all .15s;
+}
+.bi-upload:hover { border-color:#0d6efd; background:#f0f4ff; }
+.bi-upload.dragover { background:#e7f1ff; border-color:#0d6efd; border-style:solid; }
+.bi-upload input[type="file"] { display:none; }
+.bi-upload .icon { font-size:2.2rem; color:#1a3d7c; }
+.bi-upload .main-text { font-weight:700; color:#1a3d7c; margin:8px 0 4px; font-size:0.95rem; }
+.bi-upload .sub-text { font-size:0.8rem; color:#6c757d; }
+
+.bi-footer {
+  display:flex; justify-content:flex-end; gap:10px;
+  padding-top:14px; border-top:1px dashed #adb5bd;
+}
+/* ===== universal dark borders ===== */
+.bi-hero { border:2px solid #1a3d7c !important; }
+.bi-step { border:2px solid #1a3d7c !important; }
+.bi-info { border:2px solid #664d03 !important; border-left:5px solid #ffc107 !important; }
+.bi-upload { border:2.5px dashed #495057 !important; }
+.bi-upload:hover { border-color:#0d6efd !important; border-style:solid !important; }
+.bi-upload.dragover { border-color:#0d6efd !important; border-style:solid !important; }
+.bi-btn { border:2px solid #1a3d7c !important; }
+.bi-btn-primary { border-color:#0d6efd !important; }
+.bi-footer { border-top:2px solid #1a3d7c !important; }
+#bulkForm { border:2px solid #1a3d7c; border-radius:12px; padding:18px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-top:12px; }
+/* footer button border */
+#importBtn { border:2px solid #0d6efd !important; }
+
+</style>
+
+<div class="bi-hero">
+  <div class="icon"><i class="bi bi-cloud-upload"></i></div>
+  <div>
+    <h3>Bulk Import — Tests &amp; Panels</h3>
+    <p>Import multiple tests from CSV. Duplicates (same code) are updated, not duplicated.</p>
   </div>
 </div>
+
+<div class="bulk-card" style="background:transparent; border:none; padding:0; box-shadow:none;">
+
+
+  <div class="bi-steps">
+    <div class="bi-step">
+      <div class="num">1</div>
+      <div class="label">Download Sample</div>
+      <div class="desc">Get the CSV template with correct columns</div>
+    </div>
+    <div class="bi-step">
+      <div class="num">2</div>
+      <div class="label">Fill Your Data</div>
+      <div class="desc">Edit in Excel — keep column headers exactly</div>
+    </div>
+    <div class="bi-step">
+      <div class="num">3</div>
+      <div class="label">Upload &amp; Import</div>
+      <div class="desc">Choose file → Preview → Confirm</div>
+    </div>
+  </div>
+
+  <div class="bi-actions">
+    <a href="{{ url_for('static', filename='templates/test_bulk_template.csv') }}" class="bi-btn bi-btn-primary">
+      <i class="bi bi-download"></i> Download Sample CSV
+    </a>
+    <a href="/tests/?tab=catalog" class="bi-btn">
+      <i class="bi bi-list-ul"></i> Go to Catalog
+    </a>
+  </div>
+
+  <div class="bi-info">
+    <strong><i class="bi bi-info-circle"></i> Column format (exact headers required):</strong><br>
+    <code>code, name, category, price, unit, sample_type, turnaround_hours, normal_range, is_panel, result_format, description</code>
+    <br><br>
+    <strong>Notes:</strong>
+    <ul style="margin:6px 0 0 18px; padding:0;">
+      <li><code>code</code> must be unique — existing codes get <strong>updated</strong></li>
+      <li><code>is_panel</code> — <code>0</code> = single test, <code>1</code> = panel</li>
+      <li><code>result_format</code> — numeric, qualitative, semi_quant, titre, pcr, histopath, culture, microscopy, panel</li>
+      <li><code>category</code> — must match an existing Test Category name</li>
+    </ul>
+  </div>
+
+  <form method="POST" action="{{ url_for('tests.bulk_import') }}" enctype="multipart/form-data" id="bulkForm">
+    <label class="bi-upload" id="dropzone">
+      <input type="file" name="csv_file" accept=".csv" id="csvInput" onchange="updateFileName(this)">
+      <div class="icon"><i class="bi bi-cloud-arrow-up"></i></div>
+      <div class="main-text">Drop CSV here or click to select</div>
+      <div class="sub-text" id="fileName">No file selected</div>
+    </label>
+
+    <div class="bi-footer">
+      <button type="submit" class="bi-btn bi-btn-primary" id="importBtn" disabled>
+        <i class="bi bi-check-lg"></i> Import Tests
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+function updateFileName(input) {
+  const name = input.files[0] ? input.files[0].name : 'No file selected';
+  document.getElementById('fileName').textContent = name;
+  document.getElementById('importBtn').disabled = !input.files[0];
+}
+const dz = document.getElementById('dropzone');
+['dragenter','dragover'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.add('dragover'); }));
+['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.remove('dragover'); }));
+dz.addEventListener('drop', ev => {
+  if (ev.dataTransfer.files.length) {
+    document.getElementById('csvInput').files = ev.dataTransfer.files;
+    updateFileName(document.getElementById('csvInput'));
+  }
+});
+</script>
