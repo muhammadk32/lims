@@ -35,6 +35,46 @@
   color: #fff; text-decoration: none; cursor: pointer;
   text-transform: uppercase; letter-spacing: 0.03em; }
 .pst-btn:hover { background: #146c43; }
+/* ===== Printer settings layout ===== */
+.pr-page, .printer-page, .container, .printer-container { max-width: 100% !important; }
+.pr-header, .printer-header { max-width: 100% !important; margin-bottom: 16px !important; }
+table.pr-table, table.printer-table, .pr-body table {
+  width: 100% !important;
+}
+table.pr-table tbody td, table.printer-table tbody td {
+  font-size: 0.95rem !important;
+  padding: 14px 14px !important;
+}
+table.pr-table thead th, table.printer-table thead th {
+  font-size: 0.86rem !important;
+  padding: 14px 14px !important;
+}
+table.pr-table select, table.printer-table select, .pr-body select {
+  font-size: 0.92rem !important;
+  padding: 8px 12px !important;
+  height: 40px !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+}
+/* Save button alignment */
+.pr-actions, .printer-actions, .form-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding-top: 14px !important;
+}
+.pr-actions button, .printer-actions button, .pr-body form button[type='submit'] {
+  background: linear-gradient(135deg, #198754 0%, #20c997 100%) !important;
+  border: 2px solid #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  padding: 10px 26px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(25,135,84,0.25) !important;
+}
+.pr-actions button:hover {
+  filter: brightness(1.15);
+}
 </style>
 {% endblock %}
 

@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">   {# ← NEW #}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print">
+{% if request.path.startswith('/settings/') or request.path.startswith('/users/') or request.path.startswith('/audit/') or request.path.startswith('/patients/') %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_theme.css') }}">
+{% endif %}
 
   {% if branding.logo_url %}
     <link rel="icon" href="{{ branding.logo_url }}">

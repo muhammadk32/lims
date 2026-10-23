@@ -47,6 +47,87 @@
                         text-transform: uppercase; letter-spacing: 0.06em;
                         color: #6c757d; margin-bottom: 4px; }
 .rps-logo-input input[type="file"] { font-size: 0.82rem; }
+/* ===== Report Page Setup — wider + dark bordered ===== */
+.rps-page, .rpt-page, .report-setup-page, .setup-page { max-width: 100% !important; margin: 0 !important; padding: 10px 20px !important; }
+.rps-header, .rpt-header, .report-setup-header { max-width: 100% !important; }
+.rps-body, .rpt-body, .report-setup-body { max-width: 100% !important; }
+/* Card container around each section */
+.rps-card, .rpt-card, .section-card, .rps-section, .rpt-section {
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+/* Section headers stay dark */
+.rps-card-hd, .rpt-card-hd, .section-card-hd, .rps-section-hd, .rpt-section-hd {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 10px 16px !important;
+  border-bottom: 2px solid #212529 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.82rem !important;
+}
+/* Every text field / select / textarea inside */
+.rps-card input[type="text"],
+.rps-card input[type="email"],
+.rps-card input[type="number"],
+.rps-card input[type="color"],
+.rps-card select,
+.rps-card textarea,
+.rpt-card input[type="text"],
+.rpt-card input[type="email"],
+.rpt-card select,
+.report-setup-page input[type="text"],
+.report-setup-page input[type="email"],
+.report-setup-page input[type="number"],
+.report-setup-page input[type="color"],
+.report-setup-page select,
+.report-setup-page textarea {
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 0.95rem !important;
+  background: #fff !important;
+  height: 38px !important;
+}
+.rps-card textarea, .report-setup-page textarea { height: auto !important; min-height: 64px !important; }
+.rps-card input[type="color"], .report-setup-page input[type="color"] { padding: 3px !important; }
+.rps-card input:focus,
+.rps-card select:focus,
+.rps-card textarea:focus,
+.report-setup-page input:focus,
+.report-setup-page select:focus,
+.report-setup-page textarea:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+}
+/* Save button */
+.report-setup-page button[type="submit"],
+.rps-actions button,
+.rpt-actions button {
+  background: linear-gradient(135deg, #198754 0%, #20c997 100%) !important;
+  border: 2px solid #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  padding: 10px 26px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(25,135,84,0.25) !important;
+}
+.report-setup-page button[type="submit"]:hover { filter: brightness(1.15); }
+/* Preview button (in header) */
+.rps-header .btn, .report-setup-header .btn {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+.rps-header .btn:hover { background: #ffd166 !important; border-color: #ffd166 !important; }
 </style>
 {% endblock %}
 

@@ -197,6 +197,78 @@
     font-size: 0.82rem; color: var(--bs-secondary-color); line-height: 1.55;
   }
   .rfc-note strong { color: var(--bs-body-color); }
+/* ===== Referrals page: all inputs bordered + rounded ===== */
+.app-content input[type="text"],
+.app-content input[type="email"],
+.app-content input[type="number"],
+.app-content input[type="search"],
+.app-content select,
+.app-content textarea {
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 0.95rem !important;
+  background: #fff !important;
+  height: 40px !important;
+  box-sizing: border-box !important;
+}
+.app-content input:focus,
+.app-content select:focus,
+.app-content textarea:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+  outline: none !important;
+}
+/* Commission % input inside table (narrower) */
+.app-content table input[type="number"] {
+  width: 90px !important;
+  height: 36px !important;
+  padding: 6px 8px !important;
+  text-align: right !important;
+}
+/* Make the commission % column cleaner */
+.app-content table td:nth-last-child(2) {
+  text-align: center !important;
+}
+/* Save/tick buttons inside the table */
+.app-content table button[type="submit"].btn-success,
+.app-content table .btn-success {
+  background: #198754 !important;
+  border: 2px solid #0f5132 !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.app-content table .btn-success:hover { filter: brightness(1.15); }
+/* Delete/trash */
+.app-content table button[type="submit"].btn-danger,
+.app-content table .btn-danger {
+  background: #fff !important;
+  border: 2px solid #dc3545 !important;
+  color: #dc3545 !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.app-content table .btn-danger:hover { background: #dc3545 !important; color: #fff !important; }
+/* Add button */
+.app-content .btn-primary {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  height: 40px !important;
+  padding: 0 20px !important;
+}
 </style>
 {% endblock %}
 

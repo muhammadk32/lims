@@ -38,7 +38,13 @@
 .ab-btn:hover { background: #f1f3f5; }
 .ab-btn-primary { background: #198754; border-color: #198754; color: #fff; }
 .ab-btn-primary:hover { background: #146c43; }
-.ab-btn-sm { padding: 2px 8px; font-size: 0.68rem; height: 22px; line-height: 1.4; }
+.ab-btn-sm { padding: 6px 12px; font-size: 0.78rem; height: 32px; line-height: 1; border-radius: 6px;
+             display: inline-flex; align-items: center; gap: 4px; font-weight: 700; text-transform: uppercase;
+             letter-spacing: 0.03em; border-width: 2px; box-sizing: border-box; min-width: 32px; justify-content: center; }
+.ab-actions .ab-btn-sm i { font-size: 0.9rem; }
+.ab-actions .ab-btn-sm:has(>i:only-child) { width: 32px !important; height: 32px !important; padding: 0 !important; min-width: 32px !important; }
+.ab-actions .ab-btn-sm { padding: 6px 12px !important; height: 32px !important; min-height: 32px !important; font-size: 0.78rem !important; }
+.ab-actions button.ab-btn { border-radius: 6px !important; }
 .ab-btn-warn { background: #fff; border-color: #ffc107; color: #664d03; }
 .ab-btn-warn:hover { background: #ffc107; }
 .ab-btn-ok { background: #fff; border-color: #198754; color: #198754; }
@@ -101,6 +107,43 @@
                 margin: 6px 0 4px; padding-bottom: 3px;
                 border-bottom: 1px solid #dee2e6; }
 
+/* === FORCE FIX: actions + status === */
+.app-content table td:last-child { white-space: nowrap !important; text-align: center !important; vertical-align: middle !important; padding: 4px 6px !important; min-width: 220px !important; }
+.app-content table td:last-child > * { display: inline-flex !important; margin: 0 3px !important; vertical-align: middle !important; }
+.app-content table td:last-child form { display: inline-flex !important; margin: 0 !important; padding: 0 !important; }
+.app-content table td:last-child form button { display: inline-flex !important; }
+.app-content table td:last-child a, .app-content table td:last-child button {
+  height: 32px !important; min-height: 32px !important; padding: 0 12px !important; min-width: 32px !important;
+  font-size: 0.75rem !important; font-weight: 700 !important; letter-spacing: 0.03em !important; text-transform: uppercase !important;
+  border-radius: 8px !important; border: 2px solid !important; align-items: center !important; justify-content: center !important;
+  line-height: 1 !important; box-sizing: border-box !important; white-space: nowrap !important; text-decoration: none !important;
+}
+.app-content table td:last-child button:has(>i:only-child), .app-content table td:last-child a:has(>i:only-child) { width: 32px !important; padding: 0 !important; }
+.app-content table td:last-child i { font-size: 0.9rem !important; }
+/* Status pill */
+.app-content table td .badge, .app-content table td .pill, .app-content table td [class*='status'] {
+  display: inline-block !important; padding: 6px 16px !important; font-size: 0.78rem !important; font-weight: 800 !important;
+  border-radius: 6px !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; line-height: 1.15 !important;
+}
+.app-content table td .badge.bg-success, .app-content table td .status-active {
+  background: #198754 !important; color: #fff !important; border: 2px solid #0f5132 !important;
+}
+/* Bigger body text */
+.app-content table tbody td { font-size: 0.95rem !important; padding: 10px 12px !important; }
+.app-content table thead th { font-size: 0.82rem !important; padding: 12px 12px !important; }
+/* Bigger row + header fonts for antibiotics table */
+.app-content table tbody td {
+  font-size: 1rem !important;
+  padding: 12px 14px !important;
+  vertical-align: middle !important;
+}
+.app-content table thead th {
+  font-size: 0.88rem !important;
+  padding: 14px 14px !important;
+}
+.app-content table tbody td code {
+  font-size: 0.92rem !important;
+}
 </style>
 {% endblock %}
 
@@ -187,13 +230,13 @@
         </td>
         <td class="center">
           <div class="ab-actions">
-            <button type="button" class="ab-btn ab-btn-sm ab-btn-edit"
+            <button type="button" class="ab-btn ab-btn-sm ab-btn-edit" style="min-width:64px!important;height:32px!important;padding:0 14px!important;font-size:12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;"
                     onclick="openEdit({{ a.id }}, '{{ a.name|e }}', '{{ (a.short_name or '')|e }}', '{{ (a.group or '')|e }}')">
               <i class="bi bi-pencil"></i> Edit
             </button>
             <form method="POST" action="{{ url_for('settings.antibiotic_toggle', ab_id=a.id) }}"
                   style="display:inline;">
-              <button class="ab-btn ab-btn-sm {{ 'ab-btn-warn' if a.is_active else 'ab-btn-ok' }}">
+              <button class="ab-btn ab-btn-sm {{ 'ab-btn-warn' if a.is_active else 'ab-btn-ok' }}" style="min-width:120px!important;height:32px!important;padding:0 14px!important;font-size:12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:0.03em!important;">
                 {{ 'Deactivate' if a.is_active else 'Activate' }}
               </button>
             </form>
@@ -201,7 +244,7 @@
             <form method="POST" action="{{ url_for('settings.antibiotic_delete', ab_id=a.id) }}"
                   style="display:inline;"
                   onsubmit="return confirm('Permanently delete {{ a.name }}? This cannot be undone.');">
-              <button class="ab-btn ab-btn-sm ab-btn-danger" title="Delete (admin only)">
+              <button class="ab-btn ab-btn-sm ab-btn-danger" style="width:32px!important;min-width:32px!important;height:32px!important;padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;font-size:13px!important;" title="Delete (admin only)">
                 <i class="bi bi-trash"></i>
               </button>
             </form>

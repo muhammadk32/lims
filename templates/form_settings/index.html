@@ -160,6 +160,229 @@
   .fs-grid { grid-template-columns: 1fr; }
   .fs-item { border-right: none; }
 }
+/* ===== Reception Form: polish theme ===== */
+.fs-page { max-width: 100% !important; padding: 12px 20px 24px !important; }
+
+/* Top header → blue gradient banner */
+.fs-top {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+  align-items: center !important;
+  border-bottom: 2px solid #1a3d7c !important;
+}
+.fs-top h3 { color: #fff !important; }
+.fs-top h3 i { color: #ffd166 !important; }
+.fs-top .subtitle { color: rgba(255,255,255,0.9) !important; }
+.fs-top .stats { color: rgba(255,255,255,0.9) !important; }
+.fs-top .presets .lbl { color: #ffd166 !important; }
+.fs-top .presets button {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #fff !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+.fs-top .presets button:hover {
+  background: #ffd166 !important;
+  border-color: #ffd166 !important;
+  color: #1a1a1a !important;
+}
+.fs-top .preview-btn {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #fff !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  text-decoration: none !important;
+}
+.fs-top .preview-btn:hover { background: #ffd166 !important; border-color: #ffd166 !important; }
+
+/* Each section: rounded bordered card */
+.fs-sec {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+.fs-sec .left {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 10px 14px !important;
+  border-radius: 8px 8px 0 0 !important;
+  border-bottom: 2px solid #212529 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.fs-sec .left .title { color: #fff !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; }
+.fs-sec .left .title i { color: #ffd166 !important; }
+
+/* Field rows inside */
+.fs-fields, .fs-field-rows {
+  padding: 8px 12px !important;
+}
+.fs-field, .fs-row {
+  border-bottom: 1px solid #dee2e6 !important;
+  padding: 8px 6px !important;
+}
+.fs-field:last-child, .fs-row:last-child { border-bottom: none !important; }
+.fs-field:hover, .fs-row:hover { background: #f5f9ff !important; }
+.fs-field label, .fs-row label {
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  color: #212529 !important;
+}
+
+/* Toggle switches → brand blue */
+.fs-sec .form-check-input:checked {
+  background-color: #0d6efd !important;
+  border-color: #1a3d7c !important;
+}
+
+/* Save button */
+.fs-page .btn-save, .fs-page button[type="submit"]:not(.presets button) {
+  background: linear-gradient(135deg, #198754 0%, #20c997 100%) !important;
+  border: 2px solid #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  padding: 10px 26px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(25,135,84,0.25) !important;
+}
+/* ===== Borders on every field row inside fs-sec ===== */
+.fs-sec .right, .fs-sec .fields, .fs-sec .body {
+  padding: 6px 8px !important;
+}
+.fs-sec .row, .fs-sec .field-row, .fs-sec .fs-field, .fs-sec .fs-row,
+.fs-sec .form-check, .fs-sec .field {
+  border: 1.5px solid #212529 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  margin-bottom: 6px !important;
+  background: #fff !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.fs-sec .row:hover, .fs-sec .field-row:hover, .fs-sec .fs-field:hover,
+.fs-sec .fs-row:hover, .fs-sec .field:hover {
+  background: #f5f9ff !important;
+  border-color: #0d6efd !important;
+}
+/* Remove the old bottom-only separator */
+.fs-sec .row:last-child, .fs-sec .field-row:last-child,
+.fs-sec .fs-field:last-child, .fs-sec .fs-row:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* ===== Bordered field items (FINAL) ===== */
+.fs-item {
+  border: 1.5px solid #212529 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  margin: 4px 0 !important;
+  background: #fff !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.fs-item:hover {
+  background: #f5f9ff !important;
+  border-color: #0d6efd !important;
+}
+.fs-item label:not(.form-check-label),
+.fs-item .name, .fs-item .lbl {
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+  color: #212529 !important;
+}
+
+/* ===== Section header full width ===== */
+.fs-sec {
+  display: flex !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+.fs-sec .left {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 16px !important;
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+}
+.fs-sec .left .title {
+  color: #fff !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  font-size: 0.9rem !important;
+}
+.fs-sec .left .title i {
+  color: #ffd166 !important;
+}
+/* Count badge */
+.fs-sec .left .count,
+.fs-sec .left .badge {
+  background: #ffd166 !important;
+  color: #1a1a1a !important;
+  font-weight: 800 !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  margin-left: auto !important;
+}
+
+/* ===== Compact headers + field rows ===== */
+.fs-sec .left {
+  padding: 8px 14px !important;
+  min-height: 40px !important;
+  gap: 8px !important;
+}
+.fs-sec .left .title {
+  font-size: 0.82rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.fs-sec .left .title i {
+  font-size: 0.9rem !important;
+  line-height: 1 !important;
+}
+/* Field rows: shorter */
+.fs-item {
+  padding: 6px 10px !important;
+  min-height: 34px !important;
+  margin: 3px 0 !important;
+}
+.fs-item label:not(.form-check-label),
+.fs-item .name, .fs-item .lbl {
+  font-size: 0.8rem !important;
+  line-height: 1.2 !important;
+}
+.fs-item .form-check-input {
+  width: 2em !important;
+  height: 1.05em !important;
+  margin-top: 0 !important;
+}
 </style>
 {% endblock %}
 

@@ -1,0 +1,693 @@
+
+/* ============================================================
+   ADMIN THEME — applied to Administration pages
+   ============================================================ */
+
+:root {
+  --admin-primary: #1a3d7c;
+  --admin-accent: #0d6efd;
+  --admin-gold: #ffd166;
+  --admin-border: #212529;
+}
+
+/* ===== Page headers (any h1/h2 sitting in a card) ===== */
+.lab-header, .rs-header, .ref-header, .user-header,
+.page-header, .admin-header {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-accent) 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--admin-primary) !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.lab-header h1, .lab-header h2,
+.rs-header h1, .rs-header h2,
+.ref-header h1, .ref-header h2,
+.user-header h1, .user-header h2,
+.page-header h1, .page-header h2,
+.admin-header h1, .admin-header h2 {
+  color: #fff !important;
+}
+.lab-header i, .rs-header i, .ref-header i,
+.user-header i, .page-header i, .admin-header i {
+  color: var(--admin-gold) !important;
+}
+.lab-sub, .rs-sub, .ref-sub, .user-sub, .page-sub {
+  color: rgba(255,255,255,0.9) !important;
+}
+
+/* ===== All tables inside admin pages ===== */
+table:not(.no-theme):not(.ts-kpi):not(.modal-dialog *):not(.pagination *) {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid var(--admin-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+table:not(.no-theme):not(.ts-kpi) thead th {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-accent) 100%) !important;
+  color: #fff !important;
+  padding: 10px 12px !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border-right: 1px solid var(--admin-border) !important;
+  border-bottom: 2px solid var(--admin-border) !important;
+}
+table:not(.no-theme):not(.ts-kpi) thead th:last-child {
+  border-right: none !important;
+}
+table:not(.no-theme):not(.ts-kpi) tbody td {
+  padding: 8px 12px !important;
+  border-bottom: 1px solid var(--admin-border) !important;
+  border-right: 1px solid var(--admin-border) !important;
+  vertical-align: middle;
+}
+table:not(.no-theme):not(.ts-kpi) tbody td:last-child {
+  border-right: none !important;
+}
+table:not(.no-theme):not(.ts-kpi) tbody tr:last-child td {
+  border-bottom: none !important;
+}
+table:not(.no-theme):not(.ts-kpi) tbody tr:nth-child(even) td {
+  background: #f7f9fc !important;
+}
+table:not(.no-theme):not(.ts-kpi) tbody tr:hover td {
+  background: #eaf2ff !important;
+}
+
+/* ===== Buttons ===== */
+.btn-primary:not(.no-theme) {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-accent) 100%) !important;
+  border: 2px solid var(--admin-primary) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+.btn-primary:not(.no-theme):hover {
+  filter: brightness(1.15);
+  border-color: var(--admin-primary) !important;
+}
+.btn-outline-primary {
+  border: 2px solid var(--admin-primary) !important;
+  color: var(--admin-primary) !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+
+/* ===== Forms ===== */
+.form-control:not(.no-theme), .form-select:not(.no-theme) {
+  border: 2px solid #ced4da !important;
+  border-radius: 8px !important;
+}
+.form-control:not(.no-theme):focus, .form-select:not(.no-theme):focus {
+  border-color: var(--admin-accent) !important;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+}
+
+/* ===== Cards ===== */
+.card:not(.no-theme), .panel:not(.no-theme) {
+  border: 2px solid var(--admin-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* ===== Alerts ===== */
+.alert {
+  border-radius: 10px !important;
+  border-width: 2px !important;
+  font-weight: 500;
+}
+
+/* ===== Modals ===== */
+.modal-content:not(.no-theme) {
+  border-radius: 14px !important;
+  border: 2px solid var(--admin-border) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25) !important;
+}
+
+/* ===== Pills / Badges ===== */
+.badge, .pill, .pill-active, .pill-inactive {
+  border-radius: 8px !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+
+/* ===== BROAD PATTERN: any admin page header/filter ===== */
+[class$="-header"], [class*="-header "]:not(.modal-header):not(.card-header):not(.dropdown-header) {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+  margin-bottom: 14px !important;
+}
+[class$="-header"] h1,
+[class$="-header"] h2,
+[class$="-header"] h3,
+[class$="-header"] [class$="-title"],
+[class$="-header"] [class$="-title"] i,
+[class$="-header"] [class$="-sub"],
+[class$="-header"] [class$="-subtitle"] {
+  color: #fff !important;
+}
+[class$="-header"] i {
+  color: #ffd166 !important;
+}
+
+[class$="-picker"], [class$="-filter"], [class$="-toolbar"], [class$="-strip"] {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) !important;
+  padding: 14px 16px !important;
+}
+[class$="-picker"] label,
+[class$="-filter"] label,
+[class$="-toolbar"] label {
+  color: #1a3d7c !important;
+  font-weight: 800 !important;
+}
+[class$="-picker"] select,
+[class$="-picker"] input,
+[class$="-filter"] select,
+[class$="-filter"] input,
+[class$="-toolbar"] select,
+[class$="-toolbar"] input {
+  border: 2px solid #ced4da !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  height: 36px !important;
+}
+
+[class$="-empty"] {
+  border: 2px dashed #1a3d7c !important;
+  border-radius: 12px !important;
+  background: #f0f4ff !important;
+  color: #1a3d7c !important;
+  padding: 24px !important;
+  font-weight: 600;
+}
+
+
+/* ===== Admin form cards (culture labels, references, etc.) ===== */
+.branding-form, .labels-form, .settings-form,
+form[method="POST"] > .card,
+.card-body {
+  border-radius: 12px;
+}
+
+/* Form labels: uppercase, colored */
+.form-label,
+label.form-label {
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #1a3d7c !important;
+}
+
+/* Form inputs = 2px border + focus ring */
+.form-control, .form-select, textarea.form-control {
+  border: 2px solid #ced4da !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 0.92rem;
+}
+.form-control:focus, .form-select:focus, textarea.form-control:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+}
+
+/* Form helper text */
+.form-text, small.text-muted {
+  font-size: 0.74rem !important;
+  color: #6c757d !important;
+}
+
+/* Save button (primary) */
+.btn-success {
+  background: linear-gradient(135deg, #198754 0%, #20c997 100%) !important;
+  border: 2px solid #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  padding: 8px 22px !important;
+}
+.btn-success:hover {
+  filter: brightness(1.15);
+}
+
+/* Cancel / secondary buttons */
+.btn-outline-secondary, .btn-light {
+  border: 2px solid #495057 !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  color: #495057 !important;
+  padding: 8px 22px !important;
+}
+.btn-outline-secondary:hover {
+  background: #495057 !important;
+  color: #fff !important;
+}
+
+/* Card wrapper around forms */
+.row.g-3, .row.gy-3 {
+  background: #fff;
+  border: 2px solid #212529;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+
+/* ===== Culture Labels page (cl-* classes) ===== */
+.cl-header {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  border: 2px solid #1a3d7c !important;
+  margin-bottom: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+.cl-title, .cl-title i { color: #fff !important; }
+.cl-title i { color: #ffd166 !important; }
+.cl-sub { color: rgba(255,255,255,0.9) !important; }
+.cl-btn {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #fff !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 7px 16px !important;
+}
+.cl-btn:hover {
+  background: #ffd166 !important;
+  border-color: #ffd166 !important;
+  color: #1a1a1a !important;
+}
+
+.cl-card {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  padding: 24px 28px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.cl-row {
+  margin-bottom: 14px;
+}
+.cl-lbl {
+  display: block !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #1a3d7c !important;
+  margin-bottom: 6px !important;
+}
+
+.cl-input {
+  width: 100% !important;
+  padding: 10px 14px !important;
+  border: 3px solid #1a1a1a !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  border-radius: 8px !important;
+  font-size: 0.92rem !important;
+  background: #fff !important;
+}
+.cl-input:focus {
+  outline: none;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+}
+
+.cl-hint {
+  font-size: 0.74rem !important;
+  color: #6c757d !important;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Save / Cancel buttons inside form */
+.cl-card .btn,
+.cl-card button[type="submit"] {
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 8px 22px !important;
+}
+
+
+/* ===== Culture Labels action buttons (form footer) ===== */
+.cl-card .cl-actions,
+.cl-card .form-actions,
+.cl-card .actions,
+.cl-card > div:last-child {
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 2px solid #dee2e6;
+}
+
+/* Save Labels — primary */
+.cl-card button[type="submit"],
+.cl-card .btn-save,
+.cl-card .cl-btn-save {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #fff !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 10px 24px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem !important;
+  box-shadow: 0 2px 6px rgba(13,110,253,0.25) !important;
+  transition: all .12s;
+  cursor: pointer;
+}
+.cl-card button[type="submit"]:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 4px 12px rgba(13,110,253,0.35) !important;
+}
+
+/* Cancel / secondary */
+.cl-card a.cl-btn,
+.cl-card button[type="button"],
+.cl-card .btn-cancel {
+  background: #fff !important;
+  color: #1a3d7c !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 10px 24px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: all .12s;
+}
+.cl-card a.cl-btn:hover,
+.cl-card button[type="button"]:hover {
+  background: #1a3d7c !important;
+  color: #fff !important;
+}
+
+
+/* ===== Antibiotics page: action buttons ===== */
+.ab-btn, .ab-edit, .ab-delete, .ab-toggle,
+table td .btn-edit, table td .btn-delete, table td .btn-toggle,
+table td a.btn, table td button.btn {
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  font-size: 0.74rem !important;
+  padding: 6px 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-width: 2px !important;
+  transition: all .12s;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Edit = blue outline */
+table td .btn-edit,
+table td a[href*="/edit"],
+table td button[onclick*="edit"],
+.ab-edit {
+  background: #fff !important;
+  color: #0d6efd !important;
+  border: 2px solid #0d6efd !important;
+}
+table td .btn-edit:hover,
+table td a[href*="/edit"]:hover,
+table td button[onclick*="edit"]:hover,
+.ab-edit:hover {
+  background: #0d6efd !important;
+  color: #fff !important;
+}
+
+/* Deactivate / toggle = amber */
+table td .btn-toggle,
+table td button[onclick*="toggle"],
+table td button[onclick*="deactivate"],
+.ab-toggle {
+  background: #fff !important;
+  color: #b8860b !important;
+  border: 2px solid #ffc107 !important;
+}
+table td .btn-toggle:hover,
+table td button[onclick*="toggle"]:hover,
+table td button[onclick*="deactivate"]:hover,
+.ab-toggle:hover {
+  background: #ffc107 !important;
+  color: #1a1a1a !important;
+}
+
+/* Delete = red outline */
+table td .btn-delete,
+table td button[onclick*="delete"],
+table td button[onclick*="Delete"],
+.ab-delete {
+  background: #fff !important;
+  color: #dc3545 !important;
+  border: 2px solid #dc3545 !important;
+}
+table td .btn-delete:hover,
+table td button[onclick*="delete"]:hover,
+table td button[onclick*="Delete"]:hover,
+.ab-delete:hover {
+  background: #dc3545 !important;
+  color: #fff !important;
+}
+
+/* Search input on antibiotics (and any admin search field) */
+.app-content input[type="text"],
+.app-content input[type="search"],
+.app-content .search-input {
+  border: 2px solid #1a1a1a !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 0.9rem !important;
+  background: #fff !important;
+}
+.app-content input[type="text"]:focus,
+.app-content input[type="search"]:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+}
+
+/* Search + Add buttons next to input */
+.app-content .btn-search,
+.app-content button[onclick*="search"],
+.app-content .btn-add {
+  border-radius: 8px !important;
+  border: 2px solid #198754 !important;
+  background: #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  padding: 8px 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.78rem !important;
+}
+.app-content .btn-search:hover,
+.app-content button[onclick*="search"]:hover,
+.app-content .btn-add:hover {
+  filter: brightness(1.15);
+}
+
+/* Form fields inside modals on this page */
+.modal-body .form-control,
+.modal-body .form-select {
+  border: 2px solid #ced4da !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+}
+
+
+/* ===== STATUS pills (ACTIVE / INACTIVE) ===== */
+.app-content .badge,
+.app-content .pill,
+.app-content .status-active,
+.app-content .status-inactive,
+table td .badge,
+table td .pill,
+table td span[class*="status"] {
+  display: inline-block !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em;
+  border: 2px solid transparent;
+  white-space: nowrap;
+}
+
+/* ACTIVE (green) */
+.app-content .badge.bg-success,
+.app-content .badge-success,
+.app-content .status-active,
+.app-content .pill-active,
+table td .badge.bg-success,
+table td .status-active {
+  background: #198754 !important;
+  color: #fff !important;
+  border-color: #0f5132 !important;
+  box-shadow: 0 1px 3px rgba(25,135,84,0.3);
+}
+
+/* INACTIVE (grey/red) */
+.app-content .badge.bg-secondary,
+.app-content .badge-secondary,
+.app-content .status-inactive,
+.app-content .pill-inactive,
+table td .badge.bg-secondary,
+table td .status-inactive {
+  background: #6c757d !important;
+  color: #fff !important;
+  border-color: #495057 !important;
+  box-shadow: 0 1px 3px rgba(108,117,125,0.3);
+}
+
+/* Delete/inactive (red) */
+.app-content .badge.bg-danger,
+.app-content .status-deleted,
+table td .badge.bg-danger,
+table td .status-deleted {
+  background: #dc3545 !important;
+  color: #fff !important;
+  border-color: #a71d2a !important;
+}
+
+/* ===== ACTIONS column: tighter layout ===== */
+.actions-col {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+/* Small action buttons */
+table td .btn,
+table td button.btn,
+table td a.btn,
+table td .ab-btn,
+table td .ab-edit,
+table td .ab-delete,
+table td .ab-toggle {
+  min-height: 28px !important;
+  height: 28px !important;
+  padding: 2px 10px !important;
+  line-height: 1 !important;
+  font-size: 0.7rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  gap: 3px !important;
+}
+
+/* Icon-only buttons in actions */
+table td button:has(> i:only-child),
+table td a:has(> i:only-child),
+table td .btn-icon {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  min-width: 28px !important;
+}
+
+/* Icon sizing inside buttons */
+table td button i,
+table td a i {
+  font-size: 0.8rem !important;
+}
+
+/* Compact row padding */
+.app-content table tbody td {
+  padding: 6px 8px !important;
+}
+
+
+/* ===== Antibiotics: uniform action buttons ===== */
+.app-content table td .actions-cell,
+.app-content table td[class*="action"],
+.app-content table td:last-child {
+  white-space: nowrap !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.app-content table td:last-child .btn,
+.app-content table td:last-child a,
+.app-content table td:last-child button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  min-width: 32px !important;
+  height: 30px !important;
+  padding: 0 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  border-width: 2px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em;
+  text-decoration: none !important;
+  vertical-align: middle;
+  line-height: 1;
+  margin: 0 2px !important;
+}
+
+/* Icon-only (delete trash) */
+.app-content table td:last-child .btn:has(> i:only-child),
+.app-content table td:last-child button:has(> i:only-child),
+.app-content table td:last-child a:has(> i:only-child) {
+  width: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+}
+
+/* ===== Antibiotics: bigger ACTIVE pill ===== */
+.app-content table td .badge,
+.app-content table td .pill,
+.app-content table td [class*="status"] {
+  display: inline-block !important;
+  padding: 5px 14px !important;
+  font-size: 0.74rem !important;
+  font-weight: 800 !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+}
+
+.app-content table td .badge.bg-success,
+.app-content table td .status-active,
+.app-content table td [class*="status-active"] {
+  background: #198754 !important;
+  color: #fff !important;
+  border: 2px solid #0f5132 !important;
+}
+
+/* ===== Bigger general table font on admin pages ===== */
+.app-content table tbody td {
+  font-size: 0.92rem !important;
+  padding: 8px 10px !important;
+}
+.app-content table thead th {
+  font-size: 0.8rem !important;
+  padding: 10px 10px !important;
+}

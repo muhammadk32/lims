@@ -211,6 +211,127 @@
     background: var(--bs-tertiary-bg);
     border-radius: 0 0 12px 12px;
   }
+/* ===== Bigger fonts for labs table ===== */
+.lab-table thead th { font-size: 0.9rem !important; padding: 14px 12px !important; letter-spacing: 0.06em !important; }
+.lab-table tbody td { font-size: 1rem !important; padding: 12px 10px !important; }
+.lab-table .edit-input { font-size: 0.95rem !important; height: 36px !important; padding: 8px 12px !important; }
+.lab-table .pill { font-size: 0.78rem !important; padding: 5px 12px !important; font-weight: 800 !important; }
+
+/* ===== Colored action buttons ===== */
+.lab-table td.actions .lab-btn-sm {
+  width: 34px !important; height: 34px !important; border-radius: 8px !important;
+  font-size: 1rem !important; font-weight: 700 !important; display: inline-flex !important;
+  align-items: center !important; justify-content: center !important; border-width: 2px !important;
+  transition: all .12s !important;
+}
+/* Save (green) */
+.lab-table td.actions .lab-btn-primary {
+  background: #198754 !important; border-color: #198754 !important; color: #fff !important;
+}
+.lab-table td.actions .lab-btn-primary:hover { background: #146c43 !important; filter: brightness(1.15); }
+/* Toggle/Power (amber) */
+.lab-table td.actions .lab-btn-warn {
+  background: #ffc107 !important; border-color: #e0a800 !important; color: #1a1a1a !important;
+}
+.lab-table td.actions .lab-btn-warn:hover { background: #e0a800 !important; }
+/* Delete (red) */
+.lab-table td.actions .lab-btn-danger {
+  background: #dc3545 !important; border-color: #dc3545 !important; color: #fff !important;
+}
+.lab-table td.actions .lab-btn-danger:hover { background: #a71d2a !important; }
+/* ===== Name/Contact/Phone column styling ===== */
+.lab-table td:nth-child(1) .edit-input {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #1a3d7c !important;
+  background: #f0f4ff !important;
+  letter-spacing: 0.01em;
+}
+.lab-table td:nth-child(2) .edit-input {
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  color: #212529 !important;
+  background: #fff !important;
+}
+.lab-table td:nth-child(3) .edit-input {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #495057 !important;
+  background: #f8f9fa !important;
+  font-family: Consolas, Monaco, monospace !important;
+  letter-spacing: 0.03em;
+}
+/* Focus states keep brand color */
+.lab-table td:nth-child(1) .edit-input:focus,
+.lab-table td:nth-child(2) .edit-input:focus,
+.lab-table td:nth-child(3) .edit-input:focus {
+  background: #fff !important;
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+}
+/* ===== Force larger bolder inputs everywhere in labs table ===== */
+.lab-table tbody td .edit-input {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+  height: 42px !important;
+  padding: 10px 14px !important;
+  letter-spacing: 0.01em !important;
+}
+.lab-table tbody td:nth-child(1) .edit-input { color: #1a3d7c !important; background: #e7f1ff !important; }
+.lab-table tbody td:nth-child(2) .edit-input { color: #212529 !important; background: #fff !important; }
+.lab-table tbody td:nth-child(3) .edit-input { color: #495057 !important; background: #f8f9fa !important; font-family: Consolas, monospace !important; }
+/* ===== Distinct background per input column ===== */
+.lab-table tbody td:nth-child(1) .edit-input {
+  background: #e7f1ff !important;
+  border-color: #0d6efd !important;
+  color: #0a3d8f !important;
+}
+.lab-table tbody td:nth-child(2) .edit-input {
+  background: #e7f7ee !important;
+  border-color: #198754 !important;
+  color: #0f5132 !important;
+}
+.lab-table tbody td:nth-child(3) .edit-input {
+  background: #fff8e1 !important;
+  border-color: #ffc107 !important;
+  color: #664d03 !important;
+}
+.lab-table tbody td:nth-child(4) .edit-input {
+  background: #fdecef !important;
+  border-color: #dc3545 !important;
+  color: #842029 !important;
+}
+.lab-table tbody td:nth-child(5) .edit-input {
+  background: #f4eefe !important;
+  border-color: #6f42c1 !important;
+  color: #432874 !important;
+}
+.lab-table tbody td:nth-child(1) .edit-input:focus,
+.lab-table tbody td:nth-child(2) .edit-input:focus,
+.lab-table tbody td:nth-child(3) .edit-input:focus,
+.lab-table tbody td:nth-child(4) .edit-input:focus,
+.lab-table tbody td:nth-child(5) .edit-input:focus {
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.2) !important;
+}
+/* ===== Fit text inside inputs (reference labs) ===== */
+.lab-table tbody td .edit-input {
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+  padding: 6px 10px !important;
+  height: 34px !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.lab-table tbody td:nth-child(1) .edit-input { font-size: 0.9rem !important; font-weight: 700 !important; }
+.lab-table tbody td:nth-child(2) .edit-input { font-size: 0.86rem !important; font-weight: 500 !important; }
+.lab-table tbody td:nth-child(3) .edit-input { font-size: 0.86rem !important; font-weight: 600 !important; font-family: Consolas, monospace !important; }
+.lab-table tbody td:nth-child(5) .edit-input {
+  font-size: 0.82rem !important;
+  padding: 6px 8px !important;
+}
 </style>
 {% endblock %}
 
@@ -319,13 +440,6 @@
     <!-- ============================== OUTSOURCED ============================== -->
     {% if view != 'ref' %}
     <section class="lab-panel" id="panel-outsourced">
-      <header class="lab-panel-head" onclick="document.getElementById('panel-outsourced').classList.toggle('collapsed')">
-        <h2><i class="bi bi-box-seam"></i> Outsourced Laboratories</h2>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span class="count">{{ rows_out|length }}</span>
-          <i class="bi bi-chevron-down chev"></i>
-        </div>
-      </header>
       <div class="lab-panel-body">
 
         {% if rows_out %}
