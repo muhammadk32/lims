@@ -7,6 +7,28 @@
 {% endblock %}
 
 {% block content %}
+<style>
+/* ===== round corners global ===== */
+/* Section cells (patient, tests, billing, etc.) */
+.rec-cell { border-radius:12px !important; overflow:hidden; border:2px solid #212529 !important; }
+.rec-cell-title { border-radius:12px 12px 0 0 !important; padding:10px 14px !important; border-bottom:2px solid #212529 !important; }
+.rec-cell-body { padding:10px 12px !important; }
+/* Tables inside cells */
+.rec-cell .basket-table { border-collapse:separate !important; border-spacing:0 !important; border:2px solid #212529 !important; border-radius:10px !important; overflow:hidden !important; }
+.rec-cell .basket-table thead th { border-right:1px solid #444 !important; }
+.rec-cell .basket-table thead th:last-child { border-right:none !important; }
+.rec-cell .basket-table tbody td { border-bottom:1px solid #212529 !important; border-right:1px solid #212529 !important; }
+.rec-cell .basket-table tbody td:last-child { border-right:none !important; }
+/* Inputs / selects */
+.rec-cell .form-control, .rec-cell .form-select { border-radius:8px !important; }
+/* Health package bar */
+#packagePicker, #packagePicker option { border-radius:6px !important; }
+/* Billing summary box */
+.billing-summary, .billing-box, .receipt-summary { border-radius:12px !important; }
+/* Buttons */
+.rec-cell .btn { border-radius:8px !important; }
+</style>
+
 <script>window.LAB_RATE_MAP = {{ rate_map|default({})|tojson }};</script>
 <div class="rec-page" id="recPage" data-currency="{{ config.currency_symbol }}">
 
@@ -250,6 +272,19 @@
          ============================================================ #}
       {% set tests_section = config.sections | selectattr('key', 'equalto', 'tests') | first %}
       <div class="rec-cell" data-area="tests">
+        <div style="display:flex; justify-content:flex-end; margin-bottom:6px;">
+          <div style="background:linear-gradient(135deg,#1a3d7c 0%,#0d6efd 100%); color:#fff; border-radius:10px; padding:8px 14px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+            <label style="font-weight:700; font-size:0.78rem; text-transform:uppercase; color:#ffd166; margin:0; white-space:nowrap; letter-spacing:0.04em;">
+              <i class="bi bi-box-seam-fill"></i> Health Package
+            </label>
+            <select id="packagePicker" class="form-select form-select-sm" style="max-width:300px; background:#fff; color:#1a3d7c; font-weight:600; border:none;" onchange="if(typeof window.__onPackagePick==='function'){window.__onPackagePick(this.value);}">
+              <option value="">— Select a package —</option>
+              {% for pkg in (packages or []) %}
+              <option value="{{ pkg.id }}" data-price="{{ pkg.price or 0 }}" data-code="{{ pkg.code }}" data-name="{{ pkg.name }}" data-is-panel="{{ 1 if pkg.is_panel else 0 }}">{{ pkg.name }} ({{ pkg.code }})</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
         <div class="rec-cell-title">
           <i class="bi bi-clipboard2-pulse"></i> Tests &amp; Panels
           <span class="badge bg-secondary" id="testCountBadge">0 selected</span>
@@ -511,5 +546,34 @@
   document.addEventListener('DOMContentLoaded', syncRateManagedFields);
   setInterval(syncRateManagedFields, 300);
 })();
+</script>
+
+<script>
+window.__onPackagePick = function(pkgId) {
+  if (!pkgId) return;
+  var sel = document.getElementById('packagePicker');
+  var opt = sel.options[sel.selectedIndex];
+  if (!opt) return;
+  var pkgName = opt.dataset.name;
+  var searchInput = document.getElementById('testSearch');
+  if (searchInput) {
+    searchInput.value = pkgName;
+    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    searchInput.dispatchEvent(new Event('change', { bubbles: true }));
+    searchInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'a' }));
+    searchInput.focus();
+    // Give the search debounce a moment, then check results
+    setTimeout(function() {
+      var results = document.getElementById('testSearchResults');
+      if (results && results.style.display !== 'none' && results.children.length > 0) {
+        var firstResult = results.querySelector('.test-search-result');
+        if (firstResult) { firstResult.click(); }
+      } else {
+        console.warn('[pkg-pick] search returned no results for', pkgName);
+      }
+    }, 400);
+  }
+  sel.selectedIndex = 0;
+};
 </script>
 {% endblock %}

@@ -28,6 +28,20 @@
   const $newPatientForm = document.getElementById('newPatientForm');
 
   const $testSearch = document.getElementById('testSearch');
+  // ===== Children tooltip cache =====
+  var __childrenCache = {};
+  function __fetchChildren(testId) {
+    if (__childrenCache[testId]) return Promise.resolve(__childrenCache[testId]);
+    return fetch('/orders/api/test-children/' + testId)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        __childrenCache[testId] = data;
+        return data;
+      })
+      .catch(function(){ return {children: []}; });
+  }
+  window.__fetchChildren = __fetchChildren;
+
   const $testSearchResults = document.getElementById('testSearchResults');
   const $selectedTestsList = document.getElementById('selectedTestsList');
   const $testCountBadge = document.getElementById('testCountBadge');
@@ -478,6 +492,10 @@
     renderSelectedTests();
     updateBilling();
   }
+  window.addTest = addTest;
+  window.state = state;
+  window.renderSelectedTests = renderSelectedTests;
+  window.updateBilling = updateBilling;
 
   function removeTest(id) {
     state.selectedTests = state.selectedTests.filter(x => x.id !== id);
@@ -534,6 +552,25 @@
         if (state.selectedTests[i]) state.selectedTests[i][f] = ev.target.value;
       });
     });
+    // attach children tooltips
+    state.selectedTests.forEach((t, idx) => {
+      if (!t.is_panel && !t.parameter_count) return;
+      var tr = body.querySelectorAll('tr')[idx];
+      if (!tr) return;
+      __fetchChildren(t.id).then(function(data){
+        if (!data || !data.children || !data.children.length) {
+          tr.title = '(no children)';
+          return;
+        }
+        var lines = ['Children of ' + data.name + ':'];
+        data.children.forEach(function(c){
+          lines.push('  ' + c.code + ' — ' + c.name + ' (Rs ' + c.price + ')');
+        });
+        tr.title = lines.join('\n');
+        tr.style.cursor = 'help';
+      });
+    });
+
     body.querySelectorAll('.si-remove').forEach(btn => {
       btn.addEventListener('click', ev => {
         const i = parseInt(ev.currentTarget.getAttribute('data-idx'), 10);

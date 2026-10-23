@@ -165,8 +165,15 @@ def new_order():
                     'parameter_count': len(t.get_parameters()) if t.is_panel else 0,
                 })
 
+    from modules.tests.models import Test
+    packages = (Test.query
+                .filter(Test.is_active == True,
+                        Test.result_format == 'package')
+                .order_by(Test.name.asc()).all())
+
     return render_template(
         'orders/new.html',
+        packages=packages,
         rate_map=build_lab_rate_map(),
         config=get_form_config(),
         doctors=q.get_doctors(),
@@ -562,4 +569,26 @@ def api_patient_last_order():
         'created_at': order.created_at.strftime('%d-%b-%Y') if order.created_at else '',
         'tests': items_out,
         'skipped': skipped,
+    })
+
+
+@orders_bp.route('/api/test-children/<int:test_id>')
+@login_required
+def api_test_children(test_id):
+    from modules.tests.models import Test, PanelParameter
+    t = Test.query.get_or_404(test_id)
+    children = []
+    links = (PanelParameter.query
+             .filter_by(panel_id=t.id)
+             .order_by(PanelParameter.sort_order.asc()).all())
+    for link in links:
+        c = Test.query.get(link.test_id)
+        if c:
+            children.append({
+                'id': c.id, 'code': c.code, 'name': c.name,
+                'price': float(c.price or 0),
+            })
+    return jsonify({
+        'id': t.id, 'code': t.code, 'name': t.name,
+        'children': children,
     })
