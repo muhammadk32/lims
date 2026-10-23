@@ -1030,3 +1030,123 @@ def rate_test_save_override(cat_id, test_id):
     if dept:
         return redirect(url_for('tests.index', tab='rates', cat=cat_id, dept=dept))
     return redirect(url_for('tests.index', tab='rates', cat=cat_id))
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/export.csv')
+@login_required
+@permission_required('manage_tests')
+def rate_list_export_csv(cat_id):
+    from flask import Response
+    from .models import (RateCategory, RateCategoryTest,
+                         RateCategoryDeptRate, Test, TestCategory)
+    import csv, io
+
+    cat = RateCategory.query.get_or_404(cat_id)
+    dept_rates = {d.department_id: d for d in
+                  RateCategoryDeptRate.query.filter_by(rate_category_id=cat.id).all()}
+    rows = (RateCategoryTest.query
+            .filter_by(rate_category_id=cat.id)
+            .order_by(RateCategoryTest.sort_order.asc()).all())
+
+    buf = io.StringIO()
+    buf.write('\ufeff')  # UTF-8 BOM for Excel
+    w = csv.writer(buf)
+    w.writerow(['Test Code', 'Test Name', 'Department',
+                'Lab Rate', 'Discount %', 'Discount Amt',
+                'Net Rate', 'Commission %'])
+    for r in rows:
+        t = Test.query.get(r.test_id)
+        if not t: continue
+        dept = TestCategory.query.get(t.category_id) if t.category_id else None
+        dr = dept_rates.get(t.category_id) if t.category_id else None
+        dept_pct = (dr.discount_percent or 0) if dr else 0
+        dept_comm = (dr.commission_percent or 0) if dr else 0
+        eff_pct = r.discount_percent if r.discount_percent is not None else dept_pct
+        eff_comm = r.commission_percent if r.commission_percent is not None else dept_comm
+        price = float(t.price or 0)
+        disc_amt = round(price * eff_pct / 100.0, 2)
+        net = round(price - disc_amt, 2)
+        w.writerow([t.code, t.name, dept.name if dept else '',
+                    f'{price:.2f}', f'{eff_pct:.2f}', f'{disc_amt:.2f}',
+                    f'{net:.2f}', f'{eff_comm:.2f}'])
+
+    data = buf.getvalue()
+    fname = f'rate_list_{cat.name.replace(" ", "_")}.csv'
+    return Response(data, mimetype='text/csv',
+                    headers={'Content-Disposition': f'attachment; filename={fname}'})
+
+
+@tests_bp.route('/rate-lists/<int:cat_id>/export', methods=['GET'])
+@login_required
+@permission_required('manage_tests')
+def rate_list_export_preview(cat_id):
+    from .models import (RateCategory, RateCategoryTest, RateCategoryDeptRate,
+                         Test, TestCategory, Specimen)
+    cat = RateCategory.query.get_or_404(cat_id)
+
+    # Filters from query string
+    report_type = (request.args.get('report_type') or 'department').lower()
+    variant = (request.args.get('variant') or 'with_discount').lower()
+    department_id = request.args.get('department', type=int)
+    category_id = request.args.get('category', type=int)
+    run = bool(request.args.get('run'))
+
+    def _fmt_time(hours):
+        if not hours or hours <= 24: return 'SAME DAY'
+        if hours < 48: return 'AFTER ONE DAY'
+        days = round(hours / 24)
+        if days < 7: return f'AFTER {days} DAYS'
+        weeks = round(days / 7)
+        return f'AFTER {weeks} WEEK' + ('S' if weeks > 1 else '')
+
+    # Departments = TestCategory
+    departments = TestCategory.query.order_by(TestCategory.name.asc()).all()
+
+    rows = []
+    if run:
+        dept_rates = {d.department_id: d for d in
+                      RateCategoryDeptRate.query.filter_by(rate_category_id=cat.id).all()}
+        q = (RateCategoryTest.query
+             .filter_by(rate_category_id=cat.id)
+             .order_by(RateCategoryTest.sort_order.asc()))
+        for rct in q.all():
+            t = Test.query.get(rct.test_id)
+            if not t: continue
+            if department_id and t.category_id != department_id: continue
+            if category_id and t.category_id != category_id: continue
+            dept = TestCategory.query.get(t.category_id) if t.category_id else None
+            dr = dept_rates.get(t.category_id) if t.category_id else None
+            dept_pct = (dr.discount_percent or 0) if dr else 0
+            dept_comm = (dr.commission_percent or 0) if dr else 0
+            eff_pct = rct.discount_percent if rct.discount_percent is not None else dept_pct
+            eff_comm = rct.commission_percent if rct.commission_percent is not None else dept_comm
+            price = float(t.price or 0)
+            disc_amt = round(price * eff_pct / 100.0, 2)
+            net = round(price - disc_amt, 2)
+            spec = Specimen.query.get(t.specimen_id) if t.specimen_id else None
+            rows.append({
+                'code': t.code, 'name': t.name,
+                'department': dept.name if dept else '',
+                'specimen': spec.name if spec else (t.sample_type or '—'),
+                'reporting_time': _fmt_time(t.turnaround_hours),
+                'price': price, 'discount_pct': eff_pct,
+                'discount_amt': disc_amt, 'net': net,
+                'commission_pct': eff_comm,
+            })
+
+    ctx = {
+        'tab': 'rates',
+        'rate_category': cat,
+        'departments': departments,
+        'report_type': report_type,
+        'variant': variant,
+        'department_id': department_id,
+        'category_id': category_id,
+        'rows': rows,
+        'run': run,
+    }
+    # DEBUG
+    if rows:
+        print('DEBUG first row keys:', list(rows[0].keys()))
+        print('DEBUG first row:', rows[0])
+    return render_template('test_settings/_rate_list_export.html', **ctx)

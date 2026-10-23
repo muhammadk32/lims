@@ -1,0 +1,175 @@
+{# ============ RATE LIST EXPORT / PRINT PREVIEW ============ #}
+<style>
+.rle-wrap { max-width:1200px; margin:0 auto; padding:10px; }
+.rle-head { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #212529; padding-bottom:8px; margin-bottom:14px; }
+.rle-head h2 { font-size:1.15rem; margin:0; }
+.rle-back { padding:6px 14px; border:2px solid #212529; border-radius:8px; background:#fff; color:#212529; text-decoration:none; font-weight:600; font-size:0.82rem; }
+.rle-filters { background:#f8f9fa; border:2px solid #212529; border-radius:12px; padding:14px; margin-bottom:16px; display:grid; grid-template-columns: repeat(4, 1fr); gap:12px 16px; }
+.rle-filters label { display:block; font-size:0.74rem; font-weight:700; text-transform:uppercase; color:#495057; margin-bottom:4px; letter-spacing:0.03em; }
+.rle-filters select { width:100%; padding:6px 10px; border:1px solid #212529; border-radius:6px; font-size:0.86rem; }
+.rle-filters .actions { grid-column: 1 / -1; display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+.rle-btn { padding:6px 18px; border:2px solid #212529; border-radius:8px; background:#fff; color:#212529; font-weight:600; font-size:0.85rem; cursor:pointer; text-decoration:none; }
+.rle-btn-primary { background:#0d6efd; border-color:#0d6efd; color:#fff; }
+.rle-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* ===== printable report ===== */
+.rle-report { background:#fff; padding:20px 24px; }
+.rle-brand { display:flex; align-items:center; gap:14px; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:12px; }
+.rle-brand img { height:60px; }
+.rle-brand .name { font-size:1.3rem; font-weight:800; letter-spacing:0.02em; color:#b81414; }
+.rle-brand .sub { font-size:0.8rem; color:#555; }
+.rle-report-title { font-size:1rem; font-weight:700; margin:6px 0 12px; text-transform:uppercase; }
+.rle-table { width:100%; border-collapse:collapse; font-size:0.82rem; border:2px solid #212529; border-radius:8px; overflow:hidden; }
+.rle-table thead th { background:#212529; color:#fff; padding:7px 8px; text-align:left; font-size:0.76rem; text-transform:uppercase; border-right:1px solid #333; }
+.rle-table thead th:last-child { border-right:none; }
+.rle-table tbody td:last-child { border-right:none; }
+.rle-table tbody td { padding:4px 8px; border-bottom:1px solid #212529; border-right:1px solid #212529; vertical-align:middle; }
+.rle-table tbody tr:nth-child(even) td { background:#f7f9fc; }
+.rle-table .num { text-align:right; font-family:Consolas,monospace; }
+.rle-dept-row td { background:#e3f2fd !important; font-weight:700; text-transform:uppercase; font-size:0.82rem; padding:6px 8px; border-top:2px solid #212529; }
+
+@media print {
+  .rle-filters, .rle-head, .rle-print-hint { display:none !important; }
+  .rle-wrap { padding:0; }
+  .rle-report { padding:0; }
+  .rle-table thead th { background:#000 !important; -webkit-print-color-adjust: exact; color:#fff !important; }
+  .rle-dept-row td { background:#e0e0e0 !important; -webkit-print-color-adjust: exact; }
+  .rle-table tbody tr:nth-child(even) td { background:#f4f4f4 !important; -webkit-print-color-adjust: exact; }
+}
+</style>
+
+<div class="rle-wrap">
+  <div class="rle-head">
+    <h2><i class="bi bi-file-earmark-arrow-down"></i> Export Rate List — {{ rate_category.name }}</h2>
+    <a href="{{ url_for('tests.index', tab='rates') }}" class="rle-back">← Back</a>
+  </div>
+
+  <form method="GET" class="rle-filters">
+    <input type="hidden" name="run" value="1">
+    <div>
+      <label>Report Type</label>
+      <select name="report_type">
+        <option value="department" {% if report_type=='department' %}selected{% endif %}>Department Wise</option>
+        <option value="category" {% if report_type=='category' %}selected{% endif %}>Category Wise</option>
+      </select>
+    </div>
+    <div>
+      <label>Rate List Variant</label>
+      <select name="variant">
+        <option value="with_discount" {% if variant=='with_discount' %}selected{% endif %}>Rate List With Discount</option>
+        <option value="without_discount" {% if variant=='without_discount' %}selected{% endif %}>Rate List Without Discount</option>
+        <option value="actual_rate" {% if variant=='actual_rate' %}selected{% endif %}>Rate List Actual Rate</option>
+        <option value="department_wise" {% if variant=='department_wise' %}selected{% endif %}>Rate List Department Wise</option>
+        <option value="category_wise" {% if variant=='category_wise' %}selected{% endif %}>Rate List Category Wise</option>
+        <option value="cover_page" {% if variant=='cover_page' %}selected{% endif %}>Print Cover Page</option>
+      </select>
+    </div>
+    <div>
+      <label>Department</label>
+      <select name="department">
+        <option value="">— All —</option>
+        {% for d in departments %}
+        <option value="{{ d.id }}" {% if department_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Category</label>
+      <select name="category">
+        <option value="">— All —</option>
+        {% for d in departments %}
+        <option value="{{ d.id }}" {% if category_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="actions">
+      <button type="submit" class="rle-btn rle-btn-primary">Run</button>
+      <button type="button" class="rle-btn" onclick="window.print()" {% if not rows %}disabled{% endif %}>Print</button>
+      <a href="{{ url_for('tests.rate_list_export_csv', cat_id=rate_category.id) }}" class="rle-btn">Download CSV</a>
+    </div>
+  </form>
+
+  {% if rows %}
+  <div class="rle-report">
+
+    {% if variant != 'cover_page' %}
+    <div class="rle-brand">
+      {% if settings and settings.logo_filename %}
+        <img src="{{ url_for('static', filename='uploads/branding/' ~ settings.logo_filename) }}" alt="logo">
+      {% endif %}
+      <div>
+        <div class="name">{{ settings.lab_name if settings else 'CURE CLINICAL LAB' }}</div>
+        <div class="sub">{{ settings.address if settings and settings.address else 'Rahim Yar Khan' }}</div>
+      </div>
+    </div>
+    <div class="rle-report-title">{{ rate_category.name }} {% if variant == 'with_discount' %}(With Discount){% elif variant == 'without_discount' %}(Without Discount){% elif variant == 'actual_rate' %}(Actual Rate){% elif variant == 'department_wise' %}(Department Wise){% elif variant == 'category_wise' %}(Category Wise){% endif %}</div>
+    {% endif %}
+
+    {% if variant == 'cover_page' %}
+      <div style="text-align:center; padding:80px 20px;">
+        <div style="font-size:1.6rem; font-weight:800; color:#b81414;">{{ settings.lab_name if settings else 'CURE CLINICAL LAB' }}</div>
+        <div style="font-size:0.95rem; color:#555; margin:8px 0 40px;">{{ settings.address if settings and settings.address else 'Rahim Yar Khan' }}</div>
+        <div style="font-size:2rem; font-weight:800; letter-spacing:0.05em;">RATE LIST</div>
+        <div style="font-size:1.15rem; margin-top:10px;">{{ rate_category.name }}</div>
+        <div style="font-size:0.9rem; color:#555; margin-top:30px;">Generated: {{ now.strftime('%d %b %Y') if now else '' }}</div>
+      </div>
+
+    {% else %}
+      <table class="rle-table">
+        <thead>
+          <tr>
+            <th style="width:40px;">#</th>
+            <th>Code</th>
+            <th>Test Name</th>
+            {% if variant in ('with_discount','without_discount','department_wise','category_wise','actual_rate') %}
+              {% if variant == 'with_discount' %}
+                <th class="num">Rate</th>
+                <th class="num">Disc.Rate</th>
+                <th class="num">Disc.%</th>
+              {% elif variant in ('department_wise','category_wise') %}
+                <th class="num">Disc.Rate</th>
+              {% elif variant == 'actual_rate' %}
+                <th class="num">Rate</th>
+              {% elif variant == 'without_discount' %}
+                <th class="num">Disc.Rate</th>
+              {% endif %}
+            {% endif %}
+            <th>Sample</th>
+            <th>Reporting Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set ns = namespace(last_dept='') %}
+          {% for r in rows %}
+            {% if variant in ('department_wise','category_wise') and r.department != ns.last_dept %}
+              <tr class="rle-dept-row"><td colspan="7">{{ r.department }}</td></tr>
+              {% set ns.last_dept = r.department %}
+            {% endif %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ r.code }}</td>
+              <td>{{ r.name }}</td>
+              {% if variant == 'with_discount' %}
+                <td class="num">{{ '%.0f'|format(r.price) }}</td>
+                <td class="num">{{ '%.0f'|format(r.net) }}</td>
+                <td class="num">{{ '%.2f'|format(r.discount_pct) }}</td>
+              {% elif variant == 'without_discount' %}
+                <td class="num">{{ '%.0f'|format(r.net) }}</td>
+              {% elif variant == 'actual_rate' %}
+                <td class="num">{{ '%.0f'|format(r.price) }}</td>
+              {% elif variant in ('department_wise','category_wise') %}
+                <td class="num">{{ '%.0f'|format(r.net) }}</td>
+              {% endif %}
+              <td>{{ r.specimen }}</td>
+              <td>{{ r.reporting_time }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+  </div>
+  {% elif run %}
+  <div class="alert alert-info">No rows matched the filters.</div>
+  {% endif %}
+</div>
