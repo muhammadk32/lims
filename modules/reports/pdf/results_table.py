@@ -2,7 +2,7 @@
 import re
 from reportlab.lib import colors
 from modules.tests.ranges import (
-    resolve_range_for_order as _rrfo,
+    resolve_range_for_order as _rrfo_raw,
     critical_for_order as _cfo,
     evaluate_for_order as _efo,
     pick_range_for_patient as _prfp,
@@ -14,6 +14,47 @@ from reportlab.platypus import Paragraph, Table, TableStyle, HRFlowable, Spacer
 from .branding import _get_lab, _hex
 from .culture_table import _culture_block as _culture_flowables
 
+
+
+def _rrfo(test, order):
+    """Wrap resolve_range_for_order: strip all HTML, return plain text."""
+    try:
+        raw = _rrfo_raw(test, order) or '-'
+    except Exception:
+        return '-'
+    import re as _r
+    s = str(raw)
+    # Remove complete tags
+    s = _r.sub(r'<[^>]*>', '', s)
+    # Remove dangling truncated tags (unclosed < ...)
+    s = _r.sub(r'<[^>]*$', '', s)
+    # Remove any remaining < or > leftovers
+    s = s.replace('<', '').replace('>', '')
+    # Collapse whitespace
+    s = _r.sub(r'\s+', ' ', s).strip()
+    return s or '-'
+
+
+def _sanitize_para(html):
+    """Clean up HTML fragments that break reportlab's paragraph parser.
+
+    - Removes <p> with only <br> inside
+    - Strips trailing <br> before closing </p>
+    - Collapses multiple consecutive <br> to one
+    """
+    if not html:
+        return ''
+    import re
+    s = str(html)
+    # empty <p>...</p> with only whitespace or brs
+    s = re.sub(r'<p>\s*(?:<br\s*/?>\s*)*</p>', '', s, flags=re.I)
+    # brs before </p>
+    s = re.sub(r'(?:<br\s*/?>\s*)+</p>', '</p>', s, flags=re.I)
+    # brs right after <p>
+    s = re.sub(r'<p>\s*(?:<br\s*/?>\s*)+', '<p>', s, flags=re.I)
+    # collapse runs
+    s = re.sub(r'(?:<br\s*/?>\s*){3,}', '<br/>', s, flags=re.I)
+    return s.strip()
 
 def _flag_result(normal_range, result_value):
     """Return 'normal' | 'abnormal' | 'unknown'."""
@@ -145,7 +186,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             tpl = None
 
         def _pick(a, b):
-            return a if a else (b if tpl else None)
+            return _sanitize_para(a if a else (b if tpl else None))
 
         specimen    = r.specimen if r else None
         result_type = (r.result_type or r.value) if r else None
@@ -360,7 +401,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                         Paragraph(child.test.name, panel_sub_style),
                         Paragraph('' if child_is_pcr else (child.result_value or '-'), cell_style),
                         Paragraph('' if child_is_pcr else (child.test.unit or '-'), cell_style),
-                        Paragraph('' if child_is_pcr else (_rrfo(child.test, order) or '-'), cell_style),
+                        Paragraph('' if child_is_pcr else _sanitize_para(_rrfo(child.test, order) or '-'), cell_style),
                     ]
                     for pv in prev_values_for(child.test.name):
                         row.append(Paragraph(pv or '-', cell_prev))

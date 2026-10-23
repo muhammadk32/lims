@@ -82,9 +82,15 @@ def index():
         status_filter = request.args.get('status', 'active').strip()
         page = request.args.get('page', 1, type=int)
         type_filter = request.args.get('type_filter', '').strip()
+        type_choice = request.args.get('type', 'tests').strip()
         specimen_id = request.args.get('specimen', type=int)
 
         query = Test.query
+        # Type filter: default hides **-prefixed parameter rows
+        if type_choice == 'tests':
+            query = query.filter(~Test.name.like('**%'))
+        elif type_choice == 'parameters':
+            query = query.filter(Test.name.like('**%'))
         if status_filter == 'active':
             query = query.filter(Test.is_active == True)  # noqa: E712
         elif status_filter == 'inactive':
@@ -121,6 +127,7 @@ def index():
             'status_filter': status_filter,
             'type_filter': type_filter,
             'specimen_id': specimen_id,
+            'type_choice': type_choice,
         })
 
     elif tab == 'formats':
