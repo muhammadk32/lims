@@ -157,6 +157,185 @@
   padding: 40px 20px;
   color: var(--bs-secondary-color);
 }
+
+/* ===== POLISHED THEME (ov-*) ===== */
+.ov-page {
+  max-width: 100% !important;
+  padding: 16px 32px 40px !important;
+  margin: 0 auto !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
+  font-size: 0.82rem !important;
+  color: #212529 !important;
+  box-sizing: border-box !important;
+}
+
+.ov-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #212529 !important;
+  border-radius: 10px !important;
+  padding: 16px 20px !important;
+  margin-bottom: 16px !important;
+  color: #fff !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+.ov-header h3 {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.ov-header h3 i, .ov-header .sub i { color: #fff !important; }
+.ov-header .sub {
+  font-size: 0.85rem !important;
+  color: #dbeafe !important;
+  font-family: Consolas, Monaco, monospace !important;
+  margin-top: 2px !important;
+}
+.ov-header .sub strong { color: #fff !important; }
+.ov-header .actions .btn,
+.ov-header .actions a.btn {
+  height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 4px !important;
+  border: 1px solid #212529 !important;
+  background: #fff !important;
+  color: #212529 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.ov-header .actions .btn:hover { background: #f1f3f5 !important; }
+.ov-header .actions .btn-primary {
+  background: #198754 !important;
+  border-color: #198754 !important;
+  color: #fff !important;
+}
+.ov-header .actions .btn-warning {
+  background: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #664d03 !important;
+}
+.ov-header .actions .btn-danger {
+  background: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+/* Meta strip */
+.ov-meta {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 16px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 8px 24px !important;
+  font-size: 0.85rem !important;
+}
+.ov-meta .row-item { display: flex !important; gap: 6px !important; align-items: baseline !important; }
+.ov-meta .key { font-weight: 700 !important; color: #6c757d !important; min-width: 90px !important; text-transform: uppercase !important; font-size: 0.72rem !important; letter-spacing: 0.04em !important; }
+.ov-meta .val { color: #212529 !important; font-weight: 600 !important; }
+
+/* Table wrap */
+.ov-table-wrap {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  margin-bottom: 16px !important;
+}
+.ov-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 0.82rem !important;
+  margin: 0 !important;
+}
+.ov-table thead th {
+  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+  color: #fff !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 10px 8px !important;
+  text-align: center !important;
+  border-right: 1px solid #212529 !important;
+  border-bottom: 2px solid #212529 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+.ov-table thead th:last-child { border-right: none !important; }
+.ov-table tbody td {
+  padding: 8px !important;
+  border-bottom: 1px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+  vertical-align: middle !important;
+  background: #fff !important;
+  color: #212529 !important;
+}
+.ov-table tbody td:last-child { border-right: none !important; }
+.ov-table tbody tr:last-child td { border-bottom: none !important; }
+.ov-table tbody tr:hover td { background: #eaf2ff !important; }
+.ov-table tbody tr.verified td { background: #f0fdf4 !important; }
+.ov-table tbody tr.panel-header td {
+  background: #f0f7ff !important;
+  font-weight: 700 !important;
+  color: #1a3d7c !important;
+}
+.ov-table code {
+  font-size: 0.76rem !important;
+  padding: 1px 4px !important;
+  background: #eef4ff !important;
+  color: #1a3d7c !important;
+  border-radius: 3px !important;
+  font-family: Consolas, Monaco, monospace !important;
+}
+.ov-table .col-check { text-align: center !important; }
+.ov-table .text-end { text-align: right !important; }
+
+/* Cells */
+.test-name { font-weight: 700 !important; }
+.test-code { font-size: 0.72rem !important; color: #6c757d !important; font-family: Consolas, Monaco, monospace !important; }
+.result-cell { font-weight: 700 !important; text-align: right !important; }
+.result-cell.empty { color: #adb5bd !important; font-weight: 400 !important; }
+.unit-cell, .range-cell { color: #6c757d !important; font-size: 0.78rem !important; }
+.verified-tick { color: #198754 !important; font-weight: 700 !important; }
+.params-badge {
+  display: inline-block !important;
+  font-size: 0.66rem !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  background: #cff4fc !important;
+  color: #055160 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  margin-left: 6px !important;
+}
+
+/* Empty */
+.ov-empty {
+  text-align: center !important;
+  padding: 40px 20px !important;
+  background: #fff8e1 !important;
+  color: #664d03 !important;
+  font-weight: 700 !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+}
 </style>
 {% endblock %}
 
