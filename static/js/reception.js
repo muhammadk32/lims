@@ -614,9 +614,7 @@
     const subtotal = state.selectedTests.reduce(
       (s, t) => s + (Number(t.price) || 0), 0
     );
-    const rateListDiscount = state.selectedTests.reduce(
-      (s, t) => s + (Number(t.price) || 0) - (Number(t.company_rate != null ? t.company_rate : t.price) || 0), 0
-    );
+    const rateListDiscount = 0; // FIXED: company_rate is not a patient discount
     const roundedSubtotal = roundMoney(subtotal);
     $sumSubtotal.value = fmt(roundedSubtotal);
 
@@ -669,7 +667,7 @@
     if (discountValue > roundedSubtotal) discountValue = roundedSubtotal;
     const roundedDiscount = discountValue;
     if (window._labHasRateList && window._labHasRateList() && $discountAmount) {
-      $discountAmount.value = roundedDiscount.toFixed(2);
+      // FIXED: removed force-overwrite — honour user's discount input
     }
 
     // ---- Show / hide the cap warning banner ----
