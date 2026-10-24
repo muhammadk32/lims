@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">   {# ← NEW #}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print">
-{% if request.path.startswith('/settings/') or request.path.startswith('/users/') or request.path.startswith('/audit/') or request.path.startswith('/patients/') %}
+{% if request.path.startswith('/settings/') or request.path.startswith('/users/') or request.path.startswith('/audit/') or request.path.startswith('/patients/') or request.path.startswith('/billing/') or request.path.startswith('/analytics/') or request.path.startswith('/reports/') %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_theme.css') }}">
 {% endif %}
 
@@ -50,6 +50,47 @@
   </style>
 
   {% block head %}{% endblock %}
+
+<style>
+/* ===== GLOBAL REPORT KPI FIX ===== */
+/* Target the KPI tables/rows across all report pages */
+.app-content .container table:not(.table-data):not([class*="report"]):has(td[class*="kpi"]),
+.app-content .container .row:has([class*="kpi"]),
+.app-content .container .row:has([class*="stat"]),
+.app-content .container div[class*="summary"] > div {
+    text-align: center !important;
+}
+/* Force any stat boxes / kpi cells to center */
+[class*="kpi-"], [class*="stat-"] {
+    text-align: center !important;
+    display: block !important;
+}
+[class*="kpi-label"], [class*="kpi-label"] span, [class*="stat-label"],
+.app-content .container td small, .app-content .container td .label {
+    display: block !important;
+    text-align: center !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: #6c757d !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin-bottom: 6px !important;
+}
+[class*="kpi-value"], [class*="stat-value"],
+.app-content .container td strong, .app-content .container td .value {
+    display: block !important;
+    text-align: center !important;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+}
+/* Add a bit of padding to the KPI cells */
+.app-content .container table td:has([class*="kpi-label"]),
+.app-content .container table td:has([class*="stat-label"]) {
+    padding: 12px 10px !important;
+    vertical-align: middle !important;
+}
+</style>
 </head>
 <body>
 

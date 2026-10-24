@@ -598,16 +598,6 @@ table td .ab-toggle {
   gap: 3px !important;
 }
 
-/* Icon-only buttons in actions */
-table td button:has(> i:only-child),
-table td a:has(> i:only-child),
-table td .btn-icon {
-  width: 28px !important;
-  height: 28px !important;
-  padding: 0 !important;
-  min-width: 28px !important;
-}
-
 /* Icon sizing inside buttons */
 table td button i,
 table td a i {
@@ -651,15 +641,6 @@ table td a i {
   margin: 0 2px !important;
 }
 
-/* Icon-only (delete trash) */
-.app-content table td:last-child .btn:has(> i:only-child),
-.app-content table td:last-child button:has(> i:only-child),
-.app-content table td:last-child a:has(> i:only-child) {
-  width: 30px !important;
-  min-width: 30px !important;
-  padding: 0 !important;
-}
-
 /* ===== Antibiotics: bigger ACTIVE pill ===== */
 .app-content table td .badge,
 .app-content table td .pill,
@@ -690,4 +671,112 @@ table td a i {
 .app-content table thead th {
   font-size: 0.8rem !important;
   padding: 10px 10px !important;
+}
+
+
+/* ===== Report pages: Bootstrap cards → themed ===== */
+.app-content .container .card {
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+}
+.app-content .container .card-body {
+  padding: 24px 28px !important;
+}
+.app-content .container h3,
+.app-content .container h2 {
+  font-weight: 800 !important;
+  letter-spacing: 0.02em;
+}
+.app-content .container h3 i,
+.app-content .container h2 i {
+  color: #1a3d7c !important;
+}
+.app-content .container .text-muted {
+  color: #6c757d !important;
+}
+/* Input fields → dark border, rounded */
+.app-content .container .form-control,
+.app-content .container .form-select {
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+}
+.app-content .container .form-control:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
+}
+/* Report submit button */
+.app-content .container .btn-primary {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+}
+.app-content .container .btn-primary:hover {
+  filter: brightness(1.15);
+}
+/* Labels */
+.app-content .container .form-label {
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #1a3d7c !important;
+}
+
+
+/* ===== Patient History action column ===== */
+.app-content table td:last-child,
+.app-content table th:last-child {
+  white-space: nowrap !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 8px 10px !important;
+}
+.app-content table td:last-child .btn,
+.app-content table td:last-child a.btn,
+.app-content table td:last-child button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 60px !important;
+  height: 32px !important;
+  padding: 0 10px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  border-width: 2px !important;
+  margin: 0 2px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+/* Ensure the row doesn't compress */
+.app-content table td:last-child {
+  min-width: 220px !important;
+}
+
+
+/* Patient history table: don't squash action column */
+.app-content table {
+  table-layout: auto !important;
+}
+.app-content table th:last-child,
+.app-content table td:last-child {
+  min-width: 220px !important;
+  width: 220px !important;
+}
+
+
+/* ===== Cash Summary Report button ===== */
+.app-content .container .btn-primary.btn-lg {
+  min-height: 44px !important;
+  height: 44px !important;
+  padding: 0 20px !important;
+  font-size: 0.9rem !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
 }

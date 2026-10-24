@@ -221,16 +221,17 @@
   font-size: 0.78rem;
 }
 .csr-table thead th {
-  background: #212529;
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 6px 8px;
-  text-align: left;
-  border-right: 1px solid #495057;
-  white-space: nowrap;
+  background: #1a3d7c !important;
+  color: #fff !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 10px 12px !important;
+  text-align: center !important;
+  border-right: 1px solid #343a40 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
 }
 .csr-table thead th:last-child { border-right: none; }
 .csr-table thead th.num { text-align: right; }
@@ -363,5 +364,79 @@
   }
   .csr-page { page-break-inside: avoid; }
 }
+
+
+
+/* ===== KPI PROFESSIONAL FIX ===== */
+.csr-kpi td {
+    text-align: left !important;
+    vertical-align: middle !important;
+    padding: 16px 20px !important;
+}
+.csr-kpi-label {
+    display: block !important;
+    font-size: 0.9rem !important;
+    color: #495057 !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+.csr-kpi-value {
+    display: block !important;
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+}
+
+/* ===== KPI COLORED & CENTERED FIX ===== */
+.csr-kpi { border: none !important; }
+.csr-kpi td { 
+    border: none !important; 
+    padding: 4px !important; 
+}
+
+/* Individual Box Styling */
+.csr-kpi td:nth-child(1) { 
+    background: #f0f7ff !important; 
+    border: 1px solid #b6d4fe !important; 
+}
+.csr-kpi td:nth-child(2) { 
+    background: #f0fdf4 !important; 
+    border: 1px solid #a3cfbb !important; 
+}
+.csr-kpi td:nth-child(3) { 
+    background: #fef2f2 !important; 
+    border: 1px solid #f1aeb5 !important; 
+}
+.csr-kpi td:nth-child(4) { 
+    background: #f8f9fa !important; 
+    border: 1px solid #dee2e6 !important; 
+}
+
+/* Center alignment and typography */
+.csr-kpi-label {
+    display: block !important;
+    text-align: center !important;
+    font-size: 0.8rem !important;
+    color: #495057 !important;
+    font-weight: 700 !important;
+    margin-bottom: 6px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+.csr-kpi-value {
+    display: block !important;
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    color: #1a3d7c !important; /* Default color */
+}
+
+/* Override value colors */
+.csr-kpi td:nth-child(2) .csr-kpi-value { color: #198754 !important; }
+.csr-kpi td:nth-child(3) .csr-kpi-value { color: #dc3545 !important; }
+.csr-kpi td:nth-child(4) .csr-kpi-value { color: #495057 !important; }
 </style>
 {% endblock %}
