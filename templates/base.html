@@ -91,6 +91,7 @@
     vertical-align: middle !important;
 }
 </style>
+<style>.col-resize-handle:hover { background: rgba(13,110,253,0.35); }</style>
 </head>
 <body>
 
@@ -157,5 +158,6 @@
 </script>
 
 {% block scripts %}{% endblock %}
+<script src="{{ url_for('static', filename='js/col-resize.js') }}"></script>
 </body>
 </html>
