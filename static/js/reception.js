@@ -61,6 +61,7 @@
 
   // Referral typeahead
   const $referralInput = document.getElementById('referralInput');
+  const $referralId = document.getElementById('referralId');
   const $referralResults = document.getElementById('referralResults');
 
   // Laboratory typeahead
@@ -219,8 +220,10 @@
   }
 
   /* ======================== LABORATORY TYPEAHEAD ======================== */
+  let _labJustSelected = false;
   const doLaboratorySearch = debounce(async function () {
     if (!$laboratoryInput || !$laboratoryResults) return;
+    if (_labJustSelected) return;
     const q = $laboratoryInput.value.trim();
     if (q.length < 2) {
       $laboratoryResults.style.display = 'none';
@@ -237,7 +240,8 @@
       data.forEach(lab => {
         const div = document.createElement('div');
         div.className = 'referral-result';
-        div.textContent = lab.name + '  —  ' + lab.discount_percent + '% discount';
+        div.setAttribute('data-id', lab.id);
+        div.textContent = lab.name; /* Removed discount % display */
         div.addEventListener('click', () => {
           $laboratoryInput.value = lab.name;
           if ($laboratoryId) $laboratoryId.value = lab.id;
@@ -257,10 +261,81 @@
     } catch (err) { console.error('[laboratory-search]', err); }
   }, 200);
 
-  if ($laboratoryInput) {
-    $laboratoryInput.addEventListener('input', doLaboratorySearch);
+    if ($laboratoryInput) {
+    $laboratoryInput.addEventListener('input', () => {
+        if (!$laboratoryInput.value.trim()) {
+            $laboratoryResults.style.display = 'none';
+            if ($laboratoryId) $laboratoryId.value = '';
+        }
+        doLaboratorySearch();
+    });
     $laboratoryInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') $laboratoryResults.style.display = 'none';
+      if (e.key === 'Escape') {
+        $laboratoryResults.style.display = 'none';
+        return;
+      }
+      const items = Array.from($laboratoryResults.querySelectorAll('.referral-result'));
+      if (items.length === 0) return;
+
+      let idx = items.findIndex(i => i.classList.contains('keyboard-active'));
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (idx >= 0) items[idx].classList.remove('keyboard-active');
+        idx = (idx + 1) % items.length;
+        items[idx].classList.add('keyboard-active');
+        items[idx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (idx >= 0) items[idx].classList.remove('keyboard-active');
+        idx = (idx - 1 + items.length) % items.length;
+        items[idx].classList.add('keyboard-active');
+        items[idx].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        if (idx >= 0) {
+          e.preventDefault();
+          const item = items[idx];
+          const labId = item.getAttribute('data-id');
+          const labName = item.textContent.trim();
+          _labJustSelected = true;
+          $laboratoryInput.value = labName;
+          if ($laboratoryId && labId) $laboratoryId.value = labId;
+          $laboratoryResults.style.display = 'none';
+          $laboratoryResults.innerHTML = '';
+          setTimeout(() => { _labJustSelected = false; }, 600);
+        }
+      }
+    });
+    // Aggressive close on mousedown
+    $laboratoryResults.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        _labJustSelected = true;
+        $laboratoryResults.innerHTML = '';
+        $laboratoryResults.style.display = 'none';
+        if ($laboratoryInput && $laboratoryId && e.target) {
+            // pick the item text (strip icon if any)
+            var text = (e.target.textContent || '').trim();
+            if (text) {
+                $laboratoryInput.value = text;
+                // find id
+                var match = document.querySelector('#laboratoryResults [data-id="' + text + '"]');
+                // fallback: leave id alone
+            }
+        }
+        setTimeout(function() { _labJustSelected = false; }, 600);
+    });
+    $laboratoryResults.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var el = e.target.closest('.referral-result');
+        if (el && el.textContent) {
+            $laboratoryInput.value = el.textContent.trim();
+            var idMatch = el.getAttribute('data-id');
+            if (idMatch && $laboratoryId) $laboratoryId.value = idMatch;
+        }
+        $laboratoryResults.innerHTML = '';
+        $laboratoryResults.style.display = 'none';
     });
     document.addEventListener('click', (e) => {
       if (!$laboratoryInput.contains(e.target) && !$laboratoryResults.contains(e.target)) {
@@ -270,6 +345,7 @@
   }
 
   /* ======================== REFERRAL TYPEAHEAD ======================== */
+  let _referralJustSelected = false;
   const doReferralSearch = debounce(async function () {
     if (!$referralInput || !$referralResults) return;
     const q = $referralInput.value.trim();
@@ -289,6 +365,7 @@
       data.forEach(r => {
         const div = document.createElement('div');
         div.className = 'referral-result';
+        div.setAttribute('data-id', r.id);
         div.innerHTML =
           '<div class="rr-name">' + esc(r.name) + '</div>' +
           (r.clinic ? '<div class="rr-meta">' + esc(r.clinic) + '</div>' : '');
@@ -865,6 +942,7 @@
       $testSearch.focus();
     }
   }, 100);
+
 
 })();
 

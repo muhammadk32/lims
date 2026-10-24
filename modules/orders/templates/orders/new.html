@@ -32,8 +32,8 @@
 .rec-page {
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -63,9 +63,9 @@
 }
 .rec-header h3 i { color: #fff !important; }
 .rec-header p {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin: 2px 0 0 !important;
 }
 .rec-header .btn {
@@ -92,6 +92,70 @@
   font-size: 0.78rem !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
+}
+
+/* ===== COMPACT HEADER ===== */
+.rec-header {
+  padding: 8px 16px !important;
+  margin-bottom: 10px !important;
+  min-height: 0 !important;
+}
+.rec-header h3 {
+  font-size: 1.05rem !important;
+  line-height: 1.2 !important;
+}
+.rec-header p {
+  font-size: 0.78rem !important;
+  margin-top: 0 !important;
+  line-height: 1.1 !important;
+}
+.rec-header .btn {
+  height: 28px !important;
+  padding: 0 12px !important;
+  font-size: 0.75rem !important;
+}
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+
+/* ===== KEYBOARD ACTIVE LAB ITEM ===== */
+#laboratoryResults .referral-result.keyboard-active,
+#laboratoryResults .referral-result:hover {
+    background: #eaf2ff !important;
+    color: #1a3d7c !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+#laboratoryResults .referral-result {
+    padding: 6px 10px !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    font-size: 0.82rem !important;
+}
+
+/* ===== KEYBOARD ACTIVE REFERRAL ITEM ===== */
+#referralResults .referral-result.keyboard-active,
+#referralResults .referral-result:hover {
+    background: #eaf2ff !important;
+    color: #1a3d7c !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+#referralResults .referral-result {
+    padding: 6px 10px !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    font-size: 0.82rem !important;
 }
 </style>
 

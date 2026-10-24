@@ -6,7 +6,7 @@ from .models import Laboratory
 def search_laboratories(query, limit=10):
     """Typeahead search — matches name, contact, phone."""
     q = (query or '').strip()
-    base = Laboratory.query.filter(Laboratory.is_active == True)  # noqa: E712
+    base = Laboratory.query.filter(Laboratory.is_active == True, Laboratory.is_partner_lab == False)  # noqa: E712
     if q:
         like = f'%{q}%'
         base = base.filter(
