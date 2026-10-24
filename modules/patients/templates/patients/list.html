@@ -155,6 +155,179 @@
   .pd-table { font-size: 0.72rem; }
   .pd-table thead th, .pd-table tbody td { padding: 3px 5px; }
 }
+
+/* ===== POLISHED THEME (pd-*) ===== */
+.pd-page {
+  max-width: 100% !important;
+  padding: 16px 32px 40px !important;
+  margin: 0 auto !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
+  font-size: 0.82rem !important;
+  color: #212529 !important;
+  box-sizing: border-box !important;
+}
+.pd-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #212529 !important;
+  border-radius: 10px !important;
+  padding: 16px 20px !important;
+  margin-bottom: 16px !important;
+  color: #fff !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+.pd-header h1, .pd-title {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+}
+.pd-header h1 i, .pd-title i { color: #fff !important; }
+.pd-subtitle {
+  font-size: 0.85rem !important;
+  color: #dbeafe !important;
+  font-family: Consolas, Monaco, monospace !important;
+  margin-top: 2px !important;
+}
+.pd-actions .btn, .pd-actions a.btn {
+  height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  border-radius: 4px !important;
+  border: 1px solid #fff !important;
+  background: #fff !important;
+  color: #212529 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.pd-actions .btn-primary {
+  background: #198754 !important;
+  border-color: #198754 !important;
+  color: #fff !important;
+}
+
+.pd-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+.pd-stat {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 14px 16px !important;
+  text-align: center !important;
+}
+.pd-stat .label {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #6c757d !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 6px !important;
+}
+.pd-stat .value {
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: #1a3d7c !important;
+  font-family: Consolas, Monaco, monospace !important;
+}
+
+.pd-filter {
+  background: #fff !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 16px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  gap: 12px !important;
+  align-items: end !important;
+}
+.pd-field label {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #6c757d !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+.pd-field input, .pd-field select {
+  height: 38px !important;
+  padding: 0 12px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  font-size: 0.9rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+.pd-filter-actions button,
+.pd-filter-actions .btn {
+  height: 38px !important;
+  padding: 0 18px !important;
+  background: #198754 !important;
+  border: 1px solid #198754 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  border-radius: 4px !important;
+  font-size: 0.85rem !important;
+}
+
+.pd-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px 8px 0 0 !important;
+  background: #fff !important;
+  margin: 0 !important;
+  font-size: 0.82rem !important;
+}
+.pd-table thead th {
+  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+  color: #fff !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 10px 8px !important;
+  text-align: center !important;
+  border-bottom: 2px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+  vertical-align: middle !important;
+}
+.pd-table thead th:first-child { border-top-left-radius: 8px !important; }
+.pd-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
+.pd-table tbody td {
+  padding: 10px 8px !important;
+  border-bottom: 1px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+  background: #fff !important;
+  vertical-align: middle !important;
+  color: #212529 !important;
+}
+.pd-table tbody td:last-child { border-right: none !important; }
+.pd-table tbody tr:last-child td { border-bottom: none !important; }
+.pd-table tbody tr:hover td { background: #eaf2ff !important; }
+.pd-table .name { font-weight: 700 !important; }
+.pd-table .meta { font-size: 0.72rem !important; color: #6c757d !important; }
+
+.pd-empty {
+  text-align: center !important;
+  padding: 40px 16px !important;
+  background: #fff8e1 !important;
+  color: #664d03 !important;
+  font-weight: 700 !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px !important;
+}
 </style>
 {% endblock %}
 
