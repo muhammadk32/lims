@@ -10,7 +10,7 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  
   font-size: 0.82rem;
   color: #212529;
   box-sizing: border-box;
@@ -45,13 +45,13 @@
 .dl-subtitle {
   font-size: 0.85rem;
   color: #dbeafe;
-  font-family: Consolas, Monaco, monospace;
+  
   margin-top: 2px;
 }
 .dl-count {
   font-size: 0.85rem;
   color: #dbeafe;
-  font-family: Consolas, Monaco, monospace;
+  
 }
 
 /* Filter */
@@ -185,7 +185,7 @@
 .dl-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -202,7 +202,7 @@
   border-right: none !important;
 }
 .dl-table tbody td {
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
   padding: 8px 6px !important;
   border-bottom: 1px solid #212529 !important;
   border-right: 1px solid #212529 !important;
@@ -222,7 +222,7 @@
 
 /* Text helpers */
 .dl-table .name   { font-weight: 700 !important; }
-.dl-table .num    { text-align: right !important; font-family: Consolas, Monaco, monospace !important; }
+.dl-table .num    { text-align: right !important;  }
 .dl-table .center { text-align: center !important; }
 .dl-table .strike { text-decoration: line-through !important; color: #adb5bd !important; }
 .dl-table .due    { color: #b02a37 !important; font-weight: 700 !important; }
@@ -288,7 +288,7 @@
 }
 .dl-summary .stat:last-child { border-right: none !important; }
 .dl-summary .label {
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -296,11 +296,45 @@
   opacity: 0.9 !important;
 }
 .dl-summary .value {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
   color: #fff !important;
+}
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+
+/* ===== COMPACT DAILY LEDGER HEADER ===== */
+.dl-header {
+    padding: 8px 16px !important; /* Reduce vertical padding */
+    margin-bottom: 12px !important;
+    min-height: 0 !important;
+}
+.dl-header h1, .dl-title {
+    font-size: 1.1rem !important;
+    line-height: 1.2 !important;
+}
+.dl-subtitle {
+    font-size: 0.78rem !important;
+    margin-top: 0 !important;
+    line-height: 1.1 !important;
+}
+.dl-count {
+    font-size: 0.78rem !important;
 }
 </style>
 {% endblock %}
@@ -400,8 +434,8 @@
       <tr class="{% if o.status == 'cancelled' %}row-cancelled{% elif o.payment_status == 'paid' %}row-paid{% elif o.payment_status == 'partial' %}row-partial{% elif o.payment_status == 'unpaid' and o.status == 'pending' %}row-pending{% else %}row-unpaid{% endif %}">
         <td><code>{{ o.order_code }}</code></td>
         <td class="name">{{ o.patient.full_name }}</td>
-        <td class="sub" style="font-family: Consolas, Monaco, monospace;">{{ o.patient.patient_code }}</td>
-        <td class="sub" style="font-family: Consolas, Monaco, monospace;">{{ o.patient.phone or '—' }}</td>
+        <td class="sub" style="">{{ o.patient.patient_code }}</td>
+        <td class="sub" style="">{{ o.patient.phone or '—' }}</td>
         <td class="center">
           <span class="dl-badge" style="background:#e9ecef; color:#495057;">{{ o.item_count }}</span>
         </td>
@@ -436,7 +470,7 @@
           {% else %}<span class="dl-badge dl-badge-unpaid">Unpaid</span>
           {% endif %}
         </td>
-        <td class="sub" style="font-family: Consolas, Monaco, monospace; font-size: 0.7rem;">
+        <td class="sub" style=" font-size: 0.7rem;">
           {{ o.created_at | localtime('%d/%m/%y %H:%M') }}
         </td>
         <td class="center dl-actions">

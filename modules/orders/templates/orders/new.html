@@ -157,6 +157,64 @@ table[class$="-table"] tbody td {
     border-bottom: 1px solid #dee2e6 !important;
     font-size: 0.82rem !important;
 }
+
+/* ===== TESTS & PANELS TABLE HEADER ===== */
+/* Target the table inside the Tests cell specifically */
+.rec-cell[data-area="tests"] .basket-table thead th,
+.rec-cell[data-area="tests"] table thead th {
+    background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+    color: #fff !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    padding: 10px 8px !important;
+    text-align: center !important; /* Center all headers */
+    vertical-align: middle !important;
+    border-bottom: 2px solid #212529 !important;
+    border-right: 1px solid #343a40 !important;
+}
+.rec-cell[data-area="tests"] .basket-table thead th:last-child {
+    border-right: none !important;
+}
+
+/* Make the body text match, but keep numbers/codes aligned */
+.rec-cell[data-area="tests"] .basket-table tbody td {
+    font-size: 0.82rem !important;
+    padding: 8px !important;
+    vertical-align: middle !important;
+}
+/* Center numeric columns (Rate, Company Rate) */
+.rec-cell[data-area="tests"] .basket-table tbody td:nth-child(5),
+.rec-cell[data-area="tests"] .basket-table tbody td:nth-child(6) {
+    text-align: right !important;
+}
+
+/* ===== FONT SIZE & CONTRAST FIX ===== */
+/* Shrink header text slightly */
+.rec-cell[data-area="tests"] .basket-table thead th {
+    font-size: 0.72rem !important;
+    padding: 8px 6px !important;
+}
+
+/* Shrink and darken body text */
+.rec-cell[data-area="tests"] .basket-table tbody td {
+    font-size: 0.78rem !important;
+    color: #212529 !important; /* Dark text for high contrast */
+    padding: 6px 8px !important;
+}
+
+/* Specifically make the Test Name column bold and high contrast */
+.rec-cell[data-area="tests"] .basket-table tbody td:nth-child(2) {
+    font-weight: 700 !important;
+    color: #000 !important;
+}
+
+/* Keep code column distinct */
+.rec-cell[data-area="tests"] .basket-table tbody td:nth-child(1) {
+    color: #b02a37 !important;
+    font-weight: 600 !important;
+}
 </style>
 
 <script>window.LAB_RATE_MAP = {{ rate_map|default({})|tojson }};</script>
