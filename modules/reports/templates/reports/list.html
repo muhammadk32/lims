@@ -318,6 +318,117 @@
     margin-bottom: 8px;
   }
   .rp-card .rp-table { border-radius: 8px; }
+
+/* ===== POLISH OVERRIDE (keeps existing nested row styling) ===== */
+.rp-page {
+    max-width: 100% !important;
+    padding: 16px 32px 40px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+.rp-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+    border: 2px solid #212529 !important;
+    border-radius: 10px !important;
+    padding: 16px 20px !important;
+    margin-bottom: 16px !important;
+    color: #fff !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+.rp-header h1, .rp-title {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+    color: #fff !important;
+}
+.rp-header i { color: #fff !important; }
+.rp-subtitle, .rp-count {
+    font-size: 0.85rem !important;
+    color: #dbeafe !important;
+    font-family: Consolas, Monaco, monospace !important;
+}
+.rp-filter {
+    background: #fff !important;
+    border: 2px solid #212529 !important;
+    border-radius: 8px !important;
+    padding: 14px 16px !important;
+    margin-bottom: 16px !important;
+}
+.rp-filter::before { content: none !important; display: none !important; }
+.rp-field label {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    color: #6c757d !important;
+}
+.rp-filter input, .rp-filter select {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+}
+.rp-filter button,
+.rp-filter .btn,
+.rp-btn {
+    height: 38px !important;
+    padding: 0 18px !important;
+    background: #198754 !important;
+    border: 1px solid #198754 !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.85rem !important;
+    border-radius: 4px !important;
+}
+.rp-band {
+    background: #fff8e1 !important;
+    border: 2px solid #212529 !important;
+    color: #664d03 !important;
+    font-weight: 700 !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 16px !important;
+}
+.rp-card { border: none !important; background: transparent !important; }
+.rp-table {
+    border: 2px solid #212529 !important;
+    border-radius: 8px 8px 0 0 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+.rp-table thead th {
+    background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+    color: #fff !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    padding: 10px 6px !important;
+    text-align: center !important;
+    border-bottom: 2px solid #212529 !important;
+    border-right: 1px solid #212529 !important;
+    vertical-align: middle !important;
+}
+.rp-table thead th:first-child { border-top-left-radius: 8px !important; }
+.rp-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
+.rp-table tbody td {
+    font-size: 0.82rem !important;
+    border-bottom: 1px solid #212529 !important;
+    border-right: 1px solid #212529 !important;
+    padding: 8px 6px !important;
+    background: #fff !important;
+    vertical-align: middle !important;
+}
+.rp-table tbody td:last-child { border-right: none !important; }
+.rp-table tbody tr:hover td { background: #eaf2ff !important; }
 </style>
 {% endblock %}
 
