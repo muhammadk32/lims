@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block title %}Report Signatures — LabMS{% endblock %}
 
@@ -255,6 +255,7 @@
           <th>Name</th>
           <th style="width: 240px;">Qualifications</th>
           <th style="width: 180px;">Designation</th>
+          <th>Departments</th>
           <th style="width: 90px;">Status</th>
           <th class="text-end" style="width: 180px;">Actions</th>
         </tr>
@@ -266,6 +267,13 @@
           <td class="name-cell">{{ s.name }}</td>
           <td class="quals-cell">{{ s.qualifications or '—' }}</td>
           <td class="desig-cell">{{ s.designation or '—' }}</td>
+          <td>
+            {% if s.departments %}
+              {% for did in s.departments %}{% for d in departments %}{% if d.id == did %}{{ d.name }}{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% endfor %}
+            {% else %}
+              <span class="text-muted">All departments</span>
+            {% endif %}
+          </td>
           <td>
             {% if s.is_active %}
               <span class="sig-badge active">Shown</span>
@@ -301,9 +309,16 @@
               </form>
 
               {# Edit #}
-              <button class="btn btn-sm btn-outline-primary"
+              <button class="btn btn-sm btn-outline-primary sig-edit-btn"
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#sigModal"
                       title="Edit"
-                      onclick="openSigModal('edit', {{ s.id }}, {{ s.name|tojson }}, {{ (s.qualifications or '')|tojson }}, {{ (s.designation or '')|tojson }})">
+                      data-id="{{ s.id }}"
+                      data-name="{{ s.name|e }}"
+                      data-quals="{{ (s.qualifications or '')|e }}"
+                      data-desig="{{ (s.designation or '')|e }}"
+                      data-depts="{{ (s.departments or [])|tojson|e }}">
                 <i class="bi bi-pencil"></i>
               </button>
 
@@ -336,7 +351,7 @@
         </tr>
         {% else %}
         <tr>
-          <td colspan="6">
+          <td colspan="7">
             <div class="sig-empty">
               <i class="bi bi-person-plus fs-3 d-block mb-2"></i>
               <div class="fw-semibold">No signatures yet</div>
@@ -383,6 +398,19 @@
                    placeholder="Consultant Microbiologist">
           </div>
 
+          <div class="mb-3">
+            <label class="form-label">Visible on report departments</label>
+            <div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+              {% for d in departments %}
+              <div class="form-check">
+                <input class="form-check-input sig-dept-checkbox" type="checkbox" name="departments" value="{{ d.id }}" id="sigDept{{ d.id }}">
+                <label class="form-check-label" for="sigDept{{ d.id }}">{{ d.name }}</label>
+              </div>
+              {% endfor %}
+            </div>
+            <small class="text-muted">Leave all unchecked to show this signature on every report.</small>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -396,26 +424,43 @@
 </div>
 
 <script>
-function openSigModal(mode, id, name, quals, desig) {
-  const form = document.getElementById('sigForm');
-  const title = document.getElementById('sigModalTitle');
-  const nameInput = document.getElementById('sigName');
-  const qualsInput = document.getElementById('sigQuals');
-  const desigInput = document.getElementById('sigDesig');
-
-  if (mode === 'edit') {
-    title.textContent = 'Edit Signature';
-    form.action = '/settings/report-signatures/' + id + '/update';
-    nameInput.value = name || '';
-    qualsInput.value = quals || '';
-    desigInput.value = desig || '';
+function openSigModal(mode, id, name, quals, desig, depts) {
+  var form = document.getElementById("sigForm");
+  var title = document.getElementById("sigModalTitle");
+  var nameInput = document.getElementById("sigName");
+  var qualsInput = document.getElementById("sigQuals");
+  var desigInput = document.getElementById("sigDesig");
+  var deptBoxes = document.querySelectorAll(".sig-dept-checkbox");
+  if (mode === "edit") {
+    title.textContent = "Edit Signature";
+    form.action = "/settings/report-signatures/" + id + "/update";
+    nameInput.value = name || "";
+    qualsInput.value = quals || "";
+    desigInput.value = desig || "";
+    var selected = {};
+    (depts || []).forEach(function(d){ selected[String(d)] = true; });
+    deptBoxes.forEach(function(cb){ cb.checked = !!selected[cb.value]; });
   } else {
-    title.textContent = 'New Signature';
-    form.action = '{{ url_for("settings.report_signature_create") }}';
-    nameInput.value = '';
-    qualsInput.value = '';
-    desigInput.value = '';
+    title.textContent = "New Signature";
+    form.action = "/settings/report-signatures/create";
+    nameInput.value = "";
+    qualsInput.value = "";
+    desigInput.value = "";
+    deptBoxes.forEach(function(cb){ cb.checked = false; });
   }
 }
+
+document.addEventListener("mousedown", function(e) {
+  var btn = e.target.closest(".sig-edit-btn");
+  if (!btn) return;
+
+  var id = btn.getAttribute("data-id");
+  var name = btn.getAttribute("data-name");
+  var quals = btn.getAttribute("data-quals");
+  var desig = btn.getAttribute("data-desig");
+  var depts = [];
+  try { depts = JSON.parse(btn.getAttribute("data-depts") || "[]"); } catch (err) {}
+  openSigModal("edit", id, name, quals, desig, depts);
+});
 </script>
 {% endblock %}

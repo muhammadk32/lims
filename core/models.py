@@ -280,6 +280,8 @@ class ReportSignature(BaseModel):
     designation = db.Column(db.String(120), nullable=True)
     sort_order = db.Column(db.Integer, default=0, nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
+    # JSON list of LabDepartment ids. Empty/None = show on all reports.
+    departments = db.Column(db.JSON, nullable=True)
 
     @classmethod
     def active_ordered(cls):
@@ -289,6 +291,30 @@ class ReportSignature(BaseModel):
             .order_by(cls.sort_order, cls.id)
             .all()
         )
+
+    @classmethod
+    def for_departments(cls, dept_ids=None):
+        """Return active signatures visible for a set of department ids.
+
+        A signature with no departments (empty/None) shows everywhere.
+        Pass dept_ids=None to return all active (e.g. for admin or PDFs
+        without a department context).
+        """
+        sigs = cls.active_ordered()
+        if not dept_ids:
+            return sigs
+        wanted = set(int(d) for d in dept_ids if d is not None)
+        if not wanted:
+            return sigs
+        visible = []
+        for s in sigs:
+            own = set(int(d) for d in (s.departments or []) if d is not None)
+            if not own or (own & wanted):
+                visible.append(s)
+        # Fallback: if no signature matches, show all (don't print blank footer)
+        if not visible:
+            return sigs
+        return visible
 
     def __repr__(self):
         return f'<ReportSignature {self.name}>'

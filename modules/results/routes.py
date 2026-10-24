@@ -87,7 +87,31 @@ def enter(order_id):
 def report(order_id):
     """Printable result report for an order."""
     order = Order.query.get_or_404(order_id)
-    return render_template('results/report.html', order=order)
+    from core.models import ReportSignature
+    from modules.tests.models import TestCategory, LabDepartment
+
+    dept_ids = set()
+    try:
+        dept_by_name = {d.name.lower(): d.id for d in LabDepartment.query.all()}
+        for item in (order.items or []):
+            test = getattr(item, 'test', None)
+            if test is None:
+                continue
+            cat_id = getattr(test, 'category_id', None)
+            if not cat_id:
+                continue
+            cat = TestCategory.query.get(cat_id)
+            if not cat:
+                continue
+            # Match category name to department name (case-insensitive)
+            did = dept_by_name.get((cat.name or '').lower())
+            if did:
+                dept_ids.add(did)
+    except Exception:
+        dept_ids = set()
+
+    sigs = ReportSignature.for_departments(dept_ids if dept_ids else None)
+    return render_template('results/report.html', order=order, report_signatures=sigs)
 
 
 # ============================================================

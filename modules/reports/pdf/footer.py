@@ -11,19 +11,19 @@ from .branding import _get_lab
 BOTTOM_PANEL_HEIGHT = 55 * mm
 
 
-def _get_active_signatures():
+def _get_active_signatures(dept_ids=None):
     """Active ReportSignature rows, or [] if unavailable."""
     try:
         from core.models import ReportSignature
-        return ReportSignature.active_ordered()
+        return ReportSignature.for_departments(dept_ids)
     except Exception as e:
         print(f'[pdf.footer] _get_active_signatures failed: {e}')
         return []
 
 
-def _draw_page_bottom(canvas, doc):
+def _draw_page_bottom(canvas, doc, dept_ids=None):
     """Draw the full bottom footer stack on EVERY page."""
-    sigs = _get_active_signatures()
+    sigs = _get_active_signatures(dept_ids)
     lab = _get_lab()
 
     canvas.saveState()

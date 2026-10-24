@@ -137,7 +137,9 @@ def report_signatures():
     sigs = ReportSignature.query.order_by(
         ReportSignature.sort_order, ReportSignature.id
     ).all()
-    return render_template('report_signatures.html', signatures=sigs)
+    from modules.tests.models import LabDepartment
+    depts = LabDepartment.query.filter_by(is_active=True).order_by(LabDepartment.name).all()
+    return render_template('report_signatures.html', signatures=sigs, departments=depts)
 
 
 @settings_bp.route('/report-signatures/create', methods=['POST'])
@@ -159,12 +161,20 @@ def report_signature_create():
         db.func.coalesce(db.func.max(ReportSignature.sort_order), 0)
     ).scalar()
 
+    dept_ids = []
+    for v in request.form.getlist('departments'):
+        try:
+            dept_ids.append(int(v))
+        except (ValueError, TypeError):
+            pass
+
     sig = ReportSignature(
         name=name,
         qualifications=quals or None,
         designation=desig or None,
         sort_order=max_order + 1,
         is_active=True,
+        departments=dept_ids or None,
     )
     db.session.add(sig)
     db.session.commit()
@@ -189,9 +199,17 @@ def report_signature_update(sig_id):
         flash('Name is required.', 'danger')
         return redirect(url_for('settings.report_signatures'))
 
+    dept_ids = []
+    for v in request.form.getlist('departments'):
+        try:
+            dept_ids.append(int(v))
+        except (ValueError, TypeError):
+            pass
+
     sig.name = name
     sig.qualifications = quals or None
     sig.designation = desig or None
+    sig.departments = dept_ids or None
     db.session.commit()
 
     flash(f'Signature "{name}" updated.', 'success')

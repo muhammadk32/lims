@@ -111,6 +111,27 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
         pending    = [t for t in all_top if not t.is_verified]
         items_for_pdf = verified if verified else all_top
 
+    # ---- Department ids for signature filtering (name-match) ----
+    try:
+        from modules.tests.models import TestCategory, LabDepartment
+        _dept_by_name = {d.name.lower(): d.id for d in LabDepartment.query.all()}
+        _dept_ids = set()
+        for _it in items_for_pdf:
+            _test = getattr(_it, 'test', None)
+            if not _test:
+                continue
+            _cat_id = getattr(_test, 'category_id', None)
+            if not _cat_id:
+                continue
+            _cat = TestCategory.query.get(_cat_id)
+            if not _cat:
+                continue
+            _did = _dept_by_name.get((_cat.name or '').lower())
+            if _did:
+                _dept_ids.add(_did)
+    except Exception:
+        _dept_ids = set()
+
     results_table, _notes_flow, abnormal_count, critical_count = _results_table(
         order,
         previous_map=previous_map,
@@ -125,15 +146,16 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
 
     from .header import draw_continuation_header
 
+    def _on_first(canvas, doc):
+        _draw_page_bottom(canvas, doc, _dept_ids if _dept_ids else None)
+
     def _on_later(canvas, doc):
         draw_continuation_header(canvas, doc, order)
-        _draw_page_bottom(canvas, doc)
+        _draw_page_bottom(canvas, doc, _dept_ids if _dept_ids else None)
 
     doc.addPageTemplates([
-        PageTemplate(id='First', frames=[frame_first],
-                     onPage=lambda c, d: _draw_page_bottom(c, d)),
-        PageTemplate(id='Later', frames=[frame_later],
-                     onPage=_on_later),
+        PageTemplate(id='First', frames=[frame_first], onPage=_on_first),
+        PageTemplate(id='Later', frames=[frame_later], onPage=_on_later),
     ])
 
     doc.build(story)
