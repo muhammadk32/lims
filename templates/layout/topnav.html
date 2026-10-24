@@ -50,6 +50,68 @@
 .topnav-item .dropdown-item.active i {
     color: #1a3d7c !important;
 }
+
+
+
+
+
+/* ===== FORCE DARK BORDERS ===== */
+.topnav-item .topnav-dropdown {
+    padding: 8px !important;
+    background: #f8f9fa !important;
+}
+.topnav-item .topnav-dropdown .dropdown-item {
+    border: 2px solid #212529 !important; /* Dark border on ALL sides */
+    border-radius: 6px !important;
+    margin-bottom: 6px !important;
+    background-color: #fff !important; /* White background */
+    color: #212529 !important;
+    padding: 8px 12px !important;
+    font-weight: 600 !important;
+}
+.topnav-item .topnav-dropdown .dropdown-item:last-child {
+    margin-bottom: 0 !important;
+}
+.topnav-item .topnav-dropdown .dropdown-item:hover,
+.topnav-item .topnav-dropdown .dropdown-item.active {
+    background-color: #eaf2ff !important; /* Light blue hover */
+    border-color: #0d6efd !important; /* Blue border on hover */
+    color: #1a3d7c !important;
+}
+
+/* ===== FIX LONG DROPDOWN ===== */
+.topnav-item .topnav-dropdown {
+    max-height: 80vh !important; /* Limit height to 80% of screen */
+    overflow-y: auto !important; /* Add scrollbar if too long */
+    overflow-x: hidden !important;
+}
+/* Custom scrollbar to match theme */
+.topnav-item .topnav-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+.topnav-item .topnav-dropdown::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 4px;
+}
+.topnav-item .topnav-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* ===== FIX HOVER GAP ===== */
+.topnav-item .topnav-dropdown {
+    margin-top: 0 !important; /* Remove gap between nav button and menu */
+    top: 100% !important; /* Ensure it starts exactly at the bottom of the button */
+}
+/* Optional: Add an invisible bridge to catch the mouse so it doesn't close */
+.topnav-item .topnav-dropdown::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -15px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 15px !important;
+    background: transparent !important;
+}
 </style>﻿<nav class="app-topnav" id="appTopnav">
   <div class="nav-container">
 
