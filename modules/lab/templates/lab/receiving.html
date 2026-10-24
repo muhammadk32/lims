@@ -2,151 +2,280 @@
 {% block title %}Sample Receiving — LabMS{% endblock %}
 
 {% block head %}
+
+
+
 <style>
-  /* ============ Page ============ */
-  .sr-page {
-    padding: 4px 10px 24px;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 0.95rem;
-    color: var(--bs-body-color);
-  }
+/* ============================================================
+   EXACT MATCH TO REPORTS (Cash Summary) THEME
+   ============================================================ */
+.sr-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px 40px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.82rem;
+  color: #212529;
+}
 
-  /* ============ Header ============ */
-  .sr-header {
-    border-bottom: 1px solid var(--bs-border-color);
-    padding-bottom: 8px; margin-bottom: 12px;
-  }
-  .sr-title {
-    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.015em;
-    margin: 0; display: flex; align-items: center; gap: 10px;
-  }
-  .sr-title i { color: var(--brand-primary); }
-  .sr-sub { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
+/* Header: Blue Gradient, no borders, uppercase */
+.sr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  color: #fff;
+}
+.sr-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sr-title i { color: #fff; }
+.sr-sub {
+  font-size: 0.85rem;
+  color: #dbeafe;
+  font-family: Consolas, Monaco, monospace;
+  margin: 0;
+}
 
-  /* ============ Filter card ============ */
-  .sr-filter {
-    display: flex; gap: 8px; align-items: center;
-    padding: 12px 14px; margin-bottom: 12px;
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    padding-top: 40px;
-  }
-  .sr-filter::before {
-    content: "\f4fe  Search";
-    font-family: 'bootstrap-icons', 'Segoe UI', Arial, sans-serif;
-    position: absolute; top: 0; left: 0; right: 0;
-    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    color: #1d4ed8;
-    background: #dbeafe;
-  }
-  [data-bs-theme="dark"] .sr-filter::before { color: #dbeafe; background: #1e3a8a; }
+/* Filter Box: White, light grey border, rounded */
+.sr-filter {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.sr-filter::before { content: none; display: none; }
+.sr-filter input {
+  flex: 1;
+  max-width: 400px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9rem;
+}
+.sr-filter input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+.sr-filter .sr-btn {
+  height: 38px;
+  padding: 0 20px;
+  background: #198754;
+  border: 1px solid #198754;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
-  .sr-filter input {
-    padding: 7px 11px;
-    border: 2px solid #1a1a1a; border-radius: 6px;
-    font-size: 0.9rem; height: 36px; box-sizing: border-box; width: 320px;
-    background: #f3f8ff; color: var(--bs-body-color);
-  }
-  .sr-filter input:focus {
-    outline: none; border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
-  }
-  [data-bs-theme="dark"] .sr-filter input { border-color: #000; background: #1a2433; color: #e8eaee; }
+/* Yellow Band: Soft, no thick dark border */
+.sr-band {
+  background: #fff8e1;
+  border: 1px solid #ffe69c;
+  color: #664d03;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
 
-  /* ============ Buttons ============ */
-  .sr-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; font-size: 0.84rem; font-weight: 600;
-    border: 1px solid var(--bs-border-color);
-    background: var(--bs-body-bg); color: var(--bs-body-color);
-    text-decoration: none; cursor: pointer; border-radius: 6px;
-    letter-spacing: 0.02em;
-    transition: background .12s;
-  }
-  .sr-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
-  .sr-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-  .sr-btn-primary:hover { background: #146c43; color: #fff; }
-  .sr-btn-sm { padding: 5px 11px; font-size: 0.78rem; border-radius: 6px; }
+/* Table Card: Dark border OUTSIDE only */
+.sr-card {
+  border: 2px solid #212529;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  margin-bottom: 20px;
+}
+.sr-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
 
-  /* ============ Band + card wrapper ============ */
-  .sr-band {
-    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    border-radius: 10px 10px 0 0;
-    display: flex; align-items: center; gap: 8px;
-    background: #fef3c7; color: #b45309;
-    margin-top: 4px;
-  }
-  .sr-band i { font-size: 1rem; }
-  [data-bs-theme="dark"] .sr-band { background: #78350f; color: #fef3c7; }
+/* Table Headers: Blue background, centered */
+.sr-table thead th {
+  background: #1a3d7c;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 12px;
+  text-align: center;
+  border-bottom: 2px solid #212529; /* Divider under header */
+  border-right: 1px solid #343a40;
+  vertical-align: middle;
+}
+.sr-table thead th:last-child { border-right: none; }
 
-  .sr-card {
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    padding: 10px;
-    margin-bottom: 8px;
-  }
+/* Table Body: Light grey cell borders */
+.sr-table tbody td {
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dee2e6;
+  border-right: 1px solid #f1f3f5;
+  vertical-align: middle;
+  color: #212529;
+}
+.sr-table tbody td:last-child { border-right: none; }
+.sr-table tbody tr:nth-child(even) td { background: #fbfcfd; }
+.sr-table tbody tr:hover td { background: #eaf2ff; }
 
-  /* ============ Table ============ */
-  .sr-table {
-    width: 100%; border-collapse: separate; border-spacing: 0;
-    border: 2px solid #1a1a1a; border-radius: 10px;
-    overflow: hidden;
-    font-size: 0.9rem; background: var(--bs-body-bg);
-  }
-  .sr-table thead th {
-    background: #1a1a1a; color: #fff;
-    padding: 9px 12px; text-align: left;
-    font-size: 0.78rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    border-bottom: 2px solid #000;
-    border-right: 1px solid #333846;
-    white-space: nowrap;
-  }
-  .sr-table thead th:last-child { border-right: none; }
-  .sr-table tbody td {
-    padding: 6px 12px;
-    border-bottom: 1.5px solid #1a1a1a;
-    border-right: 1.5px solid #1a1a1a;
-    vertical-align: middle; font-size: 0.9rem;
-  }
-  .sr-table tbody td:last-child { border-right: none; }
-  .sr-table tbody tr:last-child td { border-bottom: none; }
-  .sr-table tbody tr:hover td { background: var(--bs-tertiary-bg); }
-  .sr-table code {
-    font-family: Consolas, Monaco, monospace;
-    font-size: 0.85rem; padding: 1px 5px; border-radius: 4px;
-    background: var(--bs-tertiary-bg); color: var(--brand-primary);
-    border: 1px solid var(--bs-border-color);
-  }
-  [data-bs-theme="dark"] .sr-table { border-color: #000; }
-  [data-bs-theme="dark"] .sr-table tbody td { border-color: #2a2f3a; }
+/* Buttons inside table */
+.sr-table .btn, .sr-table button {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  background: #198754;
+  border: 1px solid #146c43;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-  /* Badge */
-  .sr-badge-pending {
-    display: inline-block; padding: 3px 10px;
-    background: #ffc107; color: #664d03;
-    font-size: 0.72rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.04em;
-    border-radius: 999px;
-  }
+/* ===== ADD DARK BORDERS TO HEADER AND FILTER ===== */
 
-  /* ============ Empty ============ */
-  .sr-empty {
-    padding: 34px; text-align: center;
-    color: var(--bs-secondary-color); font-style: italic;
-    border: 1px dashed var(--bs-border-color); border-radius: 10px;
-    background: var(--bs-tertiary-bg);
-  }
+/* 1. Header Bar Border */
+.sr-header {
+    border: 2px solid #212529 !important; 
+}
+
+/* 2. Search Filter Box Border */
+.sr-filter {
+    border: 2px solid #212529 !important;
+}
+
+/* 3. Yellow Band Border */
+.sr-band {
+    border: 2px solid #212529 !important;
+}
+
+/* ===== EXACT GRADIENT HEADER MATCH ===== */
+.sr-table thead th {
+    /* Gradient mimicking the screenshot */
+    background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+    color: #ffffff !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-size: 0.85rem !important; /* Slightly larger */
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    padding: 14px 12px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    
+    /* Thin subtle separator instead of harsh black */
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: none !important; 
+}
+.sr-table thead th:last-child {
+    border-right: none !important;
+}
+
+/* Keep the outer table box dark */
+.sr-card, .sr-table {
+    border: 2px solid #212529 !important;
+}
+
+/* ===== STRICT GRID BORDERS ===== */
+.sr-card {
+    border: none !important; /* Remove from card to prevent clipping */
+    overflow: visible !important;
+    background: transparent !important;
+}
+
+.sr-table {
+    border: 2px solid #212529 !important; /* Dark outer box */
+    border-collapse: collapse !important;
+}
+
+/* Dark borders on every cell, including headers */
+.sr-table th, 
+.sr-table td {
+    border: 1px solid #212529 !important;
+}
+
+/* Re-apply the gradient to headers so it stays professional */
+.sr-table thead th {
+    background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+    color: #fff !important;
+    border-bottom: 2px solid #212529 !important;
+}
+
+/* ===== INCREASE TABLE BODY FONT ===== */
+.sr-table tbody td {
+    font-size: 1rem !important; /* Larger, readable size */
+    padding: 12px 12px !important; /* Slight padding increase to breathe */
+}
+
+/* ===== STATUS COLUMN COLORING ===== */
+/* Target the 6th column (Status) td elements */
+.sr-table tbody td:nth-child(6) {
+    color: #b58105 !important; /* Professional amber/orange color */
+    font-weight: 800 !important; /* Bold */
+    text-transform: uppercase !important; /* Make it look like a label */
+    font-size: 0.85rem !important;
+}
+
+/* ===== STATUS COLUMN BACKGROUND SHADE ===== */
+/* Target the 6th column (Status) td elements */
+.sr-table tbody td:nth-child(6) {
+    background-color: #fff8e1 !important; /* Soft amber shade */
+    color: #212529 !important; /* Dark text */
+}
+
+/* ===== ROUND TOP CORNERS OF TABLE HEADER ===== */
+.sr-table {
+    border-collapse: separate !important; /* Required for border-radius to work */
+    border-spacing: 0 !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.sr-table thead th:first-child {
+    border-top-left-radius: 8px !important;
+}
+
+.sr-table thead th:last-child {
+    border-top-right-radius: 8px !important;
+    border-right: none !important;
+}
+
+/* ===== PAGE WIDTH EXPANSION ===== */
+.sr-page {
+    max-width: 100% !important; /* Allow full width */
+    padding: 16px 32px 40px !important; /* Slightly larger side padding */
+}
 </style>
+
+
+
 {% endblock %}
 
 {% block content %}

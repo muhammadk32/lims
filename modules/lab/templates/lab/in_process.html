@@ -2,143 +2,192 @@
 {% block title %}Test In Process — LabMS{% endblock %}
 
 {% block head %}
+
 <style>
-  /* ============ Page ============ */
-  .tip-page {
-    padding: 4px 10px 24px;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 0.95rem;
-    color: var(--bs-body-color);
-  }
+/* ============================================================
+   MATCHING SAMPLE RECEIVING THEME
+   ============================================================ */
+.tip-page {
+  max-width: 100% !important;
+  margin: 0 auto;
+  padding: 16px 32px 40px !important;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 0.82rem;
+  color: #212529;
+}
 
-  /* ============ Header ============ */
-  .tip-header {
-    border-bottom: 1px solid var(--bs-border-color);
-    padding-bottom: 8px; margin-bottom: 12px;
-  }
-  .tip-title {
-    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.015em;
-    margin: 0; display: flex; align-items: center; gap: 10px;
-  }
-  .tip-title i { color: var(--brand-primary); }
-  .tip-sub { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
+/* Header */
+.tip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  color: #fff;
+}
+.tip-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tip-title i { color: #fff; }
+.tip-sub {
+  font-size: 0.85rem;
+  color: #dbeafe;
+  font-family: Consolas, Monaco, monospace;
+  margin: 0;
+}
 
-  /* ============ Filter card ============ */
-  .tip-filter {
-    display: flex; gap: 8px; align-items: center;
-    padding: 12px 14px 12px 14px; padding-top: 40px;
-    margin-bottom: 12px;
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: 10px;
-    position: relative; overflow: hidden;
-  }
-  .tip-filter::before {
-    content: "\\f4fe  Search";
-    font-family: 'bootstrap-icons', 'Segoe UI', Arial, sans-serif;
-    position: absolute; top: 0; left: 0; right: 0;
-    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    color: #1d4ed8; background: #dbeafe;
-  }
-  [data-bs-theme="dark"] .tip-filter::before { color: #dbeafe; background: #1e3a8a; }
-  .tip-filter input {
-    padding: 7px 11px; height: 36px; width: 320px;
-    border: 2px solid #1a1a1a; border-radius: 6px;
-    font-size: 0.9rem; background: #f3f8ff; color: var(--bs-body-color);
-    box-sizing: border-box;
-  }
-  .tip-filter input:focus {
-    outline: none; border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
-  }
-  [data-bs-theme="dark"] .tip-filter input { border-color: #000; background: #1a2433; color: #e8eaee; }
+/* Filter Box */
+.tip-filter {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.tip-filter::before { content: none; display: none; }
+.tip-filter input {
+  flex: 1;
+  max-width: 400px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9rem;
+}
+.tip-filter input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+.tip-filter .tip-btn {
+  height: 38px;
+  padding: 0 20px;
+  background: #198754;
+  border: 1px solid #198754;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
-  /* ============ Buttons ============ */
-  .tip-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; font-size: 0.84rem; font-weight: 600;
-    border: 1px solid var(--bs-border-color);
-    background: var(--bs-body-bg); color: var(--bs-body-color);
-    text-decoration: none; cursor: pointer; border-radius: 6px;
-    transition: background .12s;
-  }
-  .tip-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
-  .tip-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-  .tip-btn-primary:hover { background: #146c43; color: #fff; }
-  .tip-btn-sm { padding: 5px 11px; font-size: 0.78rem; border-radius: 6px; }
+/* Band */
+.tip-band {
+  background: #fff8e1;
+  border: 1px solid #ffe69c;
+  color: #664d03;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
 
-  /* ============ Band + Card ============ */
-  .tip-band {
-    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 8px 14px; border-radius: 10px 10px 0 0;
-    display: flex; align-items: center; gap: 8px;
-    background: #fef3c7; color: #b45309;
-    margin-top: 4px;
-  }
-  .tip-band i { font-size: 1rem; }
-  [data-bs-theme="dark"] .tip-band { background: #78350f; color: #fef3c7; }
-  .tip-card {
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    padding: 10px; margin-bottom: 8px;
-  }
+/* Table Card Container */
+.tip-card {
+  border: none !important;
+  overflow: visible !important;
+  background: transparent !important;
+  margin-bottom: 20px;
+}
 
-  /* ============ Table ============ */
-  .tip-table {
-    width: 100%; border-collapse: separate; border-spacing: 0;
-    border: 2px solid #1a1a1a; border-radius: 10px; overflow: hidden;
-    font-size: 0.9rem; background: var(--bs-body-bg);
-  }
-  .tip-table thead th {
-    background: #1a1a1a; color: #fff;
-    padding: 9px 12px; text-align: left;
-    font-size: 0.78rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    border-bottom: 2px solid #000;
-    border-right: 1px solid #333846;
-    white-space: nowrap;
-  }
-  .tip-table thead th:last-child { border-right: none; }
-  .tip-table tbody td {
-    padding: 6px 12px; font-size: 0.9rem;
-    border-bottom: 1.5px solid #1a1a1a;
-    border-right: 1.5px solid #1a1a1a;
-    vertical-align: middle;
-  }
-  .tip-table tbody td:last-child { border-right: none; }
-  .tip-table tbody tr:last-child td { border-bottom: none; }
-  .tip-table tbody tr:hover td { background: var(--bs-tertiary-bg); }
-  .tip-table code {
-    font-family: Consolas, Monaco, monospace;
-    font-size: 0.85rem; padding: 1px 5px; border-radius: 4px;
-    background: var(--bs-tertiary-bg); color: var(--brand-primary);
-    border: 1px solid var(--bs-border-color);
-  }
-  [data-bs-theme="dark"] .tip-table { border-color: #000; }
-  [data-bs-theme="dark"] .tip-table tbody td { border-color: #2a2f3a; }
+/* The Table */
+.tip-table {
+  width: 100%;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 2px solid #212529 !important;
+  border-radius: 8px 8px 0 0 !important;
+  margin: 0;
+  background: #fff;
+}
 
-  /* ============ Badge ============ */
-  .ip-badge-received {
-    display: inline-block; padding: 3px 10px;
-    background: #cfe2ff; color: #0a58ca;
-    font-size: 0.72rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.04em;
-    border-radius: 999px;
-  }
+/* Headers */
+.tip-table thead th {
+  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+  color: #ffffff !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 14px 12px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border-right: 1px solid #212529 !important;
+  border-bottom: 2px solid #212529 !important;
+}
+.tip-table thead th:last-child {
+  border-right: none !important;
+  border-top-right-radius: 8px !important;
+}
+.tip-table thead th:first-child {
+  border-top-left-radius: 8px !important;
+}
 
-  /* ============ Empty ============ */
-  .tip-empty {
-    padding: 34px; text-align: center;
-    color: var(--bs-secondary-color); font-style: italic;
-    border: 1px dashed var(--bs-border-color); border-radius: 10px;
-    background: var(--bs-tertiary-bg);
-  }
+/* Table Body Cells */
+.tip-table tbody td {
+  font-size: 1rem !important;
+  padding: 12px 12px !important;
+  border-bottom: 1px solid #212529 !important;
+  border-right: 1px solid #212529 !important;
+  vertical-align: middle;
+  color: #212529;
+}
+.tip-table tbody td:last-child {
+  border-right: none !important;
+}
+.tip-table tbody tr:hover td {
+  background: #eaf2ff !important;
+}
+
+/* Status Column Shading */
+.tip-table tbody td:nth-child(6) {
+  background-color: #fff8e1 !important;
+  color: #212529 !important;
+  font-weight: 700 !important;
+}
+
+/* Buttons inside table */
+.tip-table .btn, .tip-table button, .tip-btn-sm {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  background: #198754;
+  border: 1px solid #146c43;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ===== ADD DARK BORDERS TO HEADER AND FILTER ===== */
+.tip-header {
+    border: 2px solid #212529 !important;
+}
+.tip-filter {
+    border: 2px solid #212529 !important;
+}
 </style>
+
 {% endblock %}
 
 {% block content %}
