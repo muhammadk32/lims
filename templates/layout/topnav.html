@@ -323,17 +323,6 @@
   {# ===== RIBBON BODY (changes per tab) ===== #}
   <div class="ribbon-body">
 
-    {% if cur_tab == 'home' %}
-      <div class="ribbon-group">
-        <div class="ribbon-group-btns">
-          <a href="{{ url_for('orders.new_order') }}" class="ribbon-btn"><i class="bi bi-person-plus"></i>New Registration</a>
-          <a href="{{ url_for('orders.list_orders') }}" class="ribbon-btn"><i class="bi bi-journal-text"></i>Daily Ledger</a>
-          <a href="{{ url_for('reports.index') }}" class="ribbon-btn"><i class="bi bi-file-earmark-medical"></i>Test Reports</a>
-        </div>
-        <div class="ribbon-group-label">Quick Actions</div>
-      </div>
-    {% endif %}
-
     {% if cur_tab == 'operations' %}
       <div class="ribbon-group">
         <div class="ribbon-group-btns">
