@@ -1,10 +1,10 @@
 ﻿{% set path = request.path %}
 {% set ep = request.endpoint or '' %}
 {% set cur_tab = 'home' %}
-{% if path.startswith('/orders') or path.startswith('/reports') or ep.startswith('orders.') %}{% set cur_tab = 'operations' %}
+{% if (path.startswith('/orders') or (path.startswith('/reports') and not path.startswith('/reports/outsourced')) or ep.startswith('orders.')) %}{% set cur_tab = 'operations' %}
 {% elif path.startswith('/lab') or path.startswith('/results') or ep.startswith('lab.') or ep.startswith('results.') %}{% set cur_tab = 'laboratory' %}
-{% elif path.startswith('/analytics') or path.startswith('/billing') or ep.startswith('billing.') %}{% set cur_tab = 'reports' %}
-{% elif path.startswith('/settings') or path.startswith('/users') or path.startswith('/audit') or path.startswith('/patients') or ep.startswith('form_settings.') %}{% set cur_tab = 'admin' %}
+{% elif path.startswith('/analytics') or path.startswith('/billing') or path.startswith('/reports/outsourced') or ep.startswith('billing.') or ep == 'reports.outsourced' or ep == 'patients.history_by_phone' %}{% set cur_tab = 'reports' %}
+{% elif (path.startswith('/settings') or path.startswith('/users') or path.startswith('/audit') or (path.startswith('/patients') and ep != 'patients.history_by_phone') or ep.startswith('form_settings.')) %}{% set cur_tab = 'admin' %}
 {% elif ep.startswith('tests.') %}{% set cur_tab = 'lts' %}
 {% elif ep.startswith('dashboard.') %}{% set cur_tab = 'home' %}
 {% endif %}
@@ -19,9 +19,9 @@
 }
 .ribbon-tabs {
     display: flex;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    border-bottom: none !important;
     padding: 0 8px;
-    gap: 2px;
+    gap: 0;
 }
 .ribbon-tab {
     padding: 8px 16px;
@@ -41,7 +41,7 @@
     gap: 6px;
 }
 .ribbon-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.ribbon-tab.active { background: #fff; color: #1a3d7c; border-bottom: 2px solid #fff; margin-bottom: -1px; }
+.ribbon-tab.active { background: #fff; color: #1a3d7c; }
 .ribbon-tab i { font-size: 1rem; }
 
 .ribbon-body {
@@ -212,7 +212,7 @@
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
-    border-style: solid !important;
+    /* border-style: solid removed — was adding borders to ribbon tabs */
 }
 /* Keep the active state's border but not the ring */
 .ribbon-btn.active {
@@ -261,6 +261,32 @@
     background: transparent !important;
     border-radius: 0 !important;
     text-align: center !important;
+}
+
+/* ===== REMOVE TAB BORDERS ===== */
+.ribbon-tab,
+.ribbon-tab:link,
+.ribbon-tab:visited,
+.ribbon-tab:hover,
+.ribbon-tab:focus,
+.ribbon-tab:active,
+.ribbon-tab.active {
+    border: none !important;
+    border-width: 0 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure active tab still looks different (white bg, dark text) */
+.ribbon-tab.active {
+    background: #fff !important;
+    color: #1a3d7c !important;
+}
+.ribbon-tab.active i {
+    color: #1a3d7c !important;
 }
 </style>
 

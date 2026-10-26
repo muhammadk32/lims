@@ -383,6 +383,251 @@
   height: 1.05em !important;
   margin-top: 0 !important;
 }
+
+<style>
+/* ===== COMPACT FORM SECTION HEADERS ===== */
+.fs-section-header,
+.section-header,
+.group-header,
+.form-section-head,
+[class*="section-head"],
+[class*="group-head"] {
+    padding: 5px 12px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    line-height: 1.15 !important;
+    font-size: 0.78rem !important;
+}
+.fs-section-header h2,
+.fs-section-header h3,
+.fs-section-header h4,
+.section-header h2,
+.section-header h3,
+.section-header h4,
+.group-header h3,
+[class*="section-head"] h2,
+[class*="section-head"] h3,
+[class*="section-head"] h4 {
+    font-size: 0.82rem !important;
+    margin: 0 !important;
+    line-height: 1.15 !important;
+}
+.fs-section-header .badge,
+.section-header .badge,
+[class*="section-head"] .badge {
+    font-size: 0.7rem !important;
+    padding: 1px 6px !important;
+}
+/* Any blue band grouping fields */
+.form-section-bar,
+.field-group-header {
+    padding: 5px 12px !important;
+    min-height: 0 !important;
+    height: auto !important;
+}
+</style>
+
+
+
+<style>
+/* ===== NUCLEAR SHRINK .fs-sec ===== */
+.fs-sec {
+    padding: 2px 10px !important;
+    margin: 0 0 4px 0 !important;
+    min-height: 0 !important;
+    height: 28px !important;
+    max-height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    overflow: hidden !important;
+}
+.fs-sec > * {
+    line-height: 1 !important;
+    height: auto !important;
+}
+.fs-sec .left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: 24px !important;
+}
+.fs-sec .title {
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+.fs-sec .drag-handle,
+.fs-sec .handle,
+.fs-sec [class*="handle"],
+.fs-sec .drag-icon {
+    font-size: 0.8rem !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.fs-sec .badge,
+.fs-sec .count,
+.fs-sec .num,
+.fs-sec [class*="badge"] {
+    font-size: 0.66rem !important;
+    padding: 1px 5px !important;
+    line-height: 1 !important;
+    height: 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+.fs-sec i {
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+}
+.fs-sec svg {
+    width: 14px !important;
+    height: 14px !important;
+}
+</style>
+
+<style>
+/* ===== FIT FONT + ICONS IN .fs-sec ===== */
+.fs-sec .title {
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: 0.04em !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 22px !important;
+}
+.fs-sec .left {
+    height: 22px !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+/* Drag-handle wrapper + inner circle */
+.fs-sec .drag-handle,
+.fs-sec .handle,
+.fs-sec [class*="drag"],
+.fs-sec [class*="handle"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+/* Any inner icon inside the handle */
+.fs-sec .drag-handle *,
+.fs-sec [class*="drag"] *,
+.fs-sec [class*="handle"] * {
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: 10px !important;
+    max-height: 10px !important;
+    font-size: 0.6rem !important;
+    line-height: 1 !important;
+}
+/* Folder icon inside the title */
+.fs-sec .title i,
+.fs-sec .title .bi {
+    font-size: 0.8rem !important;
+    line-height: 1 !important;
+    margin-right: 2px !important;
+}
+/* Right-side count badge */
+.fs-sec .badge,
+.fs-sec .count,
+.fs-sec [class*="badge"] {
+    font-size: 0.62rem !important;
+    padding: 1px 6px !important;
+    height: 16px !important;
+    line-height: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 8px !important;
+}
+</style>
+
+<style>
+/* ===== SAVE SETTINGS BUTTON ===== */
+.form-actions,
+.sticky-actions,
+.actions-bar,
+div[class*="action"] {
+    padding: 8px 12px !important;
+}
+.form-actions .btn,
+.sticky-actions .btn,
+.actions-bar .btn,
+div[class*="action"] .btn,
+button.btn-success,
+button[type="submit"].btn {
+    height: 32px !important;
+    padding: 0 18px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+    border-radius: 6px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+.form-actions .btn i,
+.sticky-actions .btn i,
+.actions-bar .btn i {
+    font-size: 0.9rem !important;
+    line-height: 1 !important;
+}
+/* Fix the sticky bar that shows the save button */
+.form-save-bar,
+.save-bar,
+[class*="save"] {
+    padding: 8px 14px !important;
+}
+</style>
+
+<style>
+/* ===== CENTER SAVE BUTTON TEXT ===== */
+button.btn-success,
+.form-actions .btn,
+.save-bar .btn,
+form button[type="submit"],
+button[onclick*="save"],
+.btn-success {
+    justify-content: center !important;
+    text-align: center !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+button.btn-success i,
+.btn-success i {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+</style>
 </style>
 {% endblock %}
 
