@@ -75,7 +75,7 @@
     align-items: center;
     justify-content: center;
     padding: 4px 8px;
-    min-width: 60px;
+    min-width: 68px;
     max-width: 90px;
     color: #212529;
     text-decoration: none;
@@ -158,6 +158,110 @@
 
 /* Default fallback */
 .ribbon-btn i                       { color: #1a3d7c; }
+
+/* No dashed focus ring on ribbon buttons */
+.ribbon-btn:focus,
+.ribbon-btn:focus-visible,
+.ribbon-btn:active,
+.ribbon-tab:focus,
+.ribbon-tab:focus-visible,
+.ribbon-tab:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* FORCE remove all dashed/focus outlines on ribbon */
+.ribbon *:focus,
+.ribbon *:focus-visible,
+.ribbon *:focus-within,
+.ribbon a:focus,
+.ribbon a:focus-visible,
+.ribbon button:focus,
+.ribbon button:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+}
+.ribbon a, .ribbon button { outline: none !important; }
+/* Prevent dashed default from touch browsers */
+.ribbon-btn, .ribbon-tab {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+}
+
+
+/* ===== NUCLEAR FOCUS RING KILL ===== */
+.ribbon a,
+.ribbon a:link,
+.ribbon a:visited,
+.ribbon a:hover,
+.ribbon a:focus,
+.ribbon a:active,
+.ribbon a:focus-visible,
+.ribbon-btn,
+.ribbon-btn:focus,
+.ribbon-btn:active,
+.ribbon-btn:focus-visible,
+.ribbon-btn.active,
+.ribbon-btn.active:focus {
+    outline: 0 !important;
+    outline-width: 0 !important;
+    outline-style: none !important;
+    outline-color: transparent !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    border-style: solid !important;
+}
+/* Keep the active state's border but not the ring */
+.ribbon-btn.active {
+    border-color: #0d6efd !important;
+    background: #eaf2ff !important;
+}
+/* Focus only changes border color, never adds a ring */
+.ribbon-btn:focus:not(:active):not(.active) {
+    border-color: #ced4da !important;
+    background: #fff !important;
+}
+
+/* EXTREME: kill dashed focus visible ring everywhere in ribbon */
+:where(.ribbon) a:focus-visible,
+:where(.ribbon) a:focus,
+:where(.ribbon) button:focus-visible,
+:where(.ribbon) button:focus,
+:where(.ribbon) .ribbon-btn:focus-visible,
+:where(.ribbon) .ribbon-btn:focus,
+:where(.ribbon) .ribbon-tab:focus-visible,
+:where(.ribbon) .ribbon-tab:focus {
+    outline: none !important;
+    outline: 0 dotted transparent !important;
+    outline-offset: 0 !important;
+    box-shadow: 0 0 0 0 transparent !important;
+}
+:where(.ribbon) a::-moz-focus-inner,
+:where(.ribbon) button::-moz-focus-inner {
+    border: 0 !important;
+    padding: 0 !important;
+}
+
+/* ===== FIX: _bulk.html hijacks .bi-upload icon with a big dashed box ===== */
+.ribbon .ribbon-btn i,
+.ribbon .ribbon-btn i.bi,
+.ribbon .ribbon-btn i.bi-upload,
+.ribbon .ribbon-btn i[class*="bi-"] {
+    border: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+    font-size: 1.15rem !important;
+    line-height: 1 !important;
+    margin-bottom: 3px !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    text-align: center !important;
+}
 </style>
 
 <nav class="ribbon" id="appRibbon">
@@ -330,3 +434,35 @@
 
   </div>
 </nav>
+
+<script>
+(function() {
+  document.addEventListener('mousedown', function(e) {
+    var a = e.target.closest('.ribbon a, .ribbon-tab, .ribbon-btn');
+    if (a) {
+      // Immediately prevent focus ring: blur the link right after click
+      a.addEventListener('click', function() { a.blur(); }, { once: true });
+    }
+  }, true);
+  // Also remove focus from the currently focused ribbon element
+  window.addEventListener('load', function() {
+    if (document.activeElement && document.activeElement.classList.contains('ribbon-btn')) {
+      document.activeElement.blur();
+    }
+  });
+})();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Remove focus the moment any ribbon link is clicked
+  document.querySelectorAll('.ribbon a').forEach(function(a) {
+    a.addEventListener('click', function() { setTimeout(function(){ this.blur(); }, 0); }.bind(a));
+  });
+  // Remove focus if the current URL target has focus after load
+  if (document.activeElement && document.activeElement.classList.contains('ribbon-btn')) {
+    document.activeElement.blur();
+  }
+});
+</script>
