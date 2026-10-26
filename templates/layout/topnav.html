@@ -1,399 +1,332 @@
+﻿{% set path = request.path %}
+{% set ep = request.endpoint or '' %}
+{% set cur_tab = 'home' %}
+{% if path.startswith('/orders') or path.startswith('/reports') or ep.startswith('orders.') %}{% set cur_tab = 'operations' %}
+{% elif path.startswith('/lab') or path.startswith('/results') or ep.startswith('lab.') or ep.startswith('results.') %}{% set cur_tab = 'laboratory' %}
+{% elif path.startswith('/analytics') or path.startswith('/billing') or ep.startswith('billing.') %}{% set cur_tab = 'reports' %}
+{% elif path.startswith('/settings') or path.startswith('/users') or path.startswith('/audit') or path.startswith('/patients') or ep.startswith('form_settings.') %}{% set cur_tab = 'admin' %}
+{% elif ep.startswith('tests.') %}{% set cur_tab = 'lts' %}
+{% elif ep.startswith('dashboard.') %}{% set cur_tab = 'home' %}
+{% endif %}
+
 <style>
-/* ===== PROFESSIONAL TOPNAV DROPDOWNS ===== */
-.topnav-item .topnav-dropdown {
-    background: #fff !important;
-    border: 1px solid #dee2e6 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-    padding: 8px 0 !important;
-    margin-top: 4px !important;
-    min-width: 230px !important;
-    z-index: 1000;
+/* ===== RIBBON BAR ===== */
+.ribbon {
+    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%);
+    border-bottom: 2px solid #212529;
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
-.topnav-item .dropdown-section {
-    font-size: 0.72rem !important;
-    font-weight: 800 !important;
-    color: #1a3d7c !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    padding: 10px 20px 4px 20px !important;
-    margin-top: 4px;
+.ribbon-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 0 8px;
+    gap: 2px;
 }
-.topnav-item .dropdown-divider {
-    border-top: 1px solid #e9ecef !important;
-    margin: 8px 0 !important;
+.ribbon-tab {
+    padding: 8px 16px;
+    color: #dbeafe;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 4px 4px 0 0;
+    transition: background 0.15s;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
-.topnav-item .dropdown-item {
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: #212529 !important;
-    padding: 9px 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    text-decoration: none !important;
-    transition: all 0.15s ease-in-out !important;
-    border-left: 3px solid transparent !important;
-}
-.topnav-item .dropdown-item i {
-    font-size: 1.05rem !important;
-    color: #6c757d !important;
-    transition: color 0.15s ease !important;
-}
-.topnav-item .dropdown-item:hover,
-.topnav-item .dropdown-item.active {
-    background: #f0f7ff !important;
-    color: #1a3d7c !important;
-    border-left-color: #1a3d7c !important;
-}
-.topnav-item .dropdown-item:hover i,
-.topnav-item .dropdown-item.active i {
-    color: #1a3d7c !important;
-}
+.ribbon-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.ribbon-tab.active { background: #fff; color: #1a3d7c; border-bottom: 2px solid #fff; margin-bottom: -1px; }
+.ribbon-tab i { font-size: 1rem; }
 
-
-
-
-
-/* ===== FORCE DARK BORDERS ===== */
-.topnav-item .topnav-dropdown {
-    padding: 8px !important;
-    background: #f8f9fa !important;
+.ribbon-body {
+    display: flex;
+    padding: 4px 10px;
+    gap: 12px;
+    align-items: stretch;
+    min-height: 56px;
+    background: #fff;
+    border-bottom: 1px solid #adb5bd;
 }
-.topnav-item .topnav-dropdown .dropdown-item {
-    border: 2px solid #212529 !important; /* Dark border on ALL sides */
-    border-radius: 6px !important;
-    margin-bottom: 6px !important;
-    background-color: #fff !important; /* White background */
-    color: #212529 !important;
-    padding: 8px 12px !important;
-    font-weight: 600 !important;
+.ribbon-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 12px;
+    border-right: 1px solid #adb5bd;
+    min-width: 70px;
 }
-.topnav-item .topnav-dropdown .dropdown-item:last-child {
-    margin-bottom: 0 !important;
+.ribbon-group:last-child { border-right: none; }
+.ribbon-group-btns {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    align-items: center;
+    flex-wrap: wrap;
 }
-.topnav-item .topnav-dropdown .dropdown-item:hover,
-.topnav-item .topnav-dropdown .dropdown-item.active {
-    background-color: #eaf2ff !important; /* Light blue hover */
-    border-color: #0d6efd !important; /* Blue border on hover */
-    color: #1a3d7c !important;
-}
-
-/* ===== FIX LONG DROPDOWN ===== */
-.topnav-item .topnav-dropdown {
-    max-height: 80vh !important; /* Limit height to 80% of screen */
-    overflow-y: auto !important; /* Add scrollbar if too long */
-    overflow-x: hidden !important;
-}
-/* Custom scrollbar to match theme */
-.topnav-item .topnav-dropdown::-webkit-scrollbar {
-    width: 8px;
-}
-.topnav-item .topnav-dropdown::-webkit-scrollbar-thumb {
-    background: #ced4da;
+.ribbon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    min-width: 60px;
+    max-width: 90px;
+    color: #212529;
+    text-decoration: none;
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-align: center;
     border-radius: 4px;
+    transition: background 0.15s;
+    border: 1px solid #ced4da;
+    line-height: 1.1;
+    cursor: pointer;
+    background: #fff;
 }
-.topnav-item .topnav-dropdown::-webkit-scrollbar-thumb:hover {
-    background: #adb5bd;
+.ribbon-btn i { font-size: 1.15rem; margin-bottom: 3px; }
+.ribbon-btn:hover { background: #f0f7ff; border-color: #0d6efd; }
+.ribbon-btn:hover i { color: #0d6efd; }
+.ribbon-btn.active { background: #eaf2ff; border-color: #0d6efd; }
+.ribbon-group-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1a3d7c;
+    font-weight: 700;
+    margin-top: 4px;
+    padding-top: 3px;
+    border-top: 1px solid #adb5bd;
+    text-align: center;
+    width: 100%;
 }
 
-/* ===== FIX HOVER GAP ===== */
-.topnav-item .topnav-dropdown {
-    margin-top: 0 !important; /* Remove gap between nav button and menu */
-    top: 100% !important; /* Ensure it starts exactly at the bottom of the button */
-}
-/* Optional: Add an invisible bridge to catch the mouse so it doesn't close */
-.topnav-item .topnav-dropdown::before {
-    content: "" !important;
-    position: absolute !important;
-    top: -15px !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 15px !important;
-    background: transparent !important;
-}
-</style>﻿<nav class="app-topnav" id="appTopnav">
-  <div class="nav-container">
+/* ===== ICON COLORS PER GLYPH ===== */
+.ribbon-btn .bi-speedometer2        { color: #0d6efd; }
+.ribbon-btn .bi-clipboard2-pulse    { color: #dc3545; }
+.ribbon-btn .bi-clipboard2-check    { color: #198754; }
+.ribbon-btn .bi-bar-chart-line      { color: #fd7e14; }
+.ribbon-btn .bi-shield-check        { color: #6f42c1; }
+.ribbon-btn .bi-sliders2            { color: #0dcaf0; }
 
-    <!-- Dashboard -->
-    <a href="{{ url_for('dashboard.index') }}"
-       class="topnav-link tn-dashboard {% if request.endpoint and request.endpoint.startswith('dashboard.') %}active{% endif %}">
-      <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+/* Patients / People */
+.ribbon-btn .bi-person-plus         { color: #198754; }
+.ribbon-btn .bi-journal-text        { color: #0d6efd; }
+.ribbon-btn .bi-people              { color: #0d6efd; }
+.ribbon-btn .bi-person-badge        { color: #6f42c1; }
+.ribbon-btn .bi-person-vcard        { color: #fd7e14; }
+.ribbon-btn .bi-pen                 { color: #6f42c1; }
+
+/* Lab flow */
+.ribbon-btn .bi-inbox               { color: #0dcaf0; }
+.ribbon-btn .bi-hourglass-split     { color: #fd7e14; }
+.ribbon-btn .bi-list-check          { color: #198754; }
+
+/* Files / Reports */
+.ribbon-btn .bi-file-earmark-medical{ color: #dc3545; }
+.ribbon-btn .bi-sliders             { color: #0d6efd; }
+.ribbon-btn .bi-sliders2            { color: #0dcaf0; }
+.ribbon-btn .bi-printer             { color: #6c757d; }
+.ribbon-btn .bi-ui-checks           { color: #198754; }
+
+/* Money / Financial */
+.ribbon-btn .bi-cash-coin           { color: #198754; }
+.ribbon-btn .bi-cash-stack          { color: #fd7e14; }
+.ribbon-btn .bi-currency-exchange   { color: #198754; }
+.ribbon-btn .bi-calendar-week       { color: #0d6efd; }
+
+/* Analytics */
+.ribbon-btn .bi-grid                { color: #0d6efd; }
+.ribbon-btn .bi-exclamation-triangle{ color: #dc3545; }
+.ribbon-btn .bi-building            { color: #6c757d; }
+
+/* Catalog */
+.ribbon-btn .bi-tags                { color: #6f42c1; }
+.ribbon-btn .bi-collection          { color: #fd7e14; }
+.ribbon-btn .bi-box-seam            { color: #0d6efd; }
+.ribbon-btn .bi-rulers              { color: #0dcaf0; }
+.ribbon-btn .bi-upload              { color: #198754; }
+.ribbon-btn .bi-eye                 { color: #6f42c1; }
+
+/* Content */
+.ribbon-btn .bi-capsule             { color: #dc3545; }
+
+/* Default fallback */
+.ribbon-btn i                       { color: #1a3d7c; }
+</style>
+
+<nav class="ribbon" id="appRibbon">
+
+  {# ===== TABS ===== #}
+  <div class="ribbon-tabs">
+    <a href="{{ url_for('dashboard.index') }}" class="ribbon-tab {% if cur_tab == 'home' %}active{% endif %}">
+      <i class="bi bi-speedometer2"></i> Home
     </a>
-
-    <!-- Operations dropdown -->
-    <div class="topnav-item tn-operations">
-      <button type="button" class="topnav-link
-        {% if request.endpoint and (request.endpoint.startswith('orders.') or request.endpoint.startswith('reports.')) %}active{% endif %}">
-        <i class="bi bi-clipboard2-pulse"></i>
-        <span>Operations</span>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="topnav-dropdown">
-        {# Patient Registration (opens the FORM) #}
-        <a href="{{ url_for('orders.new_order') }}"
-           class="dropdown-item {% if request.endpoint == 'orders.new_order' %}active{% endif %}">
-          <i class="bi bi-person-plus"></i> Patient Registration
-        </a>
-
-        {# Daily Ledger (opens the LIST) #}
-        <a href="{{ url_for('orders.list_orders') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('orders.') and request.endpoint != 'orders.new_order' %}active{% endif %}">
-          <i class="bi bi-journal-text"></i> Daily Ledger
-        </a>
-
-
-        <a href="{{ url_for('reports.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('reports.') and request.endpoint != 'reports.outsourced' %}active{% endif %}">
-          <i class="bi bi-file-earmark-medical"></i> Test Reports
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Laboratory dropdown (admin & doctor only) -->
+    <a href="{{ url_for('orders.list_orders') }}" class="ribbon-tab {% if cur_tab == 'operations' %}active{% endif %}">
+      <i class="bi bi-clipboard2-pulse"></i> Operations
+    </a>
     {% if current_user.role in ['admin', 'doctor'] %}
-    <div class="topnav-item tn-laboratory">
-      <button type="button" class="topnav-link
-        {% if request.endpoint and (request.endpoint.startswith('lab.') or request.endpoint.startswith('results.')) %}active{% endif %}">
-        <i class="bi bi-clipboard2-check"></i>
-        <span>Laboratory</span>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="topnav-dropdown">
-
-        <a href="{{ url_for('lab.receiving') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('lab.receiving') %}active{% endif %}">
-          <i class="bi bi-inbox"></i> Sample Receiving
-        </a>
-
-        <a href="{{ url_for('lab.in_process') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('lab.in_process') %}active{% endif %}">
-          <i class="bi bi-hourglass-split"></i> Test In Process
-        </a>
-
-        <a href="{{ url_for('results.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('results.') and not request.endpoint.startswith('results.enter') %}active{% endif %}">
-          <i class="bi bi-list-check"></i> Results
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <a href="{{ url_for('lab.verify_queue') }}"
-           class="dropdown-item {% if request.endpoint == 'lab.verify_queue' %}active{% endif %}">
-          <i class="bi bi-shield-check"></i> Verification &amp; Approval
-        </a>
-
-      </div>
-    </div>
+    <a href="{{ url_for('lab.receiving') }}" class="ribbon-tab {% if cur_tab == 'laboratory' %}active{% endif %}">
+      <i class="bi bi-clipboard2-check"></i> Laboratory
+    </a>
     {% endif %}
-
-    <!-- Management Reports (dropdown) -->
     {% if current_user.role in ['admin', 'doctor', 'receptionist'] %}
-    <div class="topnav-item tn-reports">
-      <button type="button" class="topnav-link
-        {% if request.path.startswith('/analytics') or (request.endpoint and request.endpoint.startswith('billing.')) %}active{% endif %}">
-        <i class="bi bi-bar-chart-line"></i>
-        <span>Reports</span>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="topnav-dropdown">
+    <a href="{{ url_for('analytics.index') }}" class="ribbon-tab {% if cur_tab == 'reports' %}active{% endif %}">
+      <i class="bi bi-bar-chart-line"></i> Reports
+    </a>
+    {% endif %}
+    {% if current_user.role == 'admin' %}
+    <a href="{{ url_for('patients.list_patients') }}" class="ribbon-tab {% if cur_tab == 'admin' %}active{% endif %}">
+      <i class="bi bi-shield-check"></i> Administration
+    </a>
+    <a href="{{ url_for('tests.index', tab='catalog') }}" class="ribbon-tab {% if cur_tab == 'lts' %}active{% endif %}">
+      <i class="bi bi-sliders2"></i> Lab Test Settings
+    </a>
+    {% endif %}
+  </div>
 
-        <a href="{{ url_for('patients.history_by_phone') }}"
-           class="dropdown-item {% if request.endpoint == 'patients.history_by_phone' %}active{% endif %}">
-          <i class="bi bi-people"></i> Patient History
-        </a>
+  {# ===== RIBBON BODY (changes per tab) ===== #}
+  <div class="ribbon-body">
 
-        <div class="dropdown-section">Financial</div>
-        <a href="{{ url_for('billing.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('billing.') %}active{% endif %}">
-          <i class="bi bi-cash-coin"></i> Cash Summary
-        </a>
-        <a href="{{ url_for('analytics.due') }}"
-           class="dropdown-item {% if request.endpoint == 'analytics.due' %}active{% endif %}">
-          <i class="bi bi-cash-stack"></i> Due Collection
-        </a>
-        <a href="{{ url_for('analytics.commissions') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('analytics.commission') %}active{% endif %}">
-          <i class="bi bi-person-badge"></i> Referral Commissions
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <div class="dropdown-section">Clinical</div>
-        <a href="{{ url_for('analytics.doctors') }}"
-           class="dropdown-item {% if request.endpoint and 'analytics.doctors' in request.endpoint %}active{% endif %}">
-          <i class="bi bi-person-vcard"></i> Doctor / Referral
-        </a>
-        <a href="{{ url_for('analytics.tests') }}"
-           class="dropdown-item {% if request.endpoint and 'analytics.tests' in request.endpoint %}active{% endif %}">
-          <i class="bi bi-clipboard2-pulse"></i> Test Volume
-        </a>
-        <a href="{{ url_for('analytics.abnormal') }}"
-           class="dropdown-item {% if request.endpoint == 'analytics.abnormal' %}active{% endif %}">
-          <i class="bi bi-exclamation-triangle"></i> Abnormal Results
-        </a>
-        <a href="{{ url_for('reports.outsourced') }}"
-           class="dropdown-item {% if request.endpoint == 'reports.outsourced' %}active{% endif %}">
-          <i class="bi bi-building"></i> Outsourced Lab Tests
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <div class="dropdown-section">Operations</div>
-        <a href="{{ url_for('analytics.daily') }}"
-           class="dropdown-item {% if request.endpoint == 'analytics.daily' %}active{% endif %}">
-          <i class="bi bi-calendar-week"></i> Daily Summary
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <a href="{{ url_for('analytics.index') }}"
-           class="dropdown-item {% if request.endpoint == 'analytics.index' %}active{% endif %}">
-          <i class="bi bi-grid"></i> All Reports
-        </a>
+    {% if cur_tab == 'home' %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('orders.new_order') }}" class="ribbon-btn"><i class="bi bi-person-plus"></i>New Registration</a>
+          <a href="{{ url_for('orders.list_orders') }}" class="ribbon-btn"><i class="bi bi-journal-text"></i>Daily Ledger</a>
+          <a href="{{ url_for('reports.index') }}" class="ribbon-btn"><i class="bi bi-file-earmark-medical"></i>Test Reports</a>
+        </div>
+        <div class="ribbon-group-label">Quick Actions</div>
       </div>
-    </div>
     {% endif %}
 
-    <!-- Administration (admin only) -->
-    {% if current_user.role == 'admin' %}
-    <div class="topnav-item tn-admin">
-      <button type="button" class="topnav-link
-        {% if request.endpoint and (request.endpoint.startswith('users.') or request.endpoint.startswith('audit.') or request.endpoint.startswith('settings.') or request.endpoint.startswith('form_settings.') or request.endpoint.startswith('patients.')) %}active{% endif %}">
-        <i class="bi bi-shield-check"></i>
-        <span>Administration</span>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="topnav-dropdown">
-
-        <div class="dropdown-section">Manage</div>
-        <a href="{{ url_for('patients.list_patients') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('patients.') %}active{% endif %}">
-          <i class="bi bi-people"></i> Patient Directory
-        </a>
-        <a href="{{ url_for('users.list_users') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('users.') %}active{% endif %}">
-          <i class="bi bi-person-badge"></i> Users
-        </a>
-        <a href="{{ url_for('audit.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('audit.') %}active{% endif %}">
-          <i class="bi bi-shield-check"></i> Audit Log
-        </a>
-
-        <div class="dropdown-divider"></div>
-
-        <div class="dropdown-section">Configuration</div>
-
-        <a href="{{ url_for('form_settings.index') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('form_settings.') %}active{% endif %}">
-          <i class="bi bi-ui-checks"></i> Reception Form
-        </a>
-
-
-        <a href="{{ url_for('settings.report_signatures') }}"
-           class="dropdown-item {% if request.endpoint == 'settings.report_signatures' %}active{% endif %}">
-          <i class="bi bi-person-badge"></i> Report Signatures
-        </a>
-
-        <a href="{{ url_for('settings.referrals') }}"
-           class="dropdown-item {% if '/settings/referrals' in request.path %}active{% endif %}">
-          <i class="bi bi-person-badge"></i> Referrals &amp; Commission
-        </a>
-
-        <a href="{{ url_for('settings.report_setup') }}"
-           class="dropdown-item {% if '/settings/report-setup' in request.path %}active{% endif %}">
-          <i class="bi bi-sliders"></i> Report Page Setup
-        </a>
-
-        <a href="{{ url_for('settings.printers') }}"
-           class="dropdown-item {% if '/settings/printers' in request.path %}active{% endif %}">
-          <i class="bi bi-printer"></i> Printer Settings
-        </a>
-
-        <a href="{{ url_for('settings.laboratories', view='ref') }}"
-           class="dropdown-item {% if '/settings/laboratories' in request.path and request.args.get('view') != 'out' %}active{% endif %}">
-          <i class="bi bi-building"></i> Reference Labs
-        </a>
-
-        <a href="{{ url_for('settings.laboratories', view='out') }}"
-           class="dropdown-item {% if '/settings/laboratories' in request.path and request.args.get('view') == 'out' %}active{% endif %}">
-          <i class="bi bi-box-seam"></i> Outsource Labs
-        </a>
-
-        <a href="{{ url_for('settings.antibiotics_list') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('settings.antibiotics') %}active{% endif %}">
-          <i class="bi bi-capsule"></i> Antibiotics
-        </a>
-
-        <a href="{{ url_for('settings.culture_labels') }}"
-           class="dropdown-item {% if request.endpoint == 'settings.culture_labels' %}active{% endif %}">
-          <i class="bi bi-tags"></i> Culture Report Labels
-        </a>
-        <a href="{{ url_for('settings.pcr_templates') }}"
-           class="dropdown-item {% if request.endpoint and request.endpoint.startswith('settings.pcr_templates') %}active{% endif %}">
-          <i class="bi bi-clipboard2-pulse"></i> PCR Template Setting
-        </a>
-
+    {% if cur_tab == 'operations' %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('orders.new_order') }}" class="ribbon-btn {% if ep == 'orders.new_order' %}active{% endif %}"><i class="bi bi-person-plus"></i>Patient Registration</a>
+          <a href="{{ url_for('orders.list_orders') }}" class="ribbon-btn {% if ep.startswith('orders.') and ep != 'orders.new_order' %}active{% endif %}"><i class="bi bi-journal-text"></i>Daily Ledger</a>
+        </div>
+        <div class="ribbon-group-label">Patients</div>
       </div>
-    </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('reports.index') }}" class="ribbon-btn {% if ep.startswith('reports.') and ep != 'reports.outsourced' %}active{% endif %}"><i class="bi bi-file-earmark-medical"></i>Test Reports</a>
+        </div>
+        <div class="ribbon-group-label">Reports</div>
+      </div>
     {% endif %}
 
-    <!-- Lab Test Settings (top-level dropdown, admin only) -->
-    {% if current_user.role == 'admin' %}
-    {% set lts_active = request.args.get('tab') in ['catalog','formats','categories','panels','packages','units','bulk','previews','rates'] or request.path.startswith('/settings/tests') %}
-    <div class="topnav-item tn-tests">
-      <button type="button" class="topnav-link {% if lts_active %}active{% endif %}">
-        <i class="bi bi-sliders2"></i>
-        <span>Lab Test Settings</span>
-        <i class="bi bi-chevron-down small"></i>
-      </button>
-      <div class="topnav-dropdown">
-        <a href="{{ url_for('tests.index', tab='catalog') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'catalog' %}active{% endif %}">
-          <i class="bi bi-clipboard2-pulse"></i> Catalog
-        </a>
-        <a href="{{ url_for('tests.index', tab='formats') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'formats' %}active{% endif %}">
-          <i class="bi bi-sliders2"></i> Formats
-        </a>
-        <a href="{{ url_for('tests.index', tab='categories') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'categories' %}active{% endif %}">
-          <i class="bi bi-tags"></i> Categories
-        </a>
-        <a href="{{ url_for('tests.index', tab='panels') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'panels' %}active{% endif %}">
-          <i class="bi bi-collection"></i> Panels
-        </a>
-        <a href="{{ url_for('tests.index', tab='packages') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'packages' %}active{% endif %}">
-          <i class="bi bi-box-seam"></i> Packages
-        </a>
-        <a href="{{ url_for('tests.index', tab='units') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'units' %}active{% endif %}">
-          <i class="bi bi-rulers"></i> Units &amp; Ranges
-        </a>
-        <a href="{{ url_for('tests.index', tab='bulk') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'bulk' %}active{% endif %}">
-          <i class="bi bi-upload"></i> Bulk Actions
-        </a>
-        <a href="{{ url_for('tests.index', tab='previews') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'previews' %}active{% endif %}">
-          <i class="bi bi-eye"></i> Previews
-        </a>
-        <a href="{{ url_for('tests.index', tab='rates') }}"
-           class="dropdown-item {% if request.args.get('tab') == 'rates' %}active{% endif %}">
-          <i class="bi bi-cash-stack"></i> Rate Lists
-        </a>
+    {% if cur_tab == 'laboratory' and current_user.role in ['admin', 'doctor'] %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('lab.receiving') }}" class="ribbon-btn {% if ep.startswith('lab.receiving') %}active{% endif %}"><i class="bi bi-inbox"></i>Sample Receiving</a>
+          <a href="{{ url_for('lab.in_process') }}" class="ribbon-btn {% if ep.startswith('lab.in_process') %}active{% endif %}"><i class="bi bi-hourglass-split"></i>Test In Process</a>
+        </div>
+        <div class="ribbon-group-label">Processing</div>
       </div>
-    </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('results.index') }}" class="ribbon-btn {% if ep.startswith('results.') and not ep.startswith('results.enter') %}active{% endif %}"><i class="bi bi-list-check"></i>Results</a>
+          <a href="{{ url_for('lab.verify_queue') }}" class="ribbon-btn {% if ep == 'lab.verify_queue' %}active{% endif %}"><i class="bi bi-shield-check"></i>Verification</a>
+        </div>
+        <div class="ribbon-group-label">Review</div>
+      </div>
+    {% endif %}
+
+    {% if cur_tab == 'reports' and current_user.role in ['admin', 'doctor', 'receptionist'] %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('billing.index') }}" class="ribbon-btn {% if ep.startswith('billing.') %}active{% endif %}"><i class="bi bi-cash-coin"></i>Cash Summary</a>
+          <a href="{{ url_for('analytics.due') }}" class="ribbon-btn {% if ep == 'analytics.due' %}active{% endif %}"><i class="bi bi-cash-stack"></i>Due Collection</a>
+          <a href="{{ url_for('analytics.commissions') }}" class="ribbon-btn {% if ep.startswith('analytics.commission') %}active{% endif %}"><i class="bi bi-person-badge"></i>Referral Commissions</a>
+        </div>
+        <div class="ribbon-group-label">Financial</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('analytics.doctors') }}" class="ribbon-btn"><i class="bi bi-person-vcard"></i>Doctor / Referral</a>
+          <a href="{{ url_for('analytics.tests') }}" class="ribbon-btn"><i class="bi bi-clipboard2-pulse"></i>Test Volume</a>
+          <a href="{{ url_for('analytics.abnormal') }}" class="ribbon-btn"><i class="bi bi-exclamation-triangle"></i>Abnormal</a>
+          <a href="{{ url_for('reports.outsourced') }}" class="ribbon-btn"><i class="bi bi-building"></i>Outsourced</a>
+        </div>
+        <div class="ribbon-group-label">Clinical</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('analytics.daily') }}" class="ribbon-btn"><i class="bi bi-calendar-week"></i>Daily Summary</a>
+          <a href="{{ url_for('analytics.index') }}" class="ribbon-btn"><i class="bi bi-grid"></i>All Reports</a>
+          <a href="{{ url_for('patients.history_by_phone') }}" class="ribbon-btn"><i class="bi bi-people"></i>Patient History</a>
+        </div>
+        <div class="ribbon-group-label">Overview</div>
+      </div>
+    {% endif %}
+
+    {% if cur_tab == 'admin' and current_user.role == 'admin' %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('patients.list_patients') }}" class="ribbon-btn {% if ep.startswith('patients.') %}active{% endif %}"><i class="bi bi-people"></i>Patient Directory</a>
+          <a href="{{ url_for('users.list_users') }}" class="ribbon-btn {% if ep.startswith('users.') %}active{% endif %}"><i class="bi bi-person-badge"></i>Users</a>
+          <a href="{{ url_for('audit.index') }}" class="ribbon-btn {% if ep.startswith('audit.') %}active{% endif %}"><i class="bi bi-shield-check"></i>Audit Log</a>
+        </div>
+        <div class="ribbon-group-label">Manage</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('form_settings.index') }}" class="ribbon-btn {% if ep.startswith('form_settings.') %}active{% endif %}"><i class="bi bi-ui-checks"></i>Reception Form</a>
+          <a href="{{ url_for('settings.report_signatures') }}" class="ribbon-btn {% if ep == 'settings.report_signatures' %}active{% endif %}"><i class="bi bi-pen"></i>Signatures</a>
+          <a href="{{ url_for('settings.report_setup') }}" class="ribbon-btn {% if '/settings/report-setup' in path %}active{% endif %}"><i class="bi bi-sliders"></i>Report Page</a>
+          <a href="{{ url_for('settings.printers') }}" class="ribbon-btn {% if '/settings/printers' in path %}active{% endif %}"><i class="bi bi-printer"></i>Printers</a>
+        </div>
+        <div class="ribbon-group-label">Report Setup</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('settings.referrals') }}" class="ribbon-btn {% if '/settings/referrals' in path %}active{% endif %}"><i class="bi bi-person-badge"></i>Referrals</a>
+          <a href="{{ url_for('settings.laboratories', view='ref') }}" class="ribbon-btn"><i class="bi bi-building"></i>Reference Labs</a>
+          <a href="{{ url_for('settings.laboratories', view='out') }}" class="ribbon-btn"><i class="bi bi-box-seam"></i>Outsource Labs</a>
+        </div>
+        <div class="ribbon-group-label">Partners</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('settings.antibiotics_list') }}" class="ribbon-btn {% if ep.startswith('settings.antibiotics') %}active{% endif %}"><i class="bi bi-capsule"></i>Antibiotics</a>
+          <a href="{{ url_for('settings.culture_labels') }}" class="ribbon-btn {% if ep == 'settings.culture_labels' %}active{% endif %}"><i class="bi bi-tags"></i>Culture Labels</a>
+          <a href="{{ url_for('settings.pcr_templates') }}" class="ribbon-btn {% if ep.startswith('settings.pcr_templates') %}active{% endif %}"><i class="bi bi-clipboard2-pulse"></i>PCR Templates</a>
+        </div>
+        <div class="ribbon-group-label">Content</div>
+      </div>
+    {% endif %}
+
+    {% if cur_tab == 'lts' and current_user.role == 'admin' %}
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('tests.index', tab='catalog') }}" class="ribbon-btn {% if request.args.get('tab') == 'catalog' %}active{% endif %}"><i class="bi bi-clipboard2-pulse"></i>Catalog</a>
+          <a href="{{ url_for('tests.index', tab='categories') }}" class="ribbon-btn {% if request.args.get('tab') == 'categories' %}active{% endif %}"><i class="bi bi-tags"></i>Categories</a>
+          <a href="{{ url_for('tests.index', tab='panels') }}" class="ribbon-btn {% if request.args.get('tab') == 'panels' %}active{% endif %}"><i class="bi bi-collection"></i>Panels</a>
+          <a href="{{ url_for('tests.index', tab='packages') }}" class="ribbon-btn {% if request.args.get('tab') == 'packages' %}active{% endif %}"><i class="bi bi-box-seam"></i>Packages</a>
+        </div>
+        <div class="ribbon-group-label">Catalog</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('tests.index', tab='formats') }}" class="ribbon-btn {% if request.args.get('tab') == 'formats' %}active{% endif %}"><i class="bi bi-sliders2"></i>Formats</a>
+          <a href="{{ url_for('tests.index', tab='units') }}" class="ribbon-btn {% if request.args.get('tab') == 'units' %}active{% endif %}"><i class="bi bi-rulers"></i>Units &amp; Ranges</a>
+          <a href="{{ url_for('tests.index', tab='rates') }}" class="ribbon-btn {% if request.args.get('tab') == 'rates' %}active{% endif %}"><i class="bi bi-cash-stack"></i>Rate Lists</a>
+        </div>
+        <div class="ribbon-group-label">Settings</div>
+      </div>
+      <div class="ribbon-group">
+        <div class="ribbon-group-btns">
+          <a href="{{ url_for('tests.index', tab='bulk') }}" class="ribbon-btn {% if request.args.get('tab') == 'bulk' %}active{% endif %}"><i class="bi bi-upload"></i>Bulk Actions</a>
+          <a href="{{ url_for('tests.index', tab='previews') }}" class="ribbon-btn {% if request.args.get('tab') == 'previews' %}active{% endif %}"><i class="bi bi-eye"></i>Previews</a>
+        </div>
+        <div class="ribbon-group-label">Tools</div>
+      </div>
     {% endif %}
 
   </div>
-
-
-
 </nav>
-
-
-
