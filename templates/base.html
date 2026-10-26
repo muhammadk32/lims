@@ -14,9 +14,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">   {# ← NEW #}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print">
-{% if request.path.startswith('/settings/') or request.path.startswith('/users/') or request.path.startswith('/audit/') or request.path.startswith('/patients/') or request.path.startswith('/billing/') or request.path.startswith('/analytics/') or request.path.startswith('/reports/') %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_theme.css') }}">
-{% endif %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_theme.css') }}">
 
   {% if branding.logo_url %}
     <link rel="icon" href="{{ branding.logo_url }}">
@@ -675,6 +673,54 @@ html body .modal-header .btn-close:hover {
 .modal-footer .btn-outline-secondary i,
 .modal-footer .btn-outline-primary i {
     color: inherit !important;
+}
+</style>
+
+<style>
+/* ===== ANALYTICS HEADER BUTTONS (defeat universal header rule) ===== */
+html body .app-content .an-header button.an-btn,
+html body .app-content .an-header a.an-btn,
+html body .app-content .an-header .an-btn,
+html body .app-content .an-header button,
+html body .app-content .an-header a {
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 0 16px !important;
+    min-width: 90px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+}
+</style>
+
+<style>
+/* ===== BORDERLESS TOPBAR BUTTONS ===== */
+.app-topbar .btn,
+.app-topbar button,
+.app-topbar .dropdown-toggle,
+.app-topbar .user-btn,
+.app-topbar .theme-btn,
+.app-topbar .bell-btn {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+.app-topbar .btn:hover,
+.app-topbar button:hover {
+    background: rgba(0,0,0,0.05) !important;
+}
+/* Also strip borders from the search input */
+.app-topbar .form-control,
+.app-topbar input[type="search"] {
+    border: 1px solid #dee2e6 !important; /* keep input border */
 }
 </style>
 </head>
