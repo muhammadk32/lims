@@ -146,85 +146,89 @@ table[class*="-table"] tbody td,
 </style>
 
 
-<style>
-/* ===== UNIVERSAL PAGE HEADER ===== */
-/* Matches any "-header" class that ends up being the page-top bar */
-[class$="-header"],
-.rpt-header,
-.dl-header,
-[class*="-page"] > [class$="-header"],
-[class*="-wrap"] [class$="-header"],
-.lt-page > [class$="-header"],
-.lt-wrap [class$="-header"],
-.settings-header,
-[class*="settings"] [class$="-header"],
 
-.sr-header,
-.tip-header,
-.pr-header,
-.lv-header,
-.ov-header,
-.eo-header,
-.pd-header,
-.ph-header,
-.csr-header,
-.an-header,
-.rp-header,
-.au-header,
-.us-header,
-.lt-header,
-.er-header,
-.ei-header,
-.hist-header,
-.rep-header,
-.rr-header,
-.rg-header,
-.tf-header,
-.ab-header,
-.cl-header,
-.lab-header,
-.pt-header,
-.pst-header,
-.rfc-header,
-.rps-header,
-.sig-header,
-.rec-header {
+
+
+
+
+
+
+
+
+<style>
+
+
+
+
+<style>
+
+
+<style>
+
+
+<style>
+/* =================================================================
+   UNIFORM LAB TEST SETTINGS SPACING — ONE RULE FOR ALL TABS
+   Applies to: Catalog, Categories, Formats, Packages, Panels,
+   Units, Rates, Bulk, Previews, Coming Soon
+   ================================================================= */
+
+/* 1) Kill breadcrumb bottom margin */
+html body .app-content nav.app-breadcrumbs,
+html body .app-content .app-breadcrumbs,
+html body .app-content .breadcrumb {
+    margin-bottom: 4px !important;
+    padding-bottom: 0 !important;
+}
+
+/* 2) Zero out ALL top padding/margin on the /tests/ page shell */
+html body .app-content .lts-page,
+html body .app-content .lts-content,
+html body .app-content .lts-page > *:first-child,
+html body .app-content .lts-content > *:first-child,
+html body .app-content .lts-page > *,
+html body .app-content .lts-content > * {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* 3) Every tab header gets the exact same compact 6px top gap */
+html body .app-content .lt-header,
+html body .app-content .ts-header,
+html body .app-content .tf-header,
+html body .app-content .fp-header,
+html body .app-content .bi-hero,
+html body .app-content .lts-page .lts-page-header {
+    margin-top: 6px !important;
     padding: 10px 18px !important;
-    margin-bottom: 12px !important;
-    min-height: 0 !important;
-    height: auto !important;
+    border: 2px solid #212529 !important;
     border-radius: 10px !important;
     background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-    border: 2px solid #212529 !important;
     color: #fff !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    flex-wrap: wrap !important;
+    min-height: 0 !important;
+    height: auto !important;
     gap: 8px !important;
+    flex-wrap: wrap !important;
 }
 
-[class$="-header"] h1,
-[class$="-header"] h2,
-[class$="-header"] h3,
-.rpt-header h1, .rpt-header h2, .rpt-header h3,
-.dl-header h1, .dl-title,
-.sr-title, .sr-header h1,
-.tip-title, .pr-title,
-.lv-title, .ov-header h3,
-.eo-header h1, .eo-title,
-.pd-title, .ph-title,
-.csr-title, .an-title,
-.rp-title, .au-title,
-.us-title, .lt-title,
-.er-title, .ei-title,
-.hist-title, .rep-title,
-.rr-title, .rg-title,
-.tf-title, .ab-title,
-.cl-title, .lab-title,
-.pt-title, .pst-title,
-.rfc-title, .rps-title,
-.sig-title, .rec-header h3 {
+/* 4) Header title — same size everywhere */
+html body .app-content .lt-title,
+html body .app-content .ts-title,
+html body .app-content .tf-title,
+html body .app-content .fp-title,
+html body .app-content .lts-page-title,
+html body .app-content .bi-hero h3,
+html body .app-content .lt-header h1,
+html body .app-content .lt-header h2,
+html body .app-content .ts-header h1,
+html body .app-content .ts-header h2,
+html body .app-content .tf-header h1,
+html body .app-content .tf-header h2,
+html body .app-content .fp-header h1,
+html body .app-content .fp-header h2 {
     font-size: 1.05rem !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
@@ -234,306 +238,233 @@ table[class*="-table"] tbody td,
     letter-spacing: 0.02em !important;
 }
 
-[class$="-header"] i,
-.rpt-header i, .dl-header i, .sr-header i,
-.tip-header i, .pr-header i, .lv-header i,
-.ov-header i, .eo-header i, .pd-header i,
-.ph-header i, .csr-header i, .an-header i,
-.rp-header i, .au-header i, .us-header i,
-.lt-header i, .er-header i, .ei-header i,
-.hist-header i, .rep-header i, .rr-header i,
-.rg-header i, .tf-header i, .ab-header i,
-.cl-header i, .lab-header i, .pt-header i,
-.pst-header i, .rfc-header i, .rps-header i,
-.sig-header i, .rec-header i {
+/* 5) Header icons — white, same size */
+html body .app-content .lt-header i,
+html body .app-content .ts-header i,
+html body .app-content .tf-header i,
+html body .app-content .fp-header i,
+html body .app-content .bi-hero i {
     color: #fff !important;
     font-size: 1rem !important;
 }
 
-[class$="-subtitle"],
-[class$="-sub"],
-.rpt-subtitle, .dl-subtitle,
-.sr-sub, .tip-sub, .pr-subtitle,
-.lv-subtitle, .ov-header .sub,
-.eo-sub, .pd-subtitle, .ph-subtitle,
-.csr-subtitle, .an-subtitle,
-.rp-subtitle, .au-subtitle,
-.us-subtitle, .lt-subtitle,
-.er-subtitle, .ei-subtitle,
-.hist-subtitle, .rep-subtitle,
-.rr-subtitle, .rg-subtitle,
-.tf-subtitle, .ab-subtitle,
-.cl-subtitle, .lab-subtitle,
-.pt-subtitle, .pst-subtitle,
-.rfc-subtitle, .rps-subtitle,
-.sig-subtitle {
+/* 6) Header subtitle — same muted style everywhere */
+html body .app-content .lt-header small,
+html body .app-content .lt-header p,
+html body .app-content .ts-header small,
+html body .app-content .ts-header p,
+html body .app-content .tf-header small,
+html body .app-content .tf-header p,
+html body .app-content .fp-header small,
+html body .app-content .fp-header p,
+html body .app-content .lts-page-subtitle,
+html body .app-content .bi-hero p {
     font-size: 0.72rem !important;
     color: #dbeafe !important;
     font-family: Consolas, Monaco, monospace !important;
-    margin-top: 0 !important;
-    line-height: 1.1 !important;
-}
-
-[class$="-count"],
-.rpt-count, .dl-count, .pr-count,
-.lv-count, .ph-count {
-    font-size: 0.72rem !important;
-    color: #dbeafe !important;
-    font-family: Consolas, Monaco, monospace !important;
-}
-
-/* Shrink action buttons in headers */
-[class$="-header"] .btn,
-[class$="-header"] button,
-[class$="-actions"] .btn,
-[class$="-actions"] a,
-.rpt-btn, .an-btn,
-.dl-header .btn,
-.sr-header .btn,
-.pd-actions .btn,
-.eo-actions .btn,
-.ov-header .actions .btn,
-.sig-header .btn,
-[class*="settings"] [class$="-header"] .btn,
-.lt-page .btn,
-.bulk-header .btn,
-.preview-header .btn {
-    height: 28px !important;
-    padding: 0 12px !important;
-    font-size: 0.72rem !important;
-    border-radius: 4px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-}
-
-/* Catch-all: any -header at the top of a page */
-body .app-content > * > [class$="-header"],
-body .app-content [class^="ts-"][class$="-header"],
-body .app-content [class^="tf-"][class$="-header"],
-body .app-content [class^="fp-"][class$="-header"],
-body .app-content [class^="rps-"][class$="-header"],
-body .app-content [class^="sig-"][class$="-header"],
-body .app-content [class^="lt-"][class$="-header"],
-body .app-content [class^="settings-"][class$="-header"],
-.settings-header,
-.ts-header, .tf-header, .fp-header, .rps-header, .sig-header, .lt-header,
-.ts-page, .tf-page, .fp-page, .rps-page, .sig-page, .lt-page {
-    /* Containers just get padding normalization */
-}
-.ts-header, .tf-header, .fp-header, .rps-header, .sig-header, .lt-header,
-.settings-header {
-    padding: 10px 18px !important;
-    margin-bottom: 12px !important;
-    min-height: 0 !important;
-    border-radius: 10px !important;
-    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-    border: 2px solid #212529 !important;
-    color: #fff !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-}
-.ts-title, .tf-title, .fp-title, .rps-title, .sig-title, .lt-title,
-.ts-header h1, .ts-header h2, .ts-header h3,
-.tf-header h1, .tf-header h2, .tf-header h3,
-.fp-header h1, .fp-header h2, .fp-header h3,
-.rps-header h1, .rps-header h2, .rps-header h3,
-.sig-header h1, .sig-header h2, .sig-header h3,
-.lt-header h1, .lt-header h2, .lt-header h3,
-.settings-header h1, .settings-header h2, .settings-header h3 {
-    font-size: 1.05rem !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
     margin: 0 !important;
-    color: #fff !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.02em !important;
-}
-.ts-title i, .tf-title i, .fp-title i, .rps-title i, .sig-title i, .lt-title i,
-.ts-header i, .tf-header i, .fp-header i, .rps-header i, .sig-header i, .lt-header i,
-.settings-header i {
-    color: #fff !important;
-    font-size: 1rem !important;
-}
-.ts-subtitle, .tf-subtitle, .fp-subtitle, .rps-subtitle, .sig-subtitle, .lt-subtitle,
-.ts-header p, .ts-header small,
-.tf-header p, .tf-header small,
-.fp-header p, .fp-header small,
-.rps-header p, .rps-header small,
-.sig-header p, .sig-header small,
-.lt-header p, .lt-header small,
-.settings-header p, .settings-header small {
-    font-size: 0.72rem !important;
-    color: #dbeafe !important;
-    font-family: Consolas, Monaco, monospace !important;
-    margin-top: 0 !important;
     line-height: 1.1 !important;
 }
 
-/* Shrink buttons in these headers */
-.ts-header .btn, .ts-header button,
-.tf-header .btn, .tf-header button,
-.fp-header .btn, .fp-header button,
-.rps-header .btn, .rps-header button,
-.sig-header .btn, .sig-header button,
-.lt-header .btn, .lt-header button,
-.settings-header .btn, .settings-header button {
+/* 7) Header buttons — same size everywhere */
+html body .app-content .lt-header .btn,
+html body .app-content .ts-header .btn,
+html body .app-content .tf-header .btn,
+html body .app-content .fp-header .btn,
+html body .app-content .fp-header .fp-btn,
+html body .app-content .fp-header .fp-btn-primary,
+html body .app-content .bi-hero .btn {
     height: 28px !important;
-    padding: 0 12px !important;
+    padding: 0 14px !important;
     font-size: 0.72rem !important;
-    border-radius: 4px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-}
-</style>
-
-<style>
-/* ===== AGGRESSIVE HEADER OVERRIDE (all remaining pages) ===== */
-/* Force every element that has a class ending with "-header" to be the blue bar */
-html body .app-content [class$="-header"] {
-    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-    border: 2px solid #212529 !important;
-    border-radius: 10px !important;
-    padding: 10px 18px !important;
-    margin-bottom: 12px !important;
-    min-height: 0 !important;
-    height: auto !important;
-    color: #fff !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-}
-html body .app-content [class$="-header"] > * { color: #fff !important; }
-html body .app-content [class$="-header"] h1,
-html body .app-content [class$="-header"] h2,
-html body .app-content [class$="-header"] h3,
-html body .app-content [class$="-header"] h4,
-html body .app-content [class$="-header"] [class$="-title"] {
-    font-size: 1.05rem !important;
     font-weight: 700 !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-    color: #fff !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.02em !important;
-}
-html body .app-content [class$="-header"] i { color: #fff !important; font-size: 1rem !important; }
-html body .app-content [class$="-header"] p,
-html body .app-content [class$="-header"] small,
-html body .app-content [class$="-header"] [class$="-subtitle"],
-html body .app-content [class$="-header"] [class$="-sub"] {
-    font-size: 0.72rem !important;
-    color: #dbeafe !important;
-    font-family: Consolas, Monaco, monospace !important;
-    margin-top: 0 !important;
-    line-height: 1.1 !important;
-}
-
-/* Buttons inside ANY -header: compact */
-html body .app-content [class$="-header"] .btn,
-html body .app-content [class$="-header"] button,
-html body .app-content [class$="-header"] a.btn,
-html body .app-content [class$="-header"] .btn-primary,
-html body .app-content [class$="-header"] .btn-secondary,
-html body .app-content [class$="-header"] .btn-success,
-html body .app-content [class$="-header"] .btn-outline-primary,
-html body .app-content [class$="-header"] .btn-outline-secondary,
-html body .app-content [class$="-header"] .btn-outline-success {
-    height: 28px !important;
-    min-height: 28px !important;
-    padding: 0 12px !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
     border-radius: 4px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    gap: 5px !important;
     white-space: nowrap !important;
     line-height: 1 !important;
+    color: #212529 !important;
+    background: #fff !important;
+    border: 1px solid #212529 !important;
 }
-/* Preserve Bootstrap color on buttons */
-html body .app-content [class$="-header"] .btn-primary,
-html body .app-content [class$="-header"] .btn-success {
+html body .app-content .fp-header .fp-btn-primary,
+html body .app-content .ts-header .btn-primary,
+html body .app-content .lt-header .btn-primary {
+    color: #fff !important;
     background: #198754 !important;
     border-color: #198754 !important;
-    color: #fff !important;
 }
-html body .app-content [class$="-header"] .btn-secondary,
-html body .app-content [class$="-header"] .btn-outline-secondary {
-    background: #fff !important;
-    border-color: #212529 !important;
-    color: #212529 !important;
-}
+</style>
 
-/* Explicit coverage for the settings pages (headers wrapped in a container) */
-html body .app-content .settings-header,
+
+<style>
+/* =================================================================
+   SINGLE MASTER STYLE — controls every header + /tests/ tab in the app
+   ================================================================= */
+
+/* Uniform header baseline (all pages) */
+html body .app-content [class$="-header"],
+html body .app-content .lt-header,
 html body .app-content .ts-header,
 html body .app-content .tf-header,
 html body .app-content .fp-header,
+html body .app-content .bi-hero,
+html body .app-content .dl-header,
+html body .app-content .sr-header,
+html body .app-content .tip-header,
+html body .app-content .pr-header,
+html body .app-content .lv-header,
+html body .app-content .ov-header,
+html body .app-content .eo-header,
+html body .app-content .pd-header,
+html body .app-content .ph-header,
+html body .app-content .csr-header,
+html body .app-content .an-header,
+html body .app-content .rp-header,
+html body .app-content .au-header,
+html body .app-content .us-header,
+html body .app-content .er-header,
+html body .app-content .ei-header,
+html body .app-content .hist-header,
+html body .app-content .rep-header,
+html body .app-content .rr-header,
+html body .app-content .rg-header,
+html body .app-content .ab-header,
+html body .app-content .cl-header,
+html body .app-content .lab-header,
+html body .app-content .pt-header,
+html body .app-content .pst-header,
+html body .app-content .rfc-header,
 html body .app-content .rps-header,
 html body .app-content .sig-header,
-html body .app-content .lt-header {
+html body .app-content .rec-header,
+html body .app-content .settings-header,
+html body .app-content .lts-page-header {
     background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
     border: 2px solid #212529 !important;
     border-radius: 10px !important;
     padding: 10px 18px !important;
+    margin-top: 4px !important;
     margin-bottom: 12px !important;
+    min-height: 0 !important;
+    height: auto !important;
     color: #fff !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
 }
+
+/* Uniform title */
+html body .app-content [class$="-header"] h1,
+html body .app-content [class$="-header"] h2,
+html body .app-content [class$="-header"] h3,
+html body .app-content [class$="-header"] [class$="-title"],
+html body .app-content .bi-hero h3 {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    color: #fff !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Uniform icons */
+html body .app-content [class$="-header"] i,
+html body .app-content .bi-hero i {
+    color: #fff !important;
+    font-size: 1rem !important;
+}
+
+/* Uniform subtitle */
+html body .app-content [class$="-header"] p,
+html body .app-content [class$="-header"] small,
+html body .app-content [class$="-header"] [class$="-subtitle"],
+html body .app-content [class$="-header"] [class$="-sub"],
+html body .app-content .bi-hero p,
+html body .app-content .lts-page-subtitle {
+    font-size: 0.72rem !important;
+    color: #dbeafe !important;
+    font-family: Consolas, Monaco, monospace !important;
+    margin-top: 0 !important;
+    line-height: 1.1 !important;
+}
+
+/* Uniform buttons */
+html body .app-content [class$="-header"] .btn,
+html body .app-content [class$="-header"] button,
+html body .app-content [class$="-header"] .btn-primary,
+html body .app-content [class$="-header"] .btn-success,
+html body .app-content [class$="-header"] .fp-btn,
+html body .app-content [class$="-header"] .fp-btn-primary {
+    height: 28px !important;
+    padding: 0 14px !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    color: #212529 !important;
+    background: #fff !important;
+    border: 1px solid #212529 !important;
+}
+html body .app-content [class$="-header"] .btn-primary,
+html body .app-content [class$="-header"] .btn-success,
+html body .app-content [class$="-header"] .fp-btn-primary {
+    color: #fff !important;
+    background: #198754 !important;
+    border-color: #198754 !important;
+}
+
+/* Tighten top gap for /tests/ pages */
+html body .app-content nav.app-breadcrumbs,
+html body .app-content .app-breadcrumbs { margin-bottom: 4px !important; }
+html body .app-content .lts-page,
+html body .app-content .lts-content { padding-top: 0 !important; margin-top: 0 !important; }
+html body .app-content .lts-content > * { margin-top: 0 !important; }
 </style>
 
 <style>
-/* ===== FORCE BI-HERO COMPACT HEADER ===== */
-.bi-hero {
-    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-    border: 2px solid #212529 !important;
-    border-radius: 10px !important;
-    padding: 10px 18px !important;
-    margin-bottom: 12px !important;
-    box-shadow: none !important;
-    min-height: 0 !important;
-    height: auto !important;
-    display: flex !important;
+/* ===== LEFT-ALIGN BI-HERO TITLE ===== */
+html body .app-content .bi-hero {
+    justify-content: flex-start !important;
     align-items: center !important;
-    gap: 12px !important;
+    text-align: left !important;
 }
-.bi-hero .icon { font-size: 1.4rem !important; opacity: 1 !important; }
-.bi-hero h3 { font-size: 1.05rem !important; margin: 0 !important; line-height: 1.2 !important; }
-.bi-hero p { font-size: 0.72rem !important; margin: 2px 0 0 !important; line-height: 1.1 !important; }
-</style>
-<style>
-/* ===== HARD FIX: fp-btn white-on-white ===== */
-html body .fp-btn,
-html body .fp-btn-primary,
-html body .fp-header .fp-btn,
-html body .fp-header .fp-btn-primary {
-    background-color: #ffffff !important;
-    background-image: none !important;
-    color: #1a3d7c !important;
-    border: 2px solid #1a3d7c !important;
-    font-weight: 700 !important;
-    padding: 6px 14px !important;
-    font-size: 0.78rem !important;
-    text-transform: uppercase !important;
-    border-radius: 4px !important;
+html body .app-content .bi-hero > * {
+    text-align: left !important;
+    flex: 0 0 auto !important;
 }
-html body .fp-btn i,
-html body .fp-btn-primary i {
-    color: #1a3d7c !important;
+html body .app-content .bi-hero .icon,
+html body .app-content .bi-hero > i:first-child,
+html body .app-content .bi-hero > i.bi {
+    margin-right: 10px !important;
+    flex-shrink: 0 !important;
 }
-html body .fp-btn:hover,
-html body .fp-btn-primary:hover {
-    background-color: #1a3d7c !important;
-    color: #ffffff !important;
+html body .app-content .bi-hero h1,
+html body .app-content .bi-hero h2,
+html body .app-content .bi-hero h3,
+html body .app-content .bi-hero p {
+    text-align: left !important;
+    margin-left: 0 !important;
 }
-html body .fp-btn:hover i,
-html body .fp-btn-primary:hover i {
-    color: #ffffff !important;
+/* Wrap text area (icon + text) as one block on the left */
+html body .app-content .bi-hero > div:not(.icon) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    flex: 0 1 auto !important;
+    text-align: left !important;
 }
 </style>
 </head>
