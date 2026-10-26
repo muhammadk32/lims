@@ -467,6 +467,216 @@ html body .app-content .bi-hero > div:not(.icon) {
     text-align: left !important;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+/* ===== FINAL: force close × right-aligned + visible ===== */
+html body .modal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 14px 20px !important;
+}
+html body .modal-header .modal-title {
+    flex: 1 1 auto !important;
+    margin: 0 !important;
+}
+html body .modal-header button.btn-close,
+html body .modal-header .btn-close {
+    flex: 0 0 auto !important;
+    background: rgba(255,255,255,0.25) !important;
+    background-image: none !important;
+    border: 1px solid rgba(255,255,255,0.5) !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    padding: 0 !important;
+    margin: 0 0 0 auto !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 1 !important;
+    filter: none !important;
+    position: static !important;
+    text-indent: 0 !important;
+    color: #fff !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+}
+html body .modal-header .btn-close::before {
+    content: "×" !important;
+    color: #fff !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    display: block !important;
+}
+html body .modal-header .btn-close:hover {
+    background: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+</style>
+<style>
+/* ===== SINGLE CLEAN MODAL STYLE ===== */
+.modal-content {
+    border: 2px solid #212529 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+.modal-header {
+    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+    color: #fff !important;
+    padding: 8px 14px !important;
+    border-bottom: 2px solid #212529 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    min-height: 0 !important;
+}
+.modal-header .modal-title,
+.modal-header h5 {
+    color: #fff !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+.modal-header i { color: #ffd166 !important; }
+.modal-header .btn-close {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: rgba(255,255,255,0.25) !important;
+    background-image: none !important;
+    border: 1px solid rgba(255,255,255,0.5) !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 1 !important;
+    color: #fff !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+    position: static !important;
+}
+.modal-header .btn-close::before {
+    content: "\00d7" !important;
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    display: block !important;
+}
+.modal-header .btn-close:hover {
+    background: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+.modal-body {
+    padding: 16px 20px !important;
+    background: #fff !important;
+    font-size: 0.88rem !important;
+}
+.modal-body .form-control,
+.modal-body .form-select {
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    font-size: 0.9rem !important;
+}
+.modal-body label {
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    color: #495057 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    margin-bottom: 6px !important;
+}
+.modal-footer {
+    padding: 10px 20px !important;
+    background: #f8f9fa !important;
+    border-top: 1px solid #dee2e6 !important;
+}
+.modal-footer .btn {
+    height: 32px !important;
+    padding: 0 18px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: 5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    line-height: 1 !important;
+}
+</style>
+<style>
+/* ===== MODAL POSITION + BUTTON STYLE ===== */
+.modal-dialog {
+    margin: 20px auto !important;
+    max-width: 700px !important;
+}
+.modal-dialog-centered {
+    min-height: auto !important;
+    align-items: flex-start !important;
+}
+.modal-dialog-centered::before {
+    height: auto !important;
+    content: none !important;
+}
+.modal-body {
+    padding: 16px 20px !important;
+    background: #fff !important;
+}
+/* Force primary-style button in modal footer */
+.modal-footer .btn-outline-secondary,
+.modal-footer .btn-outline-primary {
+    background: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: #fff !important;
+    height: 34px !important;
+    padding: 0 18px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: 5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    line-height: 1 !important;
+}
+.modal-footer .btn-outline-secondary:hover,
+.modal-footer .btn-outline-primary:hover {
+    background: #0b5ed7 !important;
+    border-color: #0b5ed7 !important;
+    color: #fff !important;
+}
+.modal-footer .btn-outline-secondary i,
+.modal-footer .btn-outline-primary i {
+    color: inherit !important;
+}
+</style>
 </head>
 <body>
 
