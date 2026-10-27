@@ -464,6 +464,79 @@ tr.child-row td:first-child {
 tr.child-row td:nth-child(2) {
     padding-left: 24px !important; /* Indent the actual test name */
 }
+
+/* --- REFERRAL STYLE GRID OVERRIDES --- */
+.rp-table {
+  border-collapse: collapse !important;
+  border: 1px solid #a3b8d4 !important;
+  width: 100%;
+}
+.rp-table thead th {
+  background: #1f6fca !important; /* Solid blue from referral page */
+  color: #ffffff !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  border: 1px solid #1558a6 !important; /* Darker blue borders */
+  padding: 6px 8px !important;
+  vertical-align: middle !important;
+  border-radius: 0 !important; /* Remove rounded corners */
+}
+.rp-table tbody td {
+  border: 1px solid #a3b8d4 !important;
+  padding: 4px 8px !important;
+  font-size: 0.78rem !important;
+  vertical-align: middle !important;
+  background-color: #fff;
+}
+/* Alternate row colors slightly to match dense grid */
+.rp-table tbody tr:nth-child(even) td {
+  background-color: #f4f7fb !important;
+}
+/* Parent rows (order rows) get a distinct light blue background */
+.rp-table tbody tr.parent-row td {
+  background-color: #e6f0fa !important;
+  font-weight: 600;
+}
+/* Tighten the expand button */
+.rp-expand-btn {
+  padding: 2px 5px !important;
+  font-size: 0.75rem !important;
+}
+
+
+/* --- ULTIMATE REFERRAL GRID OVERRIDE --- */
+html body table.rp-table thead th,
+html body table.rp-table thead tr th {
+  background: #1f6fca !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #1558a6 !important;
+  border-radius: 0 !important;
+  padding: 6px 8px !important;
+  font-size: 0.8rem !important;
+}
+
+html body table.rp-table tbody td {
+  border: 1px solid #a3b8d4 !important;
+  padding: 4px 8px !important;
+  font-size: 0.78rem !important;
+  background-color: #ffffff !important;
+}
+
+/* Force alternating backgrounds like the referral page */
+html body table.rp-table tbody tr:nth-child(even) td {
+  background-color: #f4f7fb !important;
+}
+html body table.rp-table tbody tr:nth-child(odd) td {
+  background-color: #ffffff !important;
+}
+
+/* Make sure the first column (the + button) matches */
+html body table.rp-table tbody td:first-child {
+  background-color: #e6f0fa !important;
+}
+
 </style>
 {% endblock %}
 
@@ -540,13 +613,18 @@ tr.child-row td:nth-child(2) {
   <table class="rp-table">
     <thead>
       <tr>
-        <th class="center" style="width: 40px;"></th>
-        <th style="width: 110px;">Lab #</th>
-        <th style="width: 300px;">Patient</th>
-        <th>Summary</th>
-        <th style="width: 150px; white-space: nowrap;">Registered</th>
-        <th class="center" style="width: 140px;">Status</th>
-        <th class="center" style="width: 120px; white-space: nowrap;">View</th>
+        <th class="center" style="width: 32px;"></th>
+        <th style="width: 100px;">Lab No</th>
+        <th style="width: 70px;">Ref. No</th>
+        <th style="width: 120px;">Patient No</th>
+        <th>Patient Name</th>
+        <th style="width: 80px;">Gender</th>
+        <th style="width: 80px;">M.R.</th>
+        <th style="width: 140px; white-space: nowrap;">Registration Date</th>
+        <th style="width: 120px; white-space: nowrap;">Mobile No</th>
+        <th style="width: 160px;">Consultant</th>
+        <th style="width: 140px;">Reference</th>
+        <th class="center" style="width: 110px; white-space: nowrap;">View</th>
       </tr>
     </thead>
     <tbody>
@@ -571,19 +649,15 @@ tr.child-row td:nth-child(2) {
                 onclick="var rows=document.querySelectorAll('.rp-children-{{ oid }}');var open=this.textContent==='−';rows.forEach(function(r){r.style.display=open?'none':'table-row';r.classList.toggle('rp-hidden',open);});this.textContent=open?'+':'−';this.classList.toggle('open',!open);">+</span>
           </td>
           <td class="lab">{{ o.order_code }}</td>
-          <td>
-            <div style="font-weight:600;">{{ o.patient.full_name }}</div>
-          </td>
-          <td colspan="2">
-            {{ grp['items'] | length }} test{{ 's' if grp['items']|length != 1 }}
-            {% if pending_n > 0 %}
-              <span class="rp-badge pending" style="margin-left:6px;">{{ pending_n }} pending</span>
-            {% endif %}
-            {% if approved_n > 0 %}
-              <span class="rp-badge approved" style="margin-left:6px;">{{ approved_n }} approved</span>
-            {% endif %}
-          </td>
+          <td class="num">{{ o.id }}</td>
+          <td>{{ o.patient.patient_code or '—' }}</td>
+          <td style="font-weight:600;">{{ o.patient.full_name or '—' }}</td>
+          <td>{{ o.patient.gender or '—' }}</td>
+          <td>{{ o.patient.mrn or '—' }}</td>
           <td class="num" style="white-space: nowrap;">{{ o.created_at | localtime('%d/%m/%y %H:%M') }}</td>
+          <td class="num" style="white-space: nowrap;">{{ o.patient.phone or '—' }}</td>
+          <td>{{ o.referred_by_name or (o.doctor.full_name if o.doctor else '—') }}</td>
+          <td>{{ o.company_name or '—' }}</td>
           <td class="center">
             <a href="{{ url_for('reports.view_pdf', order_id=o.id) }}"
                class="rp-icon-btn rp-icon-btn-view"
@@ -598,12 +672,15 @@ tr.child-row td:nth-child(2) {
         {% for it in grp['items'] %}
         <tr class="rp-child-row rp-children-{{ oid }} rp-hidden">
           <td></td>
-          <td class="test-code">{{ it.test.code }}</td>
-          <td class="test-name">{{ it.test.name }}</td>
-          <td class="num"></td>
+          <td class="test-code" colspan="2">{{ it.test.code }}</td>
+          <td class="test-name" colspan="2">{{ it.test.name }}</td>
+          <td></td>
+          <td></td>
           <td class="num">
             {{ it.verified_at | localtime('%d/%m/%y %H:%M') if it.verified_at else '—' }}
           </td>
+          <td></td>
+          <td></td>
           <td class="center">
             {% if it.is_verified %}
               <span class="rp-badge approved">Approved</span>
