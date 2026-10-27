@@ -786,6 +786,12 @@ html body .app-content .dl-table tbody td:last-child .dropdown-menu {
               </li>
               {% endif %}
 
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('labels.print_labels', order_id=o.id) }}" target="_blank" rel="noopener">
+                  <i class="bi bi-upc-scan text-dark"></i> Barcode Labels
+                </a>
+              </li>
               {% if o.status not in ['cancelled', 'approved'] %}
               <li><hr class="dropdown-divider"></li>
               <li>
