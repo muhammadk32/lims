@@ -1,4 +1,4 @@
-
+﻿
 {# ============ CATEGORIES TAB ============ #}
 <div class="ts-header">
   <div>
@@ -6,26 +6,10 @@
     <div class="ts-subtitle">Group tests by department - Hematology, Biochemistry, etc.</div>
   </div>
   <div class="ts-count">{{ categories|length }} categor{{ 'y' if categories|length == 1 else 'ies' }}</div>
-</div>
-
-<table class="ts-kpi">
-  <tr>
-    <td><div class="ts-kpi-label">Categories</div><div class="ts-kpi-value">{{ categories|length }}</div></td>
-    <td><div class="ts-kpi-label">Uncategorized Tests</div><div class="ts-kpi-value">{{ uncategorized }}</div></td>
-    <td style="text-align:right;">
-      <button class="ts-btn ts-btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal2">
+<div class="ts-header-actions" style="margin-left:auto;display:flex;gap:6px;"><button class="ts-btn ts-btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal2">
         <i class="bi bi-plus-lg"></i> New Category
-      </button>
-    </td>
-  </tr>
-</table>
+      </button></div></div>
 
-<div class="ts-section">
-  <span>All Categories</span>
-  <span style="font-weight:400; text-transform:none; letter-spacing:0; opacity:0.85; font-size:0.7rem;">
-    Click a row to edit - Delete disabled if category has tests
-  </span>
-</div>
 
 {% if categories %}
 <table class="ts-table">

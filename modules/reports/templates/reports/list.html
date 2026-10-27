@@ -7,7 +7,7 @@
   /* ============ Page ============ */
   .rp-page {
     padding: 4px 10px 24px;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    
     font-size: 0.95rem;
     color: var(--bs-body-color);
   }
@@ -26,7 +26,7 @@
   .rp-subtitle { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
   .rp-count {
     font-size: 0.85rem; color: var(--bs-secondary-color);
-    font-family: Consolas, Monaco, monospace;
+    
   }
 
   /* ============ Filter card ============ */
@@ -39,7 +39,7 @@
   }
   .rp-filter::before {
     content: "\f4fe  Filters";
-    font-family: 'bootstrap-icons', 'Segoe UI', Arial, sans-serif;
+    
     display: block;
     font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -199,7 +199,7 @@
   .rp-table tbody tr.rp-child-row:hover td { background: var(--bs-tertiary-bg); }
   .rp-table tbody tr.rp-child-row .test-name { font-weight: 500; }
   .rp-table tbody tr.rp-child-row .test-code {
-    font-family: Consolas, Monaco, monospace;
+    
     font-size: 0.82rem;
     color: var(--bs-secondary-color);
   }
@@ -212,25 +212,25 @@
     padding-left: 26px; position: relative; white-space: nowrap;
   }
   .rp-table tbody tr.rp-child-row td:nth-child(3)::before {
-    content: "\\2514\\2500";
+    content: "\2514\2500";
     color: var(--bs-secondary-color);
     margin-right: 6px;
-    font-family: Consolas, Monaco, monospace;
+    
     font-size: 0.72rem;
   }
   .rp-table .lab {
-    font-family: Consolas, Monaco, monospace; font-weight: 700;
+     font-weight: 700;
     font-size: 0.9rem; color: var(--brand-primary);
   }
   .rp-table .test-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
   .rp-table .test-code {
-    font-family: Consolas, Monaco, monospace;
+    
     font-size: 0.82rem; color: var(--bs-secondary-color);
   }
   .rp-table .center { text-align: center; }
   .rp-table .num {
     text-align: right;
-    font-family: Consolas, Monaco, monospace;
+    
     font-size: 0.85rem;
   }
   [data-bs-theme="dark"] .rp-table { border-color: #000; }
@@ -277,7 +277,7 @@
     border: 2px solid #1a1a1a; background: var(--bs-body-bg);
     color: var(--bs-body-color); cursor: pointer;
     font-weight: 700; user-select: none;
-    font-family: Consolas, Monaco, monospace; font-size: 0.85rem;
+     font-size: 0.85rem;
     border-radius: 6px;
   }
   .rp-expand:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
@@ -349,9 +349,9 @@
 }
 .rp-header i { color: #fff !important; }
 .rp-subtitle, .rp-count {
-    font-size: 0.85rem !important;
+    font-size: 0.75rem !important;
     color: #dbeafe !important;
-    font-family: Consolas, Monaco, monospace !important;
+    
 }
 .rp-filter {
     background: #fff !important;
@@ -362,7 +362,7 @@
 }
 .rp-filter::before { content: none !important; display: none !important; }
 .rp-field label {
-    font-size: 0.72rem !important;
+    font-size: 0.68rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
     color: #6c757d !important;
@@ -384,7 +384,7 @@
     color: #fff !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    font-size: 0.85rem !important;
+    font-size: 0.75rem !important;
     border-radius: 4px !important;
 }
 .rp-band {
@@ -407,7 +407,7 @@
 .rp-table thead th {
     background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
     color: #fff !important;
-    font-size: 0.72rem !important;
+    font-size: 0.68rem !important;
     font-weight: 800 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.04em !important;
@@ -420,7 +420,7 @@
 .rp-table thead th:first-child { border-top-left-radius: 8px !important; }
 .rp-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
 .rp-table tbody td {
-    font-size: 0.82rem !important;
+    font-size: 0.75rem !important;
     border-bottom: 1px solid #212529 !important;
     border-right: 1px solid #212529 !important;
     padding: 8px 6px !important;
@@ -429,6 +429,41 @@
 }
 .rp-table tbody td:last-child { border-right: none !important; }
 .rp-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+
+/* ===== FIX WEIRD TREE CODES ===== */
+/* Make child rows look properly indented without the ugly text */
+.child-row .test-name {
+    padding-left: 20px !important;
+    position: relative !important;
+}
+.child-row .test-name::before {
+    content: "—" !important;
+    position: absolute !important;
+    left: 4px !important;
+    color: #adb5bd !important;
+}
+/* Hide the literal backslash text by making it small/invisible if it's in the HTML */
+tr.child-row td:first-child {
+    color: transparent !important; /* Hide the ©4¨0 */
+}
+tr.child-row td:nth-child(2) {
+    padding-left: 24px !important; /* Indent the actual test name */
+}
 </style>
 {% endblock %}
 

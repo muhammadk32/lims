@@ -488,27 +488,7 @@
    ============================================================ */
 
 /* ---------- Common header (used by all tabs) ---------- */
-.ts-header,
-.tf-header,
-.lt-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 2px solid #212529;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.ts-title,
-.tf-title,
-.lt-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
+
 .ts-subtitle,
 .tf-subtitle,
 .lt-subtitle {

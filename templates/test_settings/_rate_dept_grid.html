@@ -119,9 +119,9 @@
               <td class="text-end">{{ row.test.price or 0 }}</td>
               <td class="text-end">
                 <input type="number" step="0.01" min="0" name="discount_amount_override"
-                       value="{{ row.override_discount_amt if row.override_discount_amt is not none else (row.discount_amt or 0) }}"
+                       value="{{ row.override_discount_amt if row.override_discount_amt is not none else '' }}"
                        form="ovr-{{ row.test.id }}"
-                       title="Blank = dept rate" 
+                       placeholder="{{ row.discount_amt or 0 }} (dept)"
                        style="width:90px;padding:4px 8px;border:1px solid #0d6efd;border-radius:4px;font-size:0.86rem;text-align:right;">
               </td>
               <td class="text-end">{{ row.commission_amt or 0 }}</td>

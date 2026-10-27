@@ -3,7 +3,7 @@
 {% block head %}
 <style>
 .rp-page { max-width: 100%; margin: 0 auto; padding: 10px 20px 30px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+            font-size: 0.82rem; color: #212529; }
 .rp-header { display: flex; justify-content: space-between; align-items: flex-end;
              border-bottom: 2px solid #212529; padding-bottom: 5px;
              margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
@@ -11,7 +11,7 @@
             text-transform: uppercase; letter-spacing: 0.02em; }
 .rp-subtitle { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
 .rp-count { font-size: 0.76rem; color: #6c757d;
-            font-family: Consolas, Monaco, monospace; }
+             }
 
 .rp-filter {
   background: #f8f9fa; border: 1px solid #dee2e6;
@@ -84,16 +84,16 @@
   content: "\2514\2500";  /* ?? */
   color: #adb5bd;
   margin-right: 6px;
-  font-family: Consolas, Monaco, monospace;
+  
   font-size: 0.72rem;
 }
-.rp-table .lab { font-family: Consolas, Monaco, monospace; font-weight: 700;
+.rp-table .lab {  font-weight: 700;
                  font-size: 0.95rem; color: #0d6efd; }
 .rp-table .test-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
-.rp-table .test-code { font-family: Consolas, Monaco, monospace;
+.rp-table .test-code { 
                        font-size: 0.8rem; color: #6c757d; }
 .rp-table .center { text-align: center; }
-.rp-table .num { text-align: right; font-family: Consolas, Monaco, monospace;
+.rp-table .num { text-align: right; 
                  font-size: 0.85rem; border: 1px solid #ced4da; padding: 4px 10px; }
 .rp-badge { display: inline-block; padding: 3px 9px; font-size: 0.72rem;
   font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
@@ -117,7 +117,7 @@
   display: inline-block; width: 22px; height: 22px; line-height: 20px;
   text-align: center; border: 1px solid #6c757d; background: #fff;
   color: #212529; cursor: pointer; font-weight: 700; user-select: none;
-  font-family: Consolas, Monaco, monospace; font-size: 0.85rem;
+   font-size: 0.85rem;
 }
 .rp-expand:hover { background: #212529; color: #fff; border-color: #212529; }
 .rp-expand.open { background: #212529; color: #fff; border-color: #212529; }
@@ -134,8 +134,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -162,9 +162,9 @@
 }
 .rp-header h1 i, .rp-header h2 i, .rp-header h3 i { color: #fff !important; }
 .rp-subtitle, .rp-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .rp-header .btn, .rp-actions .btn {
@@ -194,12 +194,12 @@
   border-radius: 8px 8px 0 0 !important;
   background: #fff !important;
   margin: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .rp-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -222,6 +222,21 @@
 .rp-table tbody td:last-child { border-right: none !important; }
 .rp-table tbody tr:last-child td { border-bottom: none !important; }
 .rp-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 
@@ -304,7 +319,7 @@
     <tbody>
       {% for r in rows %}
       <tr>
-        <td class="num" style="font-family:Consolas,monospace; font-size:0.78rem; white-space:nowrap;">
+        <td class="num" style=" font-size:0.78rem; white-space:nowrap;">
           {{ r.created_at.strftime('%d/%m/%y %H:%M') if r.created_at else '—' }}
         </td>
         <td><code>{{ r.order_code }}</code></td>

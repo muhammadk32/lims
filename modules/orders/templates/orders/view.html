@@ -163,8 +163,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -195,9 +195,9 @@
 }
 .ov-header h3 i, .ov-header .sub i { color: #fff !important; }
 .ov-header .sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .ov-header .sub strong { color: #fff !important; }
@@ -244,10 +244,10 @@
   display: grid !important;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
   gap: 8px 24px !important;
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
 }
 .ov-meta .row-item { display: flex !important; gap: 6px !important; align-items: baseline !important; }
-.ov-meta .key { font-weight: 700 !important; color: #6c757d !important; min-width: 90px !important; text-transform: uppercase !important; font-size: 0.72rem !important; letter-spacing: 0.04em !important; }
+.ov-meta .key { font-weight: 700 !important; color: #6c757d !important; min-width: 90px !important; text-transform: uppercase !important; font-size: 0.68rem !important; letter-spacing: 0.04em !important; }
 .ov-meta .val { color: #212529 !important; font-weight: 600 !important; }
 
 /* Table wrap */
@@ -261,13 +261,13 @@
 .ov-table {
   width: 100% !important;
   border-collapse: collapse !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
   margin: 0 !important;
 }
 .ov-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -302,14 +302,14 @@
   background: #eef4ff !important;
   color: #1a3d7c !important;
   border-radius: 3px !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
 }
 .ov-table .col-check { text-align: center !important; }
 .ov-table .text-end { text-align: right !important; }
 
 /* Cells */
 .test-name { font-weight: 700 !important; }
-.test-code { font-size: 0.72rem !important; color: #6c757d !important; font-family: Consolas, Monaco, monospace !important; }
+.test-code { font-size: 0.68rem !important; color: #6c757d !important;  }
 .result-cell { font-weight: 700 !important; text-align: right !important; }
 .result-cell.empty { color: #adb5bd !important; font-weight: 400 !important; }
 .unit-cell, .range-cell { color: #6c757d !important; font-size: 0.78rem !important; }
@@ -336,6 +336,21 @@
   border: 2px solid #212529 !important;
   border-radius: 8px !important;
 }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 

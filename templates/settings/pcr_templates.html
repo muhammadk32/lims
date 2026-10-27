@@ -6,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <style>
 .pt-page { max-width: 1400px; margin: 0 auto; padding: 6px 16px 20px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.82rem; color: #212529; }
+            font-size: 0.82rem; color: #212529; }
 .pt-header { display: flex; justify-content: space-between; align-items: flex-end;
              border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
 .pt-title { font-size: 1.15rem; font-weight: 700; margin: 0;
@@ -108,8 +108,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -136,9 +136,9 @@
 }
 .pt-header h1 i, .pt-header h2 i, .pt-title i { color: #fff !important; }
 .pt-subtitle, .pt-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .pt-header .btn, .pt-actions .btn {
@@ -185,12 +185,12 @@
   border-radius: 8px 8px 0 0 !important;
   background: #fff !important;
   margin: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .pt-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -213,6 +213,21 @@
 .pt-table tbody td:last-child { border-right: none !important; }
 .pt-table tbody tr:last-child td { border-bottom: none !important; }
 .pt-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 
@@ -302,7 +317,7 @@ tinymce.init({
   toolbar2: 'bullist numlist outdent indent | alignleft aligncenter alignright | blockquote hr | link table | subscript superscript | charmap | searchreplace visualblocks fullscreen code',
   font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt',
   block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Preformatted=pre',
-  content_style: "body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; line-height: 1.5; } p { margin: 0 0 8px 0; } ul, ol { margin: 4px 0 8px 20px; } hr { border: none; border-top: 1px solid #6c757d; margin: 10px 0; } blockquote { border-left: 3px solid #adb5bd; margin: 6px 0; padding: 2px 10px; color: #495057; }",
+  content_style: "body {  font-size: 13px; line-height: 1.5; } p { margin: 0 0 8px 0; } ul, ol { margin: 4px 0 8px 20px; } hr { border: none; border-top: 1px solid #6c757d; margin: 10px 0; } blockquote { border-left: 3px solid #adb5bd; margin: 6px 0; padding: 2px 10px; color: #495057; }",
   valid_elements: '*[*]',
   extended_valid_elements: 'hr[class|style],span[class|style],p[class|style],div[class|style]'
 });

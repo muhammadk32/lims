@@ -7,7 +7,7 @@
   max-width: 1500px;
   margin: 0 auto;
   padding: 10px 20px 30px;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  
   font-size: 0.82rem;
   color: #212529;
 }
@@ -32,7 +32,7 @@
 .ph-count {
   font-size: 0.76rem;
   color: #6c757d;
-  font-family: Consolas, Monaco, monospace;
+  
 }
 
 /* Search strip */
@@ -107,7 +107,7 @@
 }
 .ph-card-header .pmeta {
   font-size: 0.74rem;
-  font-family: Consolas, Monaco, monospace;
+  
   opacity: 0.85;
 }
 .ph-card-header .pcount {
@@ -147,12 +147,12 @@
 .ph-table tbody tr:hover { background: #f1f3f5; }
 .ph-table code {
   font-size: 0.72rem;
-  font-family: Consolas, Monaco, monospace;
+  
   padding: 0 3px;
 }
 .ph-table .num {
   text-align: right;
-  font-family: Consolas, Monaco, monospace;
+  
   font-variant-numeric: tabular-nums;
 }
 .ph-table .center { text-align: center; }
@@ -304,8 +304,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -331,15 +331,15 @@
 }
 .ph-header h1 i, .ph-title i { color: #fff !important; }
 .ph-subtitle {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .ph-count {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
 }
 
 .ph-card {
@@ -364,12 +364,12 @@
 .ph-table {
   width: 100% !important;
   border-collapse: collapse !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .ph-table thead th {
   background: #eef4ff !important;
   color: #1a3d7c !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   padding: 8px 10px !important;
@@ -397,6 +397,21 @@
   border-radius: 8px !important;
   margin-bottom: 16px !important;
 }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 
@@ -482,7 +497,7 @@
         <tbody>
           {% for o in patient_visits %}
           <tr>
-            <td class="muted" style="font-family: Consolas, Monaco, monospace; font-size: 0.72rem;">
+            <td class="muted" style=" font-size: 0.72rem;">
               {{ o.created_at | localtime('%d/%m/%y %H:%M') }}
             </td>
             <td><code>{{ o.order_code }}</code></td>

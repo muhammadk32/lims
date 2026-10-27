@@ -10,7 +10,7 @@
   max-width: 1500px;
   margin: 0 auto;
   padding: 10px 20px 30px;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  
   font-size: 0.82rem;
   color: #212529;
 }
@@ -125,7 +125,7 @@
   font-size: 0.78rem;
   background: #fff;
   height: 24px;
-  font-family: inherit;
+  
   color: #212529;
 }
 .rr-select { padding: 0 4px; }
@@ -134,11 +134,11 @@
 
 .rr-input.num {
   text-align: right;
-  font-family: Consolas, Monaco, monospace;
+  
   font-variant-numeric: tabular-nums;
 }
 .rr-input.mono {
-  font-family: Consolas, Monaco, monospace;
+  
 }
 
 /* Row remove button */
@@ -160,7 +160,7 @@
   margin-top: 6px;
   font-size: 0.72rem;
   color: #6c757d;
-  font-family: Consolas, Monaco, monospace;
+  
 }
 
 @media (max-width: 900px) {
@@ -175,8 +175,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -203,9 +203,9 @@
 }
 .rr-header h1 i, .rr-header h2 i, .rr-header h3 i { color: #fff !important; }
 .rr-subtitle, .rr-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .rr-header .btn, .rr-actions .btn {
@@ -235,12 +235,12 @@
   border-radius: 8px 8px 0 0 !important;
   background: #fff !important;
   margin: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .rr-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -263,6 +263,21 @@
 .rr-table tbody td:last-child { border-right: none !important; }
 .rr-table tbody tr:last-child td { border-bottom: none !important; }
 .rr-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 

@@ -6,7 +6,7 @@
   /* ============ Page ============ */
   .er-page {
     padding: 4px 10px 24px;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    
     font-size: 0.95rem;
     color: var(--bs-body-color);
   }
@@ -48,10 +48,10 @@
     letter-spacing: 0.06em; color: #1d4ed8; white-space: nowrap; min-width: 82px;
   }
   .er-band .v {
-    font-weight: 600; font-family: Consolas, Monaco, monospace;
+    font-weight: 600; 
     color: #1e3a63; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .er-band .v.name { font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; }
+  .er-band .v.name {  font-weight: 700; }
   [data-bs-theme="dark"] .er-band { background: #1e3a8a; border-color: #3b82f6; }
   [data-bs-theme="dark"] .er-band .k { color: #93c5fd; }
   [data-bs-theme="dark"] .er-band .v { color: #dbeafe; }
@@ -130,7 +130,7 @@
   [data-bs-theme="dark"] .er-table tbody td { border-color: #2a2f3a; }
 
   .er-table .code {
-    font-family: Consolas, Monaco, monospace; font-size: 0.85rem;
+     font-size: 0.85rem;
     color: var(--brand-primary); font-weight: 700;
   }
   .er-table .test-name { font-weight: 600; font-size: 0.9rem; }
@@ -160,7 +160,7 @@
     border: 1.5px solid #1a1a1a; border-radius: 6px;
     font-size: 0.85rem; background: #f3f8ff;
     color: var(--bs-body-color);
-    box-sizing: border-box; font-family: inherit;
+    box-sizing: border-box; 
   }
   .er-input:focus {
     outline: none; border-color: var(--brand-primary);
@@ -206,8 +206,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -234,9 +234,9 @@
 }
 .er-header h1 i, .er-header h2 i, .er-header h3 i { color: #fff !important; }
 .er-subtitle, .er-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .er-header .btn, .er-actions .btn {
@@ -266,12 +266,12 @@
   border-radius: 8px 8px 0 0 !important;
   background: #fff !important;
   margin: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .er-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -294,6 +294,21 @@
 .er-table tbody td:last-child { border-right: none !important; }
 .er-table tbody tr:last-child td { border-bottom: none !important; }
 .er-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 

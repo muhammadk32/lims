@@ -7,7 +7,7 @@
   /* ============ Page ============ */
   .ei-page {
     padding: 4px 10px 24px;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    
     font-size: 0.95rem;
     color: var(--bs-body-color);
   }
@@ -24,7 +24,7 @@
   }
   .ei-title i { color: var(--brand-primary); }
   .ei-sub { font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px; }
-  .ei-sub b { color: var(--bs-body-color); font-family: Consolas, Monaco, monospace; }
+  .ei-sub b { color: var(--bs-body-color);  }
 
   .ei-back-link {
     font-size: 0.78rem; color: var(--bs-secondary-color); text-decoration: none;
@@ -49,10 +49,10 @@
     letter-spacing: 0.06em; color: #1d4ed8; white-space: nowrap; min-width: 78px;
   }
   .ei-band .v {
-    font-weight: 600; font-family: Consolas, Monaco, monospace;
+    font-weight: 600; 
     color: #1e3a63; white-space: nowrap;
   }
-  .ei-band .v.name { font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; }
+  .ei-band .v.name {  font-weight: 700; }
   [data-bs-theme="dark"] .ei-band { background: #1e3a8a; border-color: #3b82f6; }
   [data-bs-theme="dark"] .ei-band .k { color: #93c5fd; }
   [data-bs-theme="dark"] .ei-band .v { color: #dbeafe; }
@@ -140,7 +140,7 @@
   .ei-table .name { font-weight: 700; font-size: 0.9rem; }
   .ei-table .child-name { padding-left: 24px; font-weight: 500; }
   .ei-table .ref, .ei-table .unit {
-    font-family: Consolas, Monaco, monospace;
+    
     font-size: 0.82rem; color: var(--bs-secondary-color);
   }
   .ei-table .unit { text-align: center; }
@@ -153,7 +153,7 @@
     border: 1.5px solid #1a1a1a; border-radius: 6px;
     font-size: 0.9rem; background: #f3f8ff;
     color: var(--bs-body-color);
-    font-family: inherit; box-sizing: border-box;
+     box-sizing: border-box;
   }
   .ei-input:focus {
     outline: none; border-color: var(--brand-primary);
@@ -176,7 +176,7 @@
     text-transform: uppercase; letter-spacing: 0.08em;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .msc-hd .msc-code { font-family: Consolas, monospace; color: #2563eb; font-weight: 700; }
+  .msc-hd .msc-code {  color: #2563eb; font-weight: 700; }
   [data-bs-theme="dark"] .msc-hd { background: #1e3a8a; color: #dbeafe; }
   [data-bs-theme="dark"] .msc-hd .msc-code { color: #93c5fd; }
 
@@ -218,7 +218,7 @@
     outline: none; border-color: var(--brand-primary);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
   }
-  .msc-ref { font-family: Consolas, monospace; font-size: 0.8rem; color: var(--brand-primary); font-weight: 600; }
+  .msc-ref {  font-size: 0.8rem; color: var(--brand-primary); font-weight: 600; }
   [data-bs-theme="dark"] .msc-in { border-color: #000; background: #1a2433; color: #e8eaee; }
 
 /* ===== POLISHED THEME (ei-*) ===== */
@@ -226,8 +226,8 @@
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -254,9 +254,9 @@
 }
 .ei-header h1 i, .ei-header h2 i, .ei-header h3 i { color: #fff !important; }
 .ei-subtitle, .ei-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin-top: 2px !important;
 }
 .ei-header .btn, .ei-actions .btn {
@@ -286,12 +286,12 @@
   border-radius: 8px 8px 0 0 !important;
   background: #fff !important;
   margin: 0 !important;
-  font-size: 0.82rem !important;
+  font-size: 0.75rem !important;
 }
 .ei-table thead th {
   background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
   color: #fff !important;
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
@@ -314,6 +314,21 @@
 .ei-table tbody td:last-child { border-right: none !important; }
 .ei-table tbody tr:last-child td { border-bottom: none !important; }
 .ei-table tbody tr:hover td { background: #eaf2ff !important; }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 
@@ -390,10 +405,10 @@
                      value="{{ c.result_value or '' }}"
                      class="ei-input" autocomplete="off">
             </td>
-            <td class="unit" style="text-align:center;font-family:Consolas, monospace;font-size:0.72rem;">
+            <td class="unit" style="text-align:center;font-size:0.72rem;">
               {{ c.test.unit or '' }}
             </td>
-            <td class="ref" style="font-family:Consolas, monospace;font-size:0.72rem;color:#0a58ca;">
+            <td class="ref" style="font-size:0.72rem;color:#0a58ca;">
               {{ rng(c.test, order) or (c.test.normal_range or '') }}
             </td>
           </tr>
@@ -421,7 +436,7 @@
             <td class="name">
               {{ item.test.name }}
               <div style="font-size:0.68rem;color:#6c757d;
-                          font-family:Consolas, Monaco, monospace;">
+                          ">
                 {{ item.test.result_format or 'numeric' }}
               </div>
             </td>
@@ -435,7 +450,7 @@
                      value="{{ item.result_notes or '' }}"
                      class="ei-input" placeholder="Remarks">
             </td>
-            <td class="unit" style="text-align:center;font-family:Consolas, monospace;font-size:0.72rem;">
+            <td class="unit" style="text-align:center;font-size:0.72rem;">
               {{ item.test.unit or '' }}
             </td>
           </tr>
@@ -476,7 +491,7 @@
         branding: false,
         plugins: 'lists link hr',
         toolbar: 'undo redo | bold italic underline | bullist numlist | link hr | removeformat',
-        content_style: "body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; line-height: 1.5; } p { margin: 0 0 6px 0; }",
+        content_style: "body {  font-size: 13px; line-height: 1.5; } p { margin: 0 0 6px 0; }",
         setup: function (ed) {
           ed.on('change keyup', function () { ed.save(); });
         }

@@ -1,14 +1,14 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% block title %}Edit Order {{ order.order_code }} - LabMS{% endblock %}
 
 {% block head %}
 <style>
 .eo-page { max-width: 1200px; margin: 0 auto; padding: 16px 24px 40px;
-           font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.85rem; }
+            font-size: 0.85rem; }
 .eo-header { display: flex; justify-content: space-between; align-items: flex-end;
              border-bottom: 2px solid #212529; padding-bottom: 8px; margin-bottom: 14px; }
 .eo-title { font-size: 1.15rem; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.02em; }
-.eo-sub { font-size: 0.78rem; color: #6c757d; font-family: Consolas, Monaco, monospace; margin-top: 2px; }
+.eo-sub { font-size: 0.78rem; color: #6c757d;  margin-top: 2px; }
 .eo-actions { display: flex; gap: 6px; }
 .eo-btn { display: inline-block; padding: 6px 14px; font-size: 0.8rem; font-weight: 600;
           border: 1px solid #212529; background: #fff; color: #212529; text-decoration: none;
@@ -38,7 +38,7 @@
                padding: 6px 8px; border-bottom: 1px solid #dee2e6; font-size: 0.85rem; }
 .eo-item-row:last-child { border-bottom: none; }
 .eo-item-row .name { font-weight: 600; }
-.eo-item-row .code { font-family: Consolas, Monaco, monospace; font-size: 0.72rem; color: #6c757d; }
+.eo-item-row .code {  font-size: 0.72rem; color: #6c757d; }
 .eo-item-row .remove {
   background: #fff; border: 1px solid #dc3545; color: #dc3545; padding: 2px 8px;
   cursor: pointer; font-size: 0.8rem; border-radius: 0;
@@ -54,7 +54,7 @@
                     padding: 6px 10px; border-bottom: 1px solid #e9ecef; cursor: pointer; font-size: 0.82rem; }
 .eo-search-result:hover { background: #f1f3f5; }
 .eo-search-result:last-child { border-bottom: none; }
-.eo-search-result .price { color: #198754; font-weight: 700; font-family: Consolas, Monaco, monospace; }
+.eo-search-result .price { color: #198754; font-weight: 700;  }
 
 @media (max-width: 900px) {
   .eo-grid, .eo-2col { grid-template-columns: 1fr; }
@@ -64,8 +64,8 @@
 .eo-page {
   max-width: 100% !important;
   padding: 16px 32px 40px !important;
-  font-family: 'Segoe UI', Arial, sans-serif !important;
-  font-size: 0.82rem !important;
+  
+  font-size: 0.75rem !important;
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -97,9 +97,9 @@
 }
 .eo-header h1 i, .eo-header .eo-title i { color: #fff !important; }
 .eo-sub {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   color: #dbeafe !important;
-  font-family: Consolas, Monaco, monospace !important;
+  
   margin: 2px 0 0 !important;
 }
 .eo-actions {
@@ -175,13 +175,28 @@
   min-height: 36px !important;
 }
 .eo-field label {
-  font-size: 0.72rem !important;
+  font-size: 0.68rem !important;
   font-weight: 700 !important;
   color: #6c757d !important;
   text-transform: uppercase !important;
   letter-spacing: 0.04em !important;
   margin-bottom: 3px !important;
 }
+
+/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
+table[class$="-table"] thead th {
+    font-size: 0.82rem !important; 
+    padding: 10px 8px !important;
+    font-weight: 700 !important;
+}
+table[class$="-table"] tbody td {
+    font-size: 0.85rem !important;
+    padding: 8px 8px !important;
+    line-height: 1.4 !important;
+}
+/* Fix for tables inside specific wrappers */
+.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
+.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 {% endblock %}
 
@@ -345,19 +360,19 @@
       <div class="eo-card-body">
         <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dotted #dee2e6;">
           <span>Current Subtotal</span>
-          <span style="font-family:Consolas,monospace;">{{ order.subtotal | money }}</span>
+          <span style="">{{ order.subtotal | money }}</span>
         </div>
         <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dotted #dee2e6;">
           <span>Current Discount</span>
-          <span style="font-family:Consolas,monospace; color:#dc3545;">{{ order.discount_value | money }}</span>
+          <span style=" color:#dc3545;">{{ order.discount_value | money }}</span>
         </div>
         <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dotted #dee2e6;">
           <span>Current Total</span>
-          <span style="font-family:Consolas,monospace; font-weight:700; color:#198754;">{{ order.final_total | money }}</span>
+          <span style=" font-weight:700; color:#198754;">{{ order.final_total | money }}</span>
         </div>
         <div style="display:flex; justify-content:space-between; padding:6px 0;">
           <span>Already Paid</span>
-          <span style="font-family:Consolas,monospace;">{{ order.paid_amount | money }}</span>
+          <span style="">{{ order.paid_amount | money }}</span>
         </div>
         <div style="margin-top:10px; font-size:0.72rem; color:#6c757d; font-style:italic;">
           Totals will be <strong>recomputed</strong> after saving.

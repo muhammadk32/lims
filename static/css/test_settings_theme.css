@@ -137,35 +137,7 @@ table.rle-table tbody tr:hover td, table.rlk-table tbody tr:hover td {
 }
 
 /* ===== page header for test settings ===== */
-.lt-header {
-  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
-  color: #fff !important;
-  padding: 14px 20px !important;
-  border-radius: 12px !important;
-  border: 2px solid var(--theme-primary) !important;
-  margin-bottom: 14px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
-}
-.lt-header .lt-title, .lt-header .lt-title i,
-.lt-header .lt-subtitle {
-  color: #fff !important;
-}
-.lt-header .lt-title i { color: var(--theme-gold) !important; }
 
-.ts-header {
-  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
-  color: #fff !important;
-  padding: 14px 18px !important;
-  border-radius: 12px !important;
-  border: 2px solid var(--theme-primary) !important;
-  margin-bottom: 14px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
-}
-.ts-header .ts-title, .ts-header .ts-title i, .ts-header .ts-subtitle,
-.ts-header .ts-count {
-  color: #fff !important;
-}
-.ts-header .ts-title i { color: var(--theme-gold) !important; }
 
 /* ===== KPI strips ===== */
 
@@ -328,25 +300,6 @@ table.tf-table tbody tr:hover td, table.fp-ast tbody tr:hover td {
 
 
 /* ===== Test Formats tab header ===== */
-.tf-header {
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  color: #fff !important;
-  padding: 14px 20px !important;
-  border-radius: 12px !important;
-  border: 2px solid #1a3d7c !important;
-  margin-bottom: 14px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
-}
-.tf-header .tf-title,
-.tf-header .tf-title i {
-  color: #fff !important;
-}
-.tf-header .tf-title i { color: #ffd166 !important; }
-.tf-header .tf-subtitle,
-.tf-header .tf-count {
-  color: #fff !important;
-  opacity: 0.92;
-}
 
 /* ===== Test Formats filter strip ===== */
 .tf-filter {
@@ -426,35 +379,6 @@ table.tf-table tbody tr:hover td, table.fp-ast tbody tr:hover td {
 
 
 /* ===== Format Previews header ===== */
-.fp-header {
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  color: #fff !important;
-  padding: 14px 20px !important;
-  border-radius: 12px !important;
-  border: 2px solid #1a3d7c !important;
-  margin-bottom: 14px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.fp-header .fp-title,
-.fp-header .fp-title i {
-  color: #fff !important;
-}
-.fp-header .fp-title i { color: #ffd166 !important; }
-.fp-header .fp-subtitle {
-  color: rgba(255,255,255,0.9) !important;
-}
-.fp-header .fp-btn-primary {
-  background: #fff !important;
-  color: #1a3d7c !important;
-  border: 2px solid #fff !important;
-  font-weight: 700;
-}
-.fp-header .fp-btn-primary:hover {
-  background: #ffd166 !important;
-  border-color: #ffd166 !important;
-  color: #1a1a1a !important;
-}
 
 /* ===== Format Preview cards ===== */
 .fp-card {

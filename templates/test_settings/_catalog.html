@@ -7,9 +7,6 @@
   </div>
   <div class="lt-actions">
     {% if current_user.role == 'admin' %}
-    <button class="lt-btn" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-      <i class="bi bi-tags"></i> New Category
-    </button>
     <a href="{{ url_for('tests.new_test') }}" class="lt-btn lt-btn-primary">
       <i class="bi bi-plus-lg"></i> Add Test
     </a>
