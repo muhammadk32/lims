@@ -1,5 +1,11 @@
 ﻿{% extends 'base.html' %}
 {% block title %}Test Reports — LabMS
+
+
+
+
+
+
 {% endblock %}
 
 {% block head %}
@@ -431,16 +437,8 @@
 .rp-table tbody tr:hover td { background: #eaf2ff !important; }
 
 /* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
-table[class$="-table"] thead th {
-    font-size: 0.82rem !important; 
-    padding: 10px 8px !important;
-    font-weight: 700 !important;
-}
-table[class$="-table"] tbody td {
-    font-size: 0.85rem !important;
-    padding: 8px 8px !important;
-    line-height: 1.4 !important;
-}
+
+
 /* Fix for tables inside specific wrappers */
 .wrap table thead th, .table thead th { font-size: 0.82rem !important; }
 .wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
@@ -465,335 +463,639 @@ tr.child-row td:nth-child(2) {
     padding-left: 24px !important; /* Indent the actual test name */
 }
 
-/* --- REFERRAL STYLE GRID OVERRIDES --- */
-.rp-table {
+/* --- SUB-GRID (referral-style) --- */
+.rp-sub-table {
+  width: 100% !important;
   border-collapse: collapse !important;
-  border: 1px solid #a3b8d4 !important;
-  width: 100%;
-}
-.rp-table thead th {
-  background: #1f6fca !important; /* Solid blue from referral page */
-  color: #ffffff !important;
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  border: 1px solid #1558a6 !important; /* Darker blue borders */
-  padding: 6px 8px !important;
-  vertical-align: middle !important;
-  border-radius: 0 !important; /* Remove rounded corners */
-}
-.rp-table tbody td {
-  border: 1px solid #a3b8d4 !important;
-  padding: 4px 8px !important;
-  font-size: 0.78rem !important;
-  vertical-align: middle !important;
-  background-color: #fff;
-}
-/* Alternate row colors slightly to match dense grid */
-.rp-table tbody tr:nth-child(even) td {
-  background-color: #f4f7fb !important;
-}
-/* Parent rows (order rows) get a distinct light blue background */
-.rp-table tbody tr.parent-row td {
-  background-color: #e6f0fa !important;
-  font-weight: 600;
-}
-/* Tighten the expand button */
-.rp-expand-btn {
-  padding: 2px 5px !important;
-  font-size: 0.75rem !important;
-}
-
-
-/* --- ULTIMATE REFERRAL GRID OVERRIDE --- */
-html body table.rp-table thead th,
-html body table.rp-table thead tr th {
-  background: #1f6fca !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border: 1px solid #1558a6 !important;
-  border-radius: 0 !important;
-  padding: 6px 8px !important;
-  font-size: 0.8rem !important;
-}
-
-html body table.rp-table tbody td {
-  border: 1px solid #a3b8d4 !important;
-  padding: 4px 8px !important;
-  font-size: 0.78rem !important;
-  background-color: #ffffff !important;
-}
-
-/* Force alternating backgrounds like the referral page */
-html body table.rp-table tbody tr:nth-child(even) td {
-  background-color: #f4f7fb !important;
-}
-html body table.rp-table tbody tr:nth-child(odd) td {
-  background-color: #ffffff !important;
-}
-
-/* Make sure the first column (the + button) matches */
-html body table.rp-table tbody td:first-child {
-  background-color: #e6f0fa !important;
-}
-
-
-/* --- EXPAND PAGE WIDTH & REDUCE FONT SIZE --- */
-.rp-page {
-  max-width: 100% !important;
-  width: 100% !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-.rp-card {
-  max-width: 100% !important;
-  width: 100% !important;
-  overflow-x: auto !important;
-}
-.rp-table {
-  width: 100% !important;
-  table-layout: auto !important; /* Let browser decide based on content */
-}
-.rp-table thead th {
-  font-size: 0.70rem !important; /* Smaller font for headers */
-  padding: 5px 4px !important;
-  white-space: normal !important; /* Allow text to wrap */
-}
-.rp-table tbody td {
-  font-size: 0.72rem !important; /* Smaller font for data */
-  padding: 4px 4px !important;
+  
 }
 .rp-sub-table th {
-  font-size: 0.68rem !important; /* Even smaller for sub-grid */
-  padding: 4px 3px !important;
+  background: #1f6fca !important;
+  color: #fff !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  padding: 4px 2px !important;
+  line-height: 1.15 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #1558a6 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
 }
 .rp-sub-table td {
-  font-size: 0.70rem !important;
-  padding: 4px 3px !important;
-}
-.rp-sub-table select, .rp-sub-table input[type="text"] {
-  font-size: 0.70rem !important;
-  padding: 2px !important;
-  height: 24px !important; /* Compact height */
-}
-
-
-/* --- STRICT MARGIN & WIDTH FIX --- */
-.rp-page {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important; /* Prevent page-level scroll */
-  padding-left: 5px !important;
-  padding-right: 5px !important;
-}
-.rp-card {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: auto !important;
-  border: none !important;
-}
-.rp-table {
-  width: 100% !important;
-  table-layout: fixed !important; /* Force fixed table layout */
-  margin: 0 !important;
-}
-.rp-table th, .rp-table td {
-  word-wrap: break-word !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-.rp-sub-table {
-  width: 100% !important;
-  table-layout: fixed !important; /* Force fixed layout for sub-grid too */
-}
-.rp-sub-table th, .rp-sub-table td {
-  word-wrap: break-word !important;
-  white-space: normal !important;
-  vertical-align: middle !important;
-}
-/* Adjust specific column widths to make room */
-.rp-sub-table th:nth-child(1) { width: 4%; } /* Checkbox */
-.rp-sub-table th:nth-child(2) { width: 8%; } /* Code */
-.rp-sub-table th:nth-child(3) { width: 24%; } /* Name */
-.rp-sub-table th:nth-child(4) { width: 8%; } /* Status */
-.rp-sub-table th:nth-child(5) { width: 8%; } /* Alert */
-.rp-sub-table th:nth-child(6) { width: 20%; } /* Action/Comments */
-.rp-sub-table th:nth-child(7) { width: 7%; } /* Print */
-.rp-sub-table th:nth-child(8) { width: 7%; } /* Whats App */
-.rp-sub-table th:nth-child(9) { width: 5%; } /* Is Print */
-.rp-sub-table th:nth-child(10) { width: 5%; } /* Is Delay */
-.rp-sub-table th:nth-child(11) { width: 4%; } /* Icon */
-
-
-/* --- PRECISE SUB-GRID COLUMN WIDTHS --- */
-.rp-sub-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-.rp-sub-table th, .rp-sub-table td {
-  white-space: nowrap !important; /* Prevent wrapping by default */
-  vertical-align: middle !important;
+  border: 1px solid #a3b8d4 !important;
   padding: 4px 6px !important;
-}
-/* Allow Name to wrap if it's too long */
-.rp-sub-table td:nth-child(3) {
-  white-space: normal !important;
-}
-
-/* 1. Checkbox */
-.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
-
-/* 2. Code */
-.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
-
-/* 3. Name */
-.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 22% !important; }
-
-/* 4. Status */
-.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; }
-
-/* 5. Alert (Dropdown) */
-.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; }
-
-/* 6. Action/Comments (Input) */
-.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
-
-/* 7. Print */
-.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
-
-/* 8. Whats App */
-.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
-
-/* 9. Is Print */
-.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 4% !important; text-align: center; }
-
-/* 10. Is Delay */
-.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 4% !important; text-align: center; }
-
-/* 11. Icon */
-.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; }
-
-
-/* --- PRECISE SUB-GRID COLUMN WIDTHS --- */
-.rp-sub-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-.rp-sub-table th, .rp-sub-table td {
-  white-space: nowrap !important; /* Prevent wrapping by default */
+  font-size: 0.75rem !important;
   vertical-align: middle !important;
-  padding: 4px 6px !important;
+  background: #fff !important;
+  white-space: nowrap !important;
 }
-/* Allow Name to wrap if it's too long */
-.rp-sub-table td:nth-child(3) {
-  white-space: normal !important;
-}
+/* Allow Name column to wrap */
+.rp-sub-table td:nth-child(3) { white-space: normal !important; }
 
-/* 1. Checkbox */
-.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
+/* Column widths — sum must equal 100 */
 
-/* 2. Code */
-.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
-
-/* 3. Name */
-.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 22% !important; }
-
-/* 4. Status */
-.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; }
-
-/* 5. Alert (Dropdown) */
-.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; }
-
-/* 6. Action/Comments (Input) */
-.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
-
-/* 7. Print */
-.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
-
-/* 8. Whats App */
-.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
-
-/* 9. Is Print */
-.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 4% !important; text-align: center; }
-
-/* 10. Is Delay */
-.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 4% !important; text-align: center; }
-
-/* 11. Icon */
-.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; }
-
-
-/* --- FINAL PRECISE COLUMN MAPPING --- */
-.rp-page {
-  width: 100% !important;
-  max-width: 100% !important;
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-.rp-card {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important; /* No scrollbars */
-  padding: 0 !important;
-  border: none !important;
-}
-.rp-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-  margin: 0 !important;
-}
-
-/* 
-  Map every column in BOTH tables to exact percentages.
-  Parent table columns:
-  1 (Expand) 2 (Lab) 3 (Ref) 4 (PtNo) 5 (Name) 6 (Gender) 7 (MR) 8 (RegDate) 9 (Mobile) 10 (Consult) 11 (Ref)
-  
-  Sub-table columns:
-  1 (Chk) 2 (Code) 3 (Name) 4 (Status) 5 (Alert) 6 (Action) 7 (Print) 8 (WhatsApp) 9 (IsPrint) 10 (IsDelay) 11 (Icon)
-*/
-
-/* Widths shared by both tables */
-.rp-table th:nth-child(1), .rp-sub-table th:nth-child(1) { width: 4% !important; text-align: center; }
-.rp-table th:nth-child(2), .rp-sub-table th:nth-child(2) { width: 8% !important; } 
-.rp-table th:nth-child(3), .rp-sub-table th:nth-child(3) { width: 8% !important; } 
-.rp-table th:nth-child(4), .rp-sub-table th:nth-child(4) { width: 10% !important; } 
-.rp-table th:nth-child(5), .rp-sub-table th:nth-child(5) { width: 15% !important; } 
-.rp-table th:nth-child(6), .rp-sub-table th:nth-child(6) { width: 10% !important; } 
-.rp-table th:nth-child(7), .rp-sub-table th:nth-child(7) { width: 10% !important; } 
-.rp-table th:nth-child(8), .rp-sub-table th:nth-child(8) { width: 10% !important; } 
-.rp-table th:nth-child(9), .rp-sub-table th:nth-child(9) { width: 10% !important; } 
-.rp-table th:nth-child(10), .rp-sub-table th:nth-child(10) { width: 10% !important; } 
-.rp-table th:nth-child(11), .rp-sub-table th:nth-child(11) { width: 5% !important; text-align: center; }
-
-.rp-sub-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-}
-.rp-sub-table th, .rp-sub-table td {
-  white-space: normal !important; /* Allow wrapping */
-  vertical-align: middle !important;
-  padding: 6px 4px !important;
-}
-.rp-sub-table td input[type="text"], .rp-sub-table td select {
+.rp-sub-table td input[type="text"],
+.rp-sub-table td select {
   width: 100% !important;
   box-sizing: border-box !important;
   font-size: 0.75rem !important;
+  padding: 2px !important;
 }
 
 
-/* --- INDEPENDENT SUB-GRID COLUMN WIDTHS --- */
-/* Override the previous nth-child mappings specifically for the sub-table */
-.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 3% !important; text-align: center; } /* Checkbox */
-.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 7% !important; } /* Code */
-.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 25% !important; } /* Name */
-.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 7% !important; } /* Status */
-.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; } /* Alert */
-.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 20% !important; } /* Action/Comments */
-.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 5% !important; text-align: center; } /* Print */
-.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 8% !important; text-align: center; } /* Whats App */
-.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 6% !important; text-align: center; } /* Is Print */
-.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 6% !important; text-align: center; } /* Is Delay */
-.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; } /* Icon */
+/* --- HIERARCHY FIX: MAIN HEADER > SUB HEADER --- */
+
+/* 1. Main Table Header: Make it prominent */
+html body .rp-table > thead > tr > th {
+  font-size: 0.82rem !important;
+  padding: 10px 8px !important;
+  font-weight: 800 !important;
+  background: #1f6fca !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+}
+
+/* 2. Sub-Table Header: Make it smaller, tighter, and secondary */
+html body .rp-sub-table > thead > tr > th {
+  font-size: 0.65rem !important;
+  padding: 3px 2px !important;
+  font-weight: 700 !important;
+  background: #4a8adb !important; /* Slightly lighter blue to show sub-level */
+  color: #fff !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+  white-space: normal !important; /* Prevent stretching */
+}
+
+/* 3. Fix the column widths so 'WHATS APP' doesn't force height */
+html body html body html body html body 
+
+/* --- SUB-GRID: LET CONTENT DICTATE WIDTH --- */
+.rp-sub-table {
+  width: 100% !important;
+    /* Auto sizing based on content */
+  border-collapse: collapse !important;
+}
+.rp-sub-table th {
+  background: #4a8adb !important;
+  color: #fff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  padding: 3px 6px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important; /* Never break the header */
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+.rp-sub-table td {
+  border: 1px solid #a3b8d4 !important;
+  padding: 4px 6px !important;
+  font-size: 0.75rem !important;
+  vertical-align: middle !important;
+  background: #fff !important;
+  white-space: nowrap !important; /* Prevent wrapping */
+}
+/* Only the Name column is allowed to wrap to fill space */
+.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+  width: 100% !important; /* Name takes all remaining space */
+}
+/* Inputs should fill their cell */
+.rp-sub-table td input[type="text"], 
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.75rem !important;
+  padding: 2px !important;
+}
+
+
+/* --- ISOLATED SUB-TABLE RULES (NO INHERITANCE) --- */
+.rp-sub-table {
+  width: 100% !important;
+  
+  border-collapse: collapse !important;
+}
+.rp-sub-table th {
+  background: #4a8adb !important;
+  color: #fff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  padding: 3px 5px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  border: 1px solid #2a5fa0 !important;
+}
+.rp-sub-table td {
+  border: 1px solid #a3b8d4 !important;
+  padding: 4px 5px !important;
+  font-size: 0.72rem !important;
+  vertical-align: middle !important;
+  background: #fff !important;
+  white-space: nowrap !important;
+}
+/* Only Name column is allowed to wrap */
+.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+}
+.rp-sub-table td input[type="text"], 
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.72rem !important;
+  padding: 2px !important;
+}
+
+/* Force any column that doesn't need to be wide to be exactly the width of its content */
+.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1),
+.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2),
+.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4),
+.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5),
+.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7),
+.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8),
+.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9),
+.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10),
+.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) {
+  width: 1% !important;  /* Let browser shrink to content */
+}
+
+/* Let Name take all the remaining space */
+.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) {
+  width: auto !important;
+}
+
+
+/* --- SUB-TABLE MATCHES PARENT COLUMNS EXACTLY --- */
+/* The parent has 11 columns. The sub-table is forced to 100% width of its container. */
+.rp-sub-table {
+  width: 100% !important;
+  
+  border-collapse: collapse !important;
+}
+
+/* Header style */
+.rp-sub-table th {
+  background: #4a8adb !important;
+  color: #fff !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  padding: 3px 4px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  border: 1px solid #2a5fa0 !important;
+}
+
+/* Cell style */
+.rp-sub-table td {
+  border: 1px solid #a3b8d4 !important;
+  padding: 4px 4px !important;
+  font-size: 0.72rem !important;
+  vertical-align: middle !important;
+  background: #fff !important;
+  white-space: nowrap !important;
+}
+
+/* Inputs */
+.rp-sub-table td input[type="text"], 
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.72rem !important;
+  padding: 2px !important;
+}
+
+/* Exact width mapping (11 columns matching the parent's 11 columns) */
+/* 1: Checkbox */ .rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
+/* 2: Code     */ .rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
+/* 3: Name     */ .rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 18% !important; white-space: normal !important; }
+/* 4: Status   */ .rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; text-align: center; }
+/* 5: Alert    */ .rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 10% !important; }
+/* 6: Action   */ .rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
+/* 7: Print    */ .rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
+/* 8: Whats App*/ .rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
+/* 9: Is Print */ .rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 6% !important; text-align: center; }
+/* 10: Is Delay*/ .rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 6% !important; text-align: center; }
+/* 11: Icon    */ .rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 3% !important; text-align: center; }
+
+
+/* --- DEFINITIVE AUTO-LAYOUT FIX (MATCH REFERRAL PAGE) --- */
+.rp-table {
+  width: 100% !important;
+   
+}
+.rp-sub-table {
+  width: 100% !important;
+  
+  border-collapse: collapse !important;
+}
+
+/* Prevent the generic table rules from messing this up */
+.rp-sub-table th, .rp-sub-table td {
+  white-space: nowrap !important; /* Prevent wrapping which causes misalignment */
+  padding: 4px 6px !important;
+  vertical-align: middle !important;
+}
+
+/* Allow only the Name column to wrap if necessary */
+.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+}
+
+/* Inputs should fill their cell but not stretch the table */
+.rp-sub-table td input[type="text"], 
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.75rem !important;
+  padding: 2px !important;
+}
+
+/* Ensure the colspan cell allows the sub-table to expand fully */
+.rp-child-row > td {
+  padding: 0 !important;
+  border: none !important;
+}
+
+
+/* --- DEFINITIVE FIX: MAIN VS SUB LAYOUT --- */
+
+/* 1. Main Table: Fixed layout, 13 columns */
+.rp-table {
+  width: 100% !important;
+  table-layout: fixed !important; /* Locks the columns to their widths */
+}
+.rp-table th, .rp-table td {
+  white-space: nowrap !important; /* Prevents names from wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Parent Header widths (13 columns total) */
+.rp-table th:nth-child(1) { width: 3%; }  /* Checkbox */
+.rp-table th:nth-child(2) { width: 3%; }  /* Icon */
+.rp-table th:nth-child(3) { width: 6%; }  /* Show */
+.rp-table th:nth-child(4) { width: 8%; }  /* Lab No */
+.rp-table th:nth-child(5) { width: 5%; }  /* Ref No */
+.rp-table th:nth-child(6) { width: 10%; } /* Patient No */
+.rp-table th:nth-child(7) { width: 18%; } /* Patient Name */
+.rp-table th:nth-child(8) { width: 6%; }  /* Gender */
+.rp-table th:nth-child(9) { width: 5%; }  /* MR */
+.rp-table th:nth-child(10) { width: 10%; } /* Reg Date */
+.rp-table th:nth-child(11) { width: 10%; } /* Mobile */
+.rp-table th:nth-child(12) { width: 16%; } /* Consultant */
+.rp-table th:nth-child(13) { width: auto; } /* Reference (takes rest) */
+
+
+/* 2. Sub Table: Fixed layout, independent 11 columns */
+.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+.rp-sub-table th, .rp-sub-table td {
+  white-space: nowrap !important;
+  padding: 4px 4px !important;
+}
+.rp-sub-table td:nth-child(3) { white-space: normal !important; } /* Name can wrap */
+
+/* Sub Table Header widths (11 columns total) */
+.rp-sub-table th:nth-child(1) { width: 3%; }  /* Checkbox */
+.rp-sub-table th:nth-child(2) { width: 6%; }  /* Code */
+.rp-sub-table th:nth-child(3) { width: 21%; } /* Name */
+.rp-sub-table th:nth-child(4) { width: 7%; }  /* Status */
+.rp-sub-table th:nth-child(5) { width: 9%; }  /* Alert */
+.rp-sub-table th:nth-child(6) { width: 20%; } /* Action */
+.rp-sub-table th:nth-child(7) { width: 7%; }  /* Print */
+.rp-sub-table th:nth-child(8) { width: 9%; }  /* Whats App */
+.rp-sub-table th:nth-child(9) { width: 6%; }  /* Is Print */
+.rp-sub-table th:nth-child(10) { width: 6%; } /* Is Delay */
+.rp-sub-table th:nth-child(11) { width: 6%; } /* Icon */
+
+.rp-sub-table td input[type="text"], 
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+
+/* --- FIX MAIN TABLE 13-COLUMN ALIGNMENT --- */
+html body .rp-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+html body .rp-table th, 
+html body .rp-table td {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 4px !important;
+}
+
+/* Force exact widths for the 13 main table columns */
+html body .rp-table th:nth-child(1)  { width: 30px !important; text-align: center; } /* Checkbox */
+html body .rp-table th:nth-child(2)  { width: 30px !important; text-align: center; } /* Icon */
+html body .rp-table th:nth-child(3)  { width: 50px !important; text-align: center; } /* Show */
+html body .rp-table th:nth-child(4)  { width: 8% !important; }                       /* Lab No */
+html body .rp-table th:nth-child(5)  { width: 5% !important; }                       /* Ref No */
+html body .rp-table th:nth-child(6)  { width: 10% !important; }                      /* Patient No */
+html body .rp-table th:nth-child(7)  { width: 18% !important; }                      /* Patient Name */
+html body .rp-table th:nth-child(8)  { width: 6% !important; }                       /* Gender */
+html body .rp-table th:nth-child(9)  { width: 5% !important; }                       /* M.R. */
+html body .rp-table th:nth-child(10) { width: 10% !important; }                      /* Reg Date */
+html body .rp-table th:nth-child(11) { width: 10% !important; }                      /* Mobile */
+html body .rp-table th:nth-child(12) { width: 12% !important; }                      /* Consultant */
+html body .rp-table th:nth-child(13) { width: auto !important; }                     /* Reference */
+
+
+/* --- FIX CRAMPED HEADERS --- */
+.rp-table th, .rp-table td {
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+.rp-table {
+  table-layout: auto !important;
+}
+
+
+
+
+/* --- DEFINITIVE PROFESSIONAL GRID (REFERRAL STYLE) --- */
+.rp-table {
+  width: 100% !important;
+  table-layout: fixed !important; /* Forces columns to obey exact widths */
+  border-collapse: collapse !important;
+}
+
+/* Headers: Blue, Bold, Centered, No wrap */
+.rp-table th {
+  background: #1f6fca !important;
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 8px 4px !important;
+  text-align: center !important;
+  white-space: normal !important; /* Allow wrapping if needed */
+  vertical-align: middle !important;
+  border: 1px solid #1558a6 !important;
+  text-transform: uppercase !important;
+}
+
+/* Data Cells: Neat, no wrap, proper borders */
+
+
+/* Allow ONLY the Patient Name to wrap if it is extremely long */
+.rp-table td:nth-child(7) {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* Exact Column Widths for the 13 columns */
+.rp-table th:nth-child(1)  { width: 3%; }  /* Checkbox */
+.rp-table th:nth-child(2)  { width: 3%; }  /* Icon */
+.rp-table th:nth-child(3)  { width: 5%; }  /* Show */
+.rp-table th:nth-child(4)  { width: 7%; }  /* Lab No */
+.rp-table th:nth-child(5)  { width: 5%; }  /* Ref No */
+.rp-table th:nth-child(6)  { width: 10%; } /* Patient No */
+.rp-table th:nth-child(7)  { width: 16%; } /* Patient Name */
+.rp-table th:nth-child(8)  { width: 6%; }  /* Gender */
+.rp-table th:nth-child(9)  { width: 4%; }  /* M.R. */
+.rp-table th:nth-child(10) { width: 10%; } /* Reg Date */
+.rp-table th:nth-child(11) { width: 10%; } /* Mobile No */
+.rp-table th:nth-child(12) { width: 13%; } /* Consultant */
+.rp-table th:nth-child(13) { width: 13%; } /* Reference */
+
+/* Center the text for specific columns */
+.rp-table td:nth-child(1), .rp-table td:nth-child(2), .rp-table td:nth-child(3),
+.rp-table td:nth-child(8), .rp-table td:nth-child(9), .rp-table td:nth-child(10) {
+  text-align: center !important;
+}
+
+/* Make the links look clean */
+.rp-table a {
+  color: #0056b3 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+.rp-table a:hover {
+  text-decoration: underline !important;
+}
+
+
+/* --- UNIFIED STYLING (MATCHING DAILY LEDGER) --- */
+
+/* MAIN TABLE HEADERS */
+.rp-table thead th {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  padding: 10px 8px !important;
+  background: #1f6fca !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #1558a6 !important;
+  white-space: normal !important; /* Prevents awkward truncation */
+  line-height: 1.2 !important;
+}
+
+/* MAIN TABLE DATA CELLS */
+.rp-table tbody td {
+  font-size: 0.85rem !important;
+  padding: 8px 8px !important;
+  vertical-align: middle !important;
+  border: 1px solid #a3b8d4 !important;
+  background: #ffffff !important;
+  white-space: nowrap !important;
+}
+
+/* Allow Patient Name and Reference to wrap if needed */
+.rp-table tbody td:nth-child(7),
+.rp-table tbody td:nth-child(13) {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* SUB-GRID HEADERS */
+.rp-sub-table thead th {
+  font-size: 0.80rem !important; /* Slightly smaller than main header, still readable */
+  font-weight: 700 !important;
+  padding: 8px 6px !important;
+  background: #4a8adb !important; /* Lighter blue to distinguish */
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #2a5fa0 !important;
+  white-space: normal !important;
+  line-height: 1.15 !important;
+}
+
+/* SUB-GRID DATA CELLS */
+.rp-sub-table tbody td {
+  font-size: 0.82rem !important;
+  padding: 6px 6px !important;
+  vertical-align: middle !important;
+  border: 1px solid #a3b8d4 !important;
+  background: #ffffff !important;
+  white-space: nowrap !important;
+}
+
+/* Allow sub-grid Name to wrap */
+.rp-sub-table tbody td:nth-child(3) {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* Inputs / Selects in sub-grid */
+.rp-sub-table td input[type="text"],
+.rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.82rem !important;
+  padding: 3px !important;
+  border: 1px solid #ccc !important;
+}
+
+
+
+
+/* --- ABSOLUTE FINAL CSS --- */
+html body table.rp-table {
+  width: 100% !important;
+  table-layout: fixed !important; 
+  border-collapse: collapse !important;
+}
+
+/* Headers */
+html body table.rp-table thead th {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  padding: 8px 4px !important;
+  background: #1f6fca !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #1558a6 !important;
+  white-space: normal !important;
+  line-height: 1.1 !important;
+}
+
+/* Data cells */
+html body table.rp-table tbody td {
+  font-size: 0.75rem !important;
+  padding: 6px 4px !important;
+  vertical-align: middle !important;
+  border: 1px solid #a3b8d4 !important;
+  background: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Allow Patient Name (7) and Reference (13) to wrap */
+html body table.rp-table tbody td:nth-child(7),
+html body table.rp-table tbody td:nth-child(13) {
+  white-space: normal !important; 
+  word-wrap: break-word !important;
+}
+
+/* The 13 Column Widths */
+html body table.rp-table th:nth-child(1)  { width: 3% !important; }
+html body table.rp-table th:nth-child(2)  { width: 3% !important; }
+html body table.rp-table th:nth-child(3)  { width: 5% !important; }
+html body table.rp-table th:nth-child(4)  { width: 8% !important; }
+html body table.rp-table th:nth-child(5)  { width: 6% !important; }
+html body table.rp-table th:nth-child(6)  { width: 10% !important; }
+html body table.rp-table th:nth-child(7)  { width: 16% !important; }
+html body table.rp-table th:nth-child(8)  { width: 6% !important; }
+html body table.rp-table th:nth-child(9)  { width: 5% !important; }
+html body table.rp-table th:nth-child(10) { width: 11% !important; }
+html body table.rp-table th:nth-child(11) { width: 10% !important; }
+html body table.rp-table th:nth-child(12) { width: 10% !important; }
+html body table.rp-table th:nth-child(13) { width: 7% !important; }
+
+
+/* --- FIX CONSULTANT AND REFERENCE OVERLAP --- */
+html body table.rp-table tbody td:nth-child(12), /* Consultant */
+html body table.rp-table tbody td:nth-child(13) { /* Reference */
+  white-space: normal !important; /* Allow wrapping */
+  word-break: break-word !important;
+  line-height: 1.2 !important;
+}
+
+/* Also give them slightly more room by taking from the empty columns */
+html body table.rp-table th:nth-child(12) { width: 12% !important; }
+html body table.rp-table th:nth-child(13) { width: 10% !important; }
+
+
+/* --- REDUCE HEADER HEIGHT --- */
+html body table.rp-table thead th {
+  padding: 5px 4px !important; /* Reduced from 8px to 5px */
+  line-height: 1.1 !important; /* Tighter line spacing */
+  font-size: 0.7rem !important; /* Slightly smaller font to match height */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* --- PROPER COMPACT HEADER --- */
+html body table.rp-table thead tr th {
+  padding: 2px 4px !important; /* Bare minimum padding */
+  line-height: 1.1 !important; /* Tight line spacing */
+  font-size: 0.65rem !important; /* Small font */
+  height: auto !important;       /* Let it size naturally */
+  vertical-align: middle !important;
+  white-space: normal !important; /* Allow wrapping if needed */
+}
+
+/* Ensure the table doesn't force the header to stretch */
+html body table.rp-table {
+  table-layout: fixed !important;
+}
+
+
+/* --- FINAL COMPACT HEADER --- */
+html body table.rp-table thead tr th {
+  padding: 2px 4px !important; 
+  line-height: 1.1 !important; 
+  font-size: 0.65rem !important; 
+  height: auto !important;       
+  vertical-align: middle !important;
+  white-space: nowrap !important; /* Keep headers on one line now that they are short */
+}
+
+
+/* --- REMOVE ARROWS AND ALIGN LEFT --- */
+/* Target the third column (Name) in the sub-table */
+html body .rp-sub-table td:nth-child(3) {
+  text-align: left !important; 
+  padding-left: 8px !important; /* Normal padding, not the indented one */
+}
+
+/* Remove the pseudo-element that draws the "L" arrow */
+html body .rp-sub-table td:nth-child(3)::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Also ensure the main table doesn't have weird indents */
+html body .rp-table td:nth-child(3)::before {
+  content: none !important;
+}
 
 </style>
 {% endblock %}
@@ -871,14 +1173,16 @@ html body table.rp-table tbody td:first-child {
   <table class="rp-table">
     <thead>
       <tr>
-        <th class="center" ></th>
-        <th >Lab No</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Lab No</th>
         <th >Ref. No</th>
         <th >Patient No</th>
         <th>Patient Name</th>
         <th >Gender</th>
         <th >M.R.</th>
-        <th >Registration Date</th>
+        <th >Reg. Date</th>
         <th >Mobile No</th>
         <th >Consultant</th>
         <th >Reference</th>
@@ -901,9 +1205,20 @@ html body table.rp-table tbody td:first-child {
 
         {# ---- Parent row: one per order ---- #}
         <tr class="rp-parent-row">
+          <td class="center"><input type="checkbox" onclick="
+  var tr = this.closest('tr');
+  var nextTr = tr.nextElementSibling;
+  if (nextTr) {
+    var subChks = nextTr.querySelectorAll('input[type=checkbox]');
+    for (var i = 0; i < subChks.length; i++) {
+      subChks[i].checked = this.checked;
+    }
+  }
+"></td>
+          <td class="center"><i class="bi bi-file-earmark-text" style="color: #0056b3; cursor: pointer;"></i></td>
           <td class="center">
-            <span class="rp-expand"
-                onclick="var rows=document.querySelectorAll('.rp-children-{{ oid }}');var open=this.textContent==='−';rows.forEach(function(r){r.style.display=open?'none':'table-row';r.classList.toggle('rp-hidden',open);});this.textContent=open?'+':'−';this.classList.toggle('open',!open);">+</span>
+            <span class="rp-expand-link" style="color: #0056b3; text-decoration: underline; cursor: pointer; font-weight: 500; font-size: 0.8rem;"
+                onclick="var rows=document.querySelectorAll('.rp-children-{{ oid }}');var isHidden=rows[0].classList.contains('rp-hidden');rows.forEach(function(r){r.style.display=isHidden?'table-row':'none';r.classList.toggle('rp-hidden',!isHidden);});this.textContent=isHidden?'Hide':'Show';">Show</span>
           </td>
           <td class="lab">{{ o.order_code }}</td>
           <td class="num">{{ o.id }}</td>
@@ -920,13 +1235,13 @@ html body table.rp-table tbody td:first-child {
         {# ---- Child rows: one per test ---- #}
         {% if grp['items'] %}
         <tr class="rp-child-row rp-children-{{ oid }} rp-hidden">
-          <td colspan="11" style="padding: 0; border: none;">
+          <td colspan="13" style="padding: 0; border: none;">
             <table class="rp-sub-table" style="width: 100%; border-collapse: collapse; margin: 0;">
               <thead>
                 <tr>
                   <th ><i class="bi bi-printer"></i></th>
                   <th >Code</th>
-                  <th style="background: #1f6fca; color: #fff; border: 1px solid #1558a6; padding: 4px 6px; font-size: 0.75rem; text-align: left;">Name</th>
+                  <th>Name</th>
                   <th >Status</th>
                   <th >Alert</th>
                   <th >Action/Comments</th>
@@ -995,3 +1310,5 @@ html body table.rp-table tbody td:first-child {
 
 </div>
 {% endblock %}
+
+
