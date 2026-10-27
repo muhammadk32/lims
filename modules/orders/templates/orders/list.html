@@ -380,7 +380,7 @@ html body .app-content .dl-table thead th {
 html body .app-content .dl-table tbody td {
     padding: 6px 4px !important;
     font-size: 0.72rem !important;
-    overflow: hidden !important;
+    
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
 }
@@ -399,6 +399,172 @@ html body .app-content .dl-table th:nth-child(11) { width: 9% !important; }    /
 html body .app-content .dl-table th:nth-child(12) { width: 8% !important; }    /* Payment */
 html body .app-content .dl-table th:nth-child(13) { width: 9.5% !important; } /* Registered */
 html body .app-content .dl-table th:nth-child(14) { width: 7% !important; }   /* Actions */
+</style>
+
+
+
+<style>
+/* ===== DAILY LEDGER TABLE FINAL FIT ===== */
+html body .app-content .dl-page {
+    padding: 12px 24px 40px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
+html body .app-content .dl-card {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    border: 2px solid #212529 !important;
+}
+html body .app-content .dl-table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: auto !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    font-size: 0.78rem !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    border: none !important;
+}
+html body .app-content .dl-table thead th {
+    text-align: center !important;
+    font-size: 0.72rem !important;
+    padding: 10px 6px !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+    border: 1px solid #212529 !important;
+}
+html body .app-content .dl-table tbody td {
+    padding: 8px 6px !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    border: 1px solid #212529 !important;
+}
+html body .app-content .dl-table tbody td.num {
+    text-align: right !important;
+}
+html body .app-content .dl-table tbody td:nth-child(4) {
+    max-width: 220px !important;
+}
+</style>
+
+<style>
+/* ===== NARROW ACTIONS COLUMN ===== */
+html body .app-content .dl-table thead th:last-child {
+    width: 70px !important;
+    max-width: 70px !important;
+    min-width: 70px !important;
+    padding: 8px 4px !important;
+}
+html body .app-content .dl-table tbody td:last-child {
+    width: 70px !important;
+    max-width: 70px !important;
+    min-width: 70px !important;
+    padding: 6px 4px !important;
+    text-align: center !important;
+}
+html body .app-content .dl-table tbody td:last-child .dropdown-toggle {
+    padding: 2px 6px !important;
+    font-size: 0.72rem !important;
+}
+</style>
+
+<style>
+/* ===== ALLOW ACTION DROPDOWN OVERFLOW ===== */
+html body .app-content .dl-table,
+html body .app-content .dl-table tbody,
+html body .app-content .dl-table tbody tr,
+html body .app-content .dl-table tbody td {
+    overflow: visible !important;
+}
+html body .app-content .dl-card {
+    overflow: visible !important;
+}
+/* Column still clips text, but not dropdowns */
+html body .app-content .dl-table tbody td:not(:last-child) {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+/* Ensure dropdown shows on top */
+html body .app-content .dl-table tbody td:last-child .dropdown-menu {
+    z-index: 9999 !important;
+}
+</style>
+
+
+
+
+
+<style>
+/* ===== PROFESSIONAL DROPDOWN — FLUSH LEFT ===== */
+.dl-table .dropdown-menu {
+    border: 1px solid #212529 !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+    min-width: 200px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18) !important;
+}
+.dl-table .dropdown-menu .dropdown-item {
+    display: block !important;
+    padding: 9px 16px !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    color: #212529 !important;
+    border-bottom: 1px solid #e9ecef !important;
+    border-radius: 0 !important;
+    text-align: left !important;
+    line-height: 1.3 !important;
+}
+.dl-table .dropdown-menu .dropdown-item:last-child {
+    border-bottom: none !important;
+}
+.dl-table .dropdown-menu .dropdown-item:hover,
+.dl-table .dropdown-menu .dropdown-item:focus {
+    background: #1a3d7c !important;
+    color: #fff !important;
+}
+.dl-table .dropdown-menu .dropdown-item:hover i,
+.dl-table .dropdown-menu .dropdown-item:focus i {
+    color: #fff !important;
+}
+.dl-table .dropdown-menu .dropdown-item i {
+    display: inline-block !important;
+    width: 18px !important;
+    margin-right: 8px !important;
+    font-size: 0.88rem !important;
+    text-align: center !important;
+    color: #495057 !important;
+}
+.dl-table .dropdown-menu .dropdown-divider {
+    margin: 0 !important;
+    border-color: #dee2e6 !important;
+}
+</style>
+
+<style>
+/* ===== COLORFUL DROPDOWN ICONS ===== */
+.dl-table .dropdown-menu .dropdown-item i.bi-file-earmark-text    { color: #0d6efd !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-pencil-square        { color: #fd7e14 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-person-vcard         { color: #6f42c1 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-clipboard2-pulse     { color: #198754 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-files                { color: #0dcaf0 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-file-earmark-medical { color: #dc3545 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-eye                  { color: #0d6efd !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-upc-scan             { color: #495057 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-cash-coin            { color: #198754 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-unlock-fill          { color: #ffc107 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-arrow-counterclockwise { color: #198754 !important; }
+.dl-table .dropdown-menu .dropdown-item i.bi-x-circle             { color: #dc3545 !important; }
+/* Keep icons white on hover */
+.dl-table .dropdown-menu .dropdown-item:hover i,
+.dl-table .dropdown-menu .dropdown-item:focus i {
+    color: #fff !important;
+}
 </style>
 </style>
 {% endblock %}
@@ -474,7 +640,10 @@ html body .app-content .dl-table th:nth-child(14) { width: 7% !important; }   /*
   {% if orders %}
   <div class="dl-band"><i class="bi bi-journal-text"></i> Daily Ledger ({{ orders|length }})</div>
   <div class="dl-card">
-  <table class="dl-table">
+  
+
+
+<table class="dl-table">
     <thead>
       <tr>
         <th style="width: 8%;">Patient #</th>
