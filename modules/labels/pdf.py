@@ -1,4 +1,4 @@
-"""Label PDF builders — A4 grid or single-label-per-page."""
+﻿"""Label PDF builders — A4 grid or single-label-per-page."""
 import io
 from datetime import datetime
 
@@ -47,10 +47,28 @@ def _label_cell(order, item, barcode_data, idx):
 
     stamp = datetime.utcnow().strftime('%d-%b-%Y  %I:%M %p')
 
+    t = getattr(item, 'test', None)
+    
+    # Combine everything: item sample, test sample, and test name
+    t = getattr(item, 'test', None)
+    # Check if ANY test in the order is a URINE test
+    is_urine_order = False
+    for o_item in getattr(order, 'top_level_items', []):
+        t_name = str(getattr(getattr(o_item, 'test', None), 'name', '') or '').upper()
+        t_type = str(getattr(getattr(o_item, 'test', None), 'sample_type', '') or '').upper()
+        i_type = str(getattr(o_item, 'sample_type', '') or '').upper()
+        if 'URINE' in t_name or 'URINE' in t_type or 'URINE' in i_type:
+            is_urine_order = True
+            break
+
     parts = [
         [img],
         [Paragraph(barcode_data, code_style)],
-        [Paragraph(order.patient.full_name or '', name_style)],
+        [Paragraph(
+            '' if is_urine_order
+               else (order.patient.full_name or ''),
+            name_style,
+        )],
         [Paragraph(stamp, meta_style)],
     ]
     content = Table(parts, colWidths=[img_w])
