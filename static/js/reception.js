@@ -244,7 +244,7 @@
         div.textContent = lab.name; /* Removed discount % display */
         div.addEventListener('click', () => {
           $laboratoryInput.value = lab.name;
-          if ($laboratoryId) $laboratoryId.value = lab.id;
+          console.log('CLICKDEBUG lab=', JSON.stringify(lab)); var _hid = document.getElementById('laboratoryId'); if (_hid) _hid.value = lab.id; console.log('CLICKDEBUG set hidden to:', _hid ? _hid.value : 'null');
           $laboratoryResults.style.display = 'none';
 
           // Auto-apply discount
@@ -341,6 +341,35 @@
       if (!$laboratoryInput.contains(e.target) && !$laboratoryResults.contains(e.target)) {
         $laboratoryResults.style.display = 'none';
       }
+    });
+  }
+
+  // Fallback: match lab name to id on every input, regardless of click
+  if ($laboratoryInput) {
+    $laboratoryInput.addEventListener('blur', function() {
+      var name = this.value.trim();
+      var hid = document.getElementById('laboratoryId');
+      if (!name) { if (hid) hid.value = ''; return; }
+      // If already set correctly, don't override
+      if (hid && hid.value) return;
+      fetch('/orders/api/laboratory-search?q=' + encodeURIComponent(name))
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          if (!Array.isArray(data)) return;
+          var m = data.find(function(l){ return l.name.toLowerCase() === name.toLowerCase(); });
+          if (m && hid) {
+            hid.value = m.id;
+            // Recompute test prices if any exist
+            if (window._labHasRateList && window._labHasRateList()) {
+              state.selectedTests.forEach(function(t){
+                t.company_rate = _companyRate(t.price, _testPct(t.id));
+              });
+              renderSelectedTests();
+              updateBilling();
+            }
+          }
+        })
+        .catch(function(){});
     });
   }
 
@@ -688,10 +717,11 @@
 
   /* ======================== BILLING ======================== */
   function updateBilling() {
+    const usingRateList = window._labHasRateList && window._labHasRateList();
     const subtotal = state.selectedTests.reduce(
-      (s, t) => s + (Number(t.price) || 0), 0
+      (s, t) => s + (usingRateList ? (Number(t.company_rate) || 0) : (Number(t.price) || 0)), 0
     );
-    const rateListDiscount = 0; // FIXED: company_rate is not a patient discount
+    const rateListDiscount = 0;
     const roundedSubtotal = roundMoney(subtotal);
     $sumSubtotal.value = fmt(roundedSubtotal);
 
