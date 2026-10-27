@@ -537,6 +537,264 @@ html body table.rp-table tbody td:first-child {
   background-color: #e6f0fa !important;
 }
 
+
+/* --- EXPAND PAGE WIDTH & REDUCE FONT SIZE --- */
+.rp-page {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.rp-card {
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+.rp-table {
+  width: 100% !important;
+  table-layout: auto !important; /* Let browser decide based on content */
+}
+.rp-table thead th {
+  font-size: 0.70rem !important; /* Smaller font for headers */
+  padding: 5px 4px !important;
+  white-space: normal !important; /* Allow text to wrap */
+}
+.rp-table tbody td {
+  font-size: 0.72rem !important; /* Smaller font for data */
+  padding: 4px 4px !important;
+}
+.rp-sub-table th {
+  font-size: 0.68rem !important; /* Even smaller for sub-grid */
+  padding: 4px 3px !important;
+}
+.rp-sub-table td {
+  font-size: 0.70rem !important;
+  padding: 4px 3px !important;
+}
+.rp-sub-table select, .rp-sub-table input[type="text"] {
+  font-size: 0.70rem !important;
+  padding: 2px !important;
+  height: 24px !important; /* Compact height */
+}
+
+
+/* --- STRICT MARGIN & WIDTH FIX --- */
+.rp-page {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important; /* Prevent page-level scroll */
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+.rp-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  border: none !important;
+}
+.rp-table {
+  width: 100% !important;
+  table-layout: fixed !important; /* Force fixed table layout */
+  margin: 0 !important;
+}
+.rp-table th, .rp-table td {
+  word-wrap: break-word !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important; /* Force fixed layout for sub-grid too */
+}
+.rp-sub-table th, .rp-sub-table td {
+  word-wrap: break-word !important;
+  white-space: normal !important;
+  vertical-align: middle !important;
+}
+/* Adjust specific column widths to make room */
+.rp-sub-table th:nth-child(1) { width: 4%; } /* Checkbox */
+.rp-sub-table th:nth-child(2) { width: 8%; } /* Code */
+.rp-sub-table th:nth-child(3) { width: 24%; } /* Name */
+.rp-sub-table th:nth-child(4) { width: 8%; } /* Status */
+.rp-sub-table th:nth-child(5) { width: 8%; } /* Alert */
+.rp-sub-table th:nth-child(6) { width: 20%; } /* Action/Comments */
+.rp-sub-table th:nth-child(7) { width: 7%; } /* Print */
+.rp-sub-table th:nth-child(8) { width: 7%; } /* Whats App */
+.rp-sub-table th:nth-child(9) { width: 5%; } /* Is Print */
+.rp-sub-table th:nth-child(10) { width: 5%; } /* Is Delay */
+.rp-sub-table th:nth-child(11) { width: 4%; } /* Icon */
+
+
+/* --- PRECISE SUB-GRID COLUMN WIDTHS --- */
+.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.rp-sub-table th, .rp-sub-table td {
+  white-space: nowrap !important; /* Prevent wrapping by default */
+  vertical-align: middle !important;
+  padding: 4px 6px !important;
+}
+/* Allow Name to wrap if it's too long */
+.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+}
+
+/* 1. Checkbox */
+.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
+
+/* 2. Code */
+.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
+
+/* 3. Name */
+.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 22% !important; }
+
+/* 4. Status */
+.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; }
+
+/* 5. Alert (Dropdown) */
+.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; }
+
+/* 6. Action/Comments (Input) */
+.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
+
+/* 7. Print */
+.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
+
+/* 8. Whats App */
+.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
+
+/* 9. Is Print */
+.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 4% !important; text-align: center; }
+
+/* 10. Is Delay */
+.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 4% !important; text-align: center; }
+
+/* 11. Icon */
+.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; }
+
+
+/* --- PRECISE SUB-GRID COLUMN WIDTHS --- */
+.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.rp-sub-table th, .rp-sub-table td {
+  white-space: nowrap !important; /* Prevent wrapping by default */
+  vertical-align: middle !important;
+  padding: 4px 6px !important;
+}
+/* Allow Name to wrap if it's too long */
+.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+}
+
+/* 1. Checkbox */
+.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
+
+/* 2. Code */
+.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
+
+/* 3. Name */
+.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 22% !important; }
+
+/* 4. Status */
+.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; }
+
+/* 5. Alert (Dropdown) */
+.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; }
+
+/* 6. Action/Comments (Input) */
+.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
+
+/* 7. Print */
+.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
+
+/* 8. Whats App */
+.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
+
+/* 9. Is Print */
+.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 4% !important; text-align: center; }
+
+/* 10. Is Delay */
+.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 4% !important; text-align: center; }
+
+/* 11. Icon */
+.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; }
+
+
+/* --- FINAL PRECISE COLUMN MAPPING --- */
+.rp-page {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.rp-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important; /* No scrollbars */
+  padding: 0 !important;
+  border: none !important;
+}
+.rp-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  margin: 0 !important;
+}
+
+/* 
+  Map every column in BOTH tables to exact percentages.
+  Parent table columns:
+  1 (Expand) 2 (Lab) 3 (Ref) 4 (PtNo) 5 (Name) 6 (Gender) 7 (MR) 8 (RegDate) 9 (Mobile) 10 (Consult) 11 (Ref)
+  
+  Sub-table columns:
+  1 (Chk) 2 (Code) 3 (Name) 4 (Status) 5 (Alert) 6 (Action) 7 (Print) 8 (WhatsApp) 9 (IsPrint) 10 (IsDelay) 11 (Icon)
+*/
+
+/* Widths shared by both tables */
+.rp-table th:nth-child(1), .rp-sub-table th:nth-child(1) { width: 4% !important; text-align: center; }
+.rp-table th:nth-child(2), .rp-sub-table th:nth-child(2) { width: 8% !important; } 
+.rp-table th:nth-child(3), .rp-sub-table th:nth-child(3) { width: 8% !important; } 
+.rp-table th:nth-child(4), .rp-sub-table th:nth-child(4) { width: 10% !important; } 
+.rp-table th:nth-child(5), .rp-sub-table th:nth-child(5) { width: 15% !important; } 
+.rp-table th:nth-child(6), .rp-sub-table th:nth-child(6) { width: 10% !important; } 
+.rp-table th:nth-child(7), .rp-sub-table th:nth-child(7) { width: 10% !important; } 
+.rp-table th:nth-child(8), .rp-sub-table th:nth-child(8) { width: 10% !important; } 
+.rp-table th:nth-child(9), .rp-sub-table th:nth-child(9) { width: 10% !important; } 
+.rp-table th:nth-child(10), .rp-sub-table th:nth-child(10) { width: 10% !important; } 
+.rp-table th:nth-child(11), .rp-sub-table th:nth-child(11) { width: 5% !important; text-align: center; }
+
+.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.rp-sub-table th, .rp-sub-table td {
+  white-space: normal !important; /* Allow wrapping */
+  vertical-align: middle !important;
+  padding: 6px 4px !important;
+}
+.rp-sub-table td input[type="text"], .rp-sub-table td select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.75rem !important;
+}
+
+
+/* --- INDEPENDENT SUB-GRID COLUMN WIDTHS --- */
+/* Override the previous nth-child mappings specifically for the sub-table */
+.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 3% !important; text-align: center; } /* Checkbox */
+.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 7% !important; } /* Code */
+.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 25% !important; } /* Name */
+.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 7% !important; } /* Status */
+.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 9% !important; } /* Alert */
+.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 20% !important; } /* Action/Comments */
+.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 5% !important; text-align: center; } /* Print */
+.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 8% !important; text-align: center; } /* Whats App */
+.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 6% !important; text-align: center; } /* Is Print */
+.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 6% !important; text-align: center; } /* Is Delay */
+.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 4% !important; text-align: center; } /* Icon */
+
 </style>
 {% endblock %}
 
@@ -613,18 +871,17 @@ html body table.rp-table tbody td:first-child {
   <table class="rp-table">
     <thead>
       <tr>
-        <th class="center" style="width: 32px;"></th>
-        <th style="width: 100px;">Lab No</th>
-        <th style="width: 70px;">Ref. No</th>
-        <th style="width: 120px;">Patient No</th>
+        <th class="center" ></th>
+        <th >Lab No</th>
+        <th >Ref. No</th>
+        <th >Patient No</th>
         <th>Patient Name</th>
-        <th style="width: 80px;">Gender</th>
-        <th style="width: 80px;">M.R.</th>
-        <th style="width: 140px; white-space: nowrap;">Registration Date</th>
-        <th style="width: 120px; white-space: nowrap;">Mobile No</th>
-        <th style="width: 160px;">Consultant</th>
-        <th style="width: 140px;">Reference</th>
-        <th class="center" style="width: 110px; white-space: nowrap;">View</th>
+        <th >Gender</th>
+        <th >M.R.</th>
+        <th >Registration Date</th>
+        <th >Mobile No</th>
+        <th >Consultant</th>
+        <th >Reference</th>
       </tr>
     </thead>
     <tbody>
@@ -658,48 +915,71 @@ html body table.rp-table tbody td:first-child {
           <td class="num" style="white-space: nowrap;">{{ o.patient.phone or '—' }}</td>
           <td>{{ o.referred_by_name or (o.doctor.full_name if o.doctor else '—') }}</td>
           <td>{{ o.company_name or '—' }}</td>
-          <td class="center">
-            <a href="{{ url_for('reports.view_pdf', order_id=o.id) }}"
-               class="rp-icon-btn rp-icon-btn-view"
-               title="Print all approved reports for this order"
-               target="_blank">
-              <i class="bi bi-printer"></i> Print All
-            </a>
-          </td>
-        </tr>
+          </tr>
 
         {# ---- Child rows: one per test ---- #}
-        {% for it in grp['items'] %}
+        {% if grp['items'] %}
         <tr class="rp-child-row rp-children-{{ oid }} rp-hidden">
-          <td></td>
-          <td class="test-code" colspan="2">{{ it.test.code }}</td>
-          <td class="test-name" colspan="2">{{ it.test.name }}</td>
-          <td></td>
-          <td></td>
-          <td class="num">
-            {{ it.verified_at | localtime('%d/%m/%y %H:%M') if it.verified_at else '—' }}
-          </td>
-          <td></td>
-          <td></td>
-          <td class="center">
-            {% if it.is_verified %}
-              <span class="rp-badge approved">Approved</span>
-            {% elif it.needs_correction %}
-              <span class="rp-badge correction">Correction</span>
-            {% else %}
-              <span class="rp-badge pending">Pending</span>
-            {% endif %}
-          </td>
-          <td class="center">
-            <a href="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}"
-               class="rp-icon-btn rp-icon-btn-view"
-               title="{% if it.is_verified %}View approved report{% else %}View draft{% endif %}"
-               target="_blank">
-              <i class="bi bi-eye"></i>
-            </a>
+          <td colspan="11" style="padding: 0; border: none;">
+            <table class="rp-sub-table" style="width: 100%; border-collapse: collapse; margin: 0;">
+              <thead>
+                <tr>
+                  <th ><i class="bi bi-printer"></i></th>
+                  <th >Code</th>
+                  <th style="background: #1f6fca; color: #fff; border: 1px solid #1558a6; padding: 4px 6px; font-size: 0.75rem; text-align: left;">Name</th>
+                  <th >Status</th>
+                  <th >Alert</th>
+                  <th >Action/Comments</th>
+                  <th >Print</th>
+                  <th >Whats App</th>
+                  <th >Is Print</th>
+                  <th >Is Delay</th>
+                  <th ></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for it in grp['items'] %}
+                <tr class="rp-sub-row" style="background: #ffffff;">
+                  <td style="text-align: center; border: 1px solid #a3b8d4; padding: 4px 6px;"><input type="checkbox"></td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.code }}</td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.name }}</td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">
+                    {% if it.is_verified %}
+                      <span style="font-weight:bold; color:green;">Print</span>
+                    {% elif it.needs_correction %}
+                      <span style="font-weight:bold; color:red;">Correct</span>
+                    {% else %}
+                      <span style="font-weight:bold; color:gray;">Pending</span>
+                    {% endif %}
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px;">
+                    <select style="padding: 2px; font-size: 0.75rem; border: 1px solid #ccc; width: 100%;">
+                      <option>Select Here</option>
+                      <option>Alert 1</option>
+                      <option>Alert 2</option>
+                    </select>
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px;">
+                    <input type="text" placeholder="Enter comments..." value="{{ it.correction_note or '' }}" style="padding: 2px; font-size: 0.75rem; border: 1px solid #ccc; width: 100%;">
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
+                    <a href="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}" target="_blank" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Print</a>
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
+                    <a href="#" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Whats App</a>
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center; font-size: 0.75rem;">
+                    {% if it.is_verified %}Yes{% else %}No{% endif %}
+                  </td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center; font-size: 0.75rem;">No</td>
+                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center; font-size: 0.75rem;"><i class="bi bi-file-earmark-text"></i></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </td>
         </tr>
-        {% endfor %}
+        {% endif %}
       {% endfor %}
     </tbody>
   </table>
