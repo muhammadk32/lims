@@ -6,6 +6,12 @@
 
 
 
+
+
+
+
+
+
 {% endblock %}
 
 {% block head %}
@@ -1168,7 +1174,9 @@ html body .rp-table td:nth-child(3)::before {
   </form>
 
   {% if items %}
-  <div class="rp-band"><i class="bi bi-file-earmark-medical"></i> Reports ({{ items|length }})</div>
+  
+<div class="rp-band"><i class="bi bi-file-earmark-medical"></i> Reports ({{ items|length }})</div>
+
   <div class="rp-card">
   <table class="rp-table">
     <thead>
@@ -1255,7 +1263,7 @@ html body .rp-table td:nth-child(3)::before {
               <tbody>
                 {% for it in grp['items'] %}
                 <tr class="rp-sub-row" style="background: #ffffff;">
-                  <td style="text-align: center; border: 1px solid #a3b8d4; padding: 4px 6px;"><input type="checkbox"></td>
+                  <td style="text-align: center; border: 1px solid #a3b8d4; padding: 4px 6px;"><input type="checkbox" class="print-chk" data-url="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}" data-item="{{ it.id }}"></td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.code }}</td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.name }}</td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">
@@ -1278,7 +1286,7 @@ html body .rp-table td:nth-child(3)::before {
                     <input type="text" placeholder="Enter comments..." value="{{ it.correction_note or '' }}" style="padding: 2px; font-size: 0.75rem; border: 1px solid #ccc; width: 100%;">
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
-                    <a href="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}" target="_blank" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Print</a>
+                    <a href="javascript:void(0);" onclick="handlePrint('{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}', '{{ it.id }}');" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Print</a>
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
                     <a href="#" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Whats App</a>
@@ -1308,7 +1316,34 @@ html body .rp-table td:nth-child(3)::before {
   </div>
   {% endif %}
 
+
+<script>
+function handlePrint(clickedUrl, clickedItemId) {
+  var checked = document.querySelectorAll('.print-chk:checked');
+  if (checked.length === 0) {
+    window.open(clickedUrl, '_blank');
+    return;
+  }
+  var ids = [];
+  var clickedChecked = false;
+  for (var i = 0; i < checked.length; i++) {
+    ids.push(checked[i].getAttribute('data-item'));
+    if (checked[i].getAttribute('data-item') == clickedItemId) clickedChecked = true;
+  }
+  if (!clickedChecked) ids.push(clickedItemId);
+  window.open('/reports/print-batch?items=' + ids.join(','), '_blank');
+}
+</script>
 </div>
 {% endblock %}
+
+
+
+{% block scripts %}
+
+
+
+{% endblock %}
+
 
 

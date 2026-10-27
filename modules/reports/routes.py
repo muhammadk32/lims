@@ -318,3 +318,55 @@ def outsourced():
         total_discount=total_discount,
         row_count=len(rows),
     )
+
+@reports_bp.route('/print-batch')
+@login_required
+def print_batch():
+    """One continuous PDF with header+patient box on every page, tests stacked."""
+    ids = request.args.get('items', '')
+    item_ids = [int(x) for x in ids.split(',') if x.strip().isdigit()]
+    if not item_ids:
+        abort(400, "No items selected")
+
+    from modules.orders.models import Order, OrderItem
+    from .pdf_generator import generate_report_pdf
+
+    # Load items and group by order (all selected items from one order typically)
+    items = OrderItem.query.filter(OrderItem.id.in_(item_ids)).all()
+    if not items:
+        abort(404)
+
+    # Take the first order — multi-order batches are rare; keep first order's header
+    order = Order.query.get(items[0].order_id)
+    if not order:
+        abort(404)
+
+    # Use generate_report_pdf with item_id=None but pass ALL selected items
+    # by monkey-patching items via a small wrapper.
+    # Simpler: build using existing generator once per test but suppress
+    # per-test page breaks by adding a mode that reuses the header/footer.
+
+    # ---- Practical approach: one call, all items stacked ----
+    # We override top_level_items filtering by using a custom item list.
+    selected_ids = [it.id for it in items if it.order_id == order.id]
+    # All top-level items for the order
+    all_top = order.top_level_items
+    # Filter to only the selected ones (keep order stable)
+    chosen = [t for t in all_top if t.id in selected_ids]
+    if not chosen:
+        # Fallback: any item (including children) → use order's full verified set
+        chosen = None
+
+    # Temporarily replace order.top_level_items behaviour by passing an explicit list.
+    # generate_report_pdf currently only supports item_id single OR all verified.
+    # So we re-implement the call here using items_override via the private builder.
+    from .pdf.generator import _build_report_buffer  # will be added below
+
+    buffer = _build_report_buffer(order, items_override=chosen)
+    return send_file(
+        buffer,
+        mimetype='application/pdf',
+        download_name=f'reports_{order.order_code}.pdf',
+        as_attachment=False,
+    )
+

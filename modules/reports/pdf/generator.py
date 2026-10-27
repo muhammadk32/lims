@@ -13,7 +13,7 @@ from .footer import _draw_page_bottom, _footer_flowables, BOTTOM_PANEL_HEIGHT
 from .branding import _get_lab, _hex
 
 
-def generate_report_pdf(order, item_id=None) -> io.BytesIO:
+def generate_report_pdf(order, item_id=None, extra_story=None, skip_footer=False) -> io.BytesIO:
     """Generate a professional PDF report for an order."""
     lab = _get_lab()
     buffer = io.BytesIO()
@@ -42,7 +42,7 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     BOT = BM + BOTTOM_PANEL_HEIGHT
 
     TOP_PAGE1 = TM
-    TOP_LATER = max(TM, 20 * mm)
+    TOP_LATER = max(TM, 55 * mm)  # header+divider+patient box + gap
     content_w = PAGE[0] - LM - RM
 
     doc = BaseDocTemplate(
@@ -132,13 +132,20 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
     except Exception:
         _dept_ids = set()
 
-    results_table, _notes_flow, abnormal_count, critical_count = _results_table(
+    results_flow, _notes_flow, abnormal_count, critical_count = _results_table(
         order,
         previous_map=previous_map,
         date_labels=date_labels,
         items_override=items_for_pdf,
     )
-    story.append(results_table)
+    
+    # results_flow could be a single Table or a list of Tables+Spacers
+    if isinstance(results_flow, list):
+        for _block in results_flow:
+            story.append(_block)
+    else:
+        story.append(results_flow)
+
     for _p in _notes_flow:
         story.append(_p)
 
@@ -158,6 +165,24 @@ def generate_report_pdf(order, item_id=None) -> io.BytesIO:
         PageTemplate(id='Later', frames=[frame_later], onPage=_on_later),
     ])
 
+    if extra_story:
+        for s in extra_story:
+            story.append(s)
     doc.build(story)
     buffer.seek(0)
     return buffer
+
+def _build_report_buffer(order, items_override):
+    """Build one PDF with all items stacked; header+patient box+footer repeat per page."""
+    # We import the inner generator by refactoring: call generate_report_pdf with a
+    # temporary shim on order.top_level_items.
+    from .generator import generate_report_pdf  # self-import is fine
+
+    # Monkey-patch order to expose only chosen items as top_level_items
+    original = type(order).top_level_items
+    try:
+        type(order).top_level_items = property(lambda self: items_override)
+        return generate_report_pdf(order, item_id=None)
+    finally:
+        type(order).top_level_items = original
+

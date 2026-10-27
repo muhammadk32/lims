@@ -137,6 +137,8 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     for d in date_labels:
         header_cells.append(Paragraph(fmt_date(d), header_style))
 
+    _last_test_id = None
+    _sep_rows = []
     data = []
     notes_flowables = []
     notes_row_indices = []
@@ -329,32 +331,32 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             # Section title row — skip MOLECULAR (handled inside PCR blocks)
             _is_molecular_section = (item.name or '').strip().upper() == 'MOLECULAR'
             if not _is_molecular_section:
-                if '_first_section_done' in dir() and _first_section_done:
-                    _spacer = [Paragraph('', cell_style)] * (4 + n_prev)
-                    data.append(_spacer)
-                    row_idx += 1
                 _first_section_done = True
+                
+                # Add large white gap before a new Category Report (e.g., ROUTINE HEMATOLOGY)
+                _gap = [Paragraph('', cell_style)] * (4 + n_prev)
+                data.append(_gap)
                 _hdr = [Paragraph(item.name.upper() + ' REPORT', section_header_style)]
                 _hdr += [Paragraph('', cell_style)] * (3 + n_prev)
                 data.append(_hdr)
                 _section_header_rows.append(row_idx)
                 row_idx += 1
 
-            # Column header row
-            _colhdr = [
-                Paragraph('TEST', col_header_style),
-                Paragraph('RESULT', col_header_style),
-                Paragraph('UNIT', col_header_style),
-                Paragraph('REFERENCE RANGE', col_header_style),
-            ]
-            for _d in date_labels:
-                _colhdr.append(Paragraph(fmt_date(_d), col_header_style))
-            data.append(_colhdr)
-            _colhdr_rows.append(row_idx)
-            row_idx += 1
+            # Do NOT print column headers here. Wait for the first item to print them
+            # so that panels can print their own name above the columns.
+            _needs_colhdr = True
             continue
 
         if item.has_children:
+            # Insert a gap row before this panel begins (unless it's the very first item)
+            if _last_test_id is not None and _last_test_id != item.test.id:
+                _gap = [Paragraph('', cell_style)] * (4 + n_prev)
+                data.append(_gap)
+                _sep_rows.append(row_idx)
+                row_idx += 1
+            _last_test_id = item.test.id
+
+
             panel_cells = [
                 Paragraph('> ' + item.test.name, panel_header_style),
                 Paragraph('', cell_style),
@@ -364,6 +366,21 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             panel_cells += [Paragraph('', cell_style)] * n_prev
             data.append(panel_cells)
             row_idx += 1
+
+            # Print column headers right below the panel name
+            if _needs_colhdr:
+                _colhdr = [
+                    Paragraph('TEST', col_header_style),
+                    Paragraph('RESULT', col_header_style),
+                    Paragraph('UNIT', col_header_style),
+                    Paragraph('REFERENCE RANGE', col_header_style),
+                ]
+                for _d in date_labels:
+                    _colhdr.append(Paragraph(fmt_date(_d), col_header_style))
+                data.append(_colhdr)
+                _colhdr_rows.append(row_idx)
+                row_idx += 1
+                _needs_colhdr = False
 
             # Group children by section — keep original order, group headings
             _seen = set()
@@ -426,6 +443,37 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                 # PCR: skip the flat row entirely; render standalone section below
                 _collect_pcr_details(notes_flowables, item, order)
             else:
+                # Spacing row between different tests
+                if _last_test_id is not None and _last_test_id != item.test.id:
+                    _sep = [Paragraph('', cell_style)] * (4 + n_prev)
+                    data.append(_sep)
+                    _sep_rows.append(row_idx)
+                    row_idx += 1
+                _last_test_id = item.test.id
+
+                # Force a block break for every new test
+                if _last_test_id is not None and _last_test_id != item.test.id:
+                    _sep = [Paragraph('', cell_style)] * (4 + n_prev)
+                    data.append(_sep)
+                    _sep_rows.append(row_idx)
+                    row_idx += 1
+                _last_test_id = item.test.id
+
+                # Print column headers right before the first flat test row
+                if '_needs_colhdr' in dir() and _needs_colhdr:
+                    _colhdr = [
+                        Paragraph('TEST', col_header_style),
+                        Paragraph('RESULT', col_header_style),
+                        Paragraph('UNIT', col_header_style),
+                        Paragraph('REFERENCE RANGE', col_header_style),
+                    ]
+                    for _d in date_labels:
+                        _colhdr.append(Paragraph(fmt_date(_d), col_header_style))
+                    data.append(_colhdr)
+                    _colhdr_rows.append(row_idx)
+                    row_idx += 1
+                    _needs_colhdr = False
+
                 row = [
                     Paragraph(item.test.name, cell_bold),
                     Paragraph(item.result_value or '-', cell_style),
@@ -455,6 +503,72 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         ]))
         return empty, notes_flowables, len(abnormal_rows), len(critical_rows)
 
+    # --- SPLIT INTO SEPARATE BLOCKS (one per test) ---
+    # Build a set of "first row of a new test" indices:
+    # only result rows that follow a section-header block or a previous test's last row.
+    if _sep_rows:
+        blocks = []
+        start_idx = 0
+        for sep_idx in _sep_rows:
+            # Build a table up to the separator row
+            chunk_data = data[start_idx:sep_idx]
+            if chunk_data:
+                t = Table(chunk_data, colWidths=col_widths, repeatRows=0)
+                zebra_cmds = [('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]
+                for _i in range(len(chunk_data)):
+                    if _i % 2 == 1:
+                        zebra_cmds.append(('BACKGROUND', (0, _i), (-1, _i), colors.HexColor('#f8f9fa')))
+                zebra_cmds.extend([
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+                    ('BOX', (0, 0), (-1, -1), 1.2, colors.black),
+                    ('ROUNDEDCORNERS', [8, 8, 8, 8]),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+                    ('TOPPADDING', (0, 0), (-1, -1), 3),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+                ])
+                for _r in _section_header_rows:
+                    if start_idx <= _r < sep_idx:
+                        local_r = _r - start_idx
+                        zebra_cmds.extend([
+                            ('BACKGROUND', (0, local_r), (-1, local_r), colors.white),
+                            ('SPAN', (0, local_r), (-1, local_r)),
+                        ])
+                t.setStyle(TableStyle(zebra_cmds))
+                blocks.append(t)
+                blocks.append(Spacer(1, 25))
+            start_idx = sep_idx + 1
+
+        # Last block
+        chunk_data = data[start_idx:]
+        if chunk_data:
+            t = Table(chunk_data, colWidths=col_widths, repeatRows=0)
+            zebra_cmds = [('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]
+            for _i in range(len(chunk_data)):
+                if _i % 2 == 1:
+                    zebra_cmds.append(('BACKGROUND', (0, _i), (-1, _i), colors.HexColor('#f8f9fa')))
+            zebra_cmds.extend([
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+                ('BOX', (0, 0), (-1, -1), 1.2, colors.black),
+                ('ROUNDEDCORNERS', [8, 8, 8, 8]),
+                ('LEFTPADDING', (0, 0), (-1, -1), 5),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ])
+            for _r in _section_header_rows:
+                if start_idx <= _r:
+                    local_r = _r - start_idx
+                    zebra_cmds.extend([
+                        ('BACKGROUND', (0, local_r), (-1, local_r), colors.white),
+                        ('SPAN', (0, local_r), (-1, local_r)),
+                    ])
+            t.setStyle(TableStyle(zebra_cmds))
+            blocks.append(t)
+
+        return blocks, notes_flowables, len(abnormal_rows), len(critical_rows)
+
+    # Fallback if no separators were found (just one block)
     t = Table(data, colWidths=col_widths, repeatRows=0)
 
     style = [
@@ -467,8 +581,19 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     ]
 
     # Section title rows: black underline above + below, full span
+    # Per-test separators: 60pt blank gap with no borders
+    for _r in _sep_rows:
+        style.append(('SPAN', (0, _r), (-1, _r)))
+        style.append(('BACKGROUND', (0, _r), (-1, _r), colors.white))
+        style.append(('LINEBELOW', (0, _r), (-1, _r), 0, colors.white))
+        style.append(('LINEABOVE', (0, _r), (-1, _r), 0, colors.white))
+        style.append(('INNERGRID', (0, _r), (-1, _r), 0, colors.white))
+        style.append(('TOPPADDING', (0, _r), (-1, _r), 0))
+        style.append(('BOTTOMPADDING', (0, _r), (-1, _r), 60))
+
     for _r in _section_header_rows:
-        style.append(('LINEABOVE', (0, _r), (-1, _r), 1.2, colors.black))
+        # Thick separator ABOVE section header (marks boundary of previous test)
+        style.append(('LINEABOVE', (0, _r), (-1, _r), 2.0, colors.black))
         style.append(('LINEBELOW', (0, _r), (-1, _r), 1.2, colors.black))
         style.append(('BACKGROUND', (0, _r), (-1, _r), colors.white))
         style.append(('SPAN', (0, _r), (-1, _r)))

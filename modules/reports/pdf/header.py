@@ -258,7 +258,7 @@ def draw_letterhead_on_canvas(canvas, doc):
 # Continuation-page header (thin strip) — drawn by onLaterPages
 # ============================================================
 def draw_continuation_header(canvas, doc, order=None):
-    """Compact patient strip + divider for pages 2+."""
+    """Full branded header + patient box on pages 2+, aligned to TOP_LATER."""
     from reportlab.lib.units import mm
     from reportlab.lib import colors
     from .branding import _get_lab
@@ -267,52 +267,51 @@ def draw_continuation_header(canvas, doc, order=None):
     page_w, page_h = doc.pagesize
     left = doc.leftMargin
     right = doc.rightMargin
-    box_w = page_w - left - right
+    content_w = page_w - left - right
 
     try:
         primary = colors.HexColor(lab.get('primary_color') or '#0d6efd')
     except Exception:
         primary = colors.HexColor('#0d6efd')
 
+    # 48mm reserved frame-top on continuation pages
+    TOP_LATER_pt = 48 * mm
+    # Top of usable content area:
+    content_top = page_h - TOP_LATER_pt
+    # Cursor starts just above content_top; we build DOWNWARD visually upward.
+    cursor = page_h - 4 * mm   # small outer top padding
+
     canvas.saveState()
 
-    # Row 1: lab name (left) + contact (right)
-    y1 = page_h - 8 * mm
-    canvas.setFont('Helvetica-Bold', 9)
-    canvas.setFillColor(colors.HexColor('#b91c1c'))
-    canvas.drawString(left, y1, lab.get('name', 'LABORATORY'))
+    # --- Header table ---
+    try:
+        hdr = _header_table()
+        hw, hh = hdr.wrap(content_w, page_h)
+        hdr.drawOn(canvas, left, cursor - hh)
+        cursor -= hh
+    except Exception as e:
+        print(f'[cont-header] header failed: {e}')
+        canvas.setFont('Helvetica-Bold', 10)
+        canvas.setFillColor(primary)
+        canvas.drawString(left, cursor - 8*mm, lab.get('name', 'LABORATORY'))
+        cursor -= 12 * mm
 
-    contact = ' · '.join(filter(None, [lab.get('phone', ''), lab.get('email', '')]))
-    if contact:
-        canvas.setFont('Helvetica', 7)
-        canvas.setFillColor(colors.HexColor('#6c757d'))
-        canvas.drawRightString(page_w - right, y1, contact)
+    cursor -= 1 * mm
 
-    # Row 2: patient | patient code | gender/age | order | status
-    if order is not None:
-        p = getattr(order, 'patient', None)
-        parts = []
-        if p and p.full_name:
-            parts.append('Patient: ' + p.full_name)
-        if p and p.patient_code:
-            parts.append(p.patient_code)
-        if p and p.gender:
-            parts.append(p.gender)
-        if order.order_code:
-            parts.append('Order ' + order.order_code)
-        if order.created_at:
-            parts.append(order.created_at.strftime('%d-%b-%Y'))
-        if order.status:
-            parts.append(order.status.title())
-        line2 = '  |  '.join(parts)
-        if line2:
-            canvas.setFont('Helvetica', 7.5)
-            canvas.setFillColor(colors.HexColor('#212529'))
-            canvas.drawString(left, page_h - 12.5 * mm, line2)
-
-    # Divider
+    # --- Divider ---
     canvas.setStrokeColor(primary)
-    canvas.setLineWidth(0.8)
-    canvas.line(left, page_h - 15 * mm, page_w - right, page_h - 15 * mm)
+    canvas.setLineWidth(1.2)
+    canvas.line(left, cursor, page_w - right, cursor)
+    cursor -= 1 * mm
+
+    # --- Patient box ---
+    if order is not None:
+        try:
+            pbox = _patient_info_table(order)
+            pw, ph = pbox.wrap(content_w, page_h)
+            pbox.drawOn(canvas, left, cursor - ph)
+            cursor -= ph
+        except Exception as e:
+            import traceback; traceback.print_exc(); print(f'[cont-header] patient box failed: {e}')
 
     canvas.restoreState()
