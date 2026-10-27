@@ -67,6 +67,7 @@ def create_patient(form):
         email=(form.get('email') or form.get('patient_email') or '').strip() or None,
         address=(form.get('address') or form.get('patient_address') or '').strip() or None,
         blood_group=(form.get('blood_group') or form.get('patient_blood_group') or '').strip() or None,
+        mrn=(form.get('mrn') or '').strip() or None,
         notes=None,
     )
     db.session.add(patient)
@@ -134,6 +135,8 @@ def create_order(patient, tests, form, user):
         referred_by_name=referred_by_name,
         company_id=company_id,
         company_name=company_name,
+        created_by_id=user.id,
+        dues_received=0.0,
     )
 
     db.session.add(order)

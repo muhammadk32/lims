@@ -6,6 +6,8 @@ from datetime import date
 class Patient(BaseModel):
     __tablename__ = 'patients'
 
+    mrn = db.Column(db.String(50), nullable=True, index=True)
+
     # Auto-generated code like P20250115143022
     patient_code = db.Column(db.String(20), unique=True, nullable=False, index=True)
 

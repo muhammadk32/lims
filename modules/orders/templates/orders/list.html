@@ -336,6 +336,70 @@ table[class$="-table"] tbody td {
 .dl-count {
     font-size: 0.78rem !important;
 }
+
+
+
+
+
+
+
+<style>
+/* ===== DAILY LEDGER — PRECISE COLUMN WIDTHS ===== */
+html body .app-content .dl-page {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 12px 20px 40px !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
+html body .app-content .dl-card {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+html body .app-content .dl-table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    font-size: 0.72rem !important;
+    box-sizing: border-box !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+}
+html body .app-content .dl-table thead th {
+    padding: 8px 4px !important;
+    font-size: 0.66rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+html body .app-content .dl-table tbody td {
+    padding: 6px 4px !important;
+    font-size: 0.72rem !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+/* 14 columns, total exactly 100% */
+html body .app-content .dl-table th:nth-child(1)  { width: 5.5% !important; }  /* Lab # */
+html body .app-content .dl-table th:nth-child(2)  { width: 12% !important; }   /* Patient */
+html body .app-content .dl-table th:nth-child(3)  { width: 6.5% !important; }  /* Patient # */
+html body .app-content .dl-table th:nth-child(4)  { width: 8.5% !important; }  /* Mobile */
+html body .app-content .dl-table th:nth-child(5)  { width: 4% !important; }    /* Items */
+html body .app-content .dl-table th:nth-child(6)  { width: 6% !important; }    /* Total */
+html body .app-content .dl-table th:nth-child(7)  { width: 6% !important; }    /* Discount */
+html body .app-content .dl-table th:nth-child(8)  { width: 6% !important; }    /* Net */
+html body .app-content .dl-table th:nth-child(9)  { width: 6% !important; }    /* Paid */
+html body .app-content .dl-table th:nth-child(10) { width: 6% !important; }    /* Due */
+html body .app-content .dl-table th:nth-child(11) { width: 9% !important; }    /* Status */
+html body .app-content .dl-table th:nth-child(12) { width: 8% !important; }    /* Payment */
+html body .app-content .dl-table th:nth-child(13) { width: 9.5% !important; } /* Registered */
+html body .app-content .dl-table th:nth-child(14) { width: 7% !important; }   /* Actions */
+</style>
 </style>
 {% endblock %}
 
@@ -413,34 +477,36 @@ table[class$="-table"] tbody td {
   <table class="dl-table">
     <thead>
       <tr>
-        <th style="width: 90px;">Lab #</th>
-        <th>Patient</th>
-        <th style="width: 100px;">Patient #</th>
-        <th style="width: 110px;">Mobile</th>
-        <th class="center" style="width: 50px;">Items</th>
-        <th class="num" style="width: 80px;">Total</th>
-        <th class="num" style="width: 80px;">Discount</th>
-        <th class="num" style="width: 80px;">Net</th>
-        <th class="num" style="width: 80px;">Paid</th>
-        <th class="num" style="width: 80px;">Due</th>
-        <th style="width: 90px;">Status</th>
-        <th style="width: 80px;">Payment</th>
-        <th style="width: 110px;">Registered</th>
-        <th class="center" style="width: 50px;"></th>
+        <th style="width: 8%;">Patient #</th>
+        <th style="width: 8%;">Lab #</th>
+        <th style="width: 7%;">M.R. #</th>
+        <th style="width: 18%;">Name</th>
+        <th style="width: 8%;">Age / Sex</th>
+        <th class="num" style="width: 8%;">Total Amt</th>
+        <th class="num" style="width: 8%;">Discount</th>
+        <th class="num" style="width: 8%;">Net Amt</th>
+        <th class="num" style="width: 8%;">Paid Amt</th>
+        <th class="num" style="width: 8%;">Dues</th>
+        <th style="width: 13%;">Company Name</th>
+        <th class="center" style="width: 4%;"></th>
       </tr>
     </thead>
     <tbody>
       {% for o in orders %}
       <tr class="{% if o.status == 'cancelled' %}row-cancelled{% elif o.payment_status == 'paid' %}row-paid{% elif o.payment_status == 'partial' %}row-partial{% elif o.payment_status == 'unpaid' and o.status == 'pending' %}row-pending{% else %}row-unpaid{% endif %}">
+        <td class="sub" style="font-family: Consolas, Monaco, monospace;">{{ o.patient.patient_code }}</td>
         <td><code>{{ o.order_code }}</code></td>
+        <td class="sub" style="font-family: Consolas, Monaco, monospace;">{{ o.patient.mrn or '—' }}</td>
         <td class="name">{{ o.patient.full_name }}</td>
-        <td class="sub" style="">{{ o.patient.patient_code }}</td>
-        <td class="sub" style="">{{ o.patient.phone or '—' }}</td>
-        <td class="center">
-          <span class="dl-badge" style="background:#e9ecef; color:#495057;">{{ o.item_count }}</span>
+        <td class="sub">
+          {%- if o.patient.age %}{{ o.patient.age }} yrs{% endif -%}
+          {%- if o.patient.age and o.patient.gender %} / {% endif -%}
+          {{- o.patient.gender or '' -}}
         </td>
         <td class="num {% if o.status == 'cancelled' %}strike{% endif %}">{{ o.subtotal | money }}</td>
-        <td class="num {% if o.status == 'cancelled' %}strike{% endif %}">{% if o.discount_value %}{{ o.discount_value | money }}{% else %}—{% endif %}</td>
+        <td class="num {% if o.status == 'cancelled' %}strike{% endif %}">
+          {% if o.discount_value %}{{ o.discount_value | money }}{% else %}—{% endif %}
+        </td>
         <td class="num {% if o.status == 'cancelled' %}strike{% endif %}">{{ o.final_total | money }}</td>
         <td class="num paid-ok">
           {% if o.status == 'cancelled' %}<span class="strike">refunded</span>
@@ -452,27 +518,7 @@ table[class$="-table"] tbody td {
           {% elif o.balance_due > 0.01 %}<span class="due">{{ o.balance_due | money }}</span>
           {% else %}—{% endif %}
         </td>
-        <td>
-          {% set st = o.status|lower %}
-          {% if st == 'pending' %}<span class="dl-badge dl-badge-pending">Pending</span>
-          {% elif st == 'collected' %}<span class="dl-badge dl-badge-collected">Collected</span>
-          {% elif st == 'completed' %}<span class="dl-badge dl-badge-completed">Completed</span>
-          {% elif st == 'approved' %}<span class="dl-badge dl-badge-approved">Approved</span>
-          {% elif st == 'correction' %}<span class="dl-badge dl-badge-correction">Correction</span>
-          {% elif st == 'cancelled' %}<span class="dl-badge dl-badge-cancelled">Cancelled</span>
-          {% else %}<span class="dl-badge" style="background:#e9ecef; color:#495057;">{{ o.status }}</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if o.status == 'cancelled' %}<span class="dl-badge dl-badge-cancelled">Cancelled</span>
-          {% elif o.payment_status == 'paid' %}<span class="dl-badge dl-badge-paid">Paid</span>
-          {% elif o.payment_status == 'partial' %}<span class="dl-badge dl-badge-partial">Partial</span>
-          {% else %}<span class="dl-badge dl-badge-unpaid">Unpaid</span>
-          {% endif %}
-        </td>
-        <td class="sub" style=" font-size: 0.7rem;">
-          {{ o.created_at | localtime('%d/%m/%y %H:%M') }}
-        </td>
+        <td class="sub">{{ o.company_name or '' }}</td>
         <td class="center dl-actions">
           <div class="dropdown">
             <button class="btn btn-sm btn-outline-primary py-0 px-1 dropdown-toggle"

@@ -45,6 +45,9 @@ class Order(BaseModel):
 
     sample_collected_at = db.Column(db.DateTime, nullable=True)
     notes = db.Column(db.Text, nullable=True)
+    dues_received = db.Column(db.Float, nullable=False, default=0.0)
+    created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, index=True)
+    created_by = db.relationship('User', foreign_keys=[created_by_id])
 
     # Free-text referral name (set when receptionist types a name
     # in the Referred-by typeahead). Falls back to `doctor` when empty.
