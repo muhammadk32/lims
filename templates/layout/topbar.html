@@ -20,34 +20,7 @@
     </div>
   </a>
 
-  <!-- Search -->
-  <form class="topbar-search d-none d-lg-block" method="GET"
-        action="{{ url_for('dashboard.global_search') }}">
-    <div class="input-group">
-      <span class="input-group-text bg-transparent border-end-0">
-        <i class="bi bi-search"></i>
-      </span>
-      <input type="text" name="q" id="globalSearchInput"
-             class="form-control border-start-0"
-             placeholder="Search patients, orders... (press /)"
-             autocomplete="off">
-      <span class="input-group-text bg-transparent border-start-0">
-        <kbd>/</kbd>
-      </span>
-    </div>
-  </form>
 
-  <!-- Contact strip (optional, desktop only) -->
-  {% if branding.phone or branding.email %}
-  <div class="topbar-contact d-none d-xl-flex">
-    {% if branding.phone %}
-      <span><i class="bi bi-telephone"></i> {{ branding.phone }}</span>
-    {% endif %}
-    {% if branding.email %}
-      <span><i class="bi bi-envelope"></i> {{ branding.email }}</span>
-    {% endif %}
-  </div>
-  {% endif %}
 
   <!-- Right-side actions -->
   <div class="topbar-actions">
@@ -134,3 +107,66 @@
   </div>
 
 </header>
+
+<style>
+/* TOPBAR BLUE THEME */
+.app-topbar {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border-bottom: 2px solid #212529 !important;
+  color: #ffffff !important;
+}
+
+/* Brand name in white */
+.app-topbar .topbar-brand,
+.app-topbar .navbar-brand,
+.app-topbar .brand-name,
+.app-topbar .brand-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* All icons / buttons in topbar-actions white */
+.app-topbar .topbar-actions .bi,
+.app-topbar .topbar-actions i,
+.app-topbar .topbar-actions .btn,
+.app-topbar .topbar-actions button,
+.app-topbar .topbar-actions a,
+.app-topbar .topbar-actions .nav-link {
+  color: #ffffff !important;
+}
+.app-topbar .topbar-actions .btn:hover,
+.app-topbar .topbar-actions button:hover,
+.app-topbar .topbar-actions .nav-link:hover {
+  background: rgba(255,255,255,0.15) !important;
+}
+
+/* Spacing between brand and search */
+.app-topbar .topbar-brand,
+.app-topbar .navbar-brand {
+  margin-right: 16px !important;
+}
+
+/* Search input styling — keep white background, dark text */
+.app-topbar .topbar-search .form-control {
+  background: #ffffff !important;
+  color: #212529 !important;
+  border: 1px solid #ced4da !important;
+}
+.app-topbar .topbar-search .form-control::placeholder {
+  color: #6c757d !important;
+}
+.app-topbar .topbar-search .input-group-text,
+.app-topbar .topbar-search .bi-search,
+.app-topbar .topbar-search kbd {
+  background: #ffffff !important;
+  color: #495057 !important;
+  border: 1px solid #ced4da !important;
+}
+
+/* Contact strip text in white */
+.app-topbar .topbar-contact,
+.app-topbar .topbar-contact span,
+.app-topbar .topbar-contact i {
+  color: #ffffff !important;
+}
+</style>
