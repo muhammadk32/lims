@@ -3,20 +3,11 @@
 
 {% block head %}
 <style>
-.lv-page {
-  display: grid;
-  grid-template-columns: minmax(500px, 45%) 1fr;
-  gap: 12px;
-  max-width: 100%;
-  padding: 10px 20px 30px;
-  
-  font-size: 0.82rem;
-  color: #212529;
-}
-@media (max-width: 1100px) { .lv-page { grid-template-columns: 1fr; } .lv-pdf-pane { display:none !important; } }
+.lv-page { display: grid !important; grid-template-columns: 55fr 45fr !important; gap: 12px; padding: 10px 20px 30px; max-width: 100%; }
+@media (max-width: 1100px) { .lv-page { grid-template-columns: 1fr; } .lv-pdf-pane { border: 1.5px solid #212529; background: #f8f9fa; height: calc(100vh - 160px); min-height: 500px; position: sticky; top: 70px; display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; } }
 
-.lv-left { min-width: 0; }
-.lv-right { min-width: 0; position: relative; }
+.lv-left { min-width: 0 !important; }
+.lv-right { min-width: 0 !important; }
 
 /* Header */
 .lv-header { display: flex; justify-content: space-between; align-items: flex-end;
@@ -70,7 +61,7 @@
 
 /* Table */
 .lv-table { width: 100%; border-collapse: collapse; border: 1.5px solid #212529;
-  font-size: 0.78rem; background: #fff; table-layout: fixed; }
+  font-size: 0.72rem; background: #fff; table-layout: auto; }
 .lv-table thead th { background: #212529; color: #fff; font-size: 0.62rem;
   font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
   padding: 4px 6px; text-align: left; border: 1px solid #212529;
@@ -157,17 +148,15 @@
 /* ===== POLISHED THEME OVERRIDE ===== */
 .lv-page {
   max-width: 100% !important;
-  padding: 16px 32px 40px !important;
-  
+  padding: 10px 20px 30px !important;
   font-size: 0.75rem !important;
   color: #212529 !important;
-  display: flex !important;
-  gap: 20px !important;
+  display: grid !important;
+  grid-template-columns: 55fr 45fr !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
 }
-.lv-left {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-}
+.lv-left { min-width: 0 !important; }
 
 /* Header Bar */
 .lv-header {
@@ -331,30 +320,15 @@
 }
 
 /* ===== EQUALIZE PANELS 50/50 ===== */
-.lv-page {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 20px !important;
-    align-items: flex-start !important;
-    box-sizing: border-box !important;
-}
-.lv-left {
-    flex: 1 1 50% !important;
-    max-width: 50% !important;
-    min-width: 0 !important;
-}
-.lv-right {
-    flex: 1 1 50% !important;
-    max-width: 50% !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-    height: fit-content !important;
-}
+
+.lv-left { flex: 1 1 100% !important; max-width: 100% !important; min-width: 0 !important; }
+.lv-right { min-width: 0 !important; }
 .lv-right > *,
 .lv-right .panel,
 .lv-right .card {
     width: 100% !important;
     box-sizing: border-box !important;
+    display: block !important;
 }
 /* Ensure filters stretch but don't overflow */
 .lv-filter-row {
@@ -375,6 +349,797 @@ table[class$="-table"] tbody td {
 /* Fix for tables inside specific wrappers */
 .wrap table thead th, .table thead th { font-size: 0.82rem !important; }
 .wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+
+/* --- COMPACT VERIFY PANEL (fit 6-col sub-grid) --- */
+.lv-table { font-size: 0.70rem !important; }
+.lv-table thead th {
+  font-size: 0.58rem !important;
+  padding: 3px 4px !important;
+  height: 22px !important;
+}
+.lv-table tbody td { padding: 2px 4px !important; }
+.lv-test-line { font-size: 0.70rem !important; padding: 2px 0 !important; }
+
+/* Sub-grid: shrink header and cells to fit 6 columns */
+.lv-items-inner table thead th {
+  font-size: 0.62rem !important;
+  padding: 4px 5px !important;
+  line-height: 1.1 !important;
+}
+.lv-items-inner table tbody td {
+  font-size: 0.70rem !important;
+  padding: 4px 5px !important;
+}
+.lv-items-inner table th[style*="width:80px"]   { width: 50px !important; }
+.lv-items-inner table th[style*="width:260px"]  { width: 180px !important; }
+.lv-items-inner table th[style*="width:90px"]   { width: 64px !important; }
+.lv-items-inner table th[style*="width:50px"]   { width: 36px !important; }
+.lv-items-inner table td input[type="text"] { height: 22px !important; font-size: 0.7rem !important; padding: 1px 4px !important; }
+.lv-mini-btn { padding: 1px 5px !important; font-size: 0.64rem !important; }
+
+/* Bulk bar more compact */
+.lv-bulkbar { font-size: 0.72rem !important; padding: 5px 8px !important; }
+.lv-btn { padding: 4px 10px !important; font-size: 0.7rem !important; height: 26px !important; }
+
+/* Filter row tighter */
+.lv-field label { font-size: 0.58rem !important; }
+.lv-field input, .lv-field select { font-size: 0.72rem !important; height: 26px !important; }
+
+/* --- EXTRA COMPACT SUB-GRID --- */
+.lv-items-inner { padding: 4px 6px !important; }
+.lv-items-inner table { font-size: 0.68rem !important; }
+.lv-items-inner table thead th {
+  font-size: 0.58rem !important;
+  padding: 3px 3px !important;
+  line-height: 1.05 !important;
+  height: 20px !important;
+}
+.lv-items-inner table tbody td {
+  font-size: 0.66rem !important;
+  padding: 3px 3px !important;
+  line-height: 1.15 !important;
+}
+/* Shrink the fixed column widths inside the sub-grid */
+.lv-items-inner table th:nth-child(1) { width: 50px !important; }
+.lv-items-inner table th:nth-child(3) { width: 150px !important; }
+.lv-items-inner table th:nth-child(4) { width: 55px !important; }
+.lv-items-inner table th:nth-child(5) { width: 55px !important; }
+.lv-items-inner table th:nth-child(6) { width: 30px !important; }
+.lv-items-inner table td input[type="text"] {
+  height: 20px !important;
+  font-size: 0.66rem !important;
+  padding: 1px 4px !important;
+}
+.lv-mini-btn {
+  padding: 1px 4px !important;
+  font-size: 0.60rem !important;
+  line-height: 1.3 !important;
+}
+
+/* --- PREVENT OVERFLOW IN LEFT PANEL --- */
+.lv-table { table-layout: fixed !important; width: 100% !important; }
+.lv-table th, .lv-table td { overflow: hidden; text-overflow: ellipsis; }
+.lv-items-row td { padding: 0 !important; }
+.lv-items-inner { overflow: hidden; box-sizing: border-box; }
+.lv-items-inner table { table-layout: fixed !important; width: 100% !important; }
+.lv-items-inner table th, .lv-items-inner table td { overflow: hidden; text-overflow: ellipsis; }
+.lv-items-inner table th:nth-child(1)  { width: 55px !important; }
+.lv-items-inner table th:nth-child(2)  { width: auto !important; }
+.lv-items-inner table th:nth-child(3)  { width: 40% !important; }
+.lv-items-inner table th:nth-child(4)  { width: 60px !important; }
+.lv-items-inner table th:nth-child(5)  { width: 60px !important; }
+.lv-items-inner table th:nth-child(6)  { width: 34px !important; }
+
+/* ============================================================
+   VERIFY SUB-GRID — pure CSS, fits panel width
+   ============================================================ */
+.verify-subgrid {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.68rem;
+  border: 1.2px solid #212529;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.verify-subgrid thead th {
+  background: #1f6fca;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 3px;
+  border-right: 1px solid #1558a6;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.verify-subgrid thead th:last-child { border-right: none; }
+.verify-subgrid tbody td {
+  padding: 4px 4px;
+  font-size: 0.68rem;
+  border-top: 1px solid #adb5bd;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.verify-subgrid tbody tr:nth-child(even) { background: #f8f9fa; }
+.verify-subgrid .col-code {
+  font-weight: 700;
+  color: #0d6efd;
+  text-align: center;
+  white-space: nowrap;
+}
+.verify-subgrid .col-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.verify-subgrid .col-comments { }
+.verify-subgrid .col-comments input {
+  width: 100%;
+  font-size: 0.64rem;
+  padding: 2px 4px;
+  height: 20px;
+  border: 1px solid #adb5bd;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+.verify-subgrid .col-act { text-align: center; padding: 2px 1px; }
+.verify-subgrid .col-icon { text-align: center; padding: 2px 1px; }
+.verify-subgrid .lv-mini-btn {
+  font-size: 0.6rem;
+  padding: 2px 4px;
+  line-height: 1;
+}
+.verify-subgrid .params-badge {
+  background: #e7f1ff;
+  color: #0d6efd;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 6px;
+  margin-left: 3px;
+}
+
+/* Main table — also strip overflow, allow natural widths */
+.lv-table { table-layout: fixed; width: 100%; font-size: 0.7rem; }
+.lv-table th, .lv-table td {
+  padding: 3px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   COMPACT GRID — reduce row heights + column widths
+   ============================================================ */
+
+/* --- MAIN TABLE --- */
+.lv-table {
+  table-layout: fixed !important;
+  width: 100% !important;
+  font-size: 0.68rem !important;
+}
+.lv-table thead th {
+  padding: 3px 6px !important;
+  font-size: 0.6rem !important;
+  height: 22px !important;
+  line-height: 1.1 !important;
+  text-transform: uppercase !important;
+}
+.lv-table tbody td {
+  padding: 3px 6px !important;
+  height: 22px !important;
+  font-size: 0.7rem !important;
+  vertical-align: middle !important;
+}
+.lv-toggle-btn { width: 18px !important; height: 18px !important; font-size: 0.6rem !important; }
+
+/* Order-row: narrow toggle + checkbox, wider name */
+.lv-table thead tr th:nth-child(1) { width: 26px !important; }
+.lv-table thead tr th:nth-child(2) { width: 26px !important; }
+.lv-table thead tr th:nth-child(3) { width: 110px !important; }  /* Lab No */
+.lv-table thead tr th:nth-child(4) { width: 110px !important; }  /* Patient # */
+.lv-table thead tr th:nth-child(5) { width: auto !important; }   /* Patient Name */
+
+/* --- SUB GRID --- */
+.verify-subgrid {
+  font-size: 0.64rem !important;
+}
+.verify-subgrid thead th {
+  padding: 2px 4px !important;
+  font-size: 0.56rem !important;
+  height: 18px !important;
+  line-height: 1.05 !important;
+}
+.verify-subgrid tbody td {
+  padding: 2px 4px !important;
+  font-size: 0.66rem !important;
+  height: 20px !important;
+  line-height: 1.1 !important;
+  vertical-align: middle !important;
+}
+.verify-subgrid .col-comments input {
+  height: 18px !important;
+  font-size: 0.62rem !important;
+  padding: 1px 4px !important;
+}
+.verify-subgrid .lv-mini-btn {
+  font-size: 0.55rem !important;
+  padding: 1px 4px !important;
+  line-height: 1 !important;
+  height: 20px !important;
+}
+.verify-subgrid .params-badge {
+  font-size: 0.5rem !important;
+  padding: 0px 4px !important;
+}
+
+/* Adjust sub-grid column widths via colgroup override */
+.verify-subgrid col:nth-child(1) { width: 6% !important; }   /* Code */
+.verify-subgrid col:nth-child(2) { width: 40% !important; }  /* Test Name */
+.verify-subgrid col:nth-child(3) { width: 30% !important; }  /* Comments */
+.verify-subgrid col:nth-child(4) { width: 8% !important; }   /* Edit */
+.verify-subgrid col:nth-child(5) { width: 8% !important; }   /* View */
+.verify-subgrid col:nth-child(6) { width: 8% !important; }   /* icon */
+
+/* Tighten row separators */
+.lv-items-inner { padding: 4px 6px !important; }
+.lv-items-row td { padding: 0 !important; }
+
+/* ============================================================
+   EXTRA SHRINK — scoped to .lv-page ONLY (verify page)
+   ============================================================ */
+.lv-page .lv-table {
+  font-size: 0.60rem !important;
+}
+.lv-page .lv-table thead th {
+  padding: 2px 4px !important;
+  font-size: 0.54rem !important;
+  height: 18px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+}
+.lv-page .lv-table tbody td {
+  padding: 1px 4px !important;
+  height: 18px !important;
+  font-size: 0.62rem !important;
+  line-height: 1.1 !important;
+}
+.lv-page .lv-toggle-btn {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 0.5rem !important;
+}
+
+.lv-page .verify-subgrid {
+  font-size: 0.56rem !important;
+}
+.lv-page .verify-subgrid .col-code { font-size: 0.6rem !important; }
+.lv-page .verify-subgrid .col-comments input {
+  height: 15px !important;
+  font-size: 0.56rem !important;
+  padding: 0px 3px !important;
+  border-radius: 2px !important;
+}
+.lv-page .verify-subgrid .lv-mini-btn {
+  font-size: 0.5rem !important;
+  padding: 0px 2px !important;
+  height: 16px !important;
+  width: 22px !important;
+  line-height: 1 !important;
+}
+.lv-page .verify-subgrid .params-badge {
+  font-size: 0.45rem !important;
+  padding: 0px 3px !important;
+}
+
+.lv-page .lv-items-inner { padding: 2px 4px !important; }
+.lv-page .lv-items-row td { padding: 0 !important; }
+.lv-page .lv-table tbody tr { height: 18px !important; }
+
+.lv-page .verify-subgrid .col-check {
+  text-align: center;
+  padding: 1px 2px !important;
+  vertical-align: middle !important;
+}
+.lv-page .verify-subgrid .col-check input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* ============================================================
+   FLEXIBLE WIDTH SUB-GRID — content-driven, no fixed %
+   ============================================================ */
+.lv-page .verify-subgrid {
+  width: 100% !important;
+  table-layout: auto !important;   /* <- browser sizes columns by content */
+  border-collapse: collapse !important;
+}
+
+/* Kill the colgroup percentages */
+.lv-page .verify-subgrid colgroup,
+.lv-page .verify-subgrid colgroup col {
+  width: auto !important;
+}
+
+/* Narrow columns: shrink to content, but stay on one line */
+.lv-page .verify-subgrid thead th:nth-child(1),
+/* Checkbox */
+
+.lv-page .verify-subgrid thead th:nth-child(2),
+/* Code */
+
+.lv-page .verify-subgrid thead th:nth-child(5),
+/* Edit */
+
+.lv-page .verify-subgrid thead th:nth-child(6),
+/* View */
+
+
+/* Flex columns: take the remaining space */
+.lv-page .verify-subgrid thead th:nth-child(3),
+/* Test Name */
+
+.lv-page .verify-subgrid thead th:nth-child(4),
+/* Comments */
+
+/* Comments input: fills its cell */
+.lv-page .verify-subgrid td:nth-child(4) input {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   RE-BALANCE AFTER REMOVING ICON COLUMN
+   ============================================================ */
+.lv-page .verify-subgrid {
+  width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+}
+
+.lv-page .verify-subgrid colgroup,
+.lv-page .verify-subgrid colgroup col { width: auto !important; }
+
+/* Fixed-shrink to content */
+.lv-page .verify-subgrid thead th:nth-child(1),
+/* Checkbox */
+
+.lv-page .verify-subgrid thead th:nth-child(2),
+/* Code */
+
+.lv-page .verify-subgrid thead th:nth-child(5),
+/* Edit */
+
+.lv-page .verify-subgrid thead th:nth-child(6),
+/* View */
+
+/* Flex columns take remaining width */
+.lv-page .verify-subgrid thead th:nth-child(3),
+/* Test Name */
+
+.lv-page .verify-subgrid thead th:nth-child(4),
+/* Comments */
+
+/* Inputs fill their cell */
+.lv-page .verify-subgrid td:nth-child(4) input {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Tighten Edit/View button widths */
+.lv-page .verify-subgrid td:nth-child(5) .lv-mini-btn,
+.lv-page .verify-subgrid td:nth-child(6) .lv-mini-btn {
+  padding: 1px 4px !important;
+  min-width: 0 !important;
+  width: auto !important;
+  font-size: 0.55rem !important;
+}
+
+/* ============================================================
+   PDF PANE — fill height, scrollable, auto-fit
+   ============================================================ */
+.lv-right {
+  position: sticky !important;
+  top: 70px !important;
+  align-self: flex-start !important;
+  max-height: calc(100vh - 90px) !important;
+  overflow: visible !important;
+}
+.lv-pdf-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  height: calc(100vh - 130px) !important;
+  min-height: 500px !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
+}
+.lv-pdf-hd {
+  flex: 0 0 auto !important;
+  padding: 6px 10px !important;
+}
+.lv-pdf-frame {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  background: #fff !important;
+  display: block !important;
+}
+.lv-pdf-placeholder {
+  flex: 1 1 auto !important;
+  display: flex;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ============================================================
+   PDF PANE — final layout (full height, iframe fills, placeholder hides)
+   ============================================================ */
+.lv-right {
+  position: sticky !important;
+  top: 60px !important;
+  align-self: flex-start !important;
+  max-height: calc(100vh - 80px) !important;
+}
+.lv-pdf-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  height: calc(100vh - 110px) !important;
+  min-height: 520px !important;
+  overflow: hidden !important;
+  border: 1.5px solid #212529 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+}
+.lv-pdf-hd {
+  flex: 0 0 auto !important;
+  padding: 6px 10px !important;
+  background: #212529 !important;
+  color: #fff !important;
+}
+.lv-pdf-frame {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  display: none;
+}
+.lv-pdf-placeholder {
+  flex: 1 1 auto !important;
+  display: flex;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+}
+
+/* ============================================================
+   PDF IFRAME FILL — force grow to pane bottom
+   ============================================================ */
+.lv-right {
+  position: sticky !important;
+  top: 60px !important;
+  align-self: flex-start !important;
+  max-height: calc(100vh - 80px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.lv-pdf-pane {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: calc(100vh - 110px) !important;
+  min-height: 520px !important;
+  max-height: calc(100vh - 110px) !important;
+  overflow: hidden !important;
+  border: 1.5px solid #212529 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+}
+.lv-pdf-hd {
+  flex: 0 0 auto !important;
+  height: 34px !important;
+  padding: 6px 10px !important;
+}
+.lv-pdf-frame {
+  flex: 1 1 0 !important;      /* grow to fill remaining height */
+  width: 100% !important;
+  height: auto !important;      /* don't fight flex */
+  min-height: 0 !important;
+  border: 0 !important;
+  display: block !important;
+}
+.lv-pdf-placeholder {
+  display: flex;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 1 0 !important;
+  padding: 20px !important;
+  color: #6c757d !important;
+}
+
+/* ============================================================
+   SHRINK MAIN TABLE HEADER ROW (scoped to .lv-page only)
+   ============================================================ */
+.lv-page .lv-table thead th {
+  padding: 2px 6px !important;
+  font-size: 0.58rem !important;
+  line-height: 1 !important;
+  height: 18px !important;
+  vertical-align: middle !important;
+  letter-spacing: 0.02em !important;
+}
+.lv-page .lv-table thead th * {
+  font-size: 0.58rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* Order-row data cells — match header height */
+.lv-page .lv-table tbody tr.order-row td {
+  padding: 2px 6px !important;
+  height: 18px !important;
+  font-size: 0.62rem !important;
+  line-height: 1.1 !important;
+  vertical-align: middle !important;
+}
+/* Checkbox inside the header */
+.lv-page .lv-table thead th input[type="checkbox"] {
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+}
+/* Toggle button in the first column */
+.lv-page .lv-table .lv-toggle-btn {
+  width: 16px !important;
+  height: 16px !important;
+  font-size: 0.55rem !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+/* ============================================================
+   AGGRESSIVE SHRINK + REMOVE PADDINGS (scoped to .lv-page)
+   ============================================================ */
+.lv-page .lv-table { border-collapse: collapse !important; }
+.lv-page .lv-table thead th {
+  padding: 0 5px !important;
+  font-size: 0.55rem !important;
+  height: 14px !important;
+  line-height: 14px !important;
+  letter-spacing: 0 !important;
+}
+.lv-page .lv-table tbody tr.order-row td {
+  padding: 0 5px !important;
+  height: 16px !important;
+  font-size: 0.6rem !important;
+  line-height: 16px !important;
+}
+.lv-page .lv-table thead th *,
+.lv-page .lv-table tbody tr.order-row td * {
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.lv-page .lv-table thead th input[type="checkbox"] {
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 !important;
+}
+.lv-page .lv-table .lv-toggle-btn {
+  width: 14px !important;
+  height: 14px !important;
+  font-size: 0.5rem !important;
+}
+
+/* Remove space before/after paragraphs globally inside the verify page */
+.lv-page p { margin: 0 !important; padding: 0 !important; }
+.lv-page .lv-header { padding-bottom: 4px !important; margin-bottom: 6px !important; }
+.lv-page .lv-title { margin: 0 !important; font-size: 1rem !important; }
+.lv-page .lv-subtitle { margin: 0 !important; font-size: 0.7rem !important; }
+.lv-page .lv-filter { padding: 6px 8px !important; margin-bottom: 6px !important; }
+.lv-page .lv-bulkbar { padding: 3px 8px !important; margin-bottom: 4px !important; font-size: 0.68rem !important; }
+.lv-page .lv-field { margin: 0 !important; }
+.lv-page .lv-field label { margin-bottom: 0 !important; font-size: 0.55rem !important; }
+.lv-page .lv-field input, .lv-page .lv-field select { height: 22px !important; font-size: 0.68rem !important; padding: 1px 6px !important; }
+
+/* ============================================================
+   FIXED SUB-GRID WIDTHS (no flex grow/shrink)
+   ============================================================ */
+.lv-page .verify-subgrid {
+  width: 100% !important;
+  table-layout: fixed !important;   /* <- fixes widths, no reflow */
+  border-collapse: collapse !important;
+}
+
+/* Fixed per-column widths */
+.lv-page .verify-subgrid thead th:nth-child(1),
+/* Checkbox */
+.lv-page .verify-subgrid thead th:nth-child(2),
+/* Code */
+.lv-page .verify-subgrid thead th:nth-child(3),
+/* Test Name */
+.lv-page .verify-subgrid thead th:nth-child(4),
+/* Comments */
+.lv-page .verify-subgrid thead th:nth-child(5),
+/* Edit */
+.lv-page .verify-subgrid thead th:nth-child(6),
+/* View */
+
+/* Kill any colgroup/col that may still try to flex */
+.lv-page .verify-subgrid colgroup,
+.lv-page .verify-subgrid col { width: auto !important; }
+
+/* Comments input fills its cell only */
+.lv-page .verify-subgrid td:nth-child(4) input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Column widths locked */
+.lv-page .lv-table thead th:nth-child(1),
+.lv-page .lv-table tbody td:nth-child(1) { width: 3%  !important; text-align: center; }  /* Toggle */
+.lv-page .lv-table thead th:nth-child(2),
+.lv-page .lv-table tbody td:nth-child(2) { width: 3%  !important; text-align: center; }  /* Checkbox */
+.lv-page .lv-table thead th:nth-child(3),
+.lv-page .lv-table tbody td:nth-child(3) { width: 15% !important; }                      /* Lab No */
+.lv-page .lv-table thead th:nth-child(4),
+.lv-page .lv-table tbody td:nth-child(4) { width: 15% !important; }                      /* Patient # */
+.lv-page .lv-table thead th:nth-child(5),
+.lv-page .lv-table tbody td:nth-child(5) { width: 64% !important; }                      /* Patient Name */
+
+/* Cell padding tight */
+.lv-page .lv-table thead th,
+.lv-page .lv-table tbody tr.order-row td {
+  padding: 1px 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ============================================================
+   MAIN GRID (direct children ONLY — never touches nested sub-grid)
+   ============================================================ */
+.lv-page .lv-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+/* Direct-child header cells */
+.lv-page .lv-table > thead > tr > th:nth-child(1) { width: 3%  !important; text-align: center; }
+.lv-page .lv-table > thead > tr > th:nth-child(2) { width: 3%  !important; text-align: center; }
+.lv-page .lv-table > thead > tr > th:nth-child(3) { width: 15% !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(4) { width: 15% !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(5) { width: 64% !important; }
+
+/* Direct-child order-row body cells */
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(1) { width: 3%  !important; text-align: center; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(2) { width: 3%  !important; text-align: center; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(3) { width: 15% !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(4) { width: 15% !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(5) { width: 64% !important; }
+
+/* The colspan cell that wraps the sub-grid must not force width */
+.lv-page .lv-table > tbody > tr.lv-items-row > td {
+  width: auto !important;
+  padding: 0 !important;
+}
+.lv-page .lv-table > tbody > tr.lv-items-row > td > .lv-items-inner {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Direct-child padding only */
+.lv-page .lv-table > thead > tr > th,
+.lv-page .lv-table > tbody > tr.order-row > td {
+  padding: 1px 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ============================================================
+   VERIFY PAGE — GRID WIDTHS (main vs sub, isolated)
+   ============================================================ */
+
+/* --- MAIN GRID --- */
+.lv-page .lv-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+.lv-page .lv-table > thead > tr > th:nth-child(1) { width: 3%  !important; text-align: center; padding: 1px 4px !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(2) { width: 3%  !important; text-align: center; padding: 1px 4px !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(3) { width: 15% !important; padding: 1px 6px !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(4) { width: 15% !important; padding: 1px 6px !important; }
+.lv-page .lv-table > thead > tr > th:nth-child(5) { width: 64% !important; padding: 1px 6px !important; }
+
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(1) { width: 3%  !important; text-align: center; padding: 1px 4px !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(2) { width: 3%  !important; text-align: center; padding: 1px 4px !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(3) { width: 15% !important; padding: 1px 6px !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(4) { width: 15% !important; padding: 1px 6px !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(5) { width: 64% !important; padding: 1px 6px !important; }
+
+/* The row that holds the sub-grid must not force its own width */
+.lv-page .lv-table > tbody > tr.lv-items-row > td {
+  width: auto !important;
+  padding: 0 !important;
+}
+.lv-page .lv-table > tbody > tr.lv-items-row > td > .lv-items-inner {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Compact typography for the main table */
+.lv-page .lv-table > thead > tr > th {
+  font-size: 0.58rem !important;
+  line-height: 1 !important;
+  height: 16px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.lv-page .lv-table > tbody > tr.order-row > td {
+  font-size: 0.62rem !important;
+  line-height: 1 !important;
+  height: 18px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* --- SUB GRID (independent) --- */
+.lv-page .verify-subgrid {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+.lv-page .verify-subgrid > thead > tr > th:nth-child(1) { width: 3%  !important; text-align: center; }
+.lv-page .verify-subgrid > thead > tr > th:nth-child(2) { width: 7%  !important; text-align: center; }
+.lv-page .verify-subgrid > thead > tr > th:nth-child(3) { width: 40% !important; }
+.lv-page .verify-subgrid > thead > tr > th:nth-child(4) { width: 32% !important; }
+.lv-page .verify-subgrid > thead > tr > th:nth-child(5) { width: 9%  !important; text-align: center; }
+.lv-page .verify-subgrid > thead > tr > th:nth-child(6) { width: 9%  !important; text-align: center; }
+
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(1) { width: 3%  !important; text-align: center; }
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(2) { width: 7%  !important; text-align: center; }
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(3) { width: 40% !important; }
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(4) { width: 32% !important; }
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(5) { width: 9%  !important; text-align: center; }
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(6) { width: 9%  !important; text-align: center; }
+
+/* Kill any leftover colgroup */
+.lv-page .verify-subgrid colgroup,
+.lv-page .verify-subgrid col { width: auto !important; }
+
+/* Comments input fills the cell */
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(4) input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Sub-grid typography */
+.lv-page .verify-subgrid > thead > tr > th {
+  font-size: 0.55rem !important;
+  line-height: 1 !important;
+  height: 15px !important;
+  padding: 1px 4px !important;
+  white-space: nowrap !important;
+}
+.lv-page .verify-subgrid > tbody > tr > td {
+  font-size: 0.6rem !important;
+  line-height: 1 !important;
+  height: 17px !important;
+  padding: 1px 4px !important;
+  vertical-align: middle !important;
+}
 </style>
 {% endblock %}
 
@@ -433,13 +1198,14 @@ table[class$="-table"] tbody td {
     <table class="lv-table">
       <thead>
         <tr>
-          <th class="lv-toggle-col"></th>
-          <th class="center" style="width: 32px;">
+          <th class="lv-toggle-col" style="width:28px; padding:2px;"></th>
+          <th class="center" style="width:28px; padding:2px;">
             <input type="checkbox" id="checkAll" class="lv-mini-checkbox"
                    onchange="toggleAll(this.checked);">
           </th>
-          <th style="width: 150px;">Lab #</th>
-          <th style="min-width: 0;">Patient</th>
+          <th style="width:90px; padding:3px 5px;">Lab No</th>
+          <th style="width:90px; padding:3px 5px;">Patient #</th>
+          <th style="min-width:0; padding:3px 5px;">Patient Name</th>
         </tr>
       </thead>
       <tbody>
@@ -456,64 +1222,79 @@ table[class$="-table"] tbody td {
           <td class="center">
             <input type="checkbox" class="lv-mini-checkbox item-check"
                    value="{{ order.id }}"
+                   data-order-id="{{ order.id }}"
                    data-items="{{ order.pending_items | map(attribute='id') | join(',') }}"
-                   onchange="updateBulkCount();">
+                   onchange="toggleSubAll(this, {{ order.id }}); updateBulkCount();">
           </td>
           <td>
             <a href="{{ url_for('orders.view_order', order_id=order.id) }}" class="lab-link">
               {{ order.order_code }}
             </a>
           </td>
+          <td>{{ order.patient.patient_code or '&mdash;' }}</td>
           <td>
-            <div class="name">{{ order.patient.full_name }}</div>
-            <div class="sub">{{ order.patient.patient_code }}
-              {% if has_corr %}<span class="lv-badge lv-badge-correction">Correction</span>{% endif %}
-            </div>
+            {{ order.patient.full_name }}
+            {% if has_corr %}<span class="lv-badge lv-badge-correction">Correction</span>{% endif %}
           </td>
         </tr>
 
         <tr class="lv-items-row" id="items-row-{{ order.id }}" style="display:none;">
-          <td colspan="4">
-            <div class="lv-items-inner">
-              {% for item in order.pending_items %}
-                {% if item.has_children %}
-                  <div class="lv-test-line panel-header">
-                    <span class="test-icon"><i class="bi bi-collection"></i></span>
-                    <span class="test-name">
-                      {{ item.test.name }}
-                      <span class="lv-panel-badge">{{ item.children|length }} params</span>
-                    </span>
-                    <span class="test-result"></span>
-                    <span class="test-action">
-                      <button type="button" class="lv-mini-btn lv-mini-btn-view"
-                              onclick="viewReport({{ order.id }}, {{ item.id }}, '{{ item.test.name|e }}')">
-                        <i class="bi bi-eye"></i> View
-                      </button>
-                      <a href="{{ url_for('results.enter_item', item_id=item.id) }}"
-                         class="lv-mini-btn lv-mini-btn-edit">
-                        <i class="bi bi-pencil"></i> Edit
+          <td colspan="5">
+            <div class="lv-items-inner" style="padding: 6px 8px;">
+              <div style="overflow-x:auto; overflow-y:visible; width:100%;">
+              <table class="verify-subgrid">
+                <colgroup>
+                  <col style="width: 4%;">   <!-- Checkbox -->
+                  <col style="width: 6%;">   <!-- Code -->
+                  <col style="width: 32%;">  <!-- Test Name -->
+                  <col style="width: 30%;">  <!-- Comments -->
+                  <col style="width: 8%;">   <!-- Edit -->
+                  <col style="width: 8%;">   <!-- View -->
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th class="col-check"><input type="checkbox" class="sub-check-all" data-order-id="{{ order.id }}" onchange="toggleSubAll(this, {{ order.id }})"></th>
+                    <th>Code</th>
+                    <th>Test Name</th>
+                    <th>Comments</th>
+                    <th>Edit</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in order.pending_items %}
+                  <tr>
+                    <td class="col-check"><input type="checkbox" class="sub-check-item sub-check-order-{{ order.id }}" value="{{ item.id }}" data-order-id="{{ order.id }}" onchange="syncMainToggle({{ order.id }})"></td>
+                    <td class="col-code">{{ item.test.code if item.test else '&mdash;' }}</td>
+                    <td class="col-name">
+                      {% if item.has_children %}
+                        <i class="bi bi-collection text-primary"></i>
+                        <strong>{{ item.test.name }}</strong>
+                        <span class="params-badge">{{ item.children|length }}p</span>
+                      {% else %}
+                        <i class="bi bi-droplet text-secondary"></i>
+                        {{ item.test.name }}
+                      {% endif %}
+                    </td>
+                    <td class="col-comments">
+                      <input type="text" value="{{ item.correction_note or '' }}" placeholder="Comment...">
+                    </td>
+                    <td class="col-act">
+                      <a href="{{ url_for('results.enter_item', item_id=item.id) }}" class="lv-mini-btn lv-mini-btn-edit" title="Edit">
+                        <i class="bi bi-pencil"></i>
                       </a>
-                    </span>
-                  </div>
-                  
-                {% else %}
-                  <div class="lv-test-line">
-                    <span class="test-icon"><i class="bi bi-droplet"></i></span>
-                    <span class="test-name">{{ item.test.name }}</span>
-                    <span class="test-result">{{ item.result_value or '—' }}</span>
-                    <span class="test-action">
+                    </td>
+                    <td class="col-act">
                       <button type="button" class="lv-mini-btn lv-mini-btn-view"
-                              onclick="viewReport({{ order.id }}, {{ item.id }}, '{{ item.test.name|e }}')">
-                        <i class="bi bi-eye"></i> View
+                              onclick="viewReport({{ order.id }}, {{ item.id }}, '{{ item.test.name|e }}')" title="View">
+                        <i class="bi bi-eye"></i>
                       </button>
-                      <a href="{{ url_for('results.enter_item', item_id=item.id) }}"
-                         class="lv-mini-btn lv-mini-btn-edit">
-                        <i class="bi bi-pencil"></i> Edit
-                      </a>
-                    </span>
-                  </div>
-                {% endif %}
-              {% endfor %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
             </div>
           </td>
         </tr>
@@ -530,20 +1311,22 @@ table[class$="-table"] tbody td {
 
   </div>
 
-  {# ============ RIGHT: PDF PREVIEW ============ #}
-  <div class="lv-right">
-    <div class="lv-pdf-pane" id="pdfPane">
-      <div class="lv-pdf-hd">
-        <span id="pdfTitle">Report Preview</span>
-        <span class="close" onclick="closePreview()" title="Close">✕</span>
+    <div class="lv-right">
+      <div class="lv-pdf-pane" id="pdfPane">
+        <div class="lv-pdf-hd">
+          <span id="pdfTitle">Report Preview</span>
+          <button type="button" class="btn-close btn-close-white" onclick="closePdfPane()" aria-label="Close" style="margin-left:auto;"></button>
+        </div>
+        <iframe class="lv-pdf-frame" id="pdfFrame" src="about:blank"></iframe>
+        <div class="lv-pdf-placeholder" id="pdfPlaceholder">
+          <i class="bi bi-file-earmark-medical" style="font-size:2.5rem; opacity:0.3;"></i>
+          <p style="margin-top:8px; font-size:0.78rem;">Click <b>View</b> on any test to preview the report here.</p>
+        </div>
       </div>
-      <div class="lv-pdf-placeholder" id="pdfPlaceholder">
-        <i class="bi bi-file-earmark-pdf"></i>
-        <div>Click <b>View</b> on any row to preview the report here.</div>
-      </div>
-      <iframe id="pdfFrame" class="lv-pdf-frame" style="display:none;" src="about:blank"></iframe>
     </div>
-  </div>
+
+  {# ============ RIGHT: PDF PREVIEW ============ #}
+  
 
 </div>
 
@@ -694,14 +1477,40 @@ table[class$="-table"] tbody td {
 
   /* ===== PDF preview ===== */
   window.viewReport = function (orderId, itemId, title) {
-    var url = '/reports/order/' + orderId + '/preview-pdf?item=' + itemId;
+    var url = '/reports/order/' + orderId + '/view-pdf?item=' + itemId;
+    document.getElementById('pdfTitle').innerText = title;
     var frame = document.getElementById('pdfFrame');
     var ph = document.getElementById('pdfPlaceholder');
-    var hd = document.getElementById('pdfTitle');
     frame.src = url;
     frame.style.display = 'block';
-    ph.style.display = 'none';
-    hd.textContent = 'Report — ' + (title || '');
+    frame.style.flex = '1 1 auto';
+    frame.style.height = 'auto';
+    if (ph) {
+      ph.style.display = 'none';
+      ph.style.flex = '0 0 0';
+      ph.style.height = '0';
+    }
+  };
+
+  window.closePdfPane = function () {
+    var frame = document.getElementById('pdfFrame');
+    var ph = document.getElementById('pdfPlaceholder');
+    frame.src = 'about:blank';
+    frame.style.display = 'none';
+    if (ph) {
+      ph.style.display = 'flex';
+      ph.style.flex = '1 1 0';
+      ph.style.height = 'auto';
+    }
+    document.getElementById('pdfTitle').innerText = 'Report Preview';
+  };
+
+  window.closePdfPane = function () {
+    var frame = document.getElementById('pdfFrame');
+    frame.src = 'about:blank';
+    frame.style.display = 'none';
+    document.getElementById('pdfPlaceholder').style.display = 'flex';
+    document.getElementById('pdfTitle').innerText = 'Report Preview';
   };
   window.closePreview = function () {
     var frame = document.getElementById('pdfFrame');
@@ -714,4 +1523,53 @@ table[class$="-table"] tbody td {
   };
 })();
 </script>
+
+<script>
+// When the parent (order) checkbox is toggled, sync all sub-grid checkboxes for that order
+window.toggleSubAll = function (parentCb, orderId) {
+  var state = parentCb.checked;
+  var subs = document.querySelectorAll('.sub-check-order-' + orderId);
+  subs.forEach(function (cb) { cb.checked = state; });
+  // Also update the "check all" in the sub-grid header
+  var headerCb = document.querySelector('.sub-check-all[data-order-id="' + orderId + '"]');
+  if (headerCb) headerCb.checked = state;
+};
+
+// When a sub-checkbox changes, sync the parent (order) checkbox state
+window.syncMainToggle = function (orderId) {
+  var subs = document.querySelectorAll('.sub-check-order-' + orderId);
+  var checked = 0;
+  subs.forEach(function (cb) { if (cb.checked) checked++; });
+  var allChecked = (checked === subs.length) && subs.length > 0;
+
+  // Update the main row checkbox (checked only if ALL subs are checked)
+  var mainCb = document.querySelector('.item-check[data-order-id="' + orderId + '"]');
+  if (mainCb) mainCb.checked = allChecked;
+
+  // Update the header sub-check-all
+  var headerCb = document.querySelector('.sub-check-all[data-order-id="' + orderId + '"]');
+  if (headerCb) headerCb.checked = allChecked;
+};
+</script>
+
+
+{# ============ VIEW REPORT MODAL ============ #}
+
+    
+
+  <div class="modal fade" id="viewReportModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="max-width: 95%;">
+    <div class="modal-content" style="border-radius:6px; border:1.5px solid #212529;">
+      <div class="modal-header" style="background:#1f6fca; color:#fff; padding:8px 12px;">
+        <h6 class="modal-title" id="viewReportTitle" style="margin:0; color:#fff;">
+          <i class="bi bi-file-earmark-medical"></i> Report Preview
+        </h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="padding:0; background:#f8f9fa;">
+        <iframe id="viewReportFrame" style="width:100%; height:80vh; border:0; background:#fff;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
