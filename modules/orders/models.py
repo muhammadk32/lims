@@ -371,18 +371,26 @@ class OrderItem(BaseModel):
     # ---------- Result completeness ----------
     @property
     def all_children_have_results(self):
+        """True when a panel has at least one real (non-header) child value.
+
+        The name is legacy. Real rule: a panel counts as "worked on" as soon
+        as ONE of its non-header children has a value. Blanks in a saved panel
+        are intentional (e.g. a urine test where some params are N/A).
+
+        Section headers ("**PHYSICAL EXAMINATION" etc.) are layout markers
+        and never count.
+        """
         if not self.has_children:
             return False
-        # Section headers like "**PHYSICAL EXAMINATION" have no value by design;
-        # ignore them. Also ignore children whose test is missing.
         data_children = [
             c for c in self.children
             if c.test is not None
-            and not (c.test.name or '').startswith('**')
+            and not (c.test.name or '').strip().startswith('**')
         ]
         if not data_children:
             return False
-        return all(c.result_value for c in data_children)
+        # Any non-empty child value makes the panel complete.
+        return any((c.result_value or '').strip() for c in data_children)
 
     @property
     def has_result(self):
