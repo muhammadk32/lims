@@ -17,22 +17,57 @@ from .culture_table import _culture_block as _culture_flowables
 
 
 def _rrfo(test, order):
-    """Wrap resolve_range_for_order: strip all HTML, return plain text."""
+    """Wrap resolve_range_for_order: strip all HTML, return plain text.
+
+    Handles the common case where the stored range is a Word-paste blob:
+    - Truncated HTML fragments like '<p class="MsoNormal" ...>Interprer'
+    - Full HTML with prose + numbers
+    - Clean text ranges like '10 - 140'
+
+    Strategy:
+      1. If raw is already a plain range, return it.
+      2. If raw is HTML/prose garbage, try to extract 'num - num' pattern.
+      3. If nothing usable found, return '-'.
+    """
     try:
-        raw = _rrfo_raw(test, order) or '-'
+        raw = _rrfo_raw(test, order)
     except Exception:
         return '-'
+    if not raw:
+        return '-'
     import re as _r
-    s = str(raw)
-    # Remove complete tags
-    s = _r.sub(r'<[^>]*>', '', s)
-    # Remove dangling truncated tags (unclosed < ...)
-    s = _r.sub(r'<[^>]*$', '', s)
-    # Remove any remaining < or > leftovers
-    s = s.replace('<', '').replace('>', '')
-    # Collapse whitespace
-    s = _r.sub(r'\s+', ' ', s).strip()
-    return s or '-'
+    s = str(raw).strip()
+
+    # Fast path: already a clean short range
+    if len(s) <= 40 and not s.startswith('<') and _r.search(r'\d', s):
+        s_clean = _r.sub(r'\s+', ' ', s).strip()
+        return s_clean or '-'
+
+    # Try to extract a numeric range from anywhere in the raw string first
+    # (works even when HTML is truncated mid-tag)
+    range_match = _r.search(r'\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?', s)
+    if range_match:
+        return range_match.group(0).strip()
+
+    # Fall back: strip HTML tags and inspect what's left
+    stripped = _r.sub(r'<[^>]*>', '', s)
+    stripped = _r.sub(r'<[^>]*$', '', stripped)
+    stripped = stripped.replace('<', '').replace('>', '')
+    stripped = _r.sub(r'\s+', ' ', stripped).strip()
+
+    # If the stripped text contains prose markers or is truncated, it is junk
+    junk_markers = (
+        'Interprer', 'Interpretation', 'MsoNormal', 'font-',
+        'color:', 'face=', 'style=',
+    )
+    if any(j.lower() in stripped.lower() for j in junk_markers):
+        return '-'
+
+    # Truncated HTML (started with <p but no </p>)
+    if s.startswith('<') and '</' not in s:
+        return '-'
+
+    return stripped or '-'
 
 
 def _sanitize_para(html):

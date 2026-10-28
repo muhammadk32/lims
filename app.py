@@ -38,9 +38,40 @@ def create_app(config_name=None):
 
     # ===== Phase 3: reference ranges Jinja helper =====
     from modules.tests.ranges import resolve_range_for_order as _rrfo
+    import re as _re
+
+    def _clean_range(raw):
+        """Strip HTML, extract numeric range, or return '-'."""
+        if not raw:
+            return '-'
+        s = str(raw).strip()
+        # Fast path: already clean short text
+        if len(s) <= 40 and not s.startswith('<') and _re.search(r'\d', s):
+            return _re.sub(r'\s+', ' ', s).strip() or '-'
+        # Try to extract a numeric range like 10 - 140
+        m = _re.search(r'\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?', s)
+        if m:
+            return m.group(0).strip()
+        # Fallback: strip tags
+        stripped = _re.sub(r'<[^>]*>', '', s)
+        stripped = _re.sub(r'<[^>]*$', '', stripped)
+        stripped = stripped.replace('<', '').replace('>', '')
+        stripped = _re.sub(r'\s+', ' ', stripped).strip()
+        junk = ('Interprer', 'Interpretation', 'MsoNormal', 'font-',
+                'color:', 'face=', 'style=')
+        if any(j.lower() in stripped.lower() for j in junk):
+            return '-'
+        if s.startswith('<') and '</' not in s:
+            return '-'
+        return stripped or '-'
+
     @app.template_global()
     def rng(test, order):
-        return _rrfo(test, order)
+        try:
+            raw = _rrfo(test, order)
+        except Exception:
+            return '-'
+        return _clean_range(raw)
 
     # ===== Phase 4: critical-aware flag helper =====
     from modules.tests.ranges import evaluate_for_order as _efo
