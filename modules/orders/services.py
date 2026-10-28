@@ -189,22 +189,6 @@ def create_order(patient, tests, form, user):
         # Use the same exception style the caller already handles
         raise ValueError(' '.join(lines))
 
-    # ---- B3 guard: block standalone tests that are already inside a selected package ----
-    selected_panel_ids = {t.id for t in tests if t.is_panel}
-    selected_standalone_ids = {t.id for t in tests if not t.is_panel}
-    conflicts = []
-    for panel in [t for t in tests if t.is_panel]:
-        for param in panel.get_parameters():
-            if param.id in selected_standalone_ids:
-                conflicts.append((panel.name, param.name))
-    if conflicts:
-        lines = ['<b>Cannot create order.</b> These tests are already included in a selected package:']
-        for pkg, tst in conflicts:
-            lines.append(f'<br>&bull; <b>{tst}</b> is inside <b>{pkg}</b>')
-        lines.append('<br>Please remove the standalone tests and try again.')
-        # Use the same exception style the caller already handles
-        raise ValueError(' '.join(lines))
-
     for t in tests:
         extras = _item_extras(t.id)
         comp_rate = _company_rate(t.id, t.price)
