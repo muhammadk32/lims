@@ -406,6 +406,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
     _section_header_rows = []
     _section_hdr_row_indices = []
     _colhdr_rows = []
+    _needs_colhdr = False  # default; will flip on for the first section
 
     _with_headers = list(_with_headers)
     for item in _with_headers:
@@ -444,6 +445,17 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             continue
 
         if item.has_children:
+            # Culture / PCR panels render via their dedicated block, not the numeric grid.
+            _panel_fmt = (getattr(item.test, 'result_format', '') or '').lower()
+            if _panel_fmt in ('culture', 'culture_sensitivity'):
+                _collect_culture(notes_flowables, item, order)
+                _last_test_id = item.test.id
+                continue
+            if _panel_fmt in ('pcr', 'pcr_quant', 'molecular'):
+                _collect_pcr_details(notes_flowables, item, order)
+                _last_test_id = item.test.id
+                continue
+
             # Insert a gap row before this panel begins (unless it's the very first item)
             if _last_test_id is not None and _last_test_id != item.test.id:
                 _gap = [Paragraph('', cell_style)] * (4 + n_prev)
@@ -464,7 +476,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             row_idx += 1
 
             # Print column headers right below the panel name
-            if _needs_colhdr:
+            if '_needs_colhdr' in dir() and _needs_colhdr:
                 _colhdr = [
                     Paragraph('TEST', col_header_style),
                     Paragraph('RESULT', col_header_style),

@@ -392,6 +392,15 @@ class OrderItem(BaseModel):
         (simple tests) or in the Result row (culture / PCR / microscopy).
         """
         if self.has_children:
+            # If the panel itself has a value OR a Result row, treat as complete.
+            if self.result_value:
+                return True
+            try:
+                from modules.results.models import Result
+                if Result.query.filter_by(order_item_id=self.id).first() is not None:
+                    return True
+            except Exception:
+                pass
             return self.all_children_have_results
         if self.result_value:
             return True
@@ -432,8 +441,16 @@ class OrderItem(BaseModel):
         if self.is_child:
             return False
         if self.has_children:
-            # Panel is verifiable as soon as any child has a value.
-            # Blank children are treated as "not applicable".
+            # Panel is verifiable if the panel itself has a result_value,
+            # a Result row (culture / PCR / etc.), OR any child has a value.
+            if self.result_value:
+                return True
+            try:
+                from modules.results.models import Result
+                if Result.query.filter_by(order_item_id=self.id).first() is not None:
+                    return True
+            except Exception:
+                pass
             return any(bool(c.result_value) for c in self.children)
         return self.has_result
 

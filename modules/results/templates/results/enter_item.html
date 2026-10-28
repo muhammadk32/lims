@@ -379,8 +379,13 @@ table[class$="-table"] tbody td {
     
 
     {# ============ DEFAULT ENTRY (numeric, qualitative, titre, etc.) ============ #}
-    {% set fmt = (item.test.result_format or 'numeric').lower() %}
-    {% if item.has_children %}
+    {% set fmt = (item.test.result_format or 'numeric').strip().lower() %}
+
+    {# Culture / Culture & Sensitivity must render the culture block BEFORE numeric #}
+    {% if fmt in ('culture', 'culture_sensitivity') %}
+      {% include 'results/_culture_block.html' %}
+
+    {% elif item.has_children %}
     {# ---- PANEL: show each child as its own input row ---- #}
     <div class="ei-card panel-children-grid" style="margin-bottom:10px;max-width:820px;">
       <div class="ei-card-hd">
@@ -416,7 +421,7 @@ table[class$="-table"] tbody td {
         </tbody>
       </table>
     </div>
-    {% elif fmt not in ('culture', 'culture_sensitivity', 'microscopy', 'microscopy_text',
+    {% elif fmt not in ('microscopy', 'microscopy_text',
                       'text_fields', 'pcr', 'pcr_quant', 'molecular') %}
     <div class="ei-card" style="margin-bottom:10px;max-width:820px;">
       <div class="ei-card-hd">
