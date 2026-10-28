@@ -3,8 +3,7 @@
 
 {% block head %}
 <style>
-.lv-page { display: grid !important; grid-template-columns: 55fr 45fr !important; gap: 12px; padding: 10px 20px 30px; max-width: 100%; }
-@media (max-width: 1100px) { .lv-page { grid-template-columns: 1fr; } .lv-pdf-pane { border: 1.5px solid #212529; background: #f8f9fa; height: calc(100vh - 160px); min-height: 500px; position: sticky; top: 70px; display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; } }
+@media (max-width: 1100px) { .lv-pdf-pane { border: 1.5px solid #212529; background: #f8f9fa; height: calc(100vh - 160px); min-height: 500px; position: sticky; top: 70px; display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; } }
 
 .lv-left { min-width: 0 !important; }
 .lv-right { min-width: 0 !important; }
@@ -146,16 +145,6 @@
 .lv-pdf-placeholder i { font-size: 2.5rem; color: #adb5bd; }
 
 /* ===== POLISHED THEME OVERRIDE ===== */
-.lv-page {
-  max-width: 100% !important;
-  padding: 10px 20px 30px !important;
-  font-size: 0.75rem !important;
-  color: #212529 !important;
-  display: grid !important;
-  grid-template-columns: 55fr 45fr !important;
-  gap: 12px !important;
-  align-items: flex-start !important;
-}
 .lv-left { min-width: 0 !important; }
 
 /* Header Bar */
@@ -1261,6 +1250,48 @@ table[class$="-table"] tbody td {
   content: none !important;
   display: none !important;
 }
+
+/* ============================================================
+   SINGLE-PANE LAYOUT — left pane fixed width, empty space on right
+   ============================================================ */
+.lv-page {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  padding: 10px 20px 30px !important;
+  max-width: 100% !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+.lv-left {
+  flex: 0 0 58% !important;   /* fixed width, does not grow */
+  max-width: 58% !important;
+  min-width: 0 !important;
+}
+.lv-right {
+  display: none !important;
+}
+
+/* ============================================================
+   SINGLE-PANE LAYOUT — left pane fixed width, empty space on right
+   ============================================================ */
+.lv-page {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 12px !important;
+  padding: 10px 20px 30px !important;
+  max-width: 100% !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+.lv-left {
+  flex: 0 0 58% !important;   /* fixed width, does not grow */
+  max-width: 58% !important;
+  min-width: 0 !important;
+}
+.lv-right {
+  display: none !important;
+}
 </style>
 {% endblock %}
 
@@ -1432,19 +1463,7 @@ table[class$="-table"] tbody td {
 
   </div>
 
-    <div class="lv-right">
-      <div class="lv-pdf-pane" id="pdfPane">
-        <div class="lv-pdf-hd">
-          <span id="pdfTitle">Report Preview</span>
-          <button type="button" class="btn-close btn-close-white" onclick="closePdfPane()" aria-label="Close" style="margin-left:auto;"></button>
-        </div>
-        <iframe class="lv-pdf-frame" id="pdfFrame" src="about:blank"></iframe>
-        <div class="lv-pdf-placeholder" id="pdfPlaceholder">
-          <i class="bi bi-file-earmark-medical" style="font-size:2.5rem; opacity:0.3;"></i>
-          <p style="margin-top:8px; font-size:0.78rem;">Click <b>View</b> on any test to preview the report here.</p>
-        </div>
-      </div>
-    </div>
+    
 
   {# ============ RIGHT: PDF PREVIEW ============ #}
   
@@ -1598,20 +1617,11 @@ table[class$="-table"] tbody td {
 
   /* ===== PDF preview ===== */
   window.viewReport = function (orderId, itemId, title) {
-    var url = '/reports/order/' + orderId + '/view-pdf?item=' + itemId;
-    document.getElementById('pdfTitle').innerText = title;
-    var frame = document.getElementById('pdfFrame');
-    var ph = document.getElementById('pdfPlaceholder');
-    frame.src = url;
-    frame.style.display = 'block';
-    frame.style.flex = '1 1 auto';
-    frame.style.height = 'auto';
-    if (ph) {
-      ph.style.display = 'none';
-      ph.style.flex = '0 0 0';
-      ph.style.height = '0';
-    }
+    var pdfUrl = '/reports/order/' + orderId + '/view-pdf?item=' + itemId;
+    window.open(pdfUrl, '_blank');
   };
+
+  window.closePdfPane = function () { /* no-op */ };
 
   window.closePdfPane = function () {
     var frame = document.getElementById('pdfFrame');
