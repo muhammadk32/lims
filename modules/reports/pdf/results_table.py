@@ -235,6 +235,10 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             import traceback; traceback.print_exc()
 
     def _collect_pcr_details(bucket, item, order_):
+        # Hard gate: this function must only run for PCR / molecular tests
+        _fmt = (getattr(getattr(item, 'test', None), 'result_format', '') or '').lower()
+        if _fmt not in ('pcr', 'pcr_quant', 'molecular'):
+            return
         from modules.results.models import Result
         r = Result.query.filter_by(order_item_id=item.id).first()
         tpl = None
@@ -482,8 +486,11 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     data.append(row)
                     row_idx += 1
                     _collect_note(notes_flowables, child.test, order)
-                    _collect_pcr_details(notes_flowables, child, order)
-                    _collect_culture(notes_flowables, child, order)
+                    _child_fmt = (child.test.result_format or '').lower() if child.test else ''
+                    if _child_fmt in ('pcr', 'pcr_quant', 'molecular'):
+                        _collect_pcr_details(notes_flowables, child, order)
+                    if _child_fmt in ('culture', 'culture_sensitivity'):
+                        _collect_culture(notes_flowables, child, order)
         else:
             flag, _crit = _efo(item.test, item.result_value, order)
             if flag == 'abnormal':
