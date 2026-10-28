@@ -1416,7 +1416,7 @@ table[class$="-table"] tbody td {
                 <tbody>
                   {% for item in order.pending_items %}
                   <tr>
-                    <td class="col-check"><input type="checkbox" class="sub-check-item sub-check-order-{{ order.id }}" value="{{ item.id }}" data-order-id="{{ order.id }}" onchange="syncMainToggle({{ order.id }})"></td>
+                    <td class="col-check"><input type="checkbox" class="sub-check-item sub-check-order-{{ order.id }}" value="{{ item.id }}" data-order-id="{{ order.id }}" onchange="syncMainToggle({{ order.id }})" onchange="updateBulkCount(); syncMainToggle(this.dataset.orderId);"></td>
                     <td class="col-code">{{ item.test.code if item.test else '&mdash;' }}</td>
                     <td class="col-name">
                       {% if item.has_children %}
@@ -1534,9 +1534,11 @@ table[class$="-table"] tbody td {
   });
 
   window.updateBulkCount = function () {
-    var n = document.querySelectorAll('.item-check:checked').length;
+    var checkedSubs = document.querySelectorAll('.sub-check-item:checked').length;
+    var checkedOrders = document.querySelectorAll('.item-check:checked').length;
+    var n = checkedSubs || checkedOrders;
     var el = document.getElementById('bulkCount');
-    if (el) el.textContent = n;
+    if (el) el.innerText = n;
   };
   window.toggleAll = function (checked) {
     document.querySelectorAll('.item-check').forEach(function (c) { c.checked = checked; });
@@ -1544,22 +1546,34 @@ table[class$="-table"] tbody td {
   };
 
   window.bulkApprove = function () {
+    var checkedSubs = document.querySelectorAll('.sub-check-item:checked');
+    var checkedOrders = document.querySelectorAll('.item-check:checked');
+
     var ids = [];
-    document.querySelectorAll('.item-check:checked').forEach(function (c) {
-      var raw = (c.dataset.items || '').trim();
-      if (raw) {
-        raw.split(',').forEach(function (x) { if (x) ids.push(x.trim()); });
-      }
-    });
-    if (!ids.length) { alert('Select at least one order with pending items.'); return; }
-    if (!confirm('Approve all pending items in the selected order(s)?')) return;
+    if (checkedSubs.length > 0) {
+      checkedSubs.forEach(function (c) { ids.push(c.value); });
+    } else {
+      checkedOrders.forEach(function (c) {
+        var raw = (c.dataset.items || '').trim();
+        if (raw) raw.split(',').forEach(function (x) { if (x) ids.push(x); });
+      });
+    }
+
+    if (!ids.length) {
+      alert('Select at least one test (or one order) first.');
+      return;
+    }
+    if (!confirm('Approve the selected pending test(s)?')) return;
 
     var form = document.createElement('form');
     form.method = 'POST';
     form.action = '/lab/verify/bulk-approve';
+    // Add one input per ID (matches request.form.getlist('item_ids', type=int))
     ids.forEach(function (id) {
       var inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = 'item_ids'; inp.value = id;
+      inp.type = 'hidden';
+      inp.name = 'item_ids';
+      inp.value = id;
       form.appendChild(inp);
     });
     document.body.appendChild(form);
