@@ -392,12 +392,13 @@ class OrderItem(BaseModel):
         (simple tests) or in the Result row (culture / PCR / microscopy).
         """
         if self.has_children:
-            # If the panel itself has a value OR a Result row, treat as complete.
+            # Panel is complete only when at least one child has real data.
             if self.result_value:
                 return True
             try:
                 from modules.results.models import Result
-                if Result.query.filter_by(order_item_id=self.id).first() is not None:
+                r = Result.query.filter_by(order_item_id=self.id).first()
+                if r is not None and _result_has_data(r):
                     return True
             except Exception:
                 pass
@@ -441,13 +442,14 @@ class OrderItem(BaseModel):
         if self.is_child:
             return False
         if self.has_children:
-            # Panel is verifiable if the panel itself has a result_value,
-            # a Result row (culture / PCR / etc.), OR any child has a value.
+            # Panel is verifiable if any child has data OR the panel itself
+            # has a Result row with real data.
             if self.result_value:
                 return True
             try:
                 from modules.results.models import Result
-                if Result.query.filter_by(order_item_id=self.id).first() is not None:
+                r = Result.query.filter_by(order_item_id=self.id).first()
+                if r is not None and _result_has_data(r):
                     return True
             except Exception:
                 pass
