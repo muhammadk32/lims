@@ -373,7 +373,16 @@ class OrderItem(BaseModel):
     def all_children_have_results(self):
         if not self.has_children:
             return False
-        return all(c.result_value for c in self.children)
+        # Section headers like "**PHYSICAL EXAMINATION" have no value by design;
+        # ignore them. Also ignore children whose test is missing.
+        data_children = [
+            c for c in self.children
+            if c.test is not None
+            and not (c.test.name or '').startswith('**')
+        ]
+        if not data_children:
+            return False
+        return all(c.result_value for c in data_children)
 
     @property
     def has_result(self):

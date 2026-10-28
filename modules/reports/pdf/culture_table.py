@@ -72,12 +72,10 @@ def _culture_block(item, result, ab_rows):
 
     # Title
     t = Table([[Paragraph(_lbl["title"], title_style)]], colWidths=[100*mm])
-    t.setStyle(TableStyle([
-        ("BOX", (0, 0), (-1, -1), 0.8, border),
+    from ._shared_style import apply_block_style
+    apply_block_style(t, extra_cmds=[
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-        ("TOPPADDING", (0, 0), (-1, -1), 4),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-    ]))
+    ])
     out.append(t)
     out.append(Spacer(1, 3*mm))
 

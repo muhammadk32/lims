@@ -168,14 +168,71 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         from modules.results.models import Result
         from core.models import CultureAntibiotic
         r = Result.query.filter_by(order_item_id=item.id).first()
-        if not r:
-            return
         ab_rows = CultureAntibiotic.query.filter_by(order_item_id=item.id).all()
+
+        # If antibiotic rows exist but Result parent is missing, render a synthetic Result
+        # object so the culture table can still build (organism/specimen will be blank).
+        if not r and ab_rows:
+            class _SynthResult:
+                # All culture fields the PDF block may reference
+                culture_specimen = None
+                culture_organism = None
+                culture_direct_text = None
+                culture_direct_note = None
+                culture_zn_text = None
+                culture_zn_note = None
+                culture_gram_text = None
+                culture_gram_note = None
+                culture_comments_dd = None
+                culture_comments_txt = None
+                culture_bacteria_ids = None
+                culture_no_sensitive = None
+                culture_no_growth = None
+                culture_mixed_growth = None
+                culture_colony_count = None
+                culture_incubation = None
+                culture_notes = None
+                entered_at = None
+                result_value = None
+                def __getattr__(self, name):
+                    # Any other unknown attribute -> None instead of crashing
+                    return None
+            r = _SynthResult()
+
+        if not r:
+            # No result and no antibiotics — show the pending block.
+            from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
+            from reportlab.lib import colors
+            from reportlab.lib.units import mm
+            st = getSampleStyleSheet()
+            hdr = ParagraphStyle('CultHdr', parent=st['Normal'],
+                                 fontSize=10, fontName='Helvetica-Bold',
+                                 textColor=colors.white)
+            pending = ParagraphStyle('CultP', parent=st['Normal'], fontSize=9)
+            tbl = Table(
+                [[Paragraph('CULTURE & SENSITIVITY', hdr)],
+                 [Paragraph(f'<b>{item.test.name}</b> — results pending.', pending)]],
+                colWidths=[170 * mm]
+            )
+            tbl.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+                ('BACKGROUND', (0, 1), (-1, 1), colors.white),
+                ('BOX', (0, 0), (-1, -1), 1.0, colors.black),
+                ('GRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#cccccc')),
+                ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ('TOPPADDING', (0, 0), (-1, -1), 4),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ]))
+            bucket.append(tbl)
+            bucket.append(Spacer(1, 4 * mm))
+            return
         try:
             for f in _culture_flowables(item, r, ab_rows):
                 bucket.append(f)
         except Exception as e:
             print(f'[culture_table] failed: {e}')
+            import traceback; traceback.print_exc()
 
     def _collect_pcr_details(bucket, item, order_):
         from modules.results.models import Result
@@ -501,6 +558,8 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             ('LEFTPADDING', (0, 0), (-1, -1), 0),
             ('RIGHTPADDING', (0, 0), (-1, -1), 0),
         ]))
+        # For culture / PCR tests, data[] is empty but notes_flowables holds the report body.
+        # Return an empty table + those flowables so the caller renders them.
         return empty, notes_flowables, len(abnormal_rows), len(critical_rows)
 
     # --- SPLIT INTO SEPARATE BLOCKS (one per test) ---
@@ -520,6 +579,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                         zebra_cmds.append(('BACKGROUND', (0, _i), (-1, _i), colors.HexColor('#f8f9fa')))
                 zebra_cmds.extend([
                     ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f8f9fa')), # Header row background
                     ('BOX', (0, 0), (-1, -1), 1.2, colors.black),
                     ('ROUNDEDCORNERS', [8, 8, 8, 8]),
                     ('LEFTPADDING', (0, 0), (-1, -1), 5),
@@ -533,6 +593,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                         zebra_cmds.extend([
                             ('BACKGROUND', (0, local_r), (-1, local_r), colors.white),
                             ('SPAN', (0, local_r), (-1, local_r)),
+                            ('LINEBELOW', (0, local_r), (-1, local_r), 0, colors.white),
                         ])
                 t.setStyle(TableStyle(zebra_cmds))
                 blocks.append(t)
@@ -549,6 +610,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     zebra_cmds.append(('BACKGROUND', (0, _i), (-1, _i), colors.HexColor('#f8f9fa')))
             zebra_cmds.extend([
                 ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f8f9fa')), # Header row background
                 ('BOX', (0, 0), (-1, -1), 1.2, colors.black),
                 ('ROUNDEDCORNERS', [8, 8, 8, 8]),
                 ('LEFTPADDING', (0, 0), (-1, -1), 5),
@@ -573,7 +635,9 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
 
     style = [
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('GRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#cccccc')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#adb5bd')),
+        ('BOX', (0, 0), (-1, -1), 1.2, colors.black), # Outer border
+        ('ROUNDEDCORNERS', [8, 8, 8, 8]),
         ('LEFTPADDING', (0, 0), (-1, -1), 5),
         ('RIGHTPADDING', (0, 0), (-1, -1), 5),
         ('TOPPADDING', (0, 0), (-1, -1), 3),
@@ -713,13 +777,13 @@ def _pcr_section(item, order):
 
     band_tbl = Table([[Paragraph(item.test.name.upper(), band_style)]],
                      colWidths=[page_w])
-    band_tbl.setStyle(TableStyle([
-        ('BOX', (0, 0), (-1, -1), 0.9, colors.black),
+    from ._shared_style import apply_block_style
+    apply_block_style(band_tbl, extra_cmds=[
         ('LEFTPADDING', (0, 0), (-1, -1), 8),
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
         ('TOPPADDING', (0, 0), (-1, -1), 3),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-    ]))
+    ])
 
     kv_rows = []
     for label, val in [('SPECIMEN:', specimen),
@@ -730,16 +794,29 @@ def _pcr_section(item, order):
                 Paragraph(f'<b>{label}</b>', kv_label),
                 Paragraph(str(val), kv_val),
             ])
-    kv_tbl = Table(kv_rows, colWidths=[30 * mm, 140 * mm])
-    kv_tbl.setStyle(TableStyle([
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 0),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-        ('TOPPADDING', (0, 0), (-1, -1), 1),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
-    ]))
-
-    flow = [title_para, band_tbl, kv_tbl]
+    # If no specimen / result / viral load was entered, show a pending notice
+    if kv_rows:
+        kv_tbl = Table(kv_rows, colWidths=[30 * mm, 140 * mm])
+        kv_tbl.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 1),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+        ]))
+        flow = [title_para, band_tbl, kv_tbl]
+    else:
+        # No result entered — render a pending notice under the band title
+        pending_style = ParagraphStyle(
+            'PendingPcr', parent=styles['Normal'],
+            fontSize=9, textColor=colors.HexColor('#6c757d'),
+            leftIndent=6, spaceBefore=4,
+        )
+        pending_para = Paragraph(
+            f'<i>{item.test.name} — results pending (no specimen/result entered yet).</i>',
+            pending_style,
+        )
+        flow = [title_para, band_tbl, pending_para]
 
     def _section(title, body_html):
         cleaned = _clean(body_html)

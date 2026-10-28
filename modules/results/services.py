@@ -314,10 +314,37 @@ def _save_culture_fields(form, order):
 # ============================================================
 def save_item_result(item, form, user):
     """Save values for one OrderItem. If it's a panel, save each child
-    and CLEAR the panel's own correction flag once children are re-filled."""
+    and CLEAR the panel's own correction flag once children are re-filled.
+    Also mirrors values into the Result table so PDF reports can read them."""
     from datetime import datetime
+    from .models import Result
 
     now = datetime.utcnow()
+
+    def _mirror_to_result(oi):
+        """Create or update the Result row for this OrderItem so reports can render.
+
+        For a panel (has_children), we also create a Result on the parent so
+        the panel's report block can render, even if the parent itself has
+        no result_value — children hold the real data.
+        """
+        has_children = bool(getattr(oi, 'children', None))
+        children_have_values = has_children and any(
+            c.result_value for c in oi.children
+        )
+
+        if not oi.result_value and not children_have_values:
+            return
+
+        r = Result.query.filter_by(order_item_id=oi.id).first()
+        if r is None:
+            r = Result(order_item_id=oi.id)
+            db.session.add(r)
+        r.value = oi.result_value or ('Completed' if children_have_values else None)
+        r.result_value = oi.result_value or ('Completed' if children_have_values else None)
+        r.entered_at = now
+        if user is not None:
+            r.entered_by_id = getattr(user, 'id', None)
 
     if item.has_children:
         any_saved = False
@@ -350,6 +377,13 @@ def save_item_result(item, form, user):
                 item.correction_note = None
                 item.correction_at = None
                 item.correction_by_id = None
+
+    # Mirror saved values into Result table so PDFs render them
+    if item.has_children:
+        for child in item.children:
+            _mirror_to_result(child)
+    else:
+        _mirror_to_result(item)
 
     order = item.order
     if order.status == OrderStatus.APPROVED:
