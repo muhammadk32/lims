@@ -100,7 +100,7 @@ def _flag_result(normal_range, result_value):
         return 'unknown'
 
 
-def _results_table(order, previous_map=None, date_labels=None, items_override=None):
+def _results_table(order, previous_map=None, date_labels=None, items_override=None, content_width=None):
     """Results table with panel grouping + previous results columns.
 
     previous_map: {test_name_lower: [(date, value), ...]}
@@ -597,12 +597,31 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                 row_idx += 1
                 _collect_note(notes_flowables, item.test, order)
 
-    # Column widths
+    # Column widths — scale to fill the available content width.
+    # Fallback to A4 content width (170mm) if not supplied.
+    _avail = content_width if content_width else (170 * mm)
     if n_prev > 0:
-        col_widths = [55 * mm, 22 * mm, 18 * mm, 35 * mm]
-        col_widths += [22 * mm] * n_prev
+        # TEST | RESULT | UNIT | REFERENCE | prev1 | prev2 | ...
+        # Base 4 columns take 75% of width, prev columns share remaining 25%.
+        _base = _avail * 0.75
+        _prev_total = _avail * 0.25
+        _prev_w = _prev_total / max(n_prev, 1)
+        # Split base 75% into TEST(40%) RESULT(20%) UNIT(15%) REF(25%)
+        col_widths = [
+            _base * 0.40,
+            _base * 0.20,
+            _base * 0.15,
+            _base * 0.25,
+        ]
+        col_widths += [_prev_w] * n_prev
     else:
-        col_widths = [65 * mm, 30 * mm, 25 * mm, 35 * mm]
+        # TEST(40%) RESULT(20%) UNIT(15%) REF(25%) = 100% of content width
+        col_widths = [
+            _avail * 0.40,
+            _avail * 0.20,
+            _avail * 0.15,
+            _avail * 0.25,
+        ]
 
     if len(data) <= 1:
         empty = Table([['']], colWidths=[1])

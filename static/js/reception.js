@@ -1007,6 +1007,10 @@ window.addEventListener('DOMContentLoaded', function () {
   if (!params.get('patient_id') && !params.get('revisit_from')) {
     const m = new bootstrap.Modal($modal, { backdrop: 'static', keyboard: false });
     m.show();
+    // Focus search input after the modal finishes showing
+    $modal.addEventListener('shown.bs.modal', function () {
+      setTimeout(function () { if ($search) $search.focus(); }, 30);
+    }, { once: true });
   }
 
   const doSearch = _dbnc(async function () {
