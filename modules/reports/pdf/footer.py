@@ -8,7 +8,7 @@ from reportlab.platypus import Paragraph, Spacer
 from .base import _now, _fmt_dt
 from .branding import _get_lab
 
-BOTTOM_PANEL_HEIGHT = 55 * mm
+BOTTOM_PANEL_HEIGHT = 80  # footer measured max y=72.7pt + 8pt buffer
 
 
 def _get_active_signatures(dept_ids=None):
@@ -22,127 +22,124 @@ def _get_active_signatures(dept_ids=None):
 
 
 def _draw_page_bottom(canvas, doc, dept_ids=None):
-    """Draw the full bottom footer stack on EVERY page."""
+    """Referral-style footer — pixel-accurate from measured referral PDF."""
     sigs = _get_active_signatures(dept_ids)
     lab = _get_lab()
 
     canvas.saveState()
 
     page_width, page_height = A4
-    left_margin = 20 * mm
-    right_margin = 20 * mm
-    usable_width = page_width - left_margin - right_margin
 
-    COLS = 4
-    ROW_HEIGHT = 14 * mm
-
-    if sigs:
-        row_count = (len(sigs) + COLS - 1) // COLS
+    # --- Column X positions (measured from referral PDF) ---
+    # Spread signature columns evenly across the A4 page width
+    PAGE_LEFT = 8.7
+    PAGE_RIGHT = page_width - 8.7
+    n_sigs = len(sigs) if sigs else 0
+    if n_sigs > 0:
+        gap = (PAGE_RIGHT - PAGE_LEFT) / n_sigs
+        COL_X = [PAGE_LEFT + i * gap for i in range(n_sigs)]
     else:
-        row_count = 0
+        COL_X = []
+    RIGHT_EDGE_X = page_width - 8.7
+    DATE_X = RIGHT_EDGE_X - 72  # 1 inch left of right edge for date
 
-    disclaimer_height = 10 * mm
-    separator_block = 5 * mm
-    verified_block = 8 * mm
-    top_rule_block = 4 * mm
+    # Column width (for centering sigs within their column)
+    COL_W = (PAGE_RIGHT - PAGE_LEFT) / max(n_sigs, 1) if n_sigs > 0 else 0
 
-    stack_height = (
-        top_rule_block +
-        verified_block +
-        row_count * ROW_HEIGHT +
-        separator_block +
-        disclaimer_height
+    # --- Font sizes (measured) ---
+    SZ_DISCLAIMER1 = 9.7
+    SZ_BAND_TEXT = 7.8
+    SZ_SIG_NAME = 7.5
+    SZ_SIG_QUALS = 7.1
+    SZ_SIG_DESIG = 7.1
+    SZ_BOTTOM = 8.9
+
+    # --- Y positions (from page bottom, measured) ---
+    Y_DISCLAIMER1 = 72.7
+    Y_BAND_TEXT = 59.6
+    Y_SIG_NAME = 44.6
+    Y_SIG_QUALS = 31.2
+    Y_SIG_DESIG = 20.7
+    Y_BOTTOM_ROW = 5.9
+
+    # Grey band rectangle (roughly y=55 to y=68, height 13pt)
+    band_x0 = 8.0
+    band_x1 = page_width - 8.0
+    band_y0 = 55.0
+    band_y1 = 68.0
+
+    # --- 1. Disclaimer line 1 (above grey band) ---
+    canvas.setFont('Helvetica-Bold', SZ_DISCLAIMER1)
+    canvas.setFillColor(colors.HexColor('#000000'))
+    canvas.drawCentredString(
+        page_width / 2, Y_DISCLAIMER1,
+        'All results should be interpreted and correlated with clinical history.'
     )
 
-    stack_bottom = 12 * mm
-    stack_top = stack_bottom + stack_height
+    # --- 2. Grey band with second disclaimer line ---
+    canvas.setFillColor(colors.HexColor('#ced4da'))
+    canvas.rect(band_x0, band_y0, band_x1 - band_x0, band_y1 - band_y0, fill=1, stroke=0)
 
-    # 1. Top rule
-    canvas.setStrokeColor(colors.HexColor('#adb5bd'))
-    canvas.setLineWidth(0.5)
-    canvas.line(left_margin, stack_top, page_width - right_margin, stack_top)
-
-    # 2. Verified line
-    y = stack_top - 5 * mm
-    canvas.setFont('Helvetica-Bold', 8.5)
+    canvas.setFont('Helvetica-Bold', SZ_BAND_TEXT)
     canvas.setFillColor(colors.HexColor('#212529'))
     canvas.drawCentredString(
-        page_width / 2, y,
-        'Electronically verified report. No signature(s) required.'
+        page_width / 2, Y_BAND_TEXT,
+        'Electronically Verified Report, No Signature(s) required. Not valid for any court of law.'
     )
 
-    # 3. Signature grid
+    # --- 3. Signature grid (4 cols × N rows) ---
     if sigs:
-        col_width = usable_width / COLS
-        sig_grid_top = y - 5 * mm
-
         for i, sig in enumerate(sigs):
-            col = i % COLS
-            row = i // COLS
+            col = i % 4
+            row = i // 4
+            x = COL_X[col]
+            row_offset = row * 35.0  # ~35pt between rows
 
-            x = left_margin + col * col_width + 3 * mm
-            base_y = sig_grid_top - row * ROW_HEIGHT
+            # Column center X for this sig
+            col_center = x + COL_W / 2
 
-            canvas.setFont('Helvetica-Bold', 9)
-            canvas.setFillColor(colors.HexColor('#212529'))
-            canvas.drawString(x, base_y, sig.name or '—')
+            # Name (centered in column)
+            canvas.setFont('Helvetica-Bold', SZ_SIG_NAME)
+            canvas.setFillColor(colors.HexColor('#000000'))
+            canvas.drawCentredString(col_center, Y_SIG_NAME - row_offset, sig.name or '-')
 
-            current_offset_mm = 4
+            # Qualifications (centered)
             if sig.qualifications:
-                canvas.setFont('Helvetica', 8)
-                canvas.setFillColor(colors.HexColor('#495057'))
-                for line in (sig.qualifications or '').split('\n'):
-                    canvas.drawString(
-                        x, base_y - current_offset_mm * mm, line.strip()
-                    )
-                    current_offset_mm += 3.2
-                current_offset_mm += 0.8
-
-            if sig.designation:
-                canvas.setFont('Helvetica', 7.5)
-                canvas.setFillColor(colors.HexColor('#6c757d'))
-                canvas.drawString(
-                    x, base_y - current_offset_mm * mm, sig.designation
+                canvas.setFont('Helvetica', SZ_SIG_QUALS)
+                canvas.setFillColor(colors.HexColor('#000000'))
+                canvas.drawCentredString(
+                    col_center, Y_SIG_QUALS - row_offset,
+                    (sig.qualifications or '').replace('\n', ', ')[:80]
                 )
 
-    # 4. Separator
-    y = (stack_bottom + disclaimer_height) + 2 * mm
-    canvas.setStrokeColor(colors.HexColor('#dee2e6'))
-    canvas.setLineWidth(0.5)
-    canvas.line(left_margin, y, page_width - right_margin, y)
+            # Designation (centered)
+            if sig.designation:
+                canvas.setFont('Helvetica', SZ_SIG_DESIG)
+                canvas.setFillColor(colors.HexColor('#000000'))
+                canvas.drawCentredString(col_center, Y_SIG_DESIG - row_offset, sig.designation)
 
-    # 5. Disclaimer
-    y -= 4 * mm
-    canvas.setFont('Helvetica', 8)
-    canvas.setFillColor(colors.HexColor('#6c757d'))
+    # --- 4. Bottom row: Guest | Page N of M | date | time ---
+    from datetime import datetime
+    now = datetime.now()
+    date_str = now.strftime('%m/%d/%Y')
+    hour = now.hour % 12 or 12
+    ampm = 'AM' if now.hour < 12 else 'PM'
+    time_str = f'{hour}:{now.minute:02d}:{now.second:02d}{ampm}'
 
-    disclaimer_line = (
-        'This report is computer-generated and is intended for medical use only. '
-        'Results should be interpreted by a qualified healthcare professional. '
-        f'Generated on {_fmt_dt(_now())}.'
-    )
-    max_chars = 110
-    if len(disclaimer_line) > max_chars:
-        mid = disclaimer_line.rfind(' ', 0, max_chars)
-        if mid < 20:
-            mid = max_chars
-        line1 = disclaimer_line[:mid].strip()
-        line2 = disclaimer_line[mid:].strip()
-        canvas.drawCentredString(page_width / 2, y, line1)
-        canvas.drawCentredString(page_width / 2, y - 3.5 * mm, line2)
-        y -= 3.5 * mm
-    else:
-        canvas.drawCentredString(page_width / 2, y, disclaimer_line)
+    try:
+        page_num = canvas.getPageNumber()
+    except Exception:
+        page_num = 1
+    total_pages = getattr(canvas, '_total_pages', page_num)
 
-    # 6. Custom footer note
-    if lab.get('footer_note'):
-        y -= 4 * mm
-        canvas.setFont('Helvetica-Oblique', 8)
-        canvas.setFillColor(colors.HexColor('#6c757d'))
-        canvas.drawCentredString(page_width / 2, y, lab['footer_note'])
+    canvas.setFont('Helvetica', SZ_BOTTOM)
+    canvas.setFillColor(colors.HexColor('#000000'))
+    canvas.drawString(10.2, Y_BOTTOM_ROW, 'Guest')
+    canvas.drawCentredString(page_width / 2 - 15, Y_BOTTOM_ROW, f'Page {page_num} of {total_pages}')
+    canvas.drawRightString(DATE_X, Y_BOTTOM_ROW, date_str)
+    canvas.drawRightString(RIGHT_EDGE_X, Y_BOTTOM_ROW, time_str)
 
     canvas.restoreState()
-
 
 def _footer_flowables(abnormal_count):
     """The abnormal-results note (flows right after the table)."""

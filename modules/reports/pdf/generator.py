@@ -38,7 +38,7 @@ def generate_report_pdf(order, item_id=None, extra_story=None, skip_footer=False
     LM = _flt('report_margin_left', 0.8)   * 72   # inches -> points
     RM = _flt('report_margin_right', 0.8)  * 72
     TM = _flt('report_margin_top', 0.6)    * 72
-    BM = _flt('report_margin_bottom', 0.6) * 72
+    BM = 0  # footer handles its own bottom spacing (y=5.9pt is the lowest element)
     BOT = BM + BOTTOM_PANEL_HEIGHT
 
     TOP_PAGE1 = TM
