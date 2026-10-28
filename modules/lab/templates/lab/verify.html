@@ -1140,6 +1140,127 @@ table[class$="-table"] tbody td {
   padding: 1px 4px !important;
   vertical-align: middle !important;
 }
+
+/* ============================================================
+   READABLE HEIGHTS — verify page only
+   ============================================================ */
+
+/* Bulk bar — clear separation from table */
+.lv-page .lv-bulkbar {
+  padding: 6px 10px !important;
+  font-size: 0.78rem !important;
+  margin-bottom: 6px !important;
+}
+
+/* MAIN GRID HEADER: 16px -> 26px */
+.lv-page .lv-table > thead > tr > th {
+  font-size: 0.74rem !important;
+  line-height: 1.2 !important;
+  height: 26px !important;
+  padding: 5px 8px !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ORDER ROW: 18px -> 28px */
+.lv-page .lv-table > tbody > tr.order-row > td {
+  font-size: 0.8rem !important;
+  line-height: 1.2 !important;
+  height: 28px !important;
+  padding: 5px 8px !important;
+}
+
+/* SUB-GRID HEADER: 15px -> 24px */
+.lv-page .verify-subgrid > thead > tr > th {
+  font-size: 0.72rem !important;
+  line-height: 1.2 !important;
+  height: 24px !important;
+  padding: 4px 6px !important;
+}
+
+/* SUB-GRID ROWS: 17px -> 28px */
+.lv-page .verify-subgrid > tbody > tr > td {
+  font-size: 0.78rem !important;
+  line-height: 1.2 !important;
+  height: 28px !important;
+  padding: 4px 6px !important;
+}
+
+/* Comments input matches row height */
+.lv-page .verify-subgrid > tbody > tr > td:nth-child(4) input {
+  height: 24px !important;
+  font-size: 0.74rem !important;
+  padding: 3px 6px !important;
+}
+
+/* Edit/View buttons */
+.lv-page .verify-subgrid .lv-mini-btn {
+  font-size: 0.72rem !important;
+  padding: 3px 6px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+}
+
+/* Checkboxes */
+.lv-page .lv-table thead input[type="checkbox"],
+.lv-page .lv-table tbody input[type="checkbox"],
+.lv-page .verify-subgrid input[type="checkbox"] {
+  width: 15px !important;
+  height: 15px !important;
+  vertical-align: middle !important;
+}
+
+/* Toggle button */
+.lv-page .lv-toggle-btn {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 0.65rem !important;
+}
+
+/* ============================================================
+   MAIN GRID — 5 columns (empty toggle header)
+   ============================================================ */
+.lv-page .lv-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+.lv-page .lv-table > thead > tr > th:nth-child(1) { width: 3%  !important; padding: 1px 2px !important; }  /* Toggle (empty header) */
+.lv-page .lv-table > thead > tr > th:nth-child(2) { width: 4%  !important; text-align: center; }            /* Checkbox */
+.lv-page .lv-table > thead > tr > th:nth-child(3) { width: 15% !important; }                                /* Lab No */
+.lv-page .lv-table > thead > tr > th:nth-child(4) { width: 15% !important; }                                /* Patient # */
+.lv-page .lv-table > thead > tr > th:nth-child(5) { width: 63% !important; }                                /* Patient Name */
+
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(1) { width: 3%  !important; text-align: center; padding: 1px 2px !important; }  /* Toggle */
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(2) { width: 4%  !important; text-align: center; }                                /* Checkbox */
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(3) { width: 15% !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(4) { width: 15% !important; }
+.lv-page .lv-table > tbody > tr.order-row > td:nth-child(5) { width: 63% !important; }
+
+/* Sub-grid row wrapper — no width hijacking */
+.lv-page .lv-table > tbody > tr.lv-items-row > td {
+  width: auto !important;
+  padding: 0 !important;
+}
+
+/* ============================================================
+   HIDE the empty toggle <th> visual — same blue as header
+   ============================================================ */
+.lv-page .lv-table > thead > tr > th.lv-toggle-col {
+  background: #1f6fca !important;     /* match header blue */
+  border-right: 1px solid #1558a6 !important;
+  border-left: 1px solid #1558a6 !important;
+  padding: 0 !important;
+  width: 3% !important;
+  color: transparent !important;      /* hide any stray text */
+  font-size: 0 !important;
+}
+
+/* If the th is empty, it will be a solid blue block, no box/outline */
+.lv-page .lv-table > thead > tr > th.lv-toggle-col::before,
+.lv-page .lv-table > thead > tr > th.lv-toggle-col::after {
+  content: none !important;
+  display: none !important;
+}
 </style>
 {% endblock %}
 
@@ -1199,7 +1320,7 @@ table[class$="-table"] tbody td {
       <thead>
         <tr>
           <th class="lv-toggle-col" style="width:28px; padding:2px;"></th>
-          <th class="center" style="width:28px; padding:2px;">
+          <th class="center" style="width:32px; padding:2px;">
             <input type="checkbox" id="checkAll" class="lv-mini-checkbox"
                    onchange="toggleAll(this.checked);">
           </th>
