@@ -45,6 +45,8 @@
 
   function attach(table, key) {
     if (table.dataset.colResize === "1") return;
+    // Skip nested sub-grid — its layout is controlled by CSS (table-layout: fixed).
+    if (table.classList.contains("rp-sub-table")) return;
     table.dataset.colResize = "1";
     table.style.tableLayout = "auto";
 

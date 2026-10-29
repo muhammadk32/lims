@@ -470,11 +470,6 @@ tr.child-row td:nth-child(2) {
 }
 
 /* --- SUB-GRID (referral-style) --- */
-.rp-sub-table {
-  width: 100% !important;
-  border-collapse: collapse !important;
-  
-}
 .rp-sub-table th {
   background: #1f6fca !important;
   color: #fff !important;
@@ -502,15 +497,6 @@ tr.child-row td:nth-child(2) {
 
 /* Column widths — sum must equal 100 */
 
-.rp-sub-table td input[type="text"],
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.75rem !important;
-  padding: 2px !important;
-}
-
-
 /* --- HIERARCHY FIX: MAIN HEADER > SUB HEADER --- */
 
 /* 1. Main Table Header: Make it prominent */
@@ -536,14 +522,7 @@ html body .rp-sub-table > thead > tr > th {
 }
 
 /* 3. Fix the column widths so 'WHATS APP' doesn't force height */
-html body html body html body html body 
 
-/* --- SUB-GRID: LET CONTENT DICTATE WIDTH --- */
-.rp-sub-table {
-  width: 100% !important;
-    /* Auto sizing based on content */
-  border-collapse: collapse !important;
-}
 .rp-sub-table th {
   background: #4a8adb !important;
   color: #fff !important;
@@ -564,26 +543,8 @@ html body html body html body html body
   white-space: nowrap !important; /* Prevent wrapping */
 }
 /* Only the Name column is allowed to wrap to fill space */
-.rp-sub-table td:nth-child(3) {
-  white-space: normal !important;
-  width: 100% !important; /* Name takes all remaining space */
-}
 /* Inputs should fill their cell */
-.rp-sub-table td input[type="text"], 
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.75rem !important;
-  padding: 2px !important;
-}
-
-
 /* --- ISOLATED SUB-TABLE RULES (NO INHERITANCE) --- */
-.rp-sub-table {
-  width: 100% !important;
-  
-  border-collapse: collapse !important;
-}
 .rp-sub-table th {
   background: #4a8adb !important;
   color: #fff !important;
@@ -608,41 +569,10 @@ html body html body html body html body
 .rp-sub-table td:nth-child(3) {
   white-space: normal !important;
 }
-.rp-sub-table td input[type="text"], 
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.72rem !important;
-  padding: 2px !important;
-}
-
 /* Force any column that doesn't need to be wide to be exactly the width of its content */
-.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1),
-.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2),
-.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4),
-.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5),
-.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7),
-.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8),
-.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9),
-.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10),
-.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) {
-  width: 1% !important;  /* Let browser shrink to content */
-}
-
 /* Let Name take all the remaining space */
-.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) {
-  width: auto !important;
-}
-
-
 /* --- SUB-TABLE MATCHES PARENT COLUMNS EXACTLY --- */
 /* The parent has 11 columns. The sub-table is forced to 100% width of its container. */
-.rp-sub-table {
-  width: 100% !important;
-  
-  border-collapse: collapse !important;
-}
-
 /* Header style */
 .rp-sub-table th {
   background: #4a8adb !important;
@@ -668,39 +598,12 @@ html body html body html body html body
 }
 
 /* Inputs */
-.rp-sub-table td input[type="text"], 
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.72rem !important;
-  padding: 2px !important;
-}
-
 /* Exact width mapping (11 columns matching the parent's 11 columns) */
-/* 1: Checkbox */ .rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; text-align: center; }
-/* 2: Code     */ .rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
-/* 3: Name     */ .rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 18% !important; white-space: normal !important; }
-/* 4: Status   */ .rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; text-align: center; }
-/* 5: Alert    */ .rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 10% !important; }
-/* 6: Action   */ .rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 24% !important; }
-/* 7: Print    */ .rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 6% !important; text-align: center; }
-/* 8: Whats App*/ .rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 7% !important; text-align: center; }
-/* 9: Is Print */ .rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 6% !important; text-align: center; }
-/* 10: Is Delay*/ .rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 6% !important; text-align: center; }
-/* 11: Icon    */ .rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 3% !important; text-align: center; }
-
-
-/* --- DEFINITIVE AUTO-LAYOUT FIX (MATCH REFERRAL PAGE) --- */
+/* 1: Checkbox */ /* 2: Code     */ /* 3: Name     */ /* 4: Status   */ /* 5: Alert    */ /* 6: Action   */ /* 7: Print    */ /* 8: Whats App*/ /* 9: Is Print */ /* 10: Is Delay*/ /* 11: Icon    */ /* --- DEFINITIVE AUTO-LAYOUT FIX (MATCH REFERRAL PAGE) --- */
 .rp-table {
   width: 100% !important;
    
 }
-.rp-sub-table {
-  width: 100% !important;
-  
-  border-collapse: collapse !important;
-}
-
 /* Prevent the generic table rules from messing this up */
 .rp-sub-table th, .rp-sub-table td {
   white-space: nowrap !important; /* Prevent wrapping which causes misalignment */
@@ -714,14 +617,6 @@ html body html body html body html body
 }
 
 /* Inputs should fill their cell but not stretch the table */
-.rp-sub-table td input[type="text"], 
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.75rem !important;
-  padding: 2px !important;
-}
-
 /* Ensure the colspan cell allows the sub-table to expand fully */
 .rp-child-row > td {
   padding: 0 !important;
@@ -759,11 +654,6 @@ html body html body html body html body
 
 
 /* 2. Sub Table: Fixed layout, independent 11 columns */
-.rp-sub-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-  border-collapse: collapse !important;
-}
 .rp-sub-table th, .rp-sub-table td {
   white-space: nowrap !important;
   padding: 4px 4px !important;
@@ -771,24 +661,17 @@ html body html body html body html body
 .rp-sub-table td:nth-child(3) { white-space: normal !important; } /* Name can wrap */
 
 /* Sub Table Header widths (11 columns total) */
-.rp-sub-table th:nth-child(1) { width: 3%; }  /* Checkbox */
-.rp-sub-table th:nth-child(2) { width: 6%; }  /* Code */
-.rp-sub-table th:nth-child(3) { width: 21%; } /* Name */
-.rp-sub-table th:nth-child(4) { width: 7%; }  /* Status */
-.rp-sub-table th:nth-child(5) { width: 9%; }  /* Alert */
-.rp-sub-table th:nth-child(6) { width: 20%; } /* Action */
-.rp-sub-table th:nth-child(7) { width: 7%; }  /* Print */
-.rp-sub-table th:nth-child(8) { width: 9%; }  /* Whats App */
-.rp-sub-table th:nth-child(9) { width: 6%; }  /* Is Print */
-.rp-sub-table th:nth-child(10) { width: 6%; } /* Is Delay */
-.rp-sub-table th:nth-child(11) { width: 6%; } /* Icon */
-
-.rp-sub-table td input[type="text"], 
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
+/* Checkbox */
+/* Code */
+/* Name */
+/* Status */
+/* Alert */
+/* Action */
+/* Print */
+/* Whats App */
+/* Is Print */
+/* Is Delay */
+/* Icon */
 
 /* --- FIX MAIN TABLE 13-COLUMN ALIGNMENT --- */
 html body .rp-table {
@@ -959,18 +842,6 @@ html body .rp-table th:nth-child(13) { width: auto !important; }                
 }
 
 /* Inputs / Selects in sub-grid */
-.rp-sub-table td input[type="text"],
-.rp-sub-table td select {
-  width: 100% !important;
-  box-sizing: border-box !important;
-  font-size: 0.82rem !important;
-  padding: 3px !important;
-  border: 1px solid #ccc !important;
-}
-
-
-
-
 /* --- ABSOLUTE FINAL CSS --- */
 html body table.rp-table {
   width: 100% !important;
@@ -1103,6 +974,305 @@ html body .rp-table td:nth-child(3)::before {
   content: none !important;
 }
 
+
+<style>
+/* SUB-GRID CONTAINMENT FIX — force fit inside parent cell */
+/* Tight header cells */
+.rp-sub-table thead th {
+  background: #1f6fca !important;
+  color: #fff !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  padding: 4px 3px !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #1558a6 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Tight body cells */
+.rp-sub-table tbody td {
+  padding: 3px 4px !important;
+  font-size: 0.7rem !important;
+  vertical-align: middle !important;
+  border: 1px solid #adb5bd !important;
+  background: #fff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Force column percentages — sum = 100% */
+/* FIXED WIDTH SUB-GRID — columns lock to exact px */
+.rp-sub-table thead th:nth-child(1),
+.rp-sub-table tbody td:nth-child(1) { width: 26px !important; text-align: center; }   /* checkbox */
+
+.rp-sub-table thead th:nth-child(2),
+.rp-sub-table tbody td:nth-child(2) { width: 50px !important; text-align: center; }   /* code */
+
+.rp-sub-table thead th:nth-child(3),
+.rp-sub-table tbody td:nth-child(3) { width: 200px !important; }                      /* name */
+
+.rp-sub-table thead th:nth-child(4),
+.rp-sub-table tbody td:nth-child(4) { width: 50px !important; text-align: center; }   /* status */
+
+.rp-sub-table thead th:nth-child(5),
+.rp-sub-table tbody td:nth-child(5) { width: 90px !important; }                       /* alert */
+
+.rp-sub-table thead th:nth-child(6),
+.rp-sub-table tbody td:nth-child(6) { width: 150px !important; }                      /* action */
+
+.rp-sub-table thead th:nth-child(7),
+.rp-sub-table tbody td:nth-child(7) { width: 55px !important; text-align: center; }   /* print */
+
+.rp-sub-table thead th:nth-child(8),
+.rp-sub-table tbody td:nth-child(8) { width: 70px !important; text-align: center; }   /* whats app */
+
+.rp-sub-table thead th:nth-child(9),
+.rp-sub-table tbody td:nth-child(9) { width: 55px !important; text-align: center; }   /* is print */
+
+.rp-sub-table thead th:nth-child(10),
+.rp-sub-table tbody td:nth-child(10) { width: 55px !important; text-align: center; }  /* is delay */
+
+.rp-sub-table thead th:nth-child(11),
+.rp-sub-table tbody td:nth-child(11) { width: 30px !important; text-align: center; }  /* icon */
+
+/* Inputs and selects fill their cells */
+/* Ensure the wrapper doesn't overflow */
+.rp-child-row > td {
+  padding: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+</style>
+
+<style>
+/* SUB-GRID: SIZE TO CONTENT, NOT PARENT WIDTH */
+html body table.rp-sub-table {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+}
+
+/* Cells size to their content */
+html body table.rp-sub-table thead th,
+html body table.rp-sub-table tbody td {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  padding: 6px 10px !important;
+}
+
+/* Exception: Name column may wrap if it's a long test name */
+html body table.rp-sub-table td:nth-child(3) {
+  white-space: normal !important;
+  min-width: 180px !important;
+}
+
+/* No stretch on the wrapper */
+.rp-child-row > td {
+  padding: 0 !important;
+  overflow-x: auto !important;
+}
+
+/* Parent table stays fixed-width so it doesn't crush */
+.rp-table {
+  min-width: 1400px !important;
+  width: 1400px !important;
+  table-layout: fixed !important;
+}
+</style>
+
+<style>
+/* FORCE ONE PAGE VIEW - NO SCROLLBARS */
+html, body {
+  overflow-x: hidden !important;
+}
+.rp-page, .rp-card, .rp-table {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important; /* Kill scrollbar */
+}
+
+/* Parent Table - Fit to screen */
+.rp-table {
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+/* Sub-grid Table - Fit to screen */
+html body table.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+/* Adjust Parent Columns to fit 100% */
+.rp-table th:nth-child(1), .rp-table td:nth-child(1) { width: 3% !important; }
+.rp-table th:nth-child(2), .rp-table td:nth-child(2) { width: 3% !important; }
+.rp-table th:nth-child(3), .rp-table td:nth-child(3) { width: 5% !important; }
+.rp-table th:nth-child(4), .rp-table td:nth-child(4) { width: 7% !important; }
+.rp-table th:nth-child(5), .rp-table td:nth-child(5) { width: 5% !important; }
+.rp-table th:nth-child(6), .rp-table td:nth-child(6) { width: 10% !important; }
+.rp-table th:nth-child(7), .rp-table td:nth-child(7) { width: 15% !important; }
+.rp-table th:nth-child(8), .rp-table td:nth-child(8) { width: 6% !important; }
+.rp-table th:nth-child(9), .rp-table td:nth-child(9) { width: 5% !important; }
+.rp-table th:nth-child(10), .rp-table td:nth-child(10) { width: 10% !important; }
+.rp-table th:nth-child(11), .rp-table td:nth-child(11) { width: 10% !important; }
+.rp-table th:nth-child(12), .rp-table td:nth-child(12) { width: 11% !important; }
+.rp-table th:nth-child(13), .rp-table td:nth-child(13) { width: 10% !important; }
+
+/* Adjust Sub-grid Columns to fit 100% */
+.rp-sub-table th:nth-child(1), .rp-sub-table td:nth-child(1) { width: 4% !important; }
+.rp-sub-table th:nth-child(2), .rp-sub-table td:nth-child(2) { width: 8% !important; }
+.rp-sub-table th:nth-child(3), .rp-sub-table td:nth-child(3) { width: 18% !important; }
+.rp-sub-table th:nth-child(4), .rp-sub-table td:nth-child(4) { width: 8% !important; }
+.rp-sub-table th:nth-child(5), .rp-sub-table td:nth-child(5) { width: 10% !important; }
+.rp-sub-table th:nth-child(6), .rp-sub-table td:nth-child(6) { width: 22% !important; }
+.rp-sub-table th:nth-child(7), .rp-sub-table td:nth-child(7) { width: 8% !important; }
+.rp-sub-table th:nth-child(8), .rp-sub-table td:nth-child(8) { width: 8% !important; }
+.rp-sub-table th:nth-child(9), .rp-sub-table td:nth-child(9) { width: 6% !important; }
+.rp-sub-table th:nth-child(10), .rp-sub-table td:nth-child(10) { width: 6% !important; }
+.rp-sub-table th:nth-child(11), .rp-sub-table td:nth-child(11) { width: 2% !important; }
+
+/* Make sure child row doesn't overflow */
+.rp-child-row > td {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+</style>
+
+
+<style>
+/* ADJUSTED PERCENTAGES FOR SUB-GRID */
+html body table.rp-sub-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+html body table.rp-sub-table th:nth-child(1), 
+html body table.rp-sub-table td:nth-child(1) { width: 3% !important; }  /* checkbox */
+
+html body table.rp-sub-table th:nth-child(2), 
+html body table.rp-sub-table td:nth-child(2) { width: 7% !important; }  /* code */
+
+html body table.rp-sub-table th:nth-child(3), 
+html body table.rp-sub-table td:nth-child(3) { width: 30% !important; } /* name */
+
+html body table.rp-sub-table th:nth-child(4), 
+html body table.rp-sub-table td:nth-child(4) { width: 7% !important; }  /* status */
+
+/* Extended ALERT from 8% to 11% */
+html body table.rp-sub-table th:nth-child(5), 
+html body table.rp-sub-table td:nth-child(5) { width: 11% !important; } 
+
+/* Reduced ACTION from 20% to 19% */
+html body table.rp-sub-table th:nth-child(6), 
+html body table.rp-sub-table td:nth-child(6) { width: 19% !important; } 
+
+html body table.rp-sub-table th:nth-child(7), 
+html body table.rp-sub-table td:nth-child(7) { width: 6% !important; }  /* print */
+
+/* Reduced WHATS APP from 8% to 7% */
+html body table.rp-sub-table th:nth-child(8), 
+html body table.rp-sub-table td:nth-child(8) { width: 7% !important; }  
+
+html body table.rp-sub-table th:nth-child(9), 
+html body table.rp-sub-table td:nth-child(9) { width: 5% !important; }  /* is print */
+
+html body table.rp-sub-table th:nth-child(10), 
+html body table.rp-sub-table td:nth-child(10) { width: 5% !important; } /* is delay */
+
+html body table.rp-sub-table th:nth-child(11), 
+html body table.rp-sub-table td:nth-child(11) { width: 3% !important; } /* icon */
+
+/* Ensure text aligns properly */
+html body table.rp-sub-table td:nth-child(3) {
+  text-align: left !important;
+  white-space: normal !important; 
+}
+
+/* Make dropdowns visible */
+html body table.rp-sub-table td select {
+  width: 100% !important;
+  font-size: 0.7rem !important;
+  padding: 2px !important;
+  box-sizing: border-box !important;
+}
+</style>
+
+<style>
+/* FORCE CENTERING IN PRINT AND WHATSAPP COLUMNS */
+html body table.rp-sub-table td:nth-child(7),
+html body table.rp-sub-table td:nth-child(8) {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 0 !important; 
+}
+html body table.rp-sub-table td:nth-child(7) a,
+html body table.rp-sub-table td:nth-child(8) a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 8px 0 !important;
+}
+</style>
+
+<style>
+/* FIX COLUMN WIDTHS AND CENTERING */
+html body table.rp-sub-table th:nth-child(7),
+html body table.rp-sub-table td:nth-child(7),
+html body table.rp-sub-table th:nth-child(8),
+html body table.rp-sub-table td:nth-child(8) {
+  width: 6% !important; /* Set fixed width for icons */
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 4px 0 !important;
+}
+
+/* Make sure the icons are perfectly centered */
+html body table.rp-sub-table td:nth-child(7) a,
+html body table.rp-sub-table td:nth-child(8) a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+</style>
+
+<style>
+/* FINAL FIX: CENTER PRINT AND WHATSAPP */
+html body table.rp-sub-table th:nth-child(7),
+html body table.rp-sub-table td:nth-child(7),
+html body table.rp-sub-table th:nth-child(8),
+html body table.rp-sub-table td:nth-child(8) {
+  width: 6% !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 0 !important;
+}
+html body table.rp-sub-table td:nth-child(7) a,
+html body table.rp-sub-table td:nth-child(8) a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 10px 0 !important;
+}
+</style>
 </style>
 {% endblock %}
 
@@ -1175,8 +1345,6 @@ html body .rp-table td:nth-child(3)::before {
 
   {% if items %}
   
-<div class="rp-band"><i class="bi bi-file-earmark-medical"></i> Reports ({{ items|length }})</div>
-
   <div class="rp-card">
   <table class="rp-table">
     <thead>
@@ -1244,52 +1412,60 @@ html body .rp-table td:nth-child(3)::before {
         {% if grp['items'] %}
         <tr class="rp-child-row rp-children-{{ oid }} rp-hidden">
           <td colspan="13" style="padding: 0; border: none;">
-            <table class="rp-sub-table" style="width: 100%; border-collapse: collapse; margin: 0;">
-              <thead>
-                <tr>
-                  <th ><i class="bi bi-printer"></i></th>
-                  <th >Code</th>
-                  <th>Name</th>
-                  <th >Status</th>
-                  <th >Alert</th>
-                  <th >Action/Comments</th>
-                  <th >Print</th>
-                  <th >Whats App</th>
-                  <th >Is Print</th>
-                  <th >Is Delay</th>
-                  <th ></th>
-                </tr>
-              </thead>
-              <tbody>
+            <table class="rp-sub-table" style="width: 100%; border-collapse: collapse; margin: 0; table-layout: fixed;">
+<thead>
+  <tr>
+    <th style="width: 3%; text-align: center; padding: 2px;"><input type="checkbox"></th>
+    <th style="width: 5%; text-align: center; padding: 2px;">Code</th>
+    <th style="width: 25%; text-align: left; padding: 2px;">Name</th>
+    <th style="width: 12%; text-align: center; padding: 2px;">Status</th>
+    <th style="width: 11%; text-align: center; padding: 2px;">Alert</th>
+    <th style="width: 20%; text-align: center; padding: 2px;">Action/Comments</th>
+    <th style="width: 6%; text-align: center; padding: 2px;">Print</th>
+    <th style="width: 6%; text-align: center; padding: 2px;">Whats App</th>
+    <th style="width: 4%; text-align: center; padding: 2px;">Is Print</th>
+    <th style="width: 4%; text-align: center; padding: 2px;">Is Delay</th>
+    <th style="width: 4%; text-align: center; padding: 2px;"></th>
+  </tr>
+</thead>
+<tbody>
                 {% for it in grp['items'] %}
                 <tr class="rp-sub-row" style="background: #ffffff;">
                   <td style="text-align: center; border: 1px solid #a3b8d4; padding: 4px 6px;"><input type="checkbox" class="print-chk" data-url="{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}" data-item="{{ it.id }}"></td>
-                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.code }}</td>
-                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">{{ it.test.name }}</td>
-                  <td style="border: 1px solid #a3b8d4; padding: 4px 6px; font-size: 0.75rem;">
-                    {% if it.is_verified %}
-                      <span style="font-weight:bold; color:green;">Print</span>
-                    {% elif it.needs_correction %}
-                      <span style="font-weight:bold; color:red;">Correct</span>
+                  <td style="border: 1px solid #a3b8d4; padding: 1px 4px; font-size: 0.75rem; height: 22px;">{{ it.test.code }}</td>
+                  <td style="border: 1px solid #a3b8d4; padding: 1px 4px; font-size: 0.75rem; height: 22px;">{{ it.test.name }}</td>
+                  <td style="text-align: center; vertical-align: middle; padding: 2px; font-size: 0.75rem;">
+                    {% if o.status == 'approved' or it.verified_at %}
+                      <span style="background:#198754; color:#fff; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Approved</span>
+                    {% elif o.status == 'completed' or it.result_value %}
+                      <span style="background:#0d6efd; color:#fff; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Conducted</span>
+                    {% elif o.status == 'in_process' %}
+                      <span style="background:#0dcaf0; color:#000; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">In Process</span>
+                    {% elif o.status == 'collected' %}
+                      <span style="background:#6c757d; color:#fff; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Received</span>
+                    {% elif o.status == 'correction' %}
+                      <span style="background:#dc3545; color:#fff; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Correction</span>
+                    {% elif o.status == 'cancelled' %}
+                      <span style="background:#343a40; color:#fff; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Cancelled</span>
                     {% else %}
-                      <span style="font-weight:bold; color:gray;">Pending</span>
+                      <span style="background:#ffc107; color:#000; padding:2px 4px; border-radius:3px; font-size:0.55rem; font-weight:bold; white-space:nowrap; display:inline-block;">Sample to Come</span>
                     {% endif %}
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px;">
-                    <select style="padding: 2px; font-size: 0.75rem; border: 1px solid #ccc; width: 100%;">
+                    <select style="padding: 0 2px; font-size: 0.75rem; border: 1px solid #ccc; height: 20px; width: 100%;">
                       <option>Select Here</option>
                       <option>Alert 1</option>
                       <option>Alert 2</option>
                     </select>
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px;">
-                    <input type="text" placeholder="Enter comments..." value="{{ it.correction_note or '' }}" style="padding: 2px; font-size: 0.75rem; border: 1px solid #ccc; width: 100%;">
+                    <input type="text" placeholder="Enter comments..." value="{{ it.correction_note or '' }}" style="padding: 0 2px; font-size: 0.75rem; border: 1px solid #ccc; height: 20px; width: 100%;">
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
-                    <a href="javascript:void(0);" onclick="handlePrint('{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}', '{{ it.id }}');" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Print</a>
+                    <a href="javascript:void(0);" onclick="handlePrint('{{ url_for('reports.view_pdf', order_id=it.order_id) }}?item={{ it.id }}', '{{ it.id }}');" style="text-decoration: none; color: #0d6efd;" title="Print"><i class="bi bi-printer-fill fs-5"></i></a>
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center;">
-                    <a href="#" style="color:#0056b3; text-decoration:none; font-size: 0.75rem;">Whats App</a>
+                    <a href="#" style="text-decoration: none; color: #198754;" title="Send WhatsApp"><i class="bi bi-whatsapp fs-5"></i></a>
                   </td>
                   <td style="border: 1px solid #a3b8d4; padding: 4px 6px; text-align: center; font-size: 0.75rem;">
                     {% if it.is_verified %}Yes{% else %}No{% endif %}
@@ -1299,7 +1475,7 @@ html body .rp-table td:nth-child(3)::before {
                 </tr>
                 {% endfor %}
               </tbody>
-            </table>
+</table>
           </td>
         </tr>
         {% endif %}
