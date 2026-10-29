@@ -94,7 +94,7 @@
 /* --- Code pills: gray rounded --- */
 .lt-table code, .rp-table code, .dl-table code,
 .ts-table code, .tf-table code {
-  font-family: Consolas, Monaco, monospace !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
   font-size: 0.78rem !important;
   padding: 3px 8px !important;
   background: #f1f5f9 !important;
@@ -116,7 +116,7 @@
 .lt-table .num, .rp-table .num, .dl-table .num,
 .ts-table .num, .tf-table .num {
   text-align: right !important;
-  font-family: Consolas, Monaco, monospace !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
   font-variant-numeric: tabular-nums !important;
   color: #334155 !important;
 }
