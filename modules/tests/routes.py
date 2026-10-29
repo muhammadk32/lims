@@ -697,9 +697,7 @@ def edit_ranges_gender(test_id, gender):
         flash("Reference value added.", "success")
         return redirect(url_for("tests.edit_ranges_gender",
                                 test_id=test.id, gender=gender))
-
-    rows = [r for r in (test.reference_ranges or [])
-            if r.is_active and (r.gender or "any").lower() == gender]
+    rows = [r for r in (test.reference_ranges or []) if r.is_active]
 
     editing = None
     edit_id = request.args.get("edit", type=int)

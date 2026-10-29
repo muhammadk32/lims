@@ -1,353 +1,82 @@
 ﻿{% extends 'base.html' %}
-{% block title %}Setup Gender Reference Values ?{{ test.name }}{% endblock %}
+{% block title %}Setup Gender Reference Values - {{ test.name }}{% endblock %}
 
 {% block head %}
 <style>
-  /* ---- Layout ---- */
-  .rg-page {
-    padding: 0 8px 20px;
-    
-    font-size: 0.9rem;
-    color: var(--bs-body-color);
-  }
-
-  /* ---- Header ---- */
-  .rg-header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-bottom: 1px solid var(--bs-border-color);
-    padding-bottom: 6px; margin-bottom: 10px;
-  }
-  .rg-title {
-    font-size: 1.45rem; font-weight: 700; letter-spacing: -0.01em;
-    margin: 0; display: flex; align-items: center; gap: 8px;
-  }
-  .rg-title i { color: var(--brand-primary); }
-  .rg-sub {
-    font-size: 0.85rem; color: var(--bs-secondary-color); margin-top: 2px;
-  }
-
-  /* ---- Form sections (colored bands) ---- */
-  .rg-form {
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: 10px;
-    padding: 0;
-    overflow: hidden;
-    margin-bottom: 14px;
-  }
-
-  .rg-band {
-    font-size: 0.95rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 9px 14px;
-    margin: 0;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .rg-band i { font-size: 1rem; }
-  .rg-band-gender { color: #1d4ed8; background: #dbeafe; }
-  .rg-band-min    { color: #b45309; background: #fef3c7; }
-  .rg-band-max    { color: #15803d; background: #dcfce7; }
-  .rg-band-notes  { color: #c026d3; background: #fbe7fb; }
-  [data-bs-theme="dark"] .rg-band-gender { color: #dbeafe; background: #1e3a8a; }
-  [data-bs-theme="dark"] .rg-band-min    { color: #fef3c7; background: #78350f; }
-  [data-bs-theme="dark"] .rg-band-max    { color: #dcfce7; background: #14532d; }
-  [data-bs-theme="dark"] .rg-band-notes  { color: #fbe7fb; background: #4a1c50; }
-
-  .rg-form-inner { padding: 12px 14px; }
-
-  /* Gender row */
-  .rg-gender-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 14px;
-    border-bottom: 1px solid var(--bs-border-color);
-  }
-  .rg-gender-row .lbl {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
-    text-transform: uppercase; color: var(--bs-secondary-color);
-    min-width: 90px;
-  }
-
-  /* Two-column min/max */
-  .rg-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  .rg-col { padding: 12px 14px; }
-  .rg-col + .rg-col { border-left: 1px solid var(--bs-border-color); }
-  @media (max-width: 800px) {
-    .rg-cols { grid-template-columns: 1fr; }
-    .rg-col + .rg-col { border-left: none; border-top: 1px solid var(--bs-border-color); }
-  }
-
-  .rg-row {
-    display: grid; grid-template-columns: 120px 1fr;
-    align-items: center; gap: 10px; margin-bottom: 8px;
-  }
-  .rg-row:last-child { margin-bottom: 0; }
-  .rg-row .lbl {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
-    text-transform: uppercase; color: var(--bs-secondary-color);
-    text-align: right;
-  }
-
-  /* Fields */
-  .rg-input, .rg-select {
-    height: 32px; padding: 6px 10px;
-    border: 2px solid #1a1a1a;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    
-    color: var(--bs-body-color);
-    background: #fff;
-    box-sizing: border-box;
-    width: 100%;
-  }
-  .rg-input[type="number"], .rg-input.num { background: #fff8ee; }
-  .rg-input[type="text"]                   { background: #f3f8ff; }
-  .rg-select                               { background: #f6fff0; }
-  .rg-input.num { text-align: right;  }
-  .rg-input:focus, .rg-select:focus {
-    outline: none;
-    border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
-  }
-  [data-bs-theme="dark"] .rg-input,
-  [data-bs-theme="dark"] .rg-select { border-color: #000; color: #e8eaee; }
-  [data-bs-theme="dark"] .rg-input[type="number"] { background: #2a2116; }
-  [data-bs-theme="dark"] .rg-input[type="text"]   { background: #1a2433; }
-  [data-bs-theme="dark"] .rg-select               { background: #1a2719; }
-
-  .rg-inline { display: grid; grid-template-columns: 1fr 110px; gap: 8px; }
-
-  /* Notes row */
-  .rg-notes-row { display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
-  .rg-notes-row .lbl {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
-    text-transform: uppercase; color: var(--bs-secondary-color);
-    text-align: right; padding-top: 8px;
-  }
-  .rg-notes-row textarea {
-    width: 100%; min-height: 100px; padding: 8px 10px;
-    border: 2px solid #1a1a1a; border-radius: 6px;
-    font-size: 0.9rem; 
-    resize: vertical; box-sizing: border-box;
-    background: #fdf5ff; color: var(--bs-body-color);
-  }
-  .rg-notes-row textarea:focus {
-    outline: none; border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 18%, transparent);
-  }
-  [data-bs-theme="dark"] .rg-notes-row textarea { border-color: #000; background: #241a2c; color: #e8eaee; }
-
-  /* Buttons */
-  .rg-actions {
-    margin-top: 0;
-    padding: 10px 14px;
-    display: flex; gap: 8px; align-items: center;
-    background: var(--bs-tertiary-bg);
-    border-top: 1px solid var(--bs-border-color);
-  }
-  .rg-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 7px 16px;
-    font-size: 0.8rem; font-weight: 600;
-    border: 1px solid var(--bs-border-color);
-    background: var(--bs-body-bg);
-    color: var(--bs-body-color);
-    text-decoration: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background .12s, border-color .12s;
-  }
-  .rg-btn:hover { background: var(--bs-tertiary-bg); color: var(--bs-body-color); }
-  .rg-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-  .rg-btn-primary:hover { background: #146c43; border-color: #146c43; color: #fff; }
-  .rg-btn-warn { background: #ffc107; border-color: #b8860b; color: #664d03; }
-  .rg-btn-warn:hover { background: #e0a800; color: #664d03; }
-  .rg-btn-danger { border-color: #dc3545; color: #dc3545; background: transparent; }
-  .rg-btn-danger:hover { background: #dc3545; color: #fff; }
-  .rg-btn-sm { padding: 4px 10px; font-size: 0.72rem; }
-
-  .rg-hint {
-    padding: 8px 14px 10px;
-    font-size: 0.72rem;
-    color: var(--bs-secondary-color);
-    
-    background: var(--bs-body-bg);
-    border-top: 1px solid var(--bs-border-color);
-  }
-
-  /* Saved ranges */
-  .rg-list-title {
-    margin: 16px 0 8px;
-    font-size: 0.85rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.05em;
-    color: var(--bs-body-color);
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--bs-border-color);
-  }
-  .rg-table {
-    width: 100%;
-    border-collapse: separate; border-spacing: 0;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 0.85rem;
-    background: var(--bs-body-bg);
-  }
-  .rg-table thead th {
-    background: var(--bs-tertiary-bg);
-    color: var(--bs-secondary-color);
-    font-size: 0.7rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.06em;
-    padding: 8px 10px; text-align: left;
-    border-bottom: 1px solid var(--bs-border-color);
-  }
-  .rg-table tbody td {
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--bs-border-color);
-    vertical-align: middle;
-  }
-  .rg-table tbody tr:last-child td { border-bottom: none; }
-  .rg-table tbody tr:hover { background: var(--bs-tertiary-bg); }
-  .rg-table .num { text-align: right;  }
-  .rg-table .center { text-align: center; }
-  .rg-table .badge {
-    display: inline-block; padding: 2px 9px;
-    font-size: 0.68rem; font-weight: 700;
-    letter-spacing: 0.05em; text-transform: uppercase;
-    background: var(--bs-tertiary-bg); color: var(--bs-secondary-color);
-    border: 1px solid var(--bs-border-color); border-radius: 999px;
-  }
-  .rg-empty {
-    text-align: center; padding: 26px;
-    color: var(--bs-secondary-color); font-style: italic;
-    border: 1px dashed var(--bs-border-color); border-radius: 10px;
-    background: var(--bs-tertiary-bg);
-  }
-
-/* ===== POLISHED THEME (rg-*) ===== */
-.rg-page {
-  max-width: 100% !important;
-  padding: 16px 32px 40px !important;
-  margin: 0 auto !important;
+  .rg-page { padding: 10px 20px 40px; font-size: 0.8rem; }
+  .rg-header { margin-bottom: 12px; }
+  .rg-header h1 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+  .rg-header h2 { font-size: 1rem; font-weight: 600; margin: 2px 0 15px; color: #555; }
   
-  font-size: 0.75rem !important;
-  color: #212529 !important;
-  box-sizing: border-box !important;
-}
-.rg-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: flex-end !important;
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  border: 2px solid #212529 !important;
-  border-radius: 10px !important;
-  padding: 16px 20px !important;
-  margin-bottom: 16px !important;
-  color: #fff !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-}
-.rg-header h1, .rg-header h2, .rg-header h3, .rg-title {
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  margin: 0 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
-  color: #fff !important;
-}
-.rg-header h1 i, .rg-header h2 i, .rg-header h3 i { color: #fff !important; }
-.rg-subtitle, .rg-sub {
-  font-size: 0.75rem !important;
-  color: #dbeafe !important;
+  .rg-box { border: 2px solid #212529; border-radius: 12px; padding: 25px; margin-bottom: 20px; background: #fff; }
   
-  margin-top: 2px !important;
-}
-.rg-header .btn, .rg-actions .btn {
-  height: 34px !important;
-  padding: 0 14px !important;
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  border-radius: 4px !important;
-  border: 1px solid #212529 !important;
-  background: #fff !important;
-  color: #212529 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-.rg-header .btn-primary, .rg-actions .btn-primary {
-  background: #198754 !important;
-  border-color: #198754 !important;
-  color: #fff !important;
-}
-.rg-table {
-  width: 100% !important;
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-  border: 2px solid #212529 !important;
-  border-radius: 8px 8px 0 0 !important;
-  background: #fff !important;
-  margin: 0 !important;
-  font-size: 0.75rem !important;
-}
-.rg-table thead th {
-  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
-  color: #fff !important;
-  font-size: 0.68rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  padding: 10px 8px !important;
-  text-align: center !important;
-  border-bottom: 2px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  vertical-align: middle !important;
-}
-.rg-table thead th:first-child { border-top-left-radius: 8px !important; }
-.rg-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
-.rg-table tbody td {
-  padding: 10px 8px !important;
-  border-bottom: 1px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  background: #fff !important;
-  vertical-align: middle !important;
-  color: #212529 !important;
-}
-.rg-table tbody td:last-child { border-right: none !important; }
-.rg-table tbody tr:last-child td { border-bottom: none !important; }
-.rg-table tbody tr:hover td { background: #eaf2ff !important; }
+  .rg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: start; margin-bottom: 15px; }
+  .rg-col { display: flex; flex-direction: column; gap: 10px; }
+  
+  .rg-field-group { display: flex; align-items: center; gap: 8px; }
+  .rg-label { font-weight: 600; font-size: 0.8rem; min-width: 90px; }
+  
+  .rg-input, .rg-select { 
+      border: 1px solid #212529; border-radius: 6px; padding: 6px 10px; font-size: 0.8rem; background: #fff; width: 100%; 
+  }
+  .rg-input:focus, .rg-select:focus { border-color: #0d6efd; outline: none; box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25); }
+  
+  .rg-age-input { width: 80px; }
+  .rg-btn { padding: 6px 16px; font-size: 0.8rem; border: 2px solid #212529; background: #fff; border-radius: 6px; cursor: pointer; font-weight: 600; text-decoration: none; color: #212529; display: inline-block; }
+  .rg-btn-primary { background: #0d6efd; color: white; border-color: #0d6efd; }
+  .rg-btn-primary:hover { background: #0b5ed7; color: white; }
+  
+  .rg-hint { font-size: 0.75rem; color: #6c757d; margin: 8px 0 15px 0; }
 
-/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
-table[class$="-table"] thead th {
-    font-size: 0.82rem !important; 
-    padding: 10px 8px !important;
-    font-weight: 700 !important;
-}
-table[class$="-table"] tbody td {
-    font-size: 0.85rem !important;
-    padding: 8px 8px !important;
-    line-height: 1.4 !important;
-}
-/* Fix for tables inside specific wrappers */
-.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
-.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+  /* Native Editor Toolbar */
+  .native-toolbar { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; background: #f8f9fa; border: 1px solid #212529; border-bottom: none; border-radius: 6px 6px 0 0; }
+  .native-toolbar button, .native-toolbar select, .native-toolbar input[type="color"] { 
+      height: 28px; border: 1px solid #ced4da; background: #fff; border-radius: 4px; cursor: pointer; font-size: 0.8rem; 
+  }
+  .native-toolbar button:hover { background: #e9ecef; }
+  .native-toolbar select { padding: 0 4px; }
+  .native-editor { min-height: 150px; padding: 10px; outline: none; font-size: 0.85rem; font-family: inherit; border: 1px solid #212529; border-radius: 0 0 6px 6px; background: #fff; }
+  
+  .rg-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; border: 2px solid #212529; border-radius: 8px; overflow: hidden; }
+  .rg-table th, .rg-table td { border: 1px solid #212529; padding: 6px 8px; text-align: left; }
+  .rg-table th { background: #0d6efd; color: #fff; font-weight: bold; text-transform: uppercase; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  if (window.tinymce) {
-    tinymce.init({
-      selector: "#rg-notes",
-      height: 220,
-      menubar: false,
-      plugins: "lists link table code",
-      toolbar: "undo redo | fontfamily fontsize | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | link table | removeformat code",
-      font_family_formats: "Default=default;Arial=arial,helvetica,sans-serif;Segoe UI=segoe ui,arial;Calibri=calibri;Times New Roman=times new roman,times;Courier New=courier new,courier;Consolas=consolas,monaco,monospace",
-      font_size_formats: "8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt",
-      branding: false,
-      content_style: "body {  font-size: 11pt; }",
+  const editor = document.getElementById('native-editor');
+  const hiddenInput = document.getElementById('rg-notes');
+  
+  if (hiddenInput.value) editor.innerHTML = hiddenInput.value;
+
+  // Toolbar actions
+  document.querySelectorAll('.cmd-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.execCommand(this.dataset.cmd, false, null);
+      editor.focus();
     });
-  }
+  });
+
+  // Font Family
+  document.getElementById('font-family').addEventListener('change', function() {
+      document.execCommand('fontName', false, this.value);
+      editor.focus();
+  });
+
+  // Font Size
+  document.getElementById('font-size').addEventListener('change', function() {
+      document.execCommand('fontSize', false, this.value);
+      editor.focus();
+  });
+
+  // Colors
+  document.getElementById('font-color').addEventListener('input', function() { document.execCommand('foreColor', false, this.value); editor.focus(); });
+  document.getElementById('bg-color').addEventListener('input', function() { document.execCommand('hiliteColor', false, this.value); editor.focus(); });
+
+  // Save on submit
+  document.getElementById('rg-form').addEventListener('submit', function () {
+      hiddenInput.value = editor.innerHTML;
+  });
 });
 </script>
 {% endblock %}
@@ -356,150 +85,159 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="rg-page">
 
   <div class="rg-header">
-    <div>
-      <h1 class="rg-title">Setup Gender Reference Values</h1>
-      <div class="rg-sub">{{ test.name }} <span style="color:#adb5bd;">|</span> {{ test.code }}</div>
-    </div>
-    <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rg-btn">Back</a>
+    <h1>Setup Gender Reference Values</h1>
+    <h2>{{ test.name }}</h2>
   </div>
 
-  <form method="post" class="rg-form" id="rg-form"
-        action="{% if editing %}{{ url_for('tests.update_range', range_id=editing.id) }}{% else %}{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}{% endif %}">
-
-    <div class="rg-band rg-band-gender"><i class="bi bi-gender-ambiguous"></i> Gender</div>
-    <div class="rg-gender-row" style="border-bottom:none;">
-      <div class="lbl">Gender</div>
-      <select name="gender_display" class="rg-select" style="max-width: 260px;"
-              onchange="window.location='{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='__g__') }}'.replace('__g__', this.value);">
-        {% for g, label in [('male','Male'), ('female','Female'), ('any','Other')] %}
-        <option value="{{ g }}" {% if g == gender %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <div class="rg-band rg-band-min"><i class="bi bi-arrow-down"></i> Minimum</div>
-    <div class="rg-band rg-band-max" style="display:none;"></div>
-
-    <div class="rg-cols">
-
-      {# LEFT column: Minimum #}
-      <div class="rg-col">
-        <div class="rg-row">
-          <div class="lbl">Minimum Age</div>
-          <div class="rg-inline">
-            <input type="number" name="age_min_value" class="rg-input num"
-                   value="{{ editing.age_min_value if editing else 0 }}">
-            <select name="age_min_unit" class="rg-select">
+  <div class="rg-box">
+    <form method="post" id="rg-form" action="{% if editing %}{{ url_for('tests.update_range', range_id=editing.id) }}{% else %}{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}{% endif %}">
+      
+      <div class="rg-grid">
+        <div class="rg-col">
+          <div class="rg-field-group">
+            <span class="rg-label">Max Age:</span>
+            <input type="number" name="age_max_value" class="rg-input rg-age-input" value="{{ editing.age_max_value if editing else 0 }}">
+            <select name="age_max_unit" class="rg-select" style="width: 90px;">
+              {% for u in ['days','weeks','months','years'] %}
+              <option value="{{ u }}" {% if editing and editing.age_max_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="rg-field-group">
+            <span class="rg-label">Mini Age:</span>
+            <input type="number" name="age_min_value" class="rg-input rg-age-input" value="{{ editing.age_min_value if editing else 0 }}">
+            <select name="age_min_unit" class="rg-select" style="width: 90px;">
               {% for u in ['days','weeks','months','years'] %}
               <option value="{{ u }}" {% if editing and editing.age_min_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
               {% endfor %}
             </select>
           </div>
         </div>
-        <div class="rg-row">
-          <div class="lbl">Minimum Value</div>
-          <input type="text" name="value_min" class="rg-input num"
-                 value="{% if editing %}{{ editing.range_text.split(' - ')[0] if ' - ' in editing.range_text else '' }}{% endif %}">
-        </div>
-        <div class="rg-row">
-          <div class="lbl">Critical Min</div>
-          <input type="text" name="crit_min" class="rg-input num"
-                 value="{{ editing.critical_value.split('or')[0].replace('<','').strip() if editing and editing.critical_value and '<' in editing.critical_value else '0' }}">
-        </div>
-      </div>
 
-      <div class="rg-col">
-        <div class="rg-row">
-          <div class="lbl">Maximum Age</div>
-          <div class="rg-inline">
-            <input type="number" name="age_max_value" class="rg-input num"
-                   value="{{ editing.age_max_value if editing else 0 }}">
-            <select name="age_max_unit" class="rg-select">
-              {% for u in ['days','weeks','months','years'] %}
-              <option value="{{ u }}" {% if editing and editing.age_max_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
-              {% endfor %}
-            </select>
+        <div class="rg-col">
+          <div class="rg-field-group">
+            <span class="rg-label">Max Value:</span>
+            <input type="text" name="value_max" class="rg-input" value="{% if editing %}{{ editing.range_text.split(' - ')[-1] if ' - ' in editing.range_text else '' }}{% endif %}">
+          </div>
+          <div class="rg-field-group">
+            <span class="rg-label">Mini Value:</span>
+            <input type="text" name="value_min" class="rg-input" value="{% if editing %}{{ editing.range_text.split(' - ')[0] if ' - ' in editing.range_text else '' }}{% endif %}">
           </div>
         </div>
-        <div class="rg-row">
-          <div class="lbl">Maximum Value</div>
-          <input type="text" name="value_max" class="rg-input num"
-                 value="{% if editing %}{{ editing.range_text.split(' - ')[-1] if ' - ' in editing.range_text else '' }}{% endif %}">
-        </div>
-        <div class="rg-row">
-          <div class="lbl">Critical Max</div>
-          <input type="text" name="crit_max" class="rg-input num"
-                 value="{{ editing.critical_value.split('or')[-1].replace('>','').strip() if editing and editing.critical_value and '>' in editing.critical_value else '0' }}">
+
+        <div class="rg-col">
+          <div class="rg-field-group">
+            <span class="rg-label">Crit. Max:</span>
+            <input type="text" name="crit_max" class="rg-input" value="{{ editing.critical_value.split('or')[-1].replace('>','').strip() if editing and editing.critical_value and '>' in editing.critical_value else '0' }}">
+          </div>
+          <div class="rg-field-group">
+            <span class="rg-label">Crit. Min:</span>
+            <input type="text" name="crit_min" class="rg-input" value="{{ editing.critical_value.split('or')[0].replace('<','').strip() if editing and editing.critical_value and '<' in editing.critical_value else '0' }}">
+          </div>
         </div>
       </div>
 
-    </div>
+      <div class="rg-field-group" style="margin-bottom: 15px;">
+        <span class="rg-label" style="min-width: 90px;">Gender:</span>
+        <select name="gender_display" class="rg-select" style="max-width: 250px;" onchange="window.location='{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='__g__') }}'.replace('__g__', this.value);">
+          {% for g, label in [('male','Male'), ('female','Female'), ('any','Other')] %}
+          <option value="{{ g }}" {% if g == gender %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-    <div class="rg-band rg-band-notes"><i class="bi bi-chat-left-text"></i> Comments</div>
-    <div style="padding: 12px 14px;">
-    <div class="rg-notes-row">
-      <div class="lbl">Comments</div>
-      <textarea name="notes" id="rg-notes">{{ editing.notes if editing else '' }}</textarea>
-    </div>
-    </div>
+            <div class="rg-field-group" style="align-items: flex-start; margin-bottom: 15px; flex-direction: column;">
+        <span class="rg-label" style="margin-bottom: 5px;">Other Value:</span>
+        <div style="width: 100%;">
+          <div class="native-toolbar">
+            <button type="button" class="cmd-btn" data-cmd="bold" style="font-weight:bold;">B</button>
+            <button type="button" class="cmd-btn" data-cmd="italic" style="font-style:italic;">I</button>
+            <button type="button" class="cmd-btn" data-cmd="underline" style="text-decoration:underline;">U</button>
+            <button type="button" class="cmd-btn" data-cmd="insertUnorderedList">• List</button>
+            <button type="button" class="cmd-btn" data-cmd="removeFormat">Tx</button>
+            <span style="border-left:1px solid #ccc; margin:0 4px;"></span>
+            <select id="font-family">
+              <option value="Segoe UI">Segoe UI</option>
+              <option value="Arial">Arial</option>
+              <option value="Times New Roman">Times New Roman</option>
+            </select>
+            <select id="font-size">
+              <option value="2">10pt</option>
+              <option value="3" selected>12pt</option>
+              <option value="4">14pt</option>
+              <option value="5">18pt</option>
+            </select>
+            <input type="color" id="font-color" value="#000000" title="Text Color">
+            <input type="color" id="bg-color" value="#ffff00" title="Highlight">
+          </div>
+          <div id="native-editor" class="native-editor" contenteditable="true"></div>
+          <input type="hidden" name="notes" id="rg-notes" value="{{ editing.notes if editing else '' }}">
+        </div>
+      </div>
 
-    <div class="rg-actions">
-      {% if editing %}
-      <button type="submit" class="rg-btn rg-btn-warn">Update</button>
-      <a href="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}" class="rg-btn">Cancel Edit</a>
-      {% else %}
-      <button type="submit" class="rg-btn rg-btn-primary">Add</button>
-      {% endif %}
-      <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rg-btn">Back</a>
-    </div>
-    <div class="rg-hint">* Less Than = 0.19 &nbsp;|&nbsp; Greater Than &amp; More Than = 99999</div>
-  </form>
+      <div class="rg-hint">* Less Than = 0.19, Greater Than &amp; More Than = 99999, Upto = 0.18</div>
 
-  <div class="rg-list-title">{{ gender|capitalize }} Ranges ({{ rows|length }})</div>
+      <div style="display: flex; gap: 10px;">
+        <button type="submit" class="rg-btn rg-btn-primary">{% if editing %}Update{% else %}Add{% endif %}</button>
+        <a href="{{ url_for('tests.view_test', test_id=test.id) }}" class="rg-btn">Back</a>
+      </div>
+    </form>
+  </div>
 
-  {% if rows %}
   <table class="rg-table">
     <thead>
       <tr>
-        <th class="center" style="width: 80px;">Gender</th>
-        <th style="width: 220px;">Age Bracket</th>
-        <th class="num" style="width: 150px;">Value</th>
-        <th style="width: 180px;">Critical</th>
-        <th>Notes</th>
-        <th class="center" style="width: 130px;">Action</th>
+        <th>Gender</th>
+        <th>Min Age</th>
+        <th>Min Unit</th>
+        <th>Max Age</th>
+        <th>Max Unit</th>
+        <th>Mini Value</th>
+        <th>Max Value</th>
+        <th>Other Values</th>
+        <th>Critical Min</th>
+        <th>Critical Max</th>
+        <th>Edit</th>
+        <th>Remove</th>
+        <th>Created By</th>
+        <th>Created Date</th>
+        <th>Modified By</th>
+        <th>Modified Date</th>
       </tr>
     </thead>
     <tbody>
-      {% for r in rows %}
-      <tr>
-        <td class="center">
-          <span class="badge">{{ {'male':'M','female':'F','any':'O'}.get((r.gender or 'any')|lower, '?') }}</span>
-        </td>
-        <td>
-          {{ r.age_min_value if r.age_min_value is not none else 0 }} {{ (r.age_min_unit or 'years') }}
-          &nbsp;&ndash;&nbsp;
-          {{ r.age_max_value if r.age_max_value is not none else '&infin;' }} {{ (r.age_max_unit or 'years') }}
-        </td>
-        <td class="num">{{ r.range_text }}</td>
-        <td>{{ r.critical_value or '?' }}</td>
-        <td>{{ (r.notes or '')|striptags|truncate(80) or '?' }}</td>
-        <td class="center">
-          <a href="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender, edit=r.id) }}"
-             class="rg-btn rg-btn-sm" title="Edit">Edit</a>
-          <form method="post"
-                action="{{ url_for('tests.delete_range_row', range_id=r.id) }}"
-                onsubmit="return confirm('Remove this range?');"
-                style="display:inline;">
-            <button class="rg-btn rg-btn-danger rg-btn-sm" title="Delete">&times;</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
+      {% if rows %}
+        {% for r in rows %}
+        <tr>
+          <td>{{ {'male':'Male','female':'Female','any':'Other'}.get((r.gender or 'any')|lower, '?') }}</td>
+          <td>{{ r.age_min_value if r.age_min_value is not none else 0 }}</td>
+          <td>{{ (r.age_min_unit or 'years') }}</td>
+          <td>{{ r.age_max_value if r.age_max_value is not none else '&infin;' }}</td>
+          <td>{{ (r.age_max_unit or 'years') }}</td>
+          <td>{{ r.range_text.split(' - ')[0] if ' - ' in r.range_text else '' }}</td>
+          <td>{{ r.range_text.split(' - ')[-1] if ' - ' in r.range_text else '' }}</td>
+          <td>{{ (r.notes or 'Reference Ranges:')|striptags }}</td>
+          <td>{{ r.critical_value.split('or')[0].replace('<','').strip() if r.critical_value and '<' in r.critical_value else '0' }}</td>
+          <td>{{ r.critical_value.split('or')[-1].replace('>','').strip() if r.critical_value and '>' in r.critical_value else '0' }}</td>
+          <td><a href="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender, edit=r.id) }}" style="color:#0d6efd;">Edit</a></td>
+          <td>
+            <form method="post" action="{{ url_for('tests.delete_range_row', range_id=r.id) }}" onsubmit="return confirm('Remove?');" style="display:inline;">
+              <button type="submit" style="background:none;border:none;color:#0d6efd;padding:0;cursor:pointer;">Remove</button>
+            </form>
+          </td>
+          <td>admin</td>
+          <td>{{ r.created_at.strftime('%d/%m/%Y %I:%M %p') if r.created_at else '' }}</td>
+          <td>admin</td>
+          <td>{{ r.updated_at.strftime('%d/%m/%Y %I:%M %p') if r.updated_at else '' }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="16" class="text-center">Reference Ranges:</td>
+        </tr>
+      {% endif %}
     </tbody>
   </table>
-  {% else %}
-  <div class="rg-empty">No ranges yet for {{ gender }}. Use the form above to add one.</div>
-  {% endif %}
 
 </div>
 {% endblock %}

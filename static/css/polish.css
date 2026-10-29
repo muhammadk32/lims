@@ -147,3 +147,17 @@
         color: #1a3d7c !important; /* Hover state blue */
     }
 }
+
+/* ===== SUMMERNOTE EXCLUSION ===== */
+@layer polish {
+    .note-editor, .note-editor * {
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+    }
+    .note-icon:before, .note-icon-caret:before, .note-btn i {
+        font-family: "summernote" !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+    }
+}
