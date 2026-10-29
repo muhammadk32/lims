@@ -137,10 +137,7 @@
 
 @media (max-width: 900px) {
   .lt-filter { grid-template-columns: 1fr; }
-  .lt-table thead th,
-  }
-
-.lt-row-paused { opacity: 0.6; }
+  
 .lt-row-paused td { background: #f8f9fa !important; }
 .lt-badge-paused {
   background: #6c757d; color: #fff;
@@ -202,7 +199,7 @@
   padding: 16px 32px 40px !important;
   margin: 0 auto !important;
   
-  font-size: 0.75rem !important;
+  
   color: #212529 !important;
   box-sizing: border-box !important;
 }
@@ -229,7 +226,7 @@
 }
 .lt-header h1 i, .lt-header h2 i, .lt-title i { color: #fff !important; }
 .lt-subtitle, .lt-sub {
-  font-size: 0.75rem !important;
+  
   color: #dbeafe !important;
   
   margin-top: 2px !important;
@@ -253,57 +250,16 @@
   border-color: #198754 !important;
   color: #fff !important;
 }
-.lt-table {
-  width: 100% !important;
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-  border: 2px solid #212529 !important;
-  border-radius: 8px 8px 0 0 !important;
-  background: #fff !important;
-  margin: 0 !important;
-  font-size: 0.75rem !important;
-}
-.lt-table thead th {
-  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
-  color: #fff !important;
-  font-size: 0.68rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  padding: 10px 8px !important;
-  text-align: center !important;
-  border-bottom: 2px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  vertical-align: middle !important;
-}
-.lt-table thead th:first-child { border-top-left-radius: 8px !important; }
-.lt-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
-.lt-table tbody td {
-  padding: 10px 8px !important;
-  border-bottom: 1px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  background: #fff !important;
-  vertical-align: middle !important;
-  color: #212529 !important;
-}
-.lt-table tbody td:last-child { border-right: none !important; }
-.lt-table tbody tr:last-child td { border-bottom: none !important; }
-.lt-table tbody tr:hover td { background: #eaf2ff !important; }
 
-/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
-table[class$="-table"] thead th {
-    font-size: 0.82rem !important; 
-    padding: 10px 8px !important;
-    font-weight: 700 !important;
-}
-table[class$="-table"] tbody td {
-    font-size: 0.85rem !important;
-    padding: 8px 8px !important;
-    line-height: 1.4 !important;
-}
-/* Fix for tables inside specific wrappers */
-.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
-.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+
+
+
+
+
+
+
+
+
 </style>
 {% endblock %}
 

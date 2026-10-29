@@ -1,0 +1,149 @@
+﻿/* ============================================================
+   MASTER POLISH FILE — GLOBAL TYPOGRAPHY & THEME
+   ============================================================ */
+@layer polish {
+    /* --- Theme Variables --- */
+    :root {
+        --theme-primary: #1a3d7c;
+        --theme-accent: #0d6efd;
+        --theme-gold: #ffd166;
+        --theme-gold-dark: #ffb703;
+        --theme-border-dark: #212529;
+        --theme-bg-soft: #f8f9fa;
+    }
+
+    /* --- Global Fonts (Excluding Topbar) --- */
+    html, body, .app-content, .container, .container-fluid,
+    h1, h2, h3, h4, h5, h6, p, span, div, a, td, th, li, label, button, input, select, textarea {
+        font-family: 'Segoe UI', Arial, sans-serif !important;
+    }
+
+    /* --- Data Cells (Regular, 0.75rem) --- */
+    body, td, p, span, div, li, label, input, select, textarea,
+    table > tbody > tr > td,
+    .table > :not(caption) > * > *,
+    table[class*="-table"] tbody td,
+    .csr-table tbody td,
+    .an-table tbody td {
+        font-weight: 400 !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* --- Headers (Bold, 0.80rem) --- */
+    h1, h2, h3, h4, h5, h6, th,
+    table > thead > tr > th,
+    table[class*="-table"] thead th,
+    .csr-table thead th,
+    .an-table thead th {
+        font-weight: 700 !important;
+        font-size: 0.80rem !important;
+    }
+    
+    strong, b, .fw-bold { font-weight: 700 !important; }
+
+    /* --- Universal Cards & Panels --- */
+    .card, .panel, .rec-cell, .bulk-card, .lts-content > div { border-radius: 12px !important; }
+    .card, .panel, .bulk-card {
+        border: 2px solid var(--theme-border-dark) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    }
+
+    /* --- Universal Tables --- */
+    table:not(.no-theme) {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        border: 2px solid var(--theme-border-dark) !important;
+        border-radius: 10px !important;
+        overflow: hidden !important;
+    }
+    table:not(.no-theme) thead th {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+        color: #fff !important;
+        padding: 10px 12px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-right: 1px solid var(--theme-border-dark) !important;
+        border-bottom: 2px solid var(--theme-border-dark) !important;
+    }
+    table:not(.no-theme) thead th:last-child { border-right: none !important; }
+    table:not(.no-theme) tbody td {
+        padding: 8px 12px !important;
+        border-bottom: 1px solid var(--theme-border-dark) !important;
+        border-right: 1px solid var(--theme-border-dark) !important;
+        vertical-align: middle;
+    }
+    table:not(.no-theme) tbody td:last-child { border-right: none !important; }
+    table:not(.no-theme) tbody tr:last-child td { border-bottom: none !important; }
+    table:not(.no-theme) tbody tr:nth-child(even) td { background: #f7f9fc !important; }
+    table:not(.no-theme) tbody tr:hover td { background: #eaf2ff !important; }
+
+    /* --- Buttons --- */
+    .btn, button:not(.btn-close):not(.no-theme), .btn-primary, a.btn { border-radius: 8px !important; font-weight: 600; }
+    .btn:not(.btn-link) { border-width: 2px !important; }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+        border-color: var(--theme-primary) !important;
+        color: #fff !important;
+    }
+    .btn-primary:hover { filter: brightness(1.15); border-color: var(--theme-primary) !important; }
+
+    /* --- Form Inputs --- */
+    .form-control, .form-select {
+        border: 2px solid #ced4da !important;
+        border-radius: 8px !important;
+        transition: border-color 0.12s, box-shadow 0.12s;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--theme-accent) !important;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+    }
+
+    /* --- Alerts & Badges --- */
+    .alert { border-radius: 10px !important; border-width: 2px !important; font-weight: 500; }
+    .badge, .lt-badge, .ts-badge { border-radius: 6px !important; font-weight: 700; letter-spacing: 0.03em; }
+
+    /* --- Pagination --- */
+    .pagination .page-link { border-radius: 6px !important; border: 2px solid #dee2e6; color: var(--theme-primary); font-weight: 600; }
+    .pagination .page-item.active .page-link { background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%); border-color: var(--theme-primary); }
+
+    /* --- Modals --- */
+    .modal-content { border-radius: 14px !important; border: 2px solid var(--theme-border-dark) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.25) !important; }
+
+    /* --- Headers / Heroes --- */
+    .page-header, .lab-header, .lt-header, .ts-header, .tf-header, .fp-header, .an-header {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+        color: #fff !important;
+        padding: 14px 20px !important;
+        border-radius: 12px !important;
+        margin-bottom: 16px !important;
+        border: 2px solid var(--theme-primary) !important;
+    }
+    .page-header h1, .page-header h2, .lab-header h1, .lab-header h2, .lt-header h1, .lt-header h2, .ts-header h1, .ts-header h2, .tf-header h1, .tf-header h2, .fp-header h1, .fp-header h2, .an-header h1, .an-header h2 { color: #fff !important; }
+    .page-header .subtitle, .lab-header .lab-sub, .lt-subtitle, .page-header p, .lab-header p, .lt-header p, .ts-header p { color: rgba(255,255,255,0.9) !important; }
+    .page-header i, .lab-header i, .lt-header i, .ts-header i { color: var(--theme-gold) !important; }
+
+    
+
+/* ===== FIX TOPBAR BRAND TEXT ONLY ===== */
+@layer polish {
+    html body .app-topbar .brand-text {
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.05em !important;
+        display: inline-block !important;
+    }
+}
+/* ===== FIX TOPBAR DROPDOWN TEXT COLOR ===== */
+@layer polish {
+    html body .app-topbar .dropdown-menu,
+    html body .app-topbar .dropdown-menu * {
+        color: #212529 !important; /* Force dark text */
+    }
+    html body .app-topbar .dropdown-item:hover,
+    html body .app-topbar .dropdown-item:focus {
+        background-color: #f8f9fa !important;
+        color: #1a3d7c !important; /* Hover state blue */
+    }
+}

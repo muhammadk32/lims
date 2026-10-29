@@ -112,36 +112,7 @@ h1, h2, h3, h4, h5, h6, p, span, div, a, td, th, li, label, button, input, selec
 }
 </style>
 
-<style>
-/* ===== RESTORE TABLE FONT SIZES ===== */
-/* Force 13px (0.82rem) on standard table headers */
-table[class*="-table"] thead th,
-.csr-table thead th,
-.an-table thead th {
-    font-size: 0.82rem !important; 
-    padding: 12px 10px !important;
-    font-weight: 700 !important;
-}
 
-/* Force 13.5px (0.85rem) on standard table data */
-table[class*="-table"] tbody td,
-.csr-table tbody td,
-.an-table tbody td {
-    font-size: 0.85rem !important;
-    padding: 10px 10px !important;
-    line-height: 1.4 !important;
-}
-
-/* Keep the KPI numbers large and bold */
-.csr-kpi-value, .an-kpi-value {
-    font-size: 1.4rem !important;
-    font-weight: 800 !important;
-}
-.csr-kpi-label, .an-kpi-label {
-    font-size: 0.78rem !important;
-    font-weight: 700 !important;
-}
-</style>
 
 
 
@@ -723,6 +694,8 @@ html body .app-content .an-header a {
     border: 1px solid #dee2e6 !important; /* keep input border */
 }
 </style>
+<style>@layer page, base, polish;</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/polish.css') }}">
 </head>
 <body>
 
