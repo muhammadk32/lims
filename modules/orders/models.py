@@ -469,6 +469,7 @@ class OrderItem(BaseModel):
         """True if the pathologist sent this specific item back."""
         return bool(self.correction_note) and not self.is_verified
 
+
     def __repr__(self):
         kind = 'CHILD' if self.is_child else 'TOP'
         return f'<OrderItem {kind} test={self.test_id} price={self.price}>'

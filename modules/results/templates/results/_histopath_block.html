@@ -6,63 +6,64 @@
     <span class="hp-code">{{ item.test.code }}</span>
   </div>
 
-  {% set r = item.result %}
+  {% set _r = item.result %}
+  {% if _r is iterable and _r is not string and _r|length and _r[0] %}{% set r = _r[0] %}{% else %}{% set r = _r %}{% endif %}
 
   <div class="hp-grid">
     <div class="hp-row">
       <span class="hp-lbl">Biopsy/Cytology No:</span>
       <div class="hp-inline">
         <input type="text" name="biopsy_no" class="hp-input" style="max-width:180px;"
-               value="{{ r.biopsy_no if r else '' }}" placeholder="e.g. 2026 H - 001">
+               value="{{ r.biopsy_no if r else '' }}">
       </div>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Clinical History / Pre Op Dx:</span>
       <textarea name="clinical_history_html" class="hp-textarea" rows="5"
-                placeholder="Clinical history / Pre-op diagnosis...">{{ r.clinical_history_html|safe if r and r.clinical_history_html else '' }}</textarea>
+               >{{ r.clinical_history_html|safe if r and r.clinical_history_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Specimen:</span>
       <textarea name="histopath_specimen_html" class="hp-textarea" rows="3"
-                placeholder="Specimen description...">{{ r.histopath_specimen_html|safe if r and r.histopath_specimen_html else '' }}</textarea>
+               >{{ r.histopath_specimen_html|safe if r and r.histopath_specimen_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Gross:</span>
       <textarea name="gross_html" class="hp-textarea" rows="4"
-                placeholder="Gross description...">{{ r.gross_html|safe if r and r.gross_html else '' }}</textarea>
+               >{{ r.gross_html|safe if r and r.gross_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Microscopic Examination:</span>
       <textarea name="microscopic_html" class="hp-textarea" rows="6"
-                placeholder="Microscopic findings...">{{ r.microscopic_html|safe if r and r.microscopic_html else '' }}</textarea>
+               >{{ r.microscopic_html|safe if r and r.microscopic_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Immuno-Stains:</span>
       <textarea name="immuno_stains_html" class="hp-textarea" rows="3"
-                placeholder="Immuno-stain results...">{{ r.immuno_stains_html|safe if r and r.immuno_stains_html else '' }}</textarea>
+               >{{ r.immuno_stains_html|safe if r and r.immuno_stains_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Final Diagnosis / Opinion:</span>
       <textarea name="final_diagnosis_html" class="hp-textarea" rows="5"
-                placeholder="Final diagnosis / opinion...">{{ r.final_diagnosis_html|safe if r and r.final_diagnosis_html else '' }}</textarea>
+               >{{ r.final_diagnosis_html|safe if r and r.final_diagnosis_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Comments:</span>
       <textarea name="comments_html" class="hp-textarea" rows="3"
-                placeholder="Comments...">{{ r.comments_html|safe if r and r.comments_html else '' }}</textarea>
+               >{{ r.comments_html|safe if r and r.comments_html else '' }}</textarea>
     </div>
 
     <div class="hp-row hp-row-full">
       <span class="hp-lbl">Notes:</span>
       <textarea name="notes" class="hp-textarea" rows="2"
-                placeholder="Notes...">{{ r.notes if r and r.notes else '' }}</textarea>
+               >{{ r.notes if r and r.notes else '' }}</textarea>
     </div>
   </div>
 </div>
