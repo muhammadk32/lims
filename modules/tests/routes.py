@@ -501,6 +501,7 @@ def new_test():
         test = Test(
             code=code,
             name=name,
+            report_name=request.form.get('report_name', '').strip() or None,
             category_id=category.id if category else None,
             price=request.form.get('price', type=float) or 0.0,
             normal_range=request.form.get('normal_range', '').strip() or None,
@@ -568,6 +569,7 @@ def edit_test(test_id):
 
         test.code = code
         test.name = name
+        test.report_name = request.form.get('report_name', '').strip() or None
         cat_id = request.form.get('category_id', type=int)
         test.category_id = cat_id if cat_id else None
         test.price = request.form.get('price', type=float) or 0.0

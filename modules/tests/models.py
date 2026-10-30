@@ -58,6 +58,7 @@ class Test(BaseModel):
 
     code = db.Column(db.String(20), unique=True, nullable=False, index=True)
     name = db.Column(db.String(120), nullable=False, index=True)
+    report_name = db.Column(db.String(120), nullable=True)
     adamlab_id = db.Column(db.Integer, unique=True, nullable=True, index=True)
     category_id = db.Column(
         db.Integer,

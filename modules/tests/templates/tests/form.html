@@ -24,6 +24,9 @@
             <input type="text" name="code" required value="{{ form.code if form else (test.code if test else '') }}"></div>
           <div class="tf-field tf-span-2"><label>Test Name *</label>
             <input type="text" name="name" required value="{{ form.name if form else (test.name if test else '') }}"></div>
+          <div class="tf-field tf-span-2"><label>Report Name</label>
+            <input type="text" name="report_name" value="{{ form.report_name if form else (test.report_name if test else '') }}"></div>
+
 
           {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
           <div class="tf-field"><label>Category</label>
@@ -112,9 +115,7 @@
       <div class="tf-actions">
         <a href="{{ url_for('tests.list_tests') }}" class="btn-ghost">Cancel</a>
         {% if test %}
-        <a href="{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='male') }}" class="btn-ghost">
-          <i class="bi bi-rulers"></i> Reference Ranges
-        </a>
+        
         {% endif %}
         <button type="submit" class="btn-primary-lg">
           <i class="bi bi-check-lg"></i> {{ 'Update' if test else 'Save' }} Test
