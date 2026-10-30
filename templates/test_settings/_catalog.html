@@ -57,34 +57,35 @@
 </form>
 
 {% if tests.items %}
-  <table class="lt-table" style="font-size: 0.72rem; text-align: center;">
+  <table class="lt-table" style="width: 100%; border-collapse: collapse; font-size: 0.72rem; border: 1px solid #212529;">
     <thead>
-      <tr>
-        <th style="text-align: center !important;" style="width: 80px;">Code</th>
-        <th style="text-align: center !important;">Name</th>
-        <th style="text-align: center !important;" style="width: 80px;">Unit</th>
-        <th style="text-align: center !important;" class="num" style="width: 100px;">Rate</th>
-        <th style="text-align: center !important;">Report Name</th>
-        <th style="text-align: center !important;" class="center" style="width: 60px;">Status</th>
-        <th style="text-align: center !important;" class="center" style="width: 170px;">Please Select</th>
+      <tr style="background-color: #0d6efd !important;">
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700;">Code</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700;">Name</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700;">Unit</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700; width: 100px;">Rate</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700;">Report Name</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700; width: 60px;">Status</th>
+        <th style="padding: 6px 8px; border: 1px solid #212529; color: #fff; text-align: center; font-weight: 700; width: 170px;">Please Select</th>
       </tr>
     </thead>
     <tbody>
       {% for t in tests.items %}
+      {% set bg = '#d1d9e6' if loop.index is even else '#ffffff' %}
       <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
-        <td style="text-align: center;"><code>{{ t.code }}</code></td>
-        <td class="name" style="text-align: left;">{{ t.name }}</td>
-        <td style="text-align: center;">{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
-        <td class="num price" style="text-align: right;">{{ t.price | money }}</td>
-        <td style="text-align: center;">{{ t.report_name if t.report_name else '—' }}</td>
-        <td class="center">
+        <td style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: center; background-color: {{ bg }} !important;"><code>{{ t.code }}</code></td>
+        <td class="name" style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: left; background-color: {{ bg }} !important;">{{ t.name }}</td>
+        <td style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: center; background-color: {{ bg }} !important;">{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
+        <td class="num price" style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: right; background-color: {{ bg }} !important;">{{ t.price | money }}</td>
+        <td style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: center; background-color: {{ bg }} !important;">{{ t.report_name if t.report_name else '—' }}</td>
+        <td class="center" style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: center; background-color: {{ bg }} !important;">
           {% if t.is_active %}
             <span class="lt-badge" style="background:#198754;color:#fff;">A</span>
           {% else %}
             <span class="lt-badge" style="background:#6c757d;color:#fff;">I</span>
           {% endif %}
         </td>
-        <td class="center">
+        <td class="center" style="padding: 4px 8px; border: 1px solid #dee2e6; text-align: center; background-color: {{ bg }} !important;">
           <select class="form-select form-select-sm" style="font-size: 0.75rem; padding: 2px;"
                   onchange="
                     if(this.value=='edit') { window.location.href='{{ url_for('tests.edit_test', test_id=t.id) }}'; } else if(this.value=='ranges') { window.location.href='{{ url_for('tests.edit_ranges_gender', test_id=t.id, gender='any') }}'; }
@@ -98,8 +99,7 @@
             <option value="ranges">Reference Values</option>
             <option value="delete">Delete</option>
           </select>
-          
-          <!-- Hidden form to handle the Enable/Disable action -->
+
           {% if current_user.role == 'admin' %}
           <form id="toggle-form-{{ t.id }}" method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}" style="display:none;">
           </form>

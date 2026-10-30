@@ -28,7 +28,7 @@
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
-  padding: 14px 16px !important;
+  padding: 4px 10px !important;
   text-align: left !important;
   white-space: nowrap !important;
   vertical-align: middle !important;
@@ -56,14 +56,14 @@
 /* --- Body cells: visible borders --- */
 .lt-table tbody td, .rp-table tbody td, .dl-table tbody td,
 .ts-table tbody td, .tf-table tbody td {
-  padding: 12px 16px !important;
+  padding: 4px 8px !important;
   border: none !important;
   border-bottom: 1px solid #cbd5e1 !important;
   border-right: 1px solid #e2e8f0 !important;
   vertical-align: middle !important;
   color: #1e293b !important;
   font-size: 0.88rem !important;
-  background: transparent !important;
+  
 }
 
 /* Remove right border from last cell */

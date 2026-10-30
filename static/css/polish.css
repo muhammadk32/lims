@@ -239,3 +239,68 @@
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
     }
 }
+/* ===== KILL COMPETING TABLE STRIPES ===== */
+@layer polish {
+    table.lt-table tbody tr:nth-child(2n) td {
+        background-color: #d1d9e6 !important;
+    }
+    table.lt-table tbody tr:nth-child(2n+1) td {
+        background-color: #ffffff !important;
+    }
+    table.lt-table tbody tr:hover td {
+        background-color: #eaf2ff !important;
+    }
+}
+/* ===== COMPACT TABLE PADDING ===== */
+@layer polish {
+    table.lt-table > thead > tr > th {
+        padding: 6px 8px !important;
+        font-size: 0.75rem !important;
+    }
+    table.lt-table > tbody > tr > td {
+        padding: 4px 8px !important;
+        line-height: 1.2 !important;
+        font-size: 0.72rem !important;
+    }
+}
+/* ===== KILL ALL TABLE SPACING ===== */
+@layer polish {
+    /* Kill paragraph/div margins inside table cells */
+    table td > *, table th > * {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    /* Force minimum padding */
+    table.lt-table > tbody > tr > td,
+    table.lt-table > thead > tr > th {
+        padding: 2px 6px !important;
+        line-height: 1.1 !important;
+        vertical-align: middle !important;
+    }
+    /* Shrink the badges and selects inside the table */
+    table.lt-table .lt-badge {
+        padding: 1px 6px !important;
+        font-size: 0.65rem !important;
+    }
+    table.lt-table select.form-select {
+        padding: 0 4px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+        line-height: 1 !important;
+    }
+}
+/* ===== REMOVE CODE BOX SHADING ===== */
+@layer polish {
+    table code, 
+    table .lt-table code,
+    td code {
+        background-color: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        font-family: inherit !important;
+        color: inherit !important;
+        font-size: inherit !important;
+    }
+}
