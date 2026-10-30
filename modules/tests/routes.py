@@ -119,7 +119,7 @@ def index():
             from sqlalchemy import exists as _ex
             query = query.filter(_ex().where(_TP.test_id == Test.id))
         ctx.update({
-            'tests': query.order_by(Test.code.asc()).paginate(page=page, per_page=15, error_out=False),
+            'tests': query.order_by(Test.code.asc()).paginate(page=page, per_page=100, error_out=False),
             'categories': TestCategory.query.order_by(TestCategory.name).all(),
             'specimens': Specimen.query.filter_by(is_active=True).order_by(Specimen.name).all(),
             'q': q,
@@ -420,7 +420,7 @@ def list_tests():
     if category_id:
         query = query.filter(Test.category_id == category_id)
 
-    tests = query.order_by(Test.code.asc()).paginate(page=page, per_page=15, error_out=False)
+    tests = query.order_by(Test.code.asc()).paginate(page=page, per_page=100, error_out=False)
     categories = TestCategory.query.order_by(TestCategory.name).all()
 
     return render_template(
