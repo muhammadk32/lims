@@ -339,18 +339,21 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
 
         bucket.append(Spacer(1, 3 * mm))
         # Underlined header box like other sections
-        _mol_hdr_tbl = Table([[Paragraph('MOLECULAR REPORT', mol_hdr_style)]],
-                             colWidths=[170 * mm])
-        _mol_hdr_tbl.setStyle(TableStyle([
-            ('LINEABOVE', (0, 0), (-1, 0), 1.2, colors.black),
-            ('LINEBELOW', (0, 0), (-1, 0), 1.2, colors.black),
-            ('LEFTPADDING', (0, 0), (-1, -1), 0),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-            ('TOPPADDING', (0, 0), (-1, -1), 3),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-        ]))
-        bucket.append(_mol_hdr_tbl)
-        bucket.append(Spacer(1, 1 * mm))
+        from ._shared_style import resolve_section_titles as _rst
+        _mol_titles = _rst(getattr(item, 'test', None), default_label='MOLECULAR REPORT')
+        for _mt in _mol_titles:
+            _mol_hdr_tbl = Table([[Paragraph(_mt, mol_hdr_style)]],
+                                 colWidths=[170 * mm])
+            _mol_hdr_tbl.setStyle(TableStyle([
+                ('LINEABOVE', (0, 0), (-1, 0), 1.2, colors.black),
+                ('LINEBELOW', (0, 0), (-1, 0), 1.2, colors.black),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ]))
+            bucket.append(_mol_hdr_tbl)
+            bucket.append(Spacer(1, 1 * mm))
         bucket.append(Paragraph(item.test.name, test_name_style))
 
         # SPECIMEN / RESULT / VIRAL LOAD
@@ -869,10 +872,18 @@ def _pcr_section(item, order):
 
     page_w = 170 * mm
 
-    title_para = Paragraph('MOLECULAR DIAGNOSTIC SECTION', title_style)
-
-    band_tbl = Table([[Paragraph(item.test.name.upper(), band_style)]],
-                     colWidths=[page_w])
+    from ._shared_style import resolve_section_titles
+    _pcr_titles = resolve_section_titles(item.test, default_label='MOLECULAR DIAGNOSTIC SECTION')
+    # Render every title as a separate row in the band table
+    _band_rows = []
+    for _t in _pcr_titles:
+        _band_rows.append([Paragraph(_t, band_style)])
+    if not _band_rows:
+        _band_rows = [[Paragraph('', band_style)]]
+    _band_label = item.test.name.upper() if item.test and item.test.name else ''
+    _band_rows.append([Paragraph(_band_label, band_style)])
+    band_tbl = Table(_band_rows, colWidths=[page_w])
+    title_para = Spacer(1, 0)
     from ._shared_style import apply_block_style
     apply_block_style(band_tbl, extra_cmds=[
         ('LEFTPADDING', (0, 0), (-1, -1), 8),

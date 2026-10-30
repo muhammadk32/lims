@@ -75,28 +75,9 @@ def _culture_block(item, result, ab_rows):
     _rn = ((getattr(_test, 'report_name', '') or '') if _test else '').strip()
     _mode = ((getattr(_test, 'report_name_mode', 'C') or 'C') if _test else 'C').upper()
 
-    _cat = ""
-    _cat_ref = getattr(_test, 'category_ref', None) if _test else None
-    if _cat_ref:
-        _cat = ((getattr(_cat_ref, 'name', '') or '').strip()).upper()
+    from ._shared_style import resolve_section_titles
+    _titles = resolve_section_titles(_test, default_label=_lbl["title"])
 
-    _titles = []
-    if _mode == 'D':
-        pass
-    elif _mode == 'A':
-        if _rn:
-            _titles.append(_rn.upper())
-    elif _mode == 'B':
-        if _cat:
-            _titles.append(_cat + " REPORT")
-    elif _mode == 'C':
-        if _rn:
-            _titles.append(_rn.upper())
-        if _cat and _cat.upper() != (_rn or '').upper():
-            _titles.append(_cat + " REPORT")
-    else:
-        if _cat:
-            _titles.append(_cat + " REPORT")
     if _titles:
         from ._shared_style import apply_block_style
         for _tstr in _titles:

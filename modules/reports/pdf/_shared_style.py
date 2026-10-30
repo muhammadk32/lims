@@ -50,3 +50,41 @@ def apply_block_style(table, extra_cmds=None, rounded=True):
 
     table.setStyle(TableStyle(cmds))
     return table
+
+
+def resolve_section_titles(test, default_label=''):
+    """Return list of title strings to render for a test's section banner.
+
+    Modes:
+      A -> [report_name]              (report name replaces default)
+      B -> [category REPORT]           (category only)
+      C -> [report_name, category REPORT]  (both, deduped)
+      D -> []                          (nothing)
+    Falls back to default_label if test/category not usable.
+    """
+    if test is None:
+        return [default_label] if default_label else []
+
+    rn = (getattr(test, 'report_name', '') or '').strip().upper()
+    mode = (getattr(test, 'report_name_mode', 'C') or 'C').upper()
+
+    cat = ''
+    cr = getattr(test, 'category_ref', None)
+    if cr:
+        cat = ((getattr(cr, 'name', '') or '').strip()).upper()
+    cat_label = (cat + ' REPORT') if cat else ''
+
+    if mode == 'D':
+        return []
+    if mode == 'A':
+        return [rn] if rn else ([default_label] if default_label else [])
+    if mode == 'B':
+        return [cat_label] if cat_label else ([default_label] if default_label else [])
+    if mode == 'C':
+        out = []
+        if rn:
+            out.append(rn)
+        if cat_label and cat_label != rn:
+            out.append(cat_label)
+        return out or ([default_label] if default_label else [])
+    return [cat_label or default_label] if (cat_label or default_label) else []
