@@ -304,3 +304,88 @@
         font-size: inherit !important;
     }
 }
+
+/* ============================================================
+   UNIVERSAL TABLE FORMATTING (with KPI exclusion)
+   ============================================================ */
+@layer polish {
+    /* Headers */
+    html body table:not(.an-kpi) > thead > tr > th {
+        background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
+        color: #fff !important;
+        padding: 6px 8px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        border: 1px solid #212529 !important;
+        text-align: center !important;
+    }
+
+    /* Body cells */
+    html body table:not(.an-kpi) > tbody > tr > td {
+        padding: 3px 8px !important;
+        line-height: 1.2 !important;
+        font-size: 0.72rem !important;
+        border: 1px solid #dee2e6 !important;
+        vertical-align: middle !important;
+    }
+    
+    /* Zebra stripes */
+    html body table:not(.an-kpi) > tbody > tr:nth-child(odd) > td {
+        background-color: #ffffff !important;
+    }
+    html body table:not(.an-kpi) > tbody > tr:nth-child(even) > td {
+        background-color: #d1d9e6 !important;
+    }
+    html body table:not(.an-kpi) > tbody > tr:hover > td {
+        background-color: #e2e8f0 !important;
+    }
+
+    /* Inputs */
+    html body table:not(.an-kpi) select,
+    html body table:not(.an-kpi) .form-select {
+        height: 22px !important;
+        padding: 0 4px !important;
+        font-size: 0.70rem !important;
+        line-height: 1 !important;
+        border-radius: 4px !important;
+    }
+
+    /* Code */
+    html body table:not(.an-kpi) code {
+        background-color: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        font-family: inherit !important;
+        color: inherit !important;
+        font-size: inherit !important;
+    }
+
+    /* Badges */
+    html body table:not(.an-kpi) .lt-badge,
+    html body table:not(.an-kpi) .badge {
+        padding: 1px 6px !important;
+        font-size: 0.65rem !important;
+    }
+
+    /* ===== KPI BANNER (keeps its own style) ===== */
+    html body table.an-kpi td {
+        background-color: #f8f9fa !important;
+        border: 1px solid #212529 !important;
+        padding: 12px 10px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+    html body table.an-kpi .an-kpi-label {
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #6c757d !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        margin-bottom: 4px !important;
+    }
+    html body table.an-kpi .an-kpi-value {
+        font-size: 1.4rem !important;
+        font-weight: 800 !important;
+        color: #212529 !important;
+    }
+}
