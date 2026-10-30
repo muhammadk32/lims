@@ -28,7 +28,17 @@
             <input type="text" name="report_name" value="{{ form.report_name if form else (test.report_name if test else '') }}"></div>
 
 
-          {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
+          
+          <div class="tf-field"><label>Report Name Mode</label>
+            <select name="report_name_mode">
+              {% set current_mode = form.report_name_mode if form else (test.report_name_mode if test else 'C') %}
+              <option value="A" {% if current_mode == 'A' %}selected{% endif %}>A — Replace department banner</option>
+              <option value="B" {% if current_mode == 'B' %}selected{% endif %}>B — Add below department banner</option>
+              <option value="C" {% if current_mode == 'C' %}selected{% endif %}>C — Both (Show in both places)</option>
+              <option value="D" {% if current_mode == 'D' %}selected{% endif %}>D — Do not show</option>
+            </select>
+          </div>
+{% set cur_cat = form.category_id if form else (test.category_id if test else None) %}
           <div class="tf-field"><label>Category</label>
             <select name="category_id">
               <option value="">— Select —</option>
