@@ -40,7 +40,7 @@
   .rg-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; border: 2px solid #212529; border-radius: 8px; overflow: hidden; }
   .rg-table th, .rg-table td { border: 1px solid #212529; padding: 6px 8px; text-align: left; }
   .rg-table th { background: #0d6efd; color: #fff; font-weight: bold; text-transform: uppercase; }
-</style>
+  </style>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const editor = document.getElementById('native-editor');
@@ -92,51 +92,55 @@ document.addEventListener("DOMContentLoaded", function () {
   <div class="rg-box">
     <form method="post" id="rg-form" action="{% if editing %}{{ url_for('tests.update_range', range_id=editing.id) }}{% else %}{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender=gender) }}{% endif %}">
       
-      <div class="rg-grid">
-        <div class="rg-col">
+                  <div class="rg-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; align-items: start; margin-bottom: 15px;">
+        
+        <!-- Column 1: Ages -->
+        <div class="rg-col" style="display: flex; flex-direction: column; gap: 10px;">
           <div class="rg-field-group">
-            <span class="rg-label">Max Age:</span>
-            <input type="number" name="age_max_value" class="rg-input rg-age-input" value="{{ editing.age_max_value if editing else 0 }}">
-            <select name="age_max_unit" class="rg-select" style="width: 90px;">
-              {% for u in ['days','weeks','months','years'] %}
-              <option value="{{ u }}" {% if editing and editing.age_max_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="rg-field-group">
-            <span class="rg-label">Mini Age:</span>
-            <input type="number" name="age_min_value" class="rg-input rg-age-input" value="{{ editing.age_min_value if editing else 0 }}">
-            <select name="age_min_unit" class="rg-select" style="width: 90px;">
+            <span class="rg-label" style="min-width: 80px;">Mini Age:</span>
+            <input type="number" name="age_min_value" class="rg-input rg-age-input" style="width: 60px; flex: none;" value="{{ editing.age_min_value if editing else 0 }}">
+            <select name="age_min_unit" class="rg-select" style="width: 90px; flex: none;">
               {% for u in ['days','weeks','months','years'] %}
               <option value="{{ u }}" {% if editing and editing.age_min_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
               {% endfor %}
             </select>
           </div>
+          <div class="rg-field-group">
+            <span class="rg-label" style="min-width: 80px;">Max Age:</span>
+            <input type="number" name="age_max_value" class="rg-input rg-age-input" style="width: 60px; flex: none;" value="{{ editing.age_max_value if editing else 0 }}">
+            <select name="age_max_unit" class="rg-select" style="width: 90px; flex: none;">
+              {% for u in ['days','weeks','months','years'] %}
+              <option value="{{ u }}" {% if editing and editing.age_max_unit == u %}selected{% elif not editing and u == 'years' %}selected{% endif %}>{{ u|capitalize }}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
 
-        <div class="rg-col">
+        <!-- Column 2: Values -->
+        <div class="rg-col" style="display: flex; flex-direction: column; gap: 10px;">
           <div class="rg-field-group">
-            <span class="rg-label">Max Value:</span>
-            <input type="text" name="value_max" class="rg-input" value="{% if editing %}{{ editing.range_text.split(' - ')[-1] if ' - ' in editing.range_text else '' }}{% endif %}">
-          </div>
-          <div class="rg-field-group">
-            <span class="rg-label">Mini Value:</span>
+            <span class="rg-label" style="min-width: 80px;">Mini Value:</span>
             <input type="text" name="value_min" class="rg-input" value="{% if editing %}{{ editing.range_text.split(' - ')[0] if ' - ' in editing.range_text else '' }}{% endif %}">
           </div>
+          <div class="rg-field-group">
+            <span class="rg-label" style="min-width: 80px;">Max Value:</span>
+            <input type="text" name="value_max" class="rg-input" value="{% if editing %}{{ editing.range_text.split(' - ')[-1] if ' - ' in editing.range_text else '' }}{% endif %}">
+          </div>
         </div>
 
-        <div class="rg-col">
+        <!-- Column 3: Critical Values -->
+        <div class="rg-col" style="display: flex; flex-direction: column; gap: 10px;">
           <div class="rg-field-group">
-            <span class="rg-label">Crit. Max:</span>
-            <input type="text" name="crit_max" class="rg-input" value="{{ editing.critical_value.split('or')[-1].replace('>','').strip() if editing and editing.critical_value and '>' in editing.critical_value else '0' }}">
-          </div>
-          <div class="rg-field-group">
-            <span class="rg-label">Crit. Min:</span>
+            <span class="rg-label" style="min-width: 80px;">Crit. Min:</span>
             <input type="text" name="crit_min" class="rg-input" value="{{ editing.critical_value.split('or')[0].replace('<','').strip() if editing and editing.critical_value and '<' in editing.critical_value else '0' }}">
           </div>
+          <div class="rg-field-group">
+            <span class="rg-label" style="min-width: 80px;">Crit. Max:</span>
+            <input type="text" name="crit_max" class="rg-input" value="{{ editing.critical_value.split('or')[-1].replace('>','').strip() if editing and editing.critical_value and '>' in editing.critical_value else '0' }}">
+          </div>
         </div>
-      </div>
 
+      </div>
       <div class="rg-field-group" style="margin-bottom: 15px;">
         <span class="rg-label" style="min-width: 90px;">Gender:</span>
         <select name="gender_display" class="rg-select" style="max-width: 250px;" onchange="window.location='{{ url_for('tests.edit_ranges_gender', test_id=test.id, gender='__g__') }}'.replace('__g__', this.value);">
@@ -185,24 +189,20 @@ document.addEventListener("DOMContentLoaded", function () {
   </div>
 
   <table class="rg-table">
-    <thead>
+            <thead>
       <tr>
-        <th>Gender</th>
-        <th>Min Age</th>
-        <th>Min Unit</th>
-        <th>Max Age</th>
-        <th>Max Unit</th>
-        <th>Mini Value</th>
-        <th>Max Value</th>
-        <th>Other Values</th>
-        <th>Critical Min</th>
-        <th>Critical Max</th>
-        <th>Edit</th>
-        <th>Remove</th>
-        
-        
-        
-        
+        <th style="width: 8%;">Gender</th>
+        <th style="width: 9%;">Min Age</th>
+        <th style="width: 8%;">Min Unit</th>
+        <th style="width: 9%;">Max Age</th>
+        <th style="width: 8%;">Max Unit</th>
+        <th style="width: 9%;">Mini Value</th>
+        <th style="width: 9%;">Max Value</th>
+        <th style="width: 20%;">Other Values</th>
+        <th style="width: 8%;">Critical Min</th>
+        <th style="width: 8%;">Critical Max</th>
+        <th style="width: 4%;">Edit</th>
+        <th style="width: 6%;">Remove</th>
       </tr>
     </thead>
     <tbody>
