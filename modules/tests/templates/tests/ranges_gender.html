@@ -199,10 +199,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <th>Critical Max</th>
         <th>Edit</th>
         <th>Remove</th>
-        <th>Created By</th>
-        <th>Created Date</th>
-        <th>Modified By</th>
-        <th>Modified Date</th>
+        
+        
+        
+        
       </tr>
     </thead>
     <tbody>
@@ -225,15 +225,15 @@ document.addEventListener("DOMContentLoaded", function () {
               <button type="submit" style="background:none;border:none;color:#0d6efd;padding:0;cursor:pointer;">Remove</button>
             </form>
           </td>
-          <td>admin</td>
-          <td>{{ r.created_at.strftime('%d/%m/%Y %I:%M %p') if r.created_at else '' }}</td>
-          <td>admin</td>
-          <td>{{ r.updated_at.strftime('%d/%m/%Y %I:%M %p') if r.updated_at else '' }}</td>
+          
+          
+          
+          
         </tr>
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="16" class="text-center">Reference Ranges:</td>
+          <td colspan="12" class="text-center">Reference Ranges:</td>
         </tr>
       {% endif %}
     </tbody>
