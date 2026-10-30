@@ -345,37 +345,37 @@
 
   {# Table #}
   {% if tests.items %}
-  <table class="lt-table">
+  <table class="lt-table" style="font-size: 0.72rem;">
     <thead>
       <tr>
-        <th style="width: 120px;">Code</th>
+        <th style="width: 80px;">Code</th>
         <th>Name</th>
-        <th style="width: 150px;">Category</th>
-        <th class="num" style="width: 100px;">Price</th>
         <th style="width: 80px;">Unit</th>
-        <th class="center" style="width: 80px;">Status</th>
-        <th class="center" style="width: 150px;">Actions</th>
+        <th class="num" style="width: 100px;">Rate</th>
+        <th>Report Name</th>
+        <th style="width: 100px;">Created By</th>
+        <th style="width: 120px;">Created Date</th>
+        <th style="width: 100px;">Modified By</th>
+        <th style="width: 120px;">Modified Date</th>
+        <th class="center" style="width: 60px;">Status</th>
+        <th class="center" style="width: 50px;">Edit</th>
+        <th class="center" style="width: 60px;">Transfer</th>
+        <th class="center" style="width: 60px;">History</th>
+        <th class="center" style="width: 130px;">Please Select</th>
       </tr>
     </thead>
     <tbody>
       {% for t in tests.items %}
       <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
         <td><code>{{ t.code }}</code></td>
-        <td class="name">
-          {{ t.name }}
-          {% if not t.is_active %}
-            <span class="lt-badge-paused">Paused</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if t.category_ref %}
-            <span class="lt-badge lt-badge-cat" data-category="{{ t.category_ref.name|lower|replace(' ','-') }}">{{ t.category_ref.name }}</span>
-          {% else %}
-            <span class="muted">—</span>
-          {% endif %}
-        </td>
-        <td class="num price">{{ t.price | money }}</td>
+        <td class="name">{{ t.name }}</td>
         <td>{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
+        <td class="num price">{{ t.price | money }}</td>
+        <td>{{ t.report_name if t.report_name else '—' }}</td>
+        <td>{{ t.created_by if t.created_by else 'admin' }}</td>
+        <td>{{ t.created_at.strftime('%m/%d/%Y %I:%M %p') if t.created_at else '—' }}</td>
+        <td>{{ t.modified_by if t.modified_by else '—' }}</td>
+        <td>{{ t.updated_at.strftime('%m/%d/%Y %I:%M %p') if t.updated_at else '—' }}</td>
         <td class="center">
           {% if t.is_active %}
             <span class="lt-badge" style="background:#198754;color:#fff;">A</span>
@@ -384,52 +384,28 @@
           {% endif %}
         </td>
         <td class="center">
-          <div class="lt-actions-col">
-            <a href="{{ url_for('tests.view_test', test_id=t.id) }}"
-               class="lt-icon-btn lt-icon-btn-view" title="View">
-              <i class="bi bi-eye"></i>
-            </a>
-            {% if current_user.role == 'admin' %}
-            <a href="{{ url_for('tests.edit_test', test_id=t.id) }}"
-               class="lt-icon-btn lt-icon-btn-edit" title="Edit">
-              <i class="bi bi-pencil"></i>
-            </a>
-            <form method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}"
-                  class="d-inline">
-              {% if t.is_active %}
-              <button class="lt-icon-btn lt-icon-btn-pause" title="Pause (hide from registration)">
-                <i class="bi bi-pause-fill"></i>
-              </button>
-              {% else %}
-              <button class="lt-icon-btn lt-icon-btn-resume" title="Resume (show in registration)">
-                <i class="bi bi-play-fill"></i>
-              </button>
-              {% endif %}
-            </form>
-            <form method="POST" action="{{ url_for('tests.delete_test', test_id=t.id) }}"
-                  class="d-inline" onsubmit="return confirm('Archive this test?');">
-              <button class="lt-icon-btn lt-icon-btn-danger" title="Archive">
-                <i class="bi bi-trash"></i>
-              </button>
-            </form>
-            {% endif %}
-          </div>
+          {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('tests.edit_test', test_id=t.id) }}" class="text-primary" title="Edit"><i class="bi bi-pencil-square"></i></a>
+          {% endif %}
+        </td>
+        <td class="center">
+          <a href="#" class="text-primary" title="Transfer"><i class="bi bi-arrow-left-right"></i></a>
+        </td>
+        <td class="center">
+          <a href="#" class="text-primary" title="History"><i class="bi bi-clock-history"></i></a>
+        </td>
+        <td class="center">
+          <select class="form-select form-select-sm" style="font-size: 0.75rem; padding: 2px;">
+            <option>Please Select</option>
+            <option value="view">View Details</option>
+            <option value="pause">Pause Test</option>
+            <option value="delete">Delete</option>
+          </select>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-
-  {# Pagination #}
-  {% if tests.pages > 1 %}
-  <div style="margin-top: 10px; display:flex; justify-content:center;">
-    <ul class="pagination" style="font-size: 0.78rem; margin:0;">
-      <li class="page-item {% if not tests.has_prev %}disabled{% endif %}">
-        <a class="page-link" href="{{ url_for('tests.list_tests', page=tests.prev_num, q=q, category=category_id) }}">Previous</a>
-      </li>
-      {% for num in tests.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-        {% if num %}
-        <li class="page-item {% if num == tests.page %}active{% endif %}">
           <a class="page-link" href="{{ url_for('tests.list_tests', page=num, q=q, category=category_id) }}">{{ num }}</a>
         </li>
         {% else %}

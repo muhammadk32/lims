@@ -388,36 +388,50 @@ table[class$="-table"] tbody td {
         <th style="width: 28%;">Reference Range</th>
       </tr>
     </thead>
-    <tbody>
+                    <tbody>
+      {% set ns = namespace(last_report='', last_cat='') %}
       {% for item in order.top_level_items %}
+        {% set rn = (item.test.report_name or '')|trim %}
+        {% set mode = item.test.report_name_mode or 'C' %}
+        {% set cat = item.test.category_ref.name if item.test.category_ref else '' %}
+
+        {# MODE A / C: show report_name band #}
+        {% if rn and mode in ('A','C') and rn != ns.last_report %}
+          <tr class="rep-name-row">
+            <td colspan="4" style="background:#e2e8f0; font-weight:800; font-size:10pt; text-transform:uppercase; letter-spacing:0.05em; padding:6px 8px; border:1px solid #adb5bd;">{{ rn }}</td>
+          </tr>
+          {% set ns.last_report = rn %}
+        {% endif %}
+
+        {# MODE B / C: also show category (department) if changed #}
+        {% if cat and mode in ('B','C') and cat != ns.last_cat %}
+          <tr class="panel-title">
+            <td colspan="4">{{ cat }}</td>
+          </tr>
+          {% set ns.last_cat = cat %}
+        {% endif %}
+
         {% if item.has_children %}
-          {# Panel header #}
           <tr class="panel-title">
             <td colspan="4">{{ item.test.name }}</td>
           </tr>
-          {# Panel children #}
           {% for child in item.children %}
             <tr class="child">
               <td class="test-name">{{ child.test.name }}</td>
               <td class="result-val">
                 {% if child.result_value %}{{ child.result_value }}{% else %}—{% endif %}
-                {% if child.result_notes %}
-                  <div class="notes">{{ child.result_notes }}</div>
-                {% endif %}
+                {% if child.result_notes %}<div class="notes">{{ child.result_notes }}</div>{% endif %}
               </td>
               <td class="unit">{{ child.test.unit or '—' }}</td>
               <td class="range">{{ rng(child.test, order) or '—' }}</td>
             </tr>
           {% endfor %}
         {% else %}
-          {# Standalone test #}
           <tr>
             <td class="test-name">{{ item.test.name }}</td>
             <td class="result-val">
               {% if item.result_value %}{{ item.result_value }}{% else %}—{% endif %}
-              {% if item.result_notes %}
-                <div class="notes">{{ item.result_notes }}</div>
-              {% endif %}
+              {% if item.result_notes %}<div class="notes">{{ item.result_notes }}</div>{% endif %}
             </td>
             <td class="unit">{{ item.test.unit or '—' }}</td>
             <td class="range">{{ rng(item.test, order) or '—' }}</td>
