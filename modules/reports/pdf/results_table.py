@@ -100,6 +100,126 @@ def _flag_result(normal_range, result_value):
         return 'unknown'
 
 
+def _collect_histopath(bucket, item, order):
+    """Render a histopathology / cytology narrative block into bucket."""
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import mm
+    from reportlab.lib import colors
+    from reportlab.platypus import Paragraph, Table, TableStyle, Spacer
+    from ._shared_style import resolve_section_titles
+
+    styles = getSampleStyleSheet()
+    from modules.results.models import Result
+    r = Result.query.filter_by(order_item_id=item.id).first()
+    if r is None:
+        return
+
+    content_fields = [
+        getattr(r, 'biopsy_no', None),
+        getattr(r, 'clinical_history_html', None),
+        getattr(r, 'histopath_specimen_html', None),
+        getattr(r, 'gross_html', None),
+        getattr(r, 'microscopic_html', None),
+        getattr(r, 'immuno_stains_html', None),
+        getattr(r, 'final_diagnosis_html', None),
+        getattr(r, 'comments_html', None),
+        getattr(r, 'notes', None),
+    ]
+    if not any(content_fields):
+        return
+
+    title_style = ParagraphStyle('HpTitle', parent=styles['Normal'],
+                                 fontSize=10, fontName='Helvetica-Bold',
+                                 textColor=colors.black)
+    spec_style = ParagraphStyle('HpSpec', parent=styles['Normal'],
+                                fontSize=9, fontName='Helvetica-Bold',
+                                textColor=colors.black)
+    lbl_style = ParagraphStyle('HpLbl', parent=styles['Normal'],
+                               fontSize=7.5, fontName='Helvetica-Bold',
+                               textColor=colors.black)
+    body_style = ParagraphStyle('HpBody', parent=styles['Normal'],
+                                fontSize=8, leading=10)
+
+    def _clean(html):
+        if not html:
+            return ''
+        h = str(html)
+        return h.replace('\r\n', '<br/>').replace('\n', '<br/>')
+
+    bucket.append(Spacer(1, 3 * mm))
+
+    _titles = resolve_section_titles(item.test, default_label='')
+    for _t in _titles:
+        _hdr = Table([[Paragraph(_t, title_style)]], colWidths=[170 * mm])
+        _hdr.setStyle(TableStyle([
+            ('LINEABOVE', (0, 0), (-1, -1), 1.2, colors.black),
+            ('LINEBELOW', (0, 0), (-1, -1), 1.2, colors.black),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('ROUNDEDCORNERS', [6, 6, 6, 6]),
+        ]))
+        bucket.append(_hdr)
+        bucket.append(Spacer(1, 3 * mm))
+
+    _name_tbl = Table([[Paragraph(item.test.name, spec_style)]], colWidths=[170 * mm])
+    _name_tbl.setStyle(TableStyle([
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('ROUNDEDCORNERS', [6, 6, 6, 6]),
+    ]))
+    bucket.append(_name_tbl)
+    bucket.append(Spacer(1, 2 * mm))
+
+    rows = []
+    if getattr(r, 'biopsy_no', None):
+        rows.append([Paragraph('Biopsy/Cytology No:', lbl_style),
+                     Paragraph(str(r.biopsy_no), body_style)])
+    if getattr(r, 'clinical_history_html', None):
+        rows.append([Paragraph('Clinical History / Pre Op Dx:', lbl_style),
+                     Paragraph(_clean(r.clinical_history_html), body_style)])
+    if getattr(r, 'histopath_specimen_html', None):
+        rows.append([Paragraph('Specimen:', lbl_style),
+                     Paragraph(_clean(r.histopath_specimen_html), body_style)])
+    if getattr(r, 'gross_html', None):
+        rows.append([Paragraph('Gross:', lbl_style),
+                     Paragraph(_clean(r.gross_html), body_style)])
+    if getattr(r, 'microscopic_html', None):
+        rows.append([Paragraph('Microscopic Examination:', lbl_style),
+                     Paragraph(_clean(r.microscopic_html), body_style)])
+    if getattr(r, 'immuno_stains_html', None):
+        rows.append([Paragraph('Immuno-Stains:', lbl_style),
+                     Paragraph(_clean(r.immuno_stains_html), body_style)])
+    if getattr(r, 'final_diagnosis_html', None):
+        rows.append([Paragraph('Final Diagnosis / Opinion:', lbl_style),
+                     Paragraph(_clean(r.final_diagnosis_html), body_style)])
+    if getattr(r, 'comments_html', None):
+        rows.append([Paragraph('Comments:', lbl_style),
+                     Paragraph(_clean(r.comments_html), body_style)])
+    if getattr(r, 'notes', None):
+        rows.append([Paragraph('Notes:', lbl_style),
+                     Paragraph(_clean(r.notes), body_style)])
+
+    if rows:
+        t = Table(rows, colWidths=[45 * mm, 125 * mm])
+        t.setStyle(TableStyle([
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('BOX', (0, 0), (-1, -1), 1.0, colors.black),
+            ('INNERGRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#adb5bd')),
+            ('LEFTPADDING', (0, 0), (-1, -1), 5),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8f9fa')),
+            ('ROUNDEDCORNERS', [8, 8, 8, 8]),
+        ]))
+        bucket.append(t)
+
+    bucket.append(Spacer(1, 3 * mm))
+
 def _results_table(order, previous_map=None, date_labels=None, items_override=None, content_width=None):
     """Results table with panel grouping + previous results columns.
 
@@ -424,7 +544,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     break
                 _upcoming.append(_x)
             _has_printable = any(
-                (i.test.result_format or '').lower() not in ('pcr', 'pcr_quant', 'molecular', 'culture', 'culture_sensitivity')
+                (i.test.result_format or '').lower() not in ('pcr', 'pcr_quant', 'molecular', 'culture', 'culture_sensitivity', 'histopath', 'histopathology', 'histo')
                 for i in _upcoming if getattr(i, 'test', None)
             )
             if not _has_printable:
@@ -573,12 +693,14 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
 
             is_pcr = (item.test.result_format or '').lower() in ('pcr', 'pcr_quant', 'molecular')
             is_culture = (item.test.result_format or '').lower() in ('culture', 'culture_sensitivity')
+            is_histopath = (item.test.result_format or '').lower() in ('histopath', 'histopathology', 'histo')
 
             if is_culture:
                 _collect_culture(notes_flowables, item, order)
             elif is_pcr:
-                # PCR: skip the flat row entirely; render standalone section below
                 _collect_pcr_details(notes_flowables, item, order)
+            elif is_histopath:
+                _collect_histopath(notes_flowables, item, order)
             else:
                 # Spacing row between different tests
                 if _last_test_id is not None and _last_test_id != item.test.id:

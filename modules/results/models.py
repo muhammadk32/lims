@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from extensions import db
 
 
@@ -24,6 +24,16 @@ class Result(db.Model):
     suggestion_html    = db.Column(db.Text,        nullable=True)
     interpretation_html= db.Column(db.Text,        nullable=True)
     comments_html      = db.Column(db.Text,        nullable=True)
+
+    # ---------- Histopathology / Cytology fields ----------
+    biopsy_no                = db.Column(db.String(40), nullable=True)
+    histopath_template_id    = db.Column(db.Integer,    nullable=True)
+    clinical_history_html    = db.Column(db.Text,       nullable=True)
+    histopath_specimen_html  = db.Column(db.Text,       nullable=True)
+    gross_html               = db.Column(db.Text,       nullable=True)
+    microscopic_html         = db.Column(db.Text,       nullable=True)
+    immuno_stains_html       = db.Column(db.Text,       nullable=True)
+    final_diagnosis_html     = db.Column(db.Text,       nullable=True)
 
     # ---------- Culture & Sensitivity fields ----------
     culture_specimen      = db.Column(db.String(120), nullable=True)

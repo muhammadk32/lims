@@ -209,6 +209,9 @@ def enter_item(item_id):
             if r and not r.value:
                 r.value = 'Completed'
                 db.session.commit()
+        elif fmt_post in ('histopath', 'histopathology', 'histo'):
+            svc.save_histopath_fields(item, request.form, current_user)
+            db.session.commit()
         else:
             svc.save_item_result(item, request.form, None)
 

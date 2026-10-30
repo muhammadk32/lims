@@ -94,6 +94,7 @@ def _patient_info_table(order):
         ('TOPPADDING', (0, 0), (-1, -1), 1),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
         ('BOX', (0, 0), (-1, -1), 0.4, colors.HexColor('#adb5bd')),
+        ('ROUNDEDCORNERS', [8, 8, 8, 8]),
     ]
     if qr_flowable is not None:
         style.append(('SPAN', (4, 0), (4, 3)))

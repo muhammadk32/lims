@@ -1,4 +1,4 @@
-"""Single source of truth for report block styling.
+﻿"""Single source of truth for report block styling.
 
 Every department's report block MUST import from here so that all
 reports (chemistry, hematology, urinalysis, culture, molecular) share
@@ -84,7 +84,12 @@ def resolve_section_titles(test, default_label=''):
         out = []
         if rn:
             out.append(rn)
-        if cat_label and cat_label != rn:
+        if cat_label and cat_label != rn and cat_label not in out:
             out.append(cat_label)
-        return out or ([default_label] if default_label else [])
+        if not out and default_label:
+            out.append(default_label)
+        # dedupe preserving order
+        seen = set()
+        out = [x for x in out if not (x in seen or seen.add(x))]
+        return out
     return [cat_label or default_label] if (cat_label or default_label) else []

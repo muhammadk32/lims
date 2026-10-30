@@ -412,6 +412,34 @@ def save_item_result(item, form, user):
                f'Result saved for {item.test.code} ({item.test.name})')
     return item
 
+def save_histopath_fields(item, form, user):
+    """Save histopathology / cytology fields on the item's Result."""
+    from .models import Result
+    from datetime import datetime
+
+    r = Result.query.filter_by(order_item_id=item.id).first()
+    if r is None:
+        r = Result(order_item_id=item.id)
+        db.session.add(r)
+
+    r.biopsy_no              = (form.get('biopsy_no') or '').strip() or None
+    r.clinical_history_html  = (form.get('clinical_history_html') or '').strip() or None
+    r.histopath_specimen_html= (form.get('histopath_specimen_html') or '').strip() or None
+    r.gross_html             = (form.get('gross_html') or '').strip() or None
+    r.microscopic_html       = (form.get('microscopic_html') or '').strip() or None
+    r.immuno_stains_html     = (form.get('immuno_stains_html') or '').strip() or None
+    r.final_diagnosis_html   = (form.get('final_diagnosis_html') or '').strip() or None
+    r.comments_html          = (form.get('comments_html') or '').strip() or None
+    r.notes                  = (form.get('notes') or '').strip() or None
+    if not r.value:
+        r.value = 'Completed'
+    r.entered_at = datetime.utcnow()
+    if user is not None:
+        r.entered_by_id = getattr(user, 'id', None)
+
+    return r
+
+
 def save_culture_fields(item, form, user):
     """Save all culture_* fields on the item's Result plus
     the CultureAntibiotic grid rows."""

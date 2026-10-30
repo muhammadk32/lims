@@ -1,0 +1,82 @@
+﻿{# Histopathology / Cytology block #}
+<div class="hp-block" data-item="{{ item.id }}">
+  <div class="hp-hd">
+    <i class="bi bi-file-earmark-medical"></i>
+    {{ item.test.name }}
+    <span class="hp-code">{{ item.test.code }}</span>
+  </div>
+
+  {% set r = item.result %}
+
+  <div class="hp-grid">
+    <div class="hp-row">
+      <span class="hp-lbl">Biopsy/Cytology No:</span>
+      <div class="hp-inline">
+        <input type="text" name="biopsy_no" class="hp-input" style="max-width:180px;"
+               value="{{ r.biopsy_no if r else '' }}" placeholder="e.g. 2026 H - 001">
+      </div>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Clinical History / Pre Op Dx:</span>
+      <textarea name="clinical_history_html" class="hp-textarea" rows="5"
+                placeholder="Clinical history / Pre-op diagnosis...">{{ r.clinical_history_html|safe if r and r.clinical_history_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Specimen:</span>
+      <textarea name="histopath_specimen_html" class="hp-textarea" rows="3"
+                placeholder="Specimen description...">{{ r.histopath_specimen_html|safe if r and r.histopath_specimen_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Gross:</span>
+      <textarea name="gross_html" class="hp-textarea" rows="4"
+                placeholder="Gross description...">{{ r.gross_html|safe if r and r.gross_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Microscopic Examination:</span>
+      <textarea name="microscopic_html" class="hp-textarea" rows="6"
+                placeholder="Microscopic findings...">{{ r.microscopic_html|safe if r and r.microscopic_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Immuno-Stains:</span>
+      <textarea name="immuno_stains_html" class="hp-textarea" rows="3"
+                placeholder="Immuno-stain results...">{{ r.immuno_stains_html|safe if r and r.immuno_stains_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Final Diagnosis / Opinion:</span>
+      <textarea name="final_diagnosis_html" class="hp-textarea" rows="5"
+                placeholder="Final diagnosis / opinion...">{{ r.final_diagnosis_html|safe if r and r.final_diagnosis_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Comments:</span>
+      <textarea name="comments_html" class="hp-textarea" rows="3"
+                placeholder="Comments...">{{ r.comments_html|safe if r and r.comments_html else '' }}</textarea>
+    </div>
+
+    <div class="hp-row hp-row-full">
+      <span class="hp-lbl">Notes:</span>
+      <textarea name="notes" class="hp-textarea" rows="2"
+                placeholder="Notes...">{{ r.notes if r and r.notes else '' }}</textarea>
+    </div>
+  </div>
+</div>
+
+<style>
+.hp-block { width: 100%; border: 2px solid #1a1a1a; border-radius: 10px; background: #fff; margin-bottom: 12px; overflow: hidden; }
+.hp-hd { background: #dbeafe; color: #1d4ed8; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; display: flex; gap: 8px; align-items: center; }
+.hp-hd .hp-code { color: #2563eb; font-weight: 700; margin-left: auto; font-size: 0.7rem; }
+.hp-grid { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.hp-row { display: grid; grid-template-columns: 190px 1fr; align-items: start; gap: 10px; }
+.hp-row-full { grid-template-columns: 190px 1fr; }
+.hp-lbl { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #495057; text-align: right; padding-top: 8px; }
+.hp-inline { display: flex; gap: 6px; }
+.hp-input, .hp-textarea { width: 100%; padding: 6px 10px; border: 1.5px solid #1a1a1a; border-radius: 6px; font-size: 0.85rem; background: #f3f8ff; color: #212529; font-family: inherit; box-sizing: border-box; }
+.hp-input:focus, .hp-textarea:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13,110,253,0.15); }
+.hp-textarea { resize: vertical; min-height: 60px; }
+</style>
