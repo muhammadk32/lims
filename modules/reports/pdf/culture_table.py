@@ -70,14 +70,42 @@ def _culture_block(item, result, ab_rows):
 
     out = []
 
-    # Title
-    t = Table([[Paragraph(_lbl["title"], title_style)]], colWidths=[100*mm])
-    from ._shared_style import apply_block_style
-    apply_block_style(t, extra_cmds=[
-        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-    ])
-    out.append(t)
-    out.append(Spacer(1, 3*mm))
+    # Title — override label with per-test report_name/report_name_mode
+    _test = getattr(item, 'test', None)
+    _rn = ((getattr(_test, 'report_name', '') or '') if _test else '').strip()
+    _mode = ((getattr(_test, 'report_name_mode', 'C') or 'C') if _test else 'C').upper()
+
+    _cat = ""
+    _cat_ref = getattr(_test, 'category_ref', None) if _test else None
+    if _cat_ref:
+        _cat = ((getattr(_cat_ref, 'name', '') or '').strip()).upper()
+
+    _titles = []
+    if _mode == 'D':
+        pass
+    elif _mode == 'A':
+        if _rn:
+            _titles.append(_rn.upper())
+    elif _mode == 'B':
+        if _cat:
+            _titles.append(_cat + " REPORT")
+    elif _mode == 'C':
+        if _rn:
+            _titles.append(_rn.upper())
+        if _cat and _cat.upper() != (_rn or '').upper():
+            _titles.append(_cat + " REPORT")
+    else:
+        if _cat:
+            _titles.append(_cat + " REPORT")
+    if _titles:
+        from ._shared_style import apply_block_style
+        for _tstr in _titles:
+            t = Table([[Paragraph(_tstr, title_style)]], colWidths=[100*mm])
+            apply_block_style(t, extra_cmds=[
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ])
+            out.append(t)
+            out.append(Spacer(1, 2*mm))
 
 
     # ---- Each row gets its own bordered box ----
