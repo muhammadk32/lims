@@ -161,3 +161,81 @@
         font-weight: normal !important;
     }
 }
+/* ===== REDUCE TABLE ROW SPACING ===== */
+@layer polish {
+    table[class*="-table"] tbody td {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+        line-height: 1.2 !important;
+    }
+}
+/* ===== LIGHT BORDERS & FIX ACTIONS COLUMN ===== */
+@layer polish {
+    /* Lighten table borders */
+    table[class*="-table"], 
+    table:not(.no-theme),
+    table[class*="-table"] thead th,
+    table[class*="-table"] tbody td,
+    table:not(.no-theme) thead th,
+    table:not(.no-theme) tbody td {
+        border-color: #dee2e6 !important;
+    }
+
+    /* Fix Actions / last column from being cropped */
+    table[class*="-table"] thead th:last-child,
+    table[class*="-table"] tbody td:last-child {
+        min-width: 90px !important;
+        text-align: center !important;
+        padding-right: 8px !important;
+        padding-left: 8px !important;
+        overflow: visible !important;
+    }
+}
+/* ===== REDUCE TABLE ROW SPACING FOR REPORTS ===== */
+@layer polish {
+    table[class*="-table"] tbody td,
+    table:not(.no-theme) tbody td,
+    .table tbody td,
+    .report-table tbody td {
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        line-height: 1.15 !important;
+    }
+    table[class*="-table"] thead th,
+    table:not(.no-theme) thead th {
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+    }
+}
+/* ===== SUB-GRID HEADER SMALLER THAN MAIN GRID ===== */
+@layer polish {
+    /* Target any table nested inside another table (sub-grids) */
+    table table thead th,
+    table table th {
+        font-size: 0.68rem !important;
+        padding: 4px 6px !important;
+        font-weight: 600 !important;
+    }
+}
+/* ===== TIGHTEN SUB-GRID ROW SPACING ===== */
+@layer polish {
+    table table tbody td,
+    table table tbody td * {
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+        line-height: 1.1 !important;
+    }
+}
+/* ===== LIGHTEN INPUT BORDERS & COMMENTS HEADER ===== */
+@layer polish {
+    /* Lighten input/select borders in tables */
+    table input, table select, table textarea,
+    .table input, .table select, .table textarea {
+        border-color: #ced4da !important;
+        box-shadow: none !important;
+    }
+    table input:focus, table select:focus, table textarea:focus {
+        border-color: #86b7fe !important;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    }
+}

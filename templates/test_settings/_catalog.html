@@ -57,94 +57,58 @@
 </form>
 
 {% if tests.items %}
-<table class="lt-table">
-  <thead>
-    <tr>
-      <th style="width: 90px;">Code</th>
-      <th>Name</th>
-      <th style="width: 140px;">Category</th>
-      <th class="num" style="width: 90px;">Price</th>
-      <th style="width: 90px;">Unit</th>
-      <th style="width: 140px;">Specimen</th>
-      <th style="width: 140px;">Sub-Dept</th>
-      <th class="center" style="width: 70px;">Type</th>
-      <th class="center" style="width: 70px;">Status</th>
-      <th class="center" style="width: 130px;">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for t in tests.items %}
-    <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
-      <td><code>{{ t.code }}</code></td>
-      <td class="name">
-        {{ t.name }}
-        {% if not t.is_active %}<span class="lt-badge-paused">Paused</span>{% endif %}
-      </td>
-      <td>
-        {% if t.category_ref %}
-          <span class="lt-badge lt-badge-cat" data-category="{{ t.category_ref.name|lower|replace(' ','-') }}">{{ t.category_ref.name }}</span>
-        {% else %}
-          <span class="muted">—</span>
-        {% endif %}
-      </td>
-      <td class="num price">{{ t.price | money }}</td>
-      <td>{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
-      <td>
-        {% if t.specimen_ref %}{{ t.specimen_ref.name }}
-        {% elif t.sample_type %}{{ t.sample_type }}
-        {% else %}<span class="muted">—</span>{% endif %}
-      </td>
-      <td>
-        {% set sds = t.sub_departments %}
-        {% if sds %}{{ sds|map(attribute="name")|join(", ") }}
-        {% else %}<span class="muted">—</span>{% endif %}
-      </td>
-      <td class="center">
-        {% if t.is_panel %}<span class="lt-badge" style="background:#0d6efd;color:#fff;">P</span>
-        {% elif t.is_child_only %}<span class="lt-badge" style="background:#6f42c1;color:#fff;">C</span>
-        {% elif t.parameters %}<span class="lt-badge" style="background:#fd7e14;color:#fff;">A</span>
-        {% else %}<span class="lt-badge" style="background:#6c757d;color:#fff;">T</span>{% endif %}
-      </td>
-      <td class="center">
-        {% if t.is_active %}
-          <span class="lt-badge" style="background:#198754;color:#fff;">A</span>
-        {% else %}
-          <span class="lt-badge" style="background:#6c757d;color:#fff;">I</span>
-        {% endif %}
-      </td>
-      <td class="center">
-        <div class="lt-actions-col">
-          <a href="{{ url_for('tests.view_test', test_id=t.id) }}" class="lt-icon-btn lt-icon-btn-view" title="View">
-            <i class="bi bi-eye"></i>
-          </a>
-          {% if current_user.role == 'admin' %}
-          <a href="{{ url_for('tests.edit_test', test_id=t.id) }}" class="lt-icon-btn lt-icon-btn-edit" title="Edit">
-            <i class="bi bi-pencil"></i>
-          </a>
-          <form method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}" class="d-inline">
-            {% if t.is_active %}
-            <button class="lt-icon-btn lt-icon-btn-pause" title="Pause (hide from registration)">
-              <i class="bi bi-pause-fill"></i>
-            </button>
-            {% else %}
-            <button class="lt-icon-btn lt-icon-btn-resume" title="Resume (show in registration)">
-              <i class="bi bi-play-fill"></i>
-            </button>
+  <table class="lt-table" style="font-size: 0.72rem; text-align: center;">
+    <thead>
+      <tr>
+        <th style="text-align: center !important;" style="width: 80px;">Code</th>
+        <th style="text-align: center !important;">Name</th>
+        <th style="text-align: center !important;" style="width: 80px;">Unit</th>
+        <th style="text-align: center !important;" class="num" style="width: 100px;">Rate</th>
+        <th style="text-align: center !important;">Report Name</th>
+        <th style="text-align: center !important;" class="center" style="width: 60px;">Status</th>
+        <th style="text-align: center !important;" class="center" style="width: 170px;">Please Select</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tests.items %}
+      <tr class="{% if not t.is_active %}lt-row-paused{% endif %}">
+        <td style="text-align: center;"><code>{{ t.code }}</code></td>
+        <td class="name" style="text-align: left;">{{ t.name }}</td>
+        <td style="text-align: center;">{% if t.unit %}{{ t.unit }}{% else %}<span class="muted">—</span>{% endif %}</td>
+        <td class="num price" style="text-align: right;">{{ t.price | money }}</td>
+        <td style="text-align: center;">{{ t.report_name if t.report_name else '—' }}</td>
+        <td class="center">
+          {% if t.is_active %}
+            <span class="lt-badge" style="background:#198754;color:#fff;">A</span>
+          {% else %}
+            <span class="lt-badge" style="background:#6c757d;color:#fff;">I</span>
+          {% endif %}
+        </td>
+        <td class="center">
+          <select class="form-select form-select-sm" style="font-size: 0.75rem; padding: 2px;"
+                  onchange="
+                    if(this.value=='edit') { window.location.href='{{ url_for('tests.edit_test', test_id=t.id) }}'; } else if(this.value=='ranges') { window.location.href='{{ url_for('tests.edit_ranges_gender', test_id=t.id, gender='any') }}'; }
+                    else if(this.value=='toggle') { document.getElementById('toggle-form-{{ t.id }}').submit(); }
+                  ">
+            <option value="">Please Select</option>
+            {% if current_user.role == 'admin' %}
+            <option value="edit">Edit Test</option>
+            <option value="toggle">{% if t.is_active %}Disable Test{% else %}Enable Test{% endif %}</option>
             {% endif %}
-          </form>
-          <form method="POST" action="{{ url_for('tests.delete_test', test_id=t.id) }}" class="d-inline"
-                onsubmit="return confirm('Archive this test?');">
-            <button class="lt-icon-btn lt-icon-btn-danger" title="Archive">
-              <i class="bi bi-trash"></i>
-            </button>
+            <option value="ranges">Reference Values</option>
+            <option value="delete">Delete</option>
+          </select>
+          
+          <!-- Hidden form to handle the Enable/Disable action -->
+          {% if current_user.role == 'admin' %}
+          <form id="toggle-form-{{ t.id }}" method="POST" action="{{ url_for('tests.toggle_active', test_id=t.id) }}" style="display:none;">
           </form>
           {% endif %}
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% if tests.pages > 1 %}
 <div style="margin-top:10px; display:flex; justify-content:center;">
