@@ -129,22 +129,41 @@ def _collect_histopath(bucket, item, order):
         return
 
     title_style = ParagraphStyle('HpTitle', parent=styles['Normal'],
-                                 fontSize=10, fontName='Helvetica-Bold',
+                                 fontSize=12, fontName='Helvetica-Bold',
                                  textColor=colors.black)
     spec_style = ParagraphStyle('HpSpec', parent=styles['Normal'],
-                                fontSize=9, fontName='Helvetica-Bold',
+                                fontSize=10, fontName='Helvetica-Bold',
                                 textColor=colors.black)
     lbl_style = ParagraphStyle('HpLbl', parent=styles['Normal'],
-                               fontSize=7.5, fontName='Helvetica-Bold',
+                               fontSize=9, fontName='Helvetica-Bold',
                                textColor=colors.black)
     body_style = ParagraphStyle('HpBody', parent=styles['Normal'],
-                                fontSize=8, leading=10)
+                                fontSize=10, leading=14)
 
     def _clean(html):
         if not html:
             return ''
-        h = str(html)
-        return h.replace('\r\n', '<br/>').replace('\n', '<br/>')
+        import re as _re
+        h = str(html).replace('\r\n', '<br/>').replace('\n', '<br/>')
+        # ReportLab only knows: Helvetica, Times-Roman, Courier, and Bold/Italic variants
+        allowed = {
+            'helvetica': 'Helvetica',
+            'arial': 'Helvetica',
+            'segoe ui': 'Helvetica',
+            'times': 'Times-Roman',
+            'times new roman': 'Times-Roman',
+            'times-roman': 'Times-Roman',
+            'courier': 'Courier',
+            'courier new': 'Courier',
+        }
+        def _fix_font(m):
+            face = (m.group(1) or '').strip().lower()
+            mapped = allowed.get(face, 'Helvetica')
+            return 'face="%s"' % mapped
+        h = _re.sub(r'face="([^"]*)"', _fix_font, h, flags=_re.I)
+        # Strip any <font ...> tags ReportLab still can't render
+        h = _re.sub(r'</?font[^>]*>', '', h, flags=_re.I)
+        return h
 
     bucket.append(Spacer(1, 3 * mm))
 
@@ -209,10 +228,10 @@ def _collect_histopath(bucket, item, order):
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ('BOX', (0, 0), (-1, -1), 1.0, colors.black),
             ('INNERGRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#adb5bd')),
-            ('LEFTPADDING', (0, 0), (-1, -1), 5),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 5),
-            ('TOPPADDING', (0, 0), (-1, -1), 4),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 8),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
             ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8f9fa')),
             ('ROUNDEDCORNERS', [8, 8, 8, 8]),
         ]))

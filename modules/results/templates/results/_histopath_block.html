@@ -9,62 +9,61 @@
   {% set _r = item.result %}
   {% if _r is iterable and _r is not string and _r|length and _r[0] %}{% set r = _r[0] %}{% else %}{% set r = _r %}{% endif %}
 
+  <div class="hp-toolbar">
+    <div class="hp-dd" data-dd="font">
+      <button type="button" class="hp-dd-btn" data-val="">Font ▾</button>
+      <div class="hp-dd-menu">
+        <button type="button" data-cmd="fontName" data-val="Helvetica" style="font-family:Helvetica">Helvetica (Sans)</button>
+        <button type="button" data-cmd="fontName" data-val="Times-Roman" style="font-family:'Times New Roman'">Times (Serif)</button>
+        <button type="button" data-cmd="fontName" data-val="Courier" style="font-family:'Courier New'">Courier (Mono)</button>
+      </div>
+    </div>
+    <div class="hp-dd" data-dd="size">
+      <button type="button" class="hp-dd-btn" data-val="">Size ▾</button>
+      <div class="hp-dd-menu">
+        <button type="button" data-cmd="fontSize" data-val="1">8pt</button>
+        <button type="button" data-cmd="fontSize" data-val="2">10pt</button>
+        <button type="button" data-cmd="fontSize" data-val="3">12pt</button>
+        <button type="button" data-cmd="fontSize" data-val="4">14pt</button>
+        <button type="button" data-cmd="fontSize" data-val="5">18pt</button>
+        <button type="button" data-cmd="fontSize" data-val="6">24pt</button>
+      </div>
+    </div>
+    <button type="button" data-cmd="bold"><b>B</b></button>
+    <button type="button" data-cmd="italic"><i>I</i></button>
+    <button type="button" data-cmd="underline"><u>U</u></button>
+    <button type="button" data-cmd="insertUnorderedList">•</button>
+    <button type="button" data-cmd="insertOrderedList">1.</button>
+    <button type="button" data-cmd="justifyLeft">◧</button>
+    <button type="button" data-cmd="justifyCenter">◨</button>
+    <button type="button" data-cmd="justifyRight">◩</button>
+    <button type="button" data-cmd="indent">→</button>
+    <button type="button" data-cmd="outdent">←</button>
+    <button type="button" data-cmd="removeFormat">Tx</button>
+  </div>
+
   <div class="hp-grid">
     <div class="hp-row">
       <span class="hp-lbl">Biopsy/Cytology No:</span>
-      <div class="hp-inline">
-        <input type="text" name="biopsy_no" class="hp-input" style="max-width:180px;"
-               value="{{ r.biopsy_no if r else '' }}">
-      </div>
+      <input type="text" name="biopsy_no" class="hp-input" style="max-width:180px;" value="{{ r.biopsy_no if r else '' }}">
     </div>
 
+    {% macro rich_field(label, name, value) %}
     <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Clinical History / Pre Op Dx:</span>
-      <textarea name="clinical_history_html" class="hp-textarea" rows="5"
-               >{{ r.clinical_history_html|safe if r and r.clinical_history_html else '' }}</textarea>
+      <span class="hp-lbl">{{ label }}:</span>
+      <div class="hp-editor" contenteditable="true" data-name="{{ name }}">{{ value|safe }}</div>
+      <input type="hidden" name="{{ name }}" value="{{ value }}">
     </div>
+    {% endmacro %}
 
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Specimen:</span>
-      <textarea name="histopath_specimen_html" class="hp-textarea" rows="3"
-               >{{ r.histopath_specimen_html|safe if r and r.histopath_specimen_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Gross:</span>
-      <textarea name="gross_html" class="hp-textarea" rows="4"
-               >{{ r.gross_html|safe if r and r.gross_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Microscopic Examination:</span>
-      <textarea name="microscopic_html" class="hp-textarea" rows="6"
-               >{{ r.microscopic_html|safe if r and r.microscopic_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Immuno-Stains:</span>
-      <textarea name="immuno_stains_html" class="hp-textarea" rows="3"
-               >{{ r.immuno_stains_html|safe if r and r.immuno_stains_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Final Diagnosis / Opinion:</span>
-      <textarea name="final_diagnosis_html" class="hp-textarea" rows="5"
-               >{{ r.final_diagnosis_html|safe if r and r.final_diagnosis_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Comments:</span>
-      <textarea name="comments_html" class="hp-textarea" rows="3"
-               >{{ r.comments_html|safe if r and r.comments_html else '' }}</textarea>
-    </div>
-
-    <div class="hp-row hp-row-full">
-      <span class="hp-lbl">Notes:</span>
-      <textarea name="notes" class="hp-textarea" rows="2"
-               >{{ r.notes if r and r.notes else '' }}</textarea>
-    </div>
+    {{ rich_field('Clinical History / Pre Op Dx', 'clinical_history_html', (r.clinical_history_html or '') if r else '') }}
+    {{ rich_field('Specimen', 'histopath_specimen_html', (r.histopath_specimen_html or '') if r else '') }}
+    {{ rich_field('Gross', 'gross_html', (r.gross_html or '') if r else '') }}
+    {{ rich_field('Microscopic Examination', 'microscopic_html', (r.microscopic_html or '') if r else '') }}
+    {{ rich_field('Immuno-Stains', 'immuno_stains_html', (r.immuno_stains_html or '') if r else '') }}
+    {{ rich_field('Final Diagnosis / Opinion', 'final_diagnosis_html', (r.final_diagnosis_html or '') if r else '') }}
+    {{ rich_field('Comments', 'comments_html', (r.comments_html or '') if r else '') }}
+    {{ rich_field('Notes', 'notes', (r.notes or '') if r else '') }}
   </div>
 </div>
 
@@ -72,12 +71,96 @@
 .hp-block { width: 100%; border: 2px solid #1a1a1a; border-radius: 10px; background: #fff; margin-bottom: 12px; overflow: hidden; }
 .hp-hd { background: #dbeafe; color: #1d4ed8; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; display: flex; gap: 8px; align-items: center; }
 .hp-hd .hp-code { color: #2563eb; font-weight: 700; margin-left: auto; font-size: 0.7rem; }
+.hp-toolbar { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 14px; background: #f8f9fa; border-bottom: 1px solid #ced4da; position: sticky; top: 0; z-index: 5; }
+.hp-toolbar button, .hp-toolbar select { height: 26px; border: 1px solid #ced4da; background: #fff; border-radius: 4px; cursor: pointer; font-size: 0.78rem; padding: 0 6px; }
+.hp-toolbar button:hover { background: #e9ecef; }
+.hp-toolbar button[data-cmd="bold"] { color: #d63384; }
+.hp-toolbar button[data-cmd="italic"] { color: #6f42c1; }
+.hp-toolbar button[data-cmd="underline"] { color: #0d6efd; }
+.hp-toolbar button[data-cmd="insertUnorderedList"] { color: #fd7e14; }
+.hp-toolbar button[data-cmd="insertOrderedList"] { color: #fd7e14; }
+.hp-toolbar button[data-cmd="justifyLeft"] { color: #198754; }
+.hp-toolbar button[data-cmd="justifyCenter"] { color: #198754; }
+.hp-toolbar button[data-cmd="justifyRight"] { color: #198754; }
+.hp-toolbar button[data-cmd="indent"] { color: #0dcaf0; }
+.hp-toolbar button[data-cmd="outdent"] { color: #0dcaf0; }
+.hp-toolbar button[data-cmd="removeFormat"] { color: #dc3545; }
 .hp-grid { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .hp-row { display: grid; grid-template-columns: 190px 1fr; align-items: start; gap: 10px; }
-.hp-row-full { grid-template-columns: 190px 1fr; }
 .hp-lbl { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #495057; text-align: right; padding-top: 8px; }
-.hp-inline { display: flex; gap: 6px; }
-.hp-input, .hp-textarea { width: 100%; padding: 6px 10px; border: 1.5px solid #1a1a1a; border-radius: 6px; font-size: 0.85rem; background: #f3f8ff; color: #212529; font-family: inherit; box-sizing: border-box; }
-.hp-input:focus, .hp-textarea:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13,110,253,0.15); }
-.hp-textarea { resize: vertical; min-height: 60px; }
+.hp-input { width: 100%; padding: 6px 10px; border: 1.5px solid #1a1a1a; border-radius: 6px; font-size: 0.85rem; background: #f3f8ff; color: #212529; font-family: inherit; box-sizing: border-box; }
+.hp-input:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13,110,253,0.15); }
+.hp-editor { min-height: 80px; padding: 8px 10px; border: 1.5px solid #1a1a1a; border-radius: 6px; font-size: 0.85rem; background: #f3f8ff; color: #212529; font-family: inherit; box-sizing: border-box; }
+.hp-editor:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13,110,253,0.15); background: #fff; }
+.hp-dd { position: relative; display: inline-block; }
+.hp-dd-menu { display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ced4da; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 20; min-width: 160px; padding: 4px; }
+.hp-dd.open .hp-dd-menu { display: block; }
+.hp-dd-menu button { display: block; width: 100%; text-align: left; padding: 4px 8px; margin: 0; border: none; background: none; cursor: pointer; font-size: 0.82rem; }
+.hp-dd-menu button:hover { background: #e9ecef; }
 </style>
+
+<script>
+(function(){
+  document.querySelectorAll('.hp-block').forEach(function(blk){
+    if (blk.dataset.hpInit) return;
+    blk.dataset.hpInit = '1';
+
+    var toolbar = blk.querySelector('.hp-toolbar');
+    var lastEditor = null;
+
+    // Track which field the user is editing
+    blk.querySelectorAll('.hp-editor').forEach(function(ed){
+      ed.addEventListener('focus', function(){ lastEditor = ed; });
+      ed.addEventListener('input', function(){
+        var h = blk.querySelector('input[type="hidden"][name="' + ed.dataset.name + '"]');
+        if (h) h.value = ed.innerHTML;
+      });
+    });
+
+    // Prevent toolbar buttons from stealing focus from the editor
+    toolbar.querySelectorAll('button').forEach(function(el){
+      el.addEventListener('mousedown', function(e){ e.preventDefault(); });
+    });
+
+    // Dropdown toggle
+    toolbar.querySelectorAll('.hp-dd').forEach(function(dd){
+      var btn = dd.querySelector('.hp-dd-btn');
+      var menu = dd.querySelector('.hp-dd-menu');
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        toolbar.querySelectorAll('.hp-dd.open').forEach(function(o){ if (o !== dd) o.classList.remove('open'); });
+        dd.classList.toggle('open');
+      });
+      menu.querySelectorAll('button').forEach(function(item){
+        item.addEventListener('mousedown', function(e){ e.preventDefault(); });
+        item.addEventListener('click', function(e){
+          e.preventDefault();
+          if (!lastEditor) return;
+          lastEditor.focus();
+          document.execCommand(item.dataset.cmd, false, item.dataset.val);
+          lastEditor.dispatchEvent(new Event('input'));
+          dd.classList.remove('open');
+        });
+      });
+    });
+
+    // Close dropdowns when clicking elsewhere
+    document.addEventListener('click', function(e){
+      toolbar.querySelectorAll('.hp-dd.open').forEach(function(dd){
+        if (!dd.contains(e.target)) dd.classList.remove('open');
+      });
+    });
+
+    // Simple cmd buttons (B/I/U/list/align/indent)
+    toolbar.querySelectorAll('button[data-cmd]:not(.hp-dd-menu button)').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if (!lastEditor) return;
+        lastEditor.focus();
+        document.execCommand(btn.dataset.cmd, false, null);
+        lastEditor.dispatchEvent(new Event('input'));
+      });
+    });
+  });
+})();
+</script>
