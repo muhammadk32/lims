@@ -29,13 +29,13 @@
 
 
           
-          <div class="tf-field"><label>Report Name Mode</label>
+                    <div class="tf-field"><label>Report Name Mode</label>
             <select name="report_name_mode">
-              {% set current_mode = form.report_name_mode if form else (test.report_name_mode if test else 'C') %}
-              <option value="A" {% if current_mode == 'A' %}selected{% endif %}>A — Replace department banner</option>
-              <option value="B" {% if current_mode == 'B' %}selected{% endif %}>B — Add below department banner</option>
-              <option value="C" {% if current_mode == 'C' %}selected{% endif %}>C — Both (Show in both places)</option>
-              <option value="D" {% if current_mode == 'D' %}selected{% endif %}>D — Do not show</option>
+              {% set m = (form.get('report_name_mode') if form else None) or (test.report_name_mode if test else None) or 'C' %}
+              <option value="A" {% if m == 'A' %}selected{% endif %}>A — Replace department banner</option>
+              <option value="B" {% if m == 'B' %}selected{% endif %}>B — Add below department banner</option>
+              <option value="C" {% if m == 'C' %}selected{% endif %}>C — Both (Show in both places)</option>
+              <option value="D" {% if m == 'D' %}selected{% endif %}>D — Do not show</option>
             </select>
           </div>
 {% set cur_cat = form.category_id if form else (test.category_id if test else None) %}

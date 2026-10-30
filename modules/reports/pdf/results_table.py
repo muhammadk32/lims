@@ -377,10 +377,11 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
 
     # ---- Group items by category (alphabetical; uncategorized last) ----
     class _SectionMarker:
-        __slots__ = ('name', 'test', 'has_children', 'children', 'result_value', 'report_name')
-        def __init__(self, name, report_name=''):
+        __slots__ = ('name', 'test', 'has_children', 'children', 'result_value', 'report_name', 'report_name_mode')
+        def __init__(self, name, report_name='', report_name_mode='C'):
             self.name = name
             self.report_name = report_name
+            self.report_name_mode = report_name_mode
             self.test = None
             self.has_children = False
             self.children = []
@@ -401,7 +402,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
         if _cn != _last_cat:
             _last_cat = _cn
             if _cn:
-                _with_headers.append(_SectionMarker(_cn, report_name=(getattr(_it.test, 'report_name', None) or '')))
+                _with_headers.append(_SectionMarker(_cn, report_name=(getattr(_it.test, 'report_name', None) or ''), report_name_mode=(getattr(_it.test, 'report_name_mode', 'C') or 'C')))
         _with_headers.append(_it)
 
     _section_header_rows = []
@@ -434,21 +435,30 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                 # Add large white gap before a new Category Report (e.g., ROUTINE HEMATOLOGY)
                 _gap = [Paragraph('', cell_style)] * (4 + n_prev)
                 data.append(_gap)
-                if item.report_name:
-                    # Mode A/C: report_name on top, department (category) small below
-                    _hdr_title = item.report_name.upper()
-                    _hdr_row = [Paragraph(_hdr_title, section_header_style)]
-                    _hdr_row += [Paragraph('', cell_style)] * (3 + n_prev)
-                    data.append(_hdr_row)
-                    if item.name:
-                        _sub = [Paragraph(item.name.upper() + ' REPORT', cell_style)]
-                        _sub += [Paragraph('', cell_style)] * (3 + n_prev)
-                        data.append(_sub)
+                _mode = (item.report_name_mode or 'C').upper()
+                _rn = (item.report_name or '').strip()
+                _dept = (item.name or '').strip()
+                _dept_title = (_dept.upper() + ' REPORT') if _dept else ''
+
+                def _append_hdr(txt, style):
+                    _row = [Paragraph(txt, style)]
+                    _row += [Paragraph('', cell_style)] * (3 + n_prev)
+                    data.append(_row)
+
+                if _mode == 'D':
+                    pass  # nothing
+                elif _mode == 'A' and _rn:
+                    _append_hdr(_rn.upper(), section_header_style)
+                elif _mode == 'B' and _dept_title:
+                    _append_hdr(_dept_title, section_header_style)
+                elif _mode == 'C':
+                    if _rn:
+                        _append_hdr(_rn.upper(), section_header_style)
+                    if _dept_title:
+                        _append_hdr(_dept_title, cell_style)
                 else:
-                    _hdr_title = (item.name or '').upper() + ' REPORT'
-                    _hdr_row = [Paragraph(_hdr_title, section_header_style)]
-                    _hdr_row += [Paragraph('', cell_style)] * (3 + n_prev)
-                    data.append(_hdr_row)
+                    if _dept_title:
+                        _append_hdr(_dept_title, section_header_style)
                 _section_header_rows.append(row_idx)
                 row_idx += 1
 
