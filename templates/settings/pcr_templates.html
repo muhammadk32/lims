@@ -1,41 +1,37 @@
 ﻿{% extends 'base.html' %}
 {% block title %}PCR Template Setting — LabMS<script>
-let savedSelection = null;
-
-// Save selection when clicking the dropdown
-function saveSelection(el) {
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    const sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        savedSelection = sel.getRangeAt(0);
-    }
-}
-
-// Apply format and sync hidden input
 function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
     const wrapper = el.closest('.editor-wrapper');
     const contentDiv = wrapper.querySelector('.editor-content');
     
+    // Focus the content div
     contentDiv.focus();
     
-    // Restore selection if we clicked a dropdown
-    if (savedSelection) {
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(savedSelection);
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
     }
     
-    // Apply the format
-    document.execCommand(cmd, false, value);
-    
-    // Update the hidden input immediately so it saves
+    // Sync immediately
     const inputId = contentDiv.nextElementSibling.id;
     document.getElementById(inputId).value = contentDiv.innerHTML;
 }
 
-// Ensure hidden inputs sync on form submit
+// Ensure the div is rendered and updated properly
 document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function() {
@@ -53,31 +49,113 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-function wrapText(elementName, openTag, closeTag) {
-    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
-    if (!textarea) return;
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
     
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = textarea.value;
+    // Focus the content div
+    contentDiv.focus();
     
-    if (start === end) {
-        // No text selected, just insert tags
-        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
-        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
     } else {
-        // Wrap selected text
-        const selected = text.substring(start, end);
-        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
-        textarea.selectionStart = start + openTag.length;
-        textarea.selectionEnd = end + openTag.length;
+        document.execCommand(cmd, false, null);
     }
-    textarea.focus();
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
 }
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
+</script>
+<script>
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
+    
+    // Focus the content div
+    contentDiv.focus();
+    
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
+    }
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
+}
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
 </script>
 {% endblock %}
 
 {% block head %}
+<style>
+.editor-wrapper { border: 1px solid #ced4da; border-radius: 4px; background: #fff; margin-bottom: 16px; }
+.editor-toolbar { background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center; }
+.editor-toolbar select, .editor-toolbar button { height: 26px; border: 1px solid #ccc; border-radius: 3px; background: #fff; color: #000; font-size: 12px; cursor: pointer; }
+.editor-toolbar button { width: 26px; font-weight: bold; }
+.editor-content { min-height: 200px; padding: 10px; outline: none; font-family: Consolas, monospace; font-size: 13px; background: #f0f8ff; }
+</style>
 <style>
 .editor-wrapper { border: 1px solid #ced4da; border-radius: 4px; background: #fff; margin-bottom: 16px; }
 .editor-toolbar { background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center; }
@@ -314,42 +392,38 @@ table[class$="-table"] tbody td {
 .wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
 <script>
-let savedSelection = null;
-
-// Save selection when clicking the dropdown
-function saveSelection(el) {
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    const sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        savedSelection = sel.getRangeAt(0);
-    }
-}
-
-// Apply format and sync hidden input
 function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
     const wrapper = el.closest('.editor-wrapper');
     const contentDiv = wrapper.querySelector('.editor-content');
     
+    // Focus the content div
     contentDiv.focus();
     
-    // Restore selection if we clicked a dropdown
-    if (savedSelection) {
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(savedSelection);
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
     }
     
-    // Apply the format
-    document.execCommand(cmd, false, value);
-    
-    // Update the hidden input immediately so it saves
+    // Sync immediately
     const inputId = contentDiv.nextElementSibling.id;
     document.getElementById(inputId).value = contentDiv.innerHTML;
 }
 
-// Ensure hidden inputs sync on form submit
+// Ensure the div is rendered and updated properly
 document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function() {
@@ -367,27 +441,102 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-function wrapText(elementName, openTag, closeTag) {
-    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
-    if (!textarea) return;
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
     
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = textarea.value;
+    // Focus the content div
+    contentDiv.focus();
     
-    if (start === end) {
-        // No text selected, just insert tags
-        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
-        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
     } else {
-        // Wrap selected text
-        const selected = text.substring(start, end);
-        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
-        textarea.selectionStart = start + openTag.length;
-        textarea.selectionEnd = end + openTag.length;
+        document.execCommand(cmd, false, null);
     }
-    textarea.focus();
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
 }
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
+</script>
+<script>
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
+    
+    // Focus the content div
+    contentDiv.focus();
+    
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
+    }
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
+}
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
 </script>
 {% endblock %}
 
@@ -469,26 +618,27 @@ function wrapText(elementName, openTag, closeTag) {
       <div class="pt-card-hd"><i class="bi bi-chat-left-quote"></i> Interpretation</div>
       <div class="pt-card-body">
         <div class="editor-wrapper">
-    <div class="editor-toolbar">
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'formatBlock', this.value)">
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontName', this.value)">
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Consolas">Consolas</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontSize', this.value)">
-            <option value="2">Small</option>
-            <option value="3" selected>Normal</option>
-            <option value="4">Large</option>
-        </select>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'bold')"><b>B</b></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'italic')"><i>I</i></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'underline')"><u>U</u></button>
-    </div>
+    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
+    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="p">Paragraph</option>
+        <option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Consolas">Consolas</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="2">Small</option>
+        <option value="3" selected>Normal</option>
+        <option value="4">Large</option>
+    </select>
+    
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
+</div>
     <div class="editor-content" contenteditable="true">{{ tpl.interpretation_html or '' if tpl else '' }}</div>
 </div>
 <input type="hidden" name="interpretation_html" id="input-interpretation" value="{{ tpl.interpretation_html or '' if tpl else '' }}">
@@ -498,26 +648,27 @@ function wrapText(elementName, openTag, closeTag) {
       <div class="pt-card-hd"><i class="bi bi-journal-text"></i> Methodology</div>
       <div class="pt-card-body">
         <div class="editor-wrapper">
-    <div class="editor-toolbar">
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'formatBlock', this.value)">
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontName', this.value)">
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Consolas">Consolas</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontSize', this.value)">
-            <option value="2">Small</option>
-            <option value="3" selected>Normal</option>
-            <option value="4">Large</option>
-        </select>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'bold')"><b>B</b></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'italic')"><i>I</i></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'underline')"><u>U</u></button>
-    </div>
+    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
+    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="p">Paragraph</option>
+        <option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Consolas">Consolas</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="2">Small</option>
+        <option value="3" selected>Normal</option>
+        <option value="4">Large</option>
+    </select>
+    
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
+</div>
     <div class="editor-content" contenteditable="true">{{ tpl.methodology_html or '' if tpl else '' }}</div>
 </div>
 <input type="hidden" name="methodology_html" id="input-methodology" value="{{ tpl.methodology_html or '' if tpl else '' }}">
@@ -527,26 +678,27 @@ function wrapText(elementName, openTag, closeTag) {
       <div class="pt-card-hd"><i class="bi bi-chat-dots"></i> Comments</div>
       <div class="pt-card-body">
         <div class="editor-wrapper">
-    <div class="editor-toolbar">
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'formatBlock', this.value)">
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontName', this.value)">
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Consolas">Consolas</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontSize', this.value)">
-            <option value="2">Small</option>
-            <option value="3" selected>Normal</option>
-            <option value="4">Large</option>
-        </select>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'bold')"><b>B</b></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'italic')"><i>I</i></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'underline')"><u>U</u></button>
-    </div>
+    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
+    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="p">Paragraph</option>
+        <option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Consolas">Consolas</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="2">Small</option>
+        <option value="3" selected>Normal</option>
+        <option value="4">Large</option>
+    </select>
+    
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
+</div>
     <div class="editor-content" contenteditable="true">{{ tpl.comments_html or '' if tpl else '' }}</div>
 </div>
 <input type="hidden" name="comments_html" id="input-comments" value="{{ tpl.comments_html or '' if tpl else '' }}">
@@ -556,26 +708,27 @@ function wrapText(elementName, openTag, closeTag) {
       <div class="pt-card-hd"><i class="bi bi-lightbulb"></i> Suggestion</div>
       <div class="pt-card-body">
         <div class="editor-wrapper">
-    <div class="editor-toolbar">
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'formatBlock', this.value)">
-            <option value="p">Paragraph</option>
-            <option value="h1">Heading 1</option>
-            <option value="h2">Heading 2</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontName', this.value)">
-            <option value="Arial">Arial</option>
-            <option value="Verdana">Verdana</option>
-            <option value="Consolas">Consolas</option>
-        </select>
-        <select onmousedown="saveSelection(this)" onchange="formatDoc(this, 'fontSize', this.value)">
-            <option value="2">Small</option>
-            <option value="3" selected>Normal</option>
-            <option value="4">Large</option>
-        </select>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'bold')"><b>B</b></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'italic')"><i>I</i></button>
-        <button type="button" onmousedown="event.preventDefault()" onclick="formatDoc(this, 'underline')"><u>U</u></button>
-    </div>
+    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
+    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="p">Paragraph</option>
+        <option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Consolas">Consolas</option>
+    </select>
+    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
+        <option value="2">Small</option>
+        <option value="3" selected>Normal</option>
+        <option value="4">Large</option>
+    </select>
+    
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
+    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
+</div>
     <div class="editor-content" contenteditable="true">{{ tpl.suggestion_html or '' if tpl else '' }}</div>
 </div>
 <input type="hidden" name="suggestion_html" id="input-suggestion" value="{{ tpl.suggestion_html or '' if tpl else '' }}">
@@ -593,42 +746,38 @@ function wrapText(elementName, openTag, closeTag) {
 
 
 <script>
-let savedSelection = null;
-
-// Save selection when clicking the dropdown
-function saveSelection(el) {
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    const sel = window.getSelection();
-    if (sel.rangeCount > 0) {
-        savedSelection = sel.getRangeAt(0);
-    }
-}
-
-// Apply format and sync hidden input
 function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
     const wrapper = el.closest('.editor-wrapper');
     const contentDiv = wrapper.querySelector('.editor-content');
     
+    // Focus the content div
     contentDiv.focus();
     
-    // Restore selection if we clicked a dropdown
-    if (savedSelection) {
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(savedSelection);
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
     }
     
-    // Apply the format
-    document.execCommand(cmd, false, value);
-    
-    // Update the hidden input immediately so it saves
+    // Sync immediately
     const inputId = contentDiv.nextElementSibling.id;
     document.getElementById(inputId).value = contentDiv.innerHTML;
 }
 
-// Ensure hidden inputs sync on form submit
+// Ensure the div is rendered and updated properly
 document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function() {
@@ -646,26 +795,101 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-function wrapText(elementName, openTag, closeTag) {
-    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
-    if (!textarea) return;
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
     
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = textarea.value;
+    // Focus the content div
+    contentDiv.focus();
     
-    if (start === end) {
-        // No text selected, just insert tags
-        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
-        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
     } else {
-        // Wrap selected text
-        const selected = text.substring(start, end);
-        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
-        textarea.selectionStart = start + openTag.length;
-        textarea.selectionEnd = end + openTag.length;
+        document.execCommand(cmd, false, null);
     }
-    textarea.focus();
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
 }
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
+</script>
+<script>
+function formatDoc(el, cmd, value) {
+    // Find the closest wrapper and the content div inside it
+    const wrapper = el.closest('.editor-wrapper');
+    const contentDiv = wrapper.querySelector('.editor-content');
+    
+    // Focus the content div
+    contentDiv.focus();
+    
+    // Apply the command
+    if (value !== undefined) {
+        document.execCommand(cmd, false, value);
+    } else {
+        document.execCommand(cmd, false, null);
+    }
+    
+    // Sync immediately
+    const inputId = contentDiv.nextElementSibling.id;
+    document.getElementById(inputId).value = contentDiv.innerHTML;
+}
+
+// Ensure the div is rendered and updated properly
+document.addEventListener('DOMContentLoaded', function() {
+    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+        const input = document.getElementById('input-' + name);
+        if (input && input.previousElementSibling) {
+            const contentDiv = input.previousElementSibling;
+            if (contentDiv.classList.contains('editor-content')) {
+                contentDiv.innerHTML = input.value;
+            }
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
+                const input = document.getElementById('input-' + name);
+                if (input && input.previousElementSibling) {
+                    const contentDiv = input.previousElementSibling;
+                    if (contentDiv.classList.contains('editor-content')) {
+                        input.value = contentDiv.innerHTML;
+                    }
+                }
+            });
+        });
+    }
+});
 </script>
 {% endblock %}
