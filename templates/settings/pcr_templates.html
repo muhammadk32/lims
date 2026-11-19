@@ -1,151 +1,7 @@
 ﻿{% extends 'base.html' %}
-{% block title %}PCR Template Setting — LabMS<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
+{% block title %}PCR Template Setting — LabMS
 
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
 
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
-
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
-
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
 {% endblock %}
 
 {% block head %}
@@ -391,153 +247,9 @@ table[class$="-table"] tbody td {
 .wrap table thead th, .table thead th { font-size: 0.82rem !important; }
 .wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
 </style>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
 
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
 
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
 
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
-
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
 {% endblock %}
 
 {% block content %}
@@ -639,9 +351,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
     <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
 </div>
-    <div class="editor-content" contenteditable="true">{{ tpl.interpretation_html or '' if tpl else '' }}</div>
+    <div class="editor-content" contenteditable="true">{{ (tpl.interpretation_html or '')|safe if tpl else '' }}</div>
 </div>
-<input type="hidden" name="interpretation_html" id="input-interpretation" value="{{ tpl.interpretation_html or '' if tpl else '' }}">
+<input type="hidden" name="interpretation_html" id="input-interpretation" value="{{ (tpl.interpretation_html or '') if tpl else '' }}">
       </div>
     </div>
     <div class="pt-card">
@@ -669,9 +381,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
     <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
 </div>
-    <div class="editor-content" contenteditable="true">{{ tpl.methodology_html or '' if tpl else '' }}</div>
+    <div class="editor-content" contenteditable="true">{{ (tpl.methodology_html or '')|safe if tpl else '' }}</div>
 </div>
-<input type="hidden" name="methodology_html" id="input-methodology" value="{{ tpl.methodology_html or '' if tpl else '' }}">
+<input type="hidden" name="methodology_html" id="input-methodology" value="{{ (tpl.methodology_html or '') if tpl else '' }}">
       </div>
     </div>
     <div class="pt-card">
@@ -699,9 +411,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
     <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
 </div>
-    <div class="editor-content" contenteditable="true">{{ tpl.comments_html or '' if tpl else '' }}</div>
+    <div class="editor-content" contenteditable="true">{{ (tpl.comments_html or '')|safe if tpl else '' }}</div>
 </div>
-<input type="hidden" name="comments_html" id="input-comments" value="{{ tpl.comments_html or '' if tpl else '' }}">
+<input type="hidden" name="comments_html" id="input-comments" value="{{ (tpl.comments_html or '') if tpl else '' }}">
       </div>
     </div>
     <div class="pt-card">
@@ -729,9 +441,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
     <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
 </div>
-    <div class="editor-content" contenteditable="true">{{ tpl.suggestion_html or '' if tpl else '' }}</div>
+    <div class="editor-content" contenteditable="true">{{ (tpl.suggestion_html or '')|safe if tpl else '' }}</div>
 </div>
-<input type="hidden" name="suggestion_html" id="input-suggestion" value="{{ tpl.suggestion_html or '' if tpl else '' }}">
+<input type="hidden" name="suggestion_html" id="input-suggestion" value="{{ (tpl.suggestion_html or '') if tpl else '' }}">
       </div>
     </div>
     <div class="pt-save-bar">
@@ -745,145 +457,41 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 
+
+
+
 <script>
 function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
+    const contentDiv = el.closest('.editor-wrapper').querySelector('.editor-content');
     contentDiv.focus();
-    
-    // Apply the command
     if (value !== undefined) {
         document.execCommand(cmd, false, value);
     } else {
         document.execCommand(cmd, false, null);
     }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
+    const input = contentDiv.closest('.pt-card-body').querySelector('input[type="hidden"]');
+    if (input) input.value = contentDiv.innerHTML;
 }
 
-// Ensure the div is rendered and updated properly
 document.addEventListener('DOMContentLoaded', function() {
     ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
         const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
+        if (input) {
+            const contentDiv = input.closest('.pt-card-body').querySelector('.editor-content');
+            if (contentDiv) {
                 contentDiv.innerHTML = input.value;
             }
         }
     });
 
-    const form = document.querySelector('form');
+    const form = document.querySelector('form[method="POST"]');
     if (form) {
         form.addEventListener('submit', function() {
             ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
                 const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
-
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
-    }
-});
-</script>
-<script>
-function formatDoc(el, cmd, value) {
-    // Find the closest wrapper and the content div inside it
-    const wrapper = el.closest('.editor-wrapper');
-    const contentDiv = wrapper.querySelector('.editor-content');
-    
-    // Focus the content div
-    contentDiv.focus();
-    
-    // Apply the command
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    
-    // Sync immediately
-    const inputId = contentDiv.nextElementSibling.id;
-    document.getElementById(inputId).value = contentDiv.innerHTML;
-}
-
-// Ensure the div is rendered and updated properly
-document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input && input.previousElementSibling) {
-            const contentDiv = input.previousElementSibling;
-            if (contentDiv.classList.contains('editor-content')) {
-                contentDiv.innerHTML = input.value;
-            }
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input && input.previousElementSibling) {
-                    const contentDiv = input.previousElementSibling;
-                    if (contentDiv.classList.contains('editor-content')) {
+                if (input) {
+                    const contentDiv = input.closest('.pt-card-body').querySelector('.editor-content');
+                    if (contentDiv) {
                         input.value = contentDiv.innerHTML;
                     }
                 }
