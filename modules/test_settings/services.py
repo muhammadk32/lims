@@ -141,6 +141,7 @@ def create_panel(form):
     price = form.get('price') or '0'
     description = (form.get('description') or '').strip()
     param_ids = form.getlist('parameter_ids')
+    sort_orders = form.getlist('sort_orders')
 
     ok, errors, price_val = _validate_panel_form(code, name, price)
     if not ok:
@@ -161,7 +162,7 @@ def create_panel(form):
     db.session.add(panel)
     db.session.flush()
 
-    _replace_panel_parameters(panel.id, param_ids)
+    _replace_panel_parameters(panel.id, param_ids, sort_orders)
     db.session.commit()
     return True, [], panel
 
@@ -174,6 +175,7 @@ def update_panel(panel, form):
     price = form.get('price') or '0'
     description = (form.get('description') or '').strip()
     param_ids = form.getlist('parameter_ids')
+    sort_orders = form.getlist('sort_orders')
 
     ok, errors, price_val = _validate_panel_form(code, name, price, panel_id=panel.id)
     if not ok:
@@ -187,7 +189,7 @@ def update_panel(panel, form):
     panel.is_active = bool(form.get('is_active', True))
 
     PanelParameter.query.filter_by(panel_id=panel.id).delete()
-    _replace_panel_parameters(panel.id, param_ids)
+    _replace_panel_parameters(panel.id, param_ids, sort_orders)
     db.session.commit()
     return True, []
 
@@ -206,15 +208,22 @@ def delete_panel(panel):
     return True, None
 
 
-def _replace_panel_parameters(panel_id, param_ids):
+def _replace_panel_parameters(panel_id, param_ids, sort_orders=None):
     """Insert PanelParameter rows in given order."""
     for i, tid in enumerate(param_ids):
         try:
             tid_int = int(tid)
         except (ValueError, TypeError):
             continue
+        
+        # Use the provided sort_order if valid, otherwise fallback to list index
+        try:
+            order_val = int(sort_orders[i]) if sort_orders and i < len(sort_orders) else i
+        except (ValueError, TypeError):
+            order_val = i
+
         db.session.add(PanelParameter(
             panel_id=panel_id,
             test_id=tid_int,
-            sort_order=i,
+            sort_order=order_val,
         ))

@@ -402,7 +402,7 @@ table[class$="-table"] tbody td {
           </tr>
         </thead>
         <tbody>
-          {% for c in item.children %}
+          {% for c in (sorted_children if sorted_children else item.children) %}
           <tr>
             <td class="name">{{ c.test.name }}</td>
             <td>

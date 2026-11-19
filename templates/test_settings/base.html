@@ -7,8 +7,8 @@
   {{ super() }}
 
   {# Settings-specific styles (loaded last so they win specificity) #}
-  <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/test_settings.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/test_settings.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/test_settings_theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
 {% endblock %}
 

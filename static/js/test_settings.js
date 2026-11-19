@@ -1,4 +1,4 @@
-/* ==========================================================
+﻿/* ==========================================================
    Lab Test Settings — client-side handlers
    ========================================================== */
 
@@ -252,60 +252,118 @@ window.TestSettings = (function () {
     const checkboxes = Array.from(list.querySelectorAll('.param-checkbox'));
 
     function updateHidden() {
+      // Read all selected checkboxes currently rendered
+      const checkboxes = Array.from(list.querySelectorAll('.param-checkbox'));
       const selected = checkboxes.filter(cb => cb.checked);
-
-      if (hidden) {
-        hidden.innerHTML = '';
-        selected.forEach(cb => {
-          const inp = document.createElement('input');
-          inp.type = 'hidden';
-          inp.name = 'parameter_ids';
-          inp.value = cb.value;
-          hidden.appendChild(inp);
-        });
-      }
-
+      
+      // Update count
+      if (countEl) countEl.textContent = selected.length;
+      
+      // Highlight selected items on the left
       checkboxes.forEach(cb => {
         const item = cb.closest('.param-item');
-        if (!item) return;
-        const badge = item.querySelector('.param-order-badge');
-        const idx = selected.indexOf(cb);
-        if (badge) {
-          if (idx >= 0) {
-            badge.textContent = idx + 1;
-            badge.style.display = 'inline-flex';
-          } else {
-            badge.style.display = 'none';
-          }
-        }
-        item.classList.toggle('checked', idx >= 0);
+        if (item) item.classList.toggle('selected', cb.checked);
       });
-
-      if (countEl) countEl.textContent = selected.length;
+      
       updatePreview(selected);
     }
 
     function updatePreview(selected) {
+      // Sort selected checkboxes by their data-sort-order before rendering
+      selected.sort((a, b) => {
+        const itemA = a.closest('.param-item');
+        const itemB = b.closest('.param-item');
+        const orderA = parseInt(itemA.dataset.sortOrder || 9999);
+        const orderB = parseInt(itemB.dataset.sortOrder || 9999);
+        return orderA - orderB;
+      });
       if (!previewList) return;
       previewList.innerHTML = '';
+      
       if (selected.length === 0) {
-        previewList.innerHTML =
-          '<li class="text-muted small">No parameters selected yet</li>';
+        previewList.innerHTML = '<li class="text-muted small">No parameters selected yet</li>';
+        if (hidden) hidden.innerHTML = '';
         return;
       }
+
+      // 1. Build the list first
       selected.forEach((cb, i) => {
         const item = cb.closest('.param-item');
         const nameEl = item.querySelector('.fw-semibold');
         const codeEl = item.querySelector('code');
         const name = nameEl ? nameEl.textContent.trim() : '—';
         const code = codeEl ? codeEl.textContent.trim() : '—';
+        
         const li = document.createElement('li');
-        li.innerHTML =
-          '<span class="param-index">' + (i + 1) + '</span>' +
-          '<code class="small text-muted">' + code + '</code>' +
-          '<span class="ms-1">' + name + '</span>';
+        li.className = 'preview-param-row d-flex align-items-center gap-2 mb-2';
+        li.style.borderBottom = '1px solid #eee';
+        li.style.paddingBottom = '5px';
+        
+        li.innerHTML = 
+          '<input type="checkbox" class="form-check-input param-checkbox" value="' + cb.value + '" checked style="display:none;">' +
+          '<code class="small text-muted" style="width: 50px;">' + code + '</code>' +
+          '<span class="flex-grow-1">' + name + '</span>' +
+          '<input type="number" class="form-control form-control-sm sort-order-input" style="width: 70px;" value="' + (i + 1) + '" min="1">' +
+          '<button type="button" class="btn btn-sm btn-outline-danger remove-preview-btn" style="padding: 2px 6px;">&times;</button>';
+          
+        // Remove button
+        li.querySelector('.remove-preview-btn').addEventListener('click', () => {
+          cb.checked = false;
+          updateHidden();
+        });
+
+        // Reorder input
+        li.querySelector('.sort-order-input').addEventListener('change', function() {
+          let newPos = parseInt(this.value) - 1;
+          let rows = Array.from(previewList.querySelectorAll('.preview-param-row'));
+          
+          if (isNaN(newPos)) newPos = 0;
+          if (newPos < 0) newPos = 0;
+          if (newPos >= rows.length) newPos = rows.length - 1;
+          
+          // Physically move DOM element
+          if (newPos > rows.indexOf(li)) {
+            rows[newPos].after(li);
+          } else {
+            rows[newPos].before(li);
+          }
+          
+          // Re-number all inputs
+          rows = Array.from(previewList.querySelectorAll('.preview-param-row'));
+          rows.forEach((row, index) => {
+            row.querySelector('.sort-order-input').value = index + 1;
+          });
+          
+          syncHiddenInputs();
+        });
+        
         previewList.appendChild(li);
       });
+      
+      syncHiddenInputs();
+
+      // Helper to rebuild hidden inputs
+      function syncHiddenInputs() {
+        if (!hidden) return;
+        hidden.innerHTML = '';
+        const rows = previewList.querySelectorAll('.preview-param-row');
+        rows.forEach((row, index) => {
+          const cb = row.querySelector('.param-checkbox');
+          if (cb && cb.checked) {
+            const inpId = document.createElement('input');
+            inpId.type = 'hidden';
+            inpId.name = 'parameter_ids';
+            inpId.value = cb.value;
+            hidden.appendChild(inpId);
+            
+            const inpSort = document.createElement('input');
+            inpSort.type = 'hidden';
+            inpSort.name = 'sort_orders';
+            inpSort.value = index; // 0, 1, 2, 3...
+            hidden.appendChild(inpSort);
+          }
+        });
+      }
     }
 
     checkboxes.forEach(cb => cb.addEventListener('change', updateHidden));

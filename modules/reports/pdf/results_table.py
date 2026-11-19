@@ -14,6 +14,21 @@ from reportlab.platypus import Paragraph, Table, TableStyle, HRFlowable, Spacer
 from .branding import _get_lab, _hex
 from .culture_table import _culture_block as _culture_flowables
 
+def _sorted_children(item):
+    """Sort an item's children by the panel's saved sort_order."""
+    if not getattr(item, 'children', None):
+        return []
+    try:
+        from modules.tests.models import PanelParameter
+        links = (PanelParameter.query
+                 .filter_by(panel_id=item.test_id)
+                 .order_by(PanelParameter.sort_order.asc())
+                 .all())
+        order_map = {link.test_id: link.sort_order for link in links}
+        return sorted(item.children, key=lambda c: order_map.get(c.test_id, 9999))
+    except Exception:
+        return item.children
+
 
 
 def _rrfo(test, order):
@@ -658,7 +673,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             # Group children by section — keep original order, group headings
             _seen = set()
             _ordered_sections = []
-            for _ch in item.children:
+            for _ch in _sorted_children(item):
                 _sec = (getattr(_ch.test, 'panel_section', None) or '').strip()
                 if _sec not in _seen:
                     _seen.add(_sec)
@@ -678,7 +693,7 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
                     _section_hdr_row_indices.append(row_idx)
                     row_idx += 1
 
-                for child in [c for c in item.children
+                for child in [c for c in _sorted_children(item)
                               if (getattr(c.test, 'panel_section', None) or '').strip() == _sec]:
                     flag, _crit = _efo(child.test, child.result_value, order)
                     if flag == 'abnormal':

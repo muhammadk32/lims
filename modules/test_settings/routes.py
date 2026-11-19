@@ -143,9 +143,11 @@ def panel_new():
         active_tab='panels',
         panel=None,
         selected_ids=[],
+        selected_tests=[],
+        sort_map={},
         categories=q.list_categories(),
         standalone_tests=q.list_standalone_tests(),
-        mode='create',
+        mode='new',
     )
 
 
@@ -158,6 +160,7 @@ def panel_edit(panel_id):
         return redirect(url_for('test_settings.panels'))
 
     params = q.get_panel_parameters(panel.id)
+    sort_map = {p.test_id: p.sort_order for p in params}
 
     return render_template(
         'test_settings/panel_edit.html',
@@ -165,6 +168,7 @@ def panel_edit(panel_id):
         panel=panel,
         selected_ids=[p.test_id for p in params],
         selected_tests=[p.test for p in params],
+        sort_map=sort_map,
         categories=q.list_categories(),
         standalone_tests=q.list_standalone_tests(),
         mode='edit',

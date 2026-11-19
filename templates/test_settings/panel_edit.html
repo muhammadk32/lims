@@ -1,4 +1,4 @@
-{% extends "test_settings/base.html" %}
+﻿{% extends "test_settings/base.html" %}
 
 {% block title %}
   {% if mode == 'create' %}New Panel{% else %}Edit {{ panel.name }}{% endif %}
@@ -116,7 +116,7 @@
             {% for t in standalone_tests %}
             <label class="param-item d-flex align-items-center gap-2"
                    data-test-id="{{ t.id }}"
-                   data-search="{{ t.code|lower }} {{ t.name|lower }}">
+                   data-search="{{ t.code|lower }} {{ t.name|lower }}"`n                   data-sort-order="{{ sort_map.get(t.id, 9999) }}">
               <input type="checkbox"
                      class="form-check-input param-checkbox"
                      value="{{ t.id }}"

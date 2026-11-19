@@ -461,3 +461,158 @@ table.ts-kpi .ts-kpi-value {
   color: #1a3d7c !important;
   margin-top: 4px;
 }
+
+/* ===== Colorful Inputs for Panel Edit ===== */
+#panelForm input[type="text"],
+#panelForm input[type="number"],
+#panelForm select,
+#panelForm textarea {
+  background-color: #f0f8ff !important; /* Light AliceBlue */
+  border: 2px solid #b0c4de !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+}
+
+#panelForm input[type="text"]:focus,
+#panelForm input[type="number"]:focus,
+#panelForm select:focus,
+#panelForm textarea:focus {
+  background-color: #ffffff !important;
+  border-color: #0d6efd !important; /* theme accent */
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15) !important;
+}
+
+/* Highlight required fields */
+#panelForm input[required] {
+  background-color: #fffaf0 !important; /* Light floral white */
+  border-color: #ffb703 !important; /* theme gold dark */
+}
+
+/* Style the right-side preview list inputs */
+.preview-param-row input[type="number"] {
+  background-color: #fdf5e6 !important; /* Light OldLace */
+  border: 2px solid #ffb703 !important; /* theme gold */
+  font-weight: 800 !important;
+  text-align: center;
+  color: #1a3d7c !important;
+}
+
+.preview-param-row input[type="number"]:focus {
+  background-color: #ffffff !important;
+  border-color: #1a3d7c !important;
+  box-shadow: 0 0 0 4px rgba(26, 61, 124, 0.15) !important;
+}
+
+/* ===== Prominent Card Headers ===== */
+.card {
+  border: 2px solid #212529 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+  overflow: hidden !important;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #212529 !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px 16px !important;
+}
+
+.card-header i {
+  color: #ffd166 !important; /* theme gold */
+  margin-right: 6px;
+}
+
+/* Make the "Selected: X" badge pop against the new dark header */
+.card-header .text-primary,
+.card-header .badge {
+  color: #ffd166 !important;
+  background: transparent !important;
+  font-weight: 800 !important;
+}
+
+/* ===== Visible Borders for Preview Rows ===== */
+.preview-param-row {
+  border-bottom: 2px solid #212529 !important; /* Strong dark border */
+  padding: 10px 0 !important;
+  margin-bottom: 0 !important; /* Remove the inline mb-2 from JS */
+}
+
+/* Remove the border from the very last row so it doesn't double up with the card border */
+.preview-param-row:last-child {
+  border-bottom: none !important;
+}
+
+/* Make the borders on the main blocks slightly thicker to match */
+.card {
+  border: 2px solid #212529 !important;
+}
+
+/* Ensure the parameter picker items also have clear borders */
+.param-item {
+  border-bottom: 1px solid #ced4da !important;
+  margin-bottom: 2px;
+}
+
+/* ===== Dark Prominent Highlight for Selected Parameters ===== */
+.param-item.checked,
+.param-item:has(.param-checkbox:checked) {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #1a3d7c !important;
+  border-radius: 8px !important;
+  margin-bottom: 4px !important; /* give it some breathing room */
+}
+
+/* Make text white inside the dark highlight */
+.param-item.checked .fw-semibold,
+.param-item.checked code,
+.param-item.checked .text-muted,
+.param-item:has(.param-checkbox:checked) .fw-semibold,
+.param-item:has(.param-checkbox:checked) code,
+.param-item:has(.param-checkbox:checked) .text-muted {
+  color: #ffffff !important;
+}
+
+/* Make the checkbox pop against the dark background */
+.param-item.checked .param-checkbox,
+.param-item:has(.param-checkbox:checked) .param-checkbox {
+  border-color: #ffd166 !important;
+  background-color: #ffd166 !important;
+}
+
+/* ===== Force Dark Blue for Hovered/Selected Parameters ===== */
+.param-item:hover,
+.param-item.checked,
+.param-item:has(.param-checkbox:checked),
+.param-item.selected {
+  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
+  border: 2px solid #0d6efd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Make text white inside the dark highlight */
+.param-item:hover .fw-semibold,
+.param-item:hover code,
+.param-item:hover .text-muted,
+.param-item.checked .fw-semibold,
+.param-item.checked code,
+.param-item.checked .text-muted,
+.param-item.selected .fw-semibold,
+.param-item.selected code,
+.param-item.selected .text-muted {
+  color: #ffffff !important;
+}
+
+/* Make the checkbox pop against the dark background */
+.param-item:hover .param-checkbox,
+.param-item.checked .param-checkbox,
+.param-item.selected .param-checkbox {
+  border-color: #ffd166 !important;
+  background-color: #ffd166 !important;
+}

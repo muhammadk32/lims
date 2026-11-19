@@ -171,7 +171,7 @@
             </tr>
 
             {# ---- Children rows ---- #}
-            {% for child in item.children %}
+            {% for child in (item.sorted_children if item.sorted_children else item.children) %}
               {% set flag = check_result(rng(child.test, order), child.result_value) %}
               {% if flag == 'abnormal' %}{% set ns.abnormal_count = ns.abnormal_count + 1 %}{% endif %}
               <tr class="panel-child {% if flag == 'abnormal' %}abnormal-row{% endif %}">

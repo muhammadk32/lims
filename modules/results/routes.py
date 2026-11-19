@@ -37,8 +37,7 @@ def index():
     """
     search = request.args.get('q', '').strip()
     order_filter = request.args.get('order', '').strip()
-
-    pending_orders = q.list_pending_orders(q=search, order_filter=order_filter)
+    pending_orders = q.list_pending_orders(search, order_filter)
 
     return render_template(
         'results/index.html',
@@ -250,8 +249,51 @@ def enter_item(item_id):
         from modules.tests.models import PcrTemplate
         tpl = PcrTemplate.query.filter_by(test_id=item.test_id).first()
 
+    # Sort children by PanelParameter.sort_order if they exist
+    from modules.tests.models import PanelParameter
+    sorted_children = []
+    if getattr(item, 'children', None):
+        links = (PanelParameter.query
+                 .filter_by(panel_id=item.test_id)
+                 .order_by(PanelParameter.sort_order.asc())
+                 .all())
+        order_map = {link.test_id: link.sort_order for link in links}
+        sorted_children = sorted(
+            item.children, 
+            key=lambda c: order_map.get(c.test_id, 9999)
+        )
+
+    # Sort children by PanelParameter.sort_order if they exist
+    from modules.tests.models import PanelParameter
+    sorted_children = []
+    if getattr(item, 'children', None):
+        links = (PanelParameter.query
+                 .filter_by(panel_id=item.test_id)
+                 .order_by(PanelParameter.sort_order.asc())
+                 .all())
+        order_map = {link.test_id: link.sort_order for link in links}
+        sorted_children = sorted(
+            item.children, 
+            key=lambda c: order_map.get(c.test_id, 9999)
+        )
+
+    # Sort children by PanelParameter.sort_order if they exist
+    from modules.tests.models import PanelParameter
+    sorted_children = []
+    if getattr(item, 'children', None):
+        links = (PanelParameter.query
+                 .filter_by(panel_id=item.test_id)
+                 .order_by(PanelParameter.sort_order.asc())
+                 .all())
+        order_map = {link.test_id: link.sort_order for link in links}
+        sorted_children = sorted(
+            item.children, 
+            key=lambda c: order_map.get(c.test_id, 9999)
+        )
+
     return render_template(
         'results/enter_item.html',
+        sorted_children=sorted_children,
         item=item,
         order=item.order,
         r=r,
