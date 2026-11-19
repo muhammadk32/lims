@@ -52,6 +52,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<script>
+function wrapText(elementName, openTag, closeTag) {
+    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    
+    if (start === end) {
+        // No text selected, just insert tags
+        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    } else {
+        // Wrap selected text
+        const selected = text.substring(start, end);
+        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
+        textarea.selectionStart = start + openTag.length;
+        textarea.selectionEnd = end + openTag.length;
+    }
+    textarea.focus();
+}
+</script>
 {% endblock %}
 
 {% block head %}
@@ -343,6 +366,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+<script>
+function wrapText(elementName, openTag, closeTag) {
+    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    
+    if (start === end) {
+        // No text selected, just insert tags
+        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    } else {
+        // Wrap selected text
+        const selected = text.substring(start, end);
+        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
+        textarea.selectionStart = start + openTag.length;
+        textarea.selectionEnd = end + openTag.length;
+    }
+    textarea.focus();
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -598,5 +644,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+<script>
+function wrapText(elementName, openTag, closeTag) {
+    const textarea = document.querySelector(`textarea[name="${elementName}"]`);
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    
+    if (start === end) {
+        // No text selected, just insert tags
+        textarea.value = text.substring(0, start) + openTag + closeTag + text.substring(end);
+        textarea.selectionStart = textarea.selectionEnd = start + openTag.length;
+    } else {
+        // Wrap selected text
+        const selected = text.substring(start, end);
+        textarea.value = text.substring(0, start) + openTag + selected + closeTag + text.substring(end);
+        textarea.selectionStart = start + openTag.length;
+        textarea.selectionEnd = end + openTag.length;
+    }
+    textarea.focus();
+}
 </script>
 {% endblock %}
