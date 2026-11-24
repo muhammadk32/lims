@@ -110,7 +110,14 @@ def report(order_id):
         dept_ids = set()
 
     sigs = ReportSignature.for_departments(dept_ids if dept_ids else None)
-    return render_template('results/report.html', order=order, report_signatures=sigs)
+    from modules.results.models import Result as _Result
+    from modules.tests.models import PcrTemplate as _PcrTemplate
+    _item_ids = [it.id for it in (order.items or [])]
+    results_by_item = {r.order_item_id: r for r in _Result.query.filter(_Result.order_item_id.in_(_item_ids)).all()} if _item_ids else {}
+    _pcr_ids = {it.test_id for it in (order.items or []) if (getattr(getattr(it, 'test', None), 'result_format', '') or '').lower() in ('pcr', 'pcr_quant', 'molecular')}
+    pcr_tpl_by_test = {t.test_id: t for t in _PcrTemplate.query.filter(_PcrTemplate.test_id.in_(_pcr_ids)).all()} if _pcr_ids else {}
+
+    return render_template('results/report.html', order=order, report_signatures=sigs, results_by_item=results_by_item, pcr_tpl_by_test=pcr_tpl_by_test)
 
 
 # ============================================================

@@ -316,6 +316,7 @@ class PcrTemplate(BaseModel):
     suggestion_html     = db.Column(db.Text, nullable=True)
     interpretation_html = db.Column(db.Text, nullable=True)
     comments_html       = db.Column(db.Text, nullable=True)
+    layout_html         = db.Column(db.Text, nullable=True)
 
     test = db.relationship('Test', backref=db.backref(
         'pcr_template', uselist=False, cascade='all, delete-orphan'

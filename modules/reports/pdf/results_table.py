@@ -1,4 +1,4 @@
-﻿"""Results table — grouped by panel, with abnormal highlighting."""
+"""Results table — grouped by panel, with abnormal highlighting."""
 import re
 from reportlab.lib import colors
 from modules.tests.ranges import (
@@ -438,10 +438,10 @@ def _results_table(order, previous_map=None, date_labels=None, items_override=No
             tpl = None
 
         def _pick(a, b):
-            return _sanitize_para(a if a else (b if tpl else None))
+            return _sanitize_para(a if a else b)
 
-        specimen    = r.specimen if r else None
-        result_type = (r.result_type or r.value) if r else None
+        specimen    = (r.specimen if r and r.specimen else item.sample_type) or None
+        result_type = ((r.result_type or r.value) if r else item.result_value) or None
         viral_load  = r.viral_load_type if r else None
         interpretation = _pick(r.interpretation_html if r else None,
                                tpl.interpretation_html if tpl else None)
@@ -992,10 +992,10 @@ def _pcr_section(item, order):
         tpl = None
 
     def _pick(a, b):
-        return a if a else (b if tpl else None)
+        return a if a else b
 
-    specimen    = r.specimen if r else None
-    result_type = (r.result_type or r.value) if r else None
+    specimen    = (r.specimen if r and r.specimen else item.sample_type) or None
+    result_type = ((r.result_type or r.value) if r else item.result_value) or None
     viral_load  = r.viral_load_type if r else None
     interpretation = _pick(r.interpretation_html if r else None,
                            tpl.interpretation_html if tpl else None)
@@ -1003,6 +1003,8 @@ def _pcr_section(item, order):
                         tpl.methodology_html if tpl else None)
     comments    = _pick(r.comments_html if r else None,
                         tpl.comments_html if tpl else None)
+    suggestion  = _pick(r.suggestion_html if r else None,
+                        tpl.suggestion_html if tpl else None)
 
     def _clean(html):
         if not html:
@@ -1028,25 +1030,32 @@ def _pcr_section(item, order):
 
     page_w = 170 * mm
 
-    from ._shared_style import resolve_section_titles
-    _pcr_titles = resolve_section_titles(item.test, default_label='MOLECULAR DIAGNOSTIC SECTION')
-    # Render every title as a separate row in the band table
-    _band_rows = []
-    for _t in _pcr_titles:
-        _band_rows.append([Paragraph(_t, band_style)])
-    if not _band_rows:
-        _band_rows = [[Paragraph('', band_style)]]
-    _band_label = item.test.name.upper() if item.test and item.test.name else ''
-    _band_rows.append([Paragraph(_band_label, band_style)])
-    band_tbl = Table(_band_rows, colWidths=[page_w])
+    from datetime import datetime
+    def _fmt_dt(dt):
+        return dt.strftime('%d-%b-%Y %I:%M %p') if dt else '-'
+        
+    _dt_para = Paragraph(f'<b>Collection Date:</b> {_fmt_dt(order.created_at)}<br/><b>Reporting Date:</b> {_fmt_dt(order.reported_at)}', ParagraphStyle('DtRight', parent=styles['Normal'], alignment=2, fontSize=7, leading=9))
+    
+    _band_label = item.test.report_name or item.test.name
+    _boxed_style = ParagraphStyle('BoxedName', parent=styles['Normal'], fontSize=9, fontName='Helvetica-Bold', leading=11)
+    
+    _header_rows = [
+        [Paragraph('MOLECULAR DIAGNOSTIC SECTION', band_style), _dt_para],
+        [Paragraph(f'<b>{_band_label}</b>', _boxed_style), '']
+    ]
+    
+    band_tbl = Table(_header_rows, colWidths=[100*mm, 70*mm])
+    band_tbl.setStyle(TableStyle([
+        ('SPAN', (0, 1), (1, 1)),
+        ('BOX', (0, 1), (1, 1), 1, colors.black),
+        ('VALIGN', (0, 0), (-1, -1), 'BOTTOM'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('LEFTPADDING', (0, 0), (0, 0), 0),
+    ]))
     title_para = Spacer(1, 0)
-    from ._shared_style import apply_block_style
-    apply_block_style(band_tbl, extra_cmds=[
-        ('LEFTPADDING', (0, 0), (-1, -1), 8),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-        ('TOPPADDING', (0, 0), (-1, -1), 3),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-    ])
 
     kv_rows = []
     for label, val in [('SPECIMEN:', specimen),
@@ -1095,6 +1104,7 @@ def _pcr_section(item, order):
 
     _section('Interpretation', interpretation)
     _section('Methodologies', methodology)
+    _section('Suggestions', suggestion)
     _section('Comments', comments)
 
     empty = Table([['']], colWidths=[1])

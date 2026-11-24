@@ -570,6 +570,7 @@ def pcr_templates():
         tpl.suggestion_html     = _clean(request.form.get('suggestion_html'))
         tpl.interpretation_html = _clean(request.form.get('interpretation_html'))
         tpl.comments_html       = _clean(request.form.get('comments_html'))
+        tpl.layout_html         = _clean(request.form.get('layout_html'))
         db.session.commit()
 
         flash(f'PCR template saved for {selected.name}.', 'success')

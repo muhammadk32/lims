@@ -1,0 +1,229 @@
+"""Entry point — assembles the PDF from header, patient box, results, footer."""
+import io
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, NextPageTemplate, Spacer, HRFlowable
+
+from .header import _header_table
+from .patient_box import _patient_info_table
+from .results_table import _results_table
+from .footer import _draw_page_bottom, _footer_flowables, BOTTOM_PANEL_HEIGHT
+from .branding import _get_lab, _hex
+
+
+def generate_report_pdf(order, item_id=None, extra_story=None, skip_footer=False) -> io.BytesIO:
+    """Generate a professional PDF report for an order."""
+    lab = _get_lab()
+    buffer = io.BytesIO()
+
+    # ---- Read page setup from LabSettings ----
+    from reportlab.lib.pagesizes import LETTER, LEGAL
+    from core.models import LabSettings
+    _ps = LabSettings.get()
+
+    def _flt(attr, default):
+        v = getattr(_ps, attr, None) if _ps else None
+        try:
+            return float(v) if v is not None else default
+        except (TypeError, ValueError):
+            return default
+
+    page_name = (getattr(_ps, 'report_page_size', 'A4') or 'A4') if _ps else 'A4'
+    PAGE = {'A4': A4, 'Letter': LETTER, 'Legal': LEGAL, 'A5': (A4[0]/2, A4[1]/2)}.get(page_name, A4)
+    if (getattr(_ps, 'report_orientation', 'portrait') or 'portrait').lower() == 'landscape':
+        PAGE = (PAGE[1], PAGE[0])
+
+    LM = _flt('report_margin_left', 0.8)   * 72   # inches -> points
+    RM = _flt('report_margin_right', 0.8)  * 72
+    TM = _flt('report_margin_top', 0.6)    * 72
+    BM = 0  # footer handles its own bottom spacing (y=5.9pt is the lowest element)
+    BOT = BM + BOTTOM_PANEL_HEIGHT
+
+    TOP_PAGE1 = TM
+    TOP_LATER = max(TM, 55 * mm)  # header+divider+patient box + gap
+    content_w = PAGE[0] - LM - RM
+
+    doc = BaseDocTemplate(
+        buffer,
+        pagesize=PAGE,
+        leftMargin=LM,
+        rightMargin=RM,
+        topMargin=TOP_PAGE1,
+        bottomMargin=BOT,
+        title=f'Lab Report — {order.order_code}',
+        author=lab['name'],
+    )
+
+    frame_first = Frame(LM, BOT, content_w, PAGE[1] - TOP_PAGE1 - BOT, id='first')
+    frame_later = Frame(LM, BOT, content_w, PAGE[1] - TOP_LATER - BOT, id='later')
+
+    primary = _hex(lab['primary_color'])
+
+    story = []
+
+
+    # Check global header toggle
+    try:
+        from core.models import LabSettings
+        _lab_s = LabSettings.get()
+        _hdr_on = bool(getattr(_lab_s, 'header_enabled', True)) if _lab_s else True
+    except Exception:
+        _lab_s = None
+        _hdr_on = True
+
+    # Adjust top margin when header is off
+    if not _hdr_on and _lab_s is not None:
+        _top_mm = int(getattr(_lab_s, 'header_top_margin_mm', 15) or 15)
+        doc.topMargin = _top_mm * mm
+
+    if _hdr_on:
+        story.append(_header_table())
+        story.append(Spacer(1, 1 * mm))
+        if getattr(_lab_s, 'header_show_divider', True) if _lab_s else True:
+            story.append(HRFlowable(width='100%', thickness=1.5, color=primary))
+        story.append(Spacer(1, 1 * mm))
+
+    from reportlab.platypus import KeepTogether
+    story.append(KeepTogether([_patient_info_table(order)]))
+    story.append(NextPageTemplate('Later'))    # page 2+ uses 'Later' template
+    story.append(Spacer(1, 1 * mm))
+
+    # Build previous-results map for this patient (last 2 prior visits)
+    previous_map = {}
+    date_labels = []
+    try:
+        from modules.reports.queries import build_previous_map
+        previous_map, date_labels = build_previous_map(order.patient_id, order.id, limit=2)
+    except Exception as e:
+        print(f'[pdf.generator] previous_map failed: {e}')
+
+    # ---- Item filter: single test print (?item=<id>) ----
+    if item_id is not None:
+        target = [t for t in order.top_level_items if t.id == item_id]
+        items_for_pdf = target or order.top_level_items
+        pending = []
+    else:
+        # ---- PARTIAL REPORT: only verified top-level items are printed ----
+        all_top    = order.top_level_items
+        verified   = [t for t in all_top if t.is_verified]
+        pending    = [t for t in all_top if not t.is_verified]
+        items_for_pdf = verified if verified else all_top
+
+    # ---- WEASYPRINT INTERCEPT FOR SINGLE PCR TEST ----
+    if item_id is not None and len(items_for_pdf) == 1:
+        _it = items_for_pdf[0]
+        _fmt = (getattr(getattr(_it, 'test', None), 'result_format', '') or '').lower()
+        if _fmt in ('pcr', 'pcr_quant', 'molecular'):
+            import os
+            _gtk_path = r'C:\Program Files\GTK3-Runtime Win64\bin'
+            if os.path.exists(_gtk_path):
+                os.environ['PATH'] = _gtk_path + os.pathsep + os.environ.get('PATH', '')
+            from flask import render_template, has_request_context, request
+            from weasyprint import HTML
+            from modules.results.models import Result
+            from modules.tests.models import PcrTemplate
+
+            _r = Result.query.filter_by(order_item_id=_it.id).first()
+            _tpl = PcrTemplate.query.filter_by(test_id=_it.test_id).first()
+
+            res_map = {_it.id: _r} if _r else {}
+            tpl_map = {_it.test_id: _tpl} if _tpl else {}
+            
+            # Render the exact HTML template used for the screen view
+            html_str = render_template('results/report.html', order=order, results_by_item=res_map, pcr_tpl_by_test=tpl_map, items_override=items_for_pdf)
+            
+            # Inject PDF-specific CSS overrides to prevent blank first page
+            css_override = """
+            <style>
+                @page { margin: 10mm; }
+                .page-sheet { min-height: 0 !important; margin-bottom: 0 !important; padding: 0 !important; }
+                body { margin: 0 !important; }
+            </style>
+            </head>
+            """
+            html_str = html_str.replace('</head>', css_override)
+            
+            base_url = request.url_root if has_request_context() else None
+            pdf_bytes = HTML(string=html_str, base_url=base_url).write_pdf()
+            
+            buffer.write(pdf_bytes)
+            buffer.seek(0)
+            return buffer
+    # ---------------------------------------------------
+    # ---- Department ids for signature filtering (name-match) ----
+    try:
+        from modules.tests.models import TestCategory, LabDepartment
+        _dept_by_name = {d.name.lower(): d.id for d in LabDepartment.query.all()}
+        _dept_ids = set()
+        for _it in items_for_pdf:
+            _test = getattr(_it, 'test', None)
+            if not _test:
+                continue
+            _cat_id = getattr(_test, 'category_id', None)
+            if not _cat_id:
+                continue
+            _cat = TestCategory.query.get(_cat_id)
+            if not _cat:
+                continue
+            _did = _dept_by_name.get((_cat.name or '').lower())
+            if _did:
+                _dept_ids.add(_did)
+    except Exception:
+        _dept_ids = set()
+
+    results_flow, _notes_flow, abnormal_count, critical_count = _results_table(
+        order,
+        previous_map=previous_map,
+        date_labels=date_labels,
+        items_override=items_for_pdf,
+    )
+    
+    # results_flow could be a single Table or a list of Tables+Spacers
+    if isinstance(results_flow, list):
+        for _block in results_flow:
+            story.append(_block)
+    else:
+        story.append(results_flow)
+
+    for _p in _notes_flow:
+        story.append(_p)
+
+    story.extend(_footer_flowables(abnormal_count))
+
+    from .header import draw_continuation_header
+
+    def _on_first(canvas, doc):
+        _draw_page_bottom(canvas, doc, _dept_ids if _dept_ids else None)
+
+    def _on_later(canvas, doc):
+        draw_continuation_header(canvas, doc, order)
+        _draw_page_bottom(canvas, doc, _dept_ids if _dept_ids else None)
+
+    doc.addPageTemplates([
+        PageTemplate(id='First', frames=[frame_first], onPage=_on_first),
+        PageTemplate(id='Later', frames=[frame_later], onPage=_on_later),
+    ])
+
+    if extra_story:
+        for s in extra_story:
+            story.append(s)
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+def _build_report_buffer(order, items_override):
+    """Build one PDF with all items stacked; header+patient box+footer repeat per page."""
+    # We import the inner generator by refactoring: call generate_report_pdf with a
+    # temporary shim on order.top_level_items.
+    from .generator import generate_report_pdf  # self-import is fine
+
+    # Monkey-patch order to expose only chosen items as top_level_items
+    original = type(order).top_level_items
+    try:
+        type(order).top_level_items = property(lambda self: items_override)
+        return generate_report_pdf(order, item_id=None)
+    finally:
+        type(order).top_level_items = original
+

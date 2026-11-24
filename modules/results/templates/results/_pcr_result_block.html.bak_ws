@@ -1,0 +1,47 @@
+﻿{% set r = _r %}
+{% set tpl = _tpl %}
+{% set _interp = (r.interpretation_html if r and r.interpretation_html else '') or (tpl.interpretation_html if tpl else '') or '' %}
+{% set _method = (r.method_html if r and r.method_html else '') or (tpl.methodology_html if tpl else '') or '' %}
+{% set _sugg   = (r.suggestion_html if r and r.suggestion_html else '') or (tpl.suggestion_html if tpl else '') or '' %}
+{% set _comm   = (r.comments_html if r and r.comments_html else '') or (tpl.comments_html if tpl else '') or '' %}
+{% set _spec   = (r.specimen if r and r.specimen else '') or '' %}
+{% set _val    = (r.value if r and r.value else (r.result_type if r else '')) or item.result_value or '' %}
+{% set _viral  = (r.viral_load_type if r and r.viral_load_type else '') or '' %}
+
+{% if false and tpl and tpl.layout_html %}
+  {% set layout = tpl.layout_html %}
+  {% set layout = layout|replace('<body>','')|replace('</body>','')|replace('<html>','')|replace('</html>','') %}
+  {% set layout = layout.replace('[[COLLECTION_DATE]]', (order.created_at | localtime('%d-%b-%Y %I:%M %p')) if order.created_at else '—') %}
+  {% set layout = layout.replace('[[REPORTING_DATE]]',  (order.reported_at | localtime('%d-%b-%Y %I:%M %p')) if order.reported_at else 'Pending') %}
+  {% set layout = layout.replace('[[TEST_NAME]]',       (item.test.report_name or item.test.name) or '') %}
+  {% set layout = layout.replace('[[SPECIMEN]]',        _spec or '—') %}
+  {% set layout = layout.replace('[[RESULT]]',          _val or '—') %}
+  {% set layout = layout.replace('[[VIRAL_LOAD]]',      _viral) %}
+  {% set layout = layout.replace('[[INTERPRETATION]]',  _interp | safe) %}
+  {% set layout = layout.replace('[[METHODOLOGY]]',     _method | safe) %}
+  {% set layout = layout.replace('[[SUGGESTION]]',      _sugg | safe) %}
+  {% set layout = layout.replace('[[COMMENTS]]',        _comm | safe) %}
+  {{ layout | safe }}
+{% else %}
+  <div class="pcr-report-layout" style="font-family: Arial, sans-serif; font-size: 10pt; color: #000; padding: 10px 0; page-break-inside: avoid;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6px;">
+      <div style="font-weight: bold; font-size: 11pt;">MOLECULAR DIAGNOSTIC SECTION</div>
+      <div style="text-align: right; font-size: 8.5pt; line-height: 1.4;">
+        <div><span style="font-weight: bold;">Collection Date:</span> {{ order.created_at | localtime('%d-%b-%Y %I:%M %p') if order.created_at else '—' }}</div>
+        <div><span style="font-weight: bold;">Reporting Date:</span> {{ order.reported_at | localtime('%d-%b-%Y %I:%M %p') if order.reported_at else 'Pending' }}</div>
+      </div>
+    </div>
+    <div style="border: 1px solid #000; padding: 5px 8px; font-weight: bold; margin-bottom: 15px;">
+      {{ item.test.report_name or item.test.name }}
+    </div>
+    <div style="margin-bottom: 20px;">
+      <div style="display: flex; margin-bottom: 8px;"><div style="width: 150px; font-weight: bold;">SPECIMEN:</div><div>{{ _spec or '—' }}</div></div>
+      <div style="display: flex; margin-bottom: 8px;"><div style="width: 150px; font-weight: bold;">RESULT:</div><div style="font-weight: bold;">{{ _val or '—' }}</div></div>
+      {% if _viral %}<div style="display: flex; margin-bottom: 8px;"><div style="width: 150px; font-weight: bold;">VIRAL LOAD:</div><div>{{ _viral }}</div></div>{% endif %}
+    </div>
+    {% if _interp %}<hr style="border:0;border-top:1px solid #000;margin-bottom:6px;"><div style="font-weight:bold;margin-bottom:4px;">Interpretation:</div><div style="font-size:9pt;line-height:1.4;margin-bottom:15px;">{{ _interp|safe }}</div>{% endif %}
+    {% if _method %}<hr style="border:0;border-top:1px solid #000;margin-bottom:6px;"><div style="font-weight:bold;margin-bottom:4px;">Methodologies:</div><div style="font-size:9pt;line-height:1.4;margin-bottom:15px;">{{ _method|safe }}</div>{% endif %}
+    {% if _sugg   %}<hr style="border:0;border-top:1px solid #000;margin-bottom:6px;"><div style="font-weight:bold;margin-bottom:4px;">Suggestion:</div><div style="font-size:9pt;line-height:1.4;margin-bottom:15px;">{{ _sugg|safe }}</div>{% endif %}
+    {% if _comm   %}<hr style="border:0;border-top:1px solid #000;margin-bottom:6px;"><div style="font-weight:bold;margin-bottom:4px;">Comments:</div><div style="font-size:9pt;line-height:1.4;margin-bottom:15px;">{{ _comm|safe }}</div>{% endif %}
+  </div>
+{% endif %}

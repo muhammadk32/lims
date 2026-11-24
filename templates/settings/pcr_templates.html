@@ -1,304 +1,39 @@
 ﻿{% extends 'base.html' %}
-{% block title %}PCR Template Setting — LabMS
-
-
-{% endblock %}
+{% block title %}PCR Template Setting — LabMS{% endblock %}
 
 {% block head %}
-<style>
-.editor-wrapper { border: 1px solid #ced4da; border-radius: 4px; background: #fff; margin-bottom: 16px; }
-.editor-toolbar { background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center; }
-.editor-toolbar select, .editor-toolbar button { height: 26px; border: 1px solid #ccc; border-radius: 3px; background: #fff; color: #000; font-size: 12px; cursor: pointer; }
-.editor-toolbar button { width: 26px; font-weight: bold; }
-.editor-content { min-height: 200px; padding: 10px; outline: none; font-family: Consolas, monospace; font-size: 13px; background: #f0f8ff; }
-</style>
-<style>
-.editor-wrapper { border: 1px solid #ced4da; border-radius: 4px; background: #fff; margin-bottom: 16px; }
-.editor-toolbar { background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center; }
-.editor-toolbar select, .editor-toolbar button { height: 26px; border: 1px solid #ccc; border-radius: 3px; background: #fff; color: #000; font-size: 12px; cursor: pointer; }
-.editor-toolbar button { width: 26px; font-weight: bold; }
-.editor-toolbar button:hover, .editor-toolbar select:hover { background: #e9ecef; }
-.editor-content { min-height: 200px; padding: 10px; outline: none; font-family: Consolas, monospace; font-size: 13px; background: #f0f8ff; }
-</style>
+<link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+<script src="https://unpkg.com/grapesjs"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
 <style>
-.pt-page { max-width: 1400px; margin: 0 auto; padding: 6px 16px 20px;
-            font-size: 0.82rem; color: #212529; }
-.pt-header { display: flex; justify-content: space-between; align-items: flex-end;
-             border-bottom: 2px solid #212529; padding-bottom: 5px; margin-bottom: 12px; }
-.pt-title { font-size: 1.15rem; font-weight: 700; margin: 0;
-            text-transform: uppercase; letter-spacing: 0.02em; }
-.pt-sub { font-size: 0.76rem; color: #6c757d; margin-top: 2px; }
-
-.pt-picker { background: #f8f9fa; border: 1px solid #dee2e6;
-             padding: 10px 12px; margin-bottom: 12px;
-             display: flex; gap: 12px; align-items: end; }
-.pt-picker label { display: block; font-size: 0.62rem; font-weight: 700;
-                   text-transform: uppercase; letter-spacing: 0.06em;
-                   color: #6c757d; margin-bottom: 2px; }
-.pt-picker select { min-width: 320px; padding: 4px 8px; border: 1px solid #6c757d;
-                    font-size: 0.82rem; background: #fff; height: 30px; box-sizing: border-box; }
-.pt-btn { display: inline-block; padding: 4px 14px; font-size: 0.74rem;
-  font-weight: 600; border: 1px solid #212529; background: #fff;
-  color: #212529; text-decoration: none; cursor: pointer; border-radius: 0;
-  text-transform: uppercase; letter-spacing: 0.03em; height: 30px;
-  line-height: 1.8; box-sizing: border-box; }
-.pt-btn-primary { background: #198754; border-color: #198754; color: #fff; }
-.pt-btn-primary:hover { background: #146c43; }
-
-.pt-card { border: 1.5px solid #212529; background: #fff; margin-bottom: 6px; }
-.pt-card-hd { background: #0d6efd; color: #fff; padding: 4px 10px;
-              font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-              letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; }
-.pt-card-body { padding: 6px 10px; }
-
-.pt-empty { padding: 24px; text-align: center; color: #6c757d;
-            font-size: 0.85rem; border: 1px dashed #adb5bd; }
-.pt-save-bar { position: sticky; bottom: 0; background: #fff;
-               padding: 8px 12px; border-top: 1px solid #dee2e6;
-               margin-top: 12px; text-align: right; }
-/* ===== Theme overrides ===== */
-.pt-header {
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  color: #fff !important;
-  padding: 14px 20px !important;
-  border-radius: 12px !important;
-  border: 2px solid #1a3d7c !important;
-  border-bottom: 2px solid #1a3d7c !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  margin-bottom: 14px !important;
-}
-.pt-title,
-.pt-title i { color: #fff !important; }
-.pt-title i { color: #ffd166 !important; }
-.pt-sub { color: rgba(255,255,255,0.9) !important; }
-
-.pt-picker {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-  border: 2px solid #1a3d7c !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  padding: 14px 16px !important;
-}
-.pt-picker label { color: #1a3d7c !important; font-weight: 800 !important; }
-.pt-picker select {
-  border: 2px solid #ced4da !important;
-  border-radius: 8px !important;
-  padding: 6px 10px !important;
-  height: 36px !important;
-}
-.pt-picker select:focus {
-  outline: none; border-color: #0d6efd !important;
-  box-shadow: 0 0 0 3px rgba(13,110,253,0.15) !important;
-}
-
-.pt-btn {
-  border: 2px solid #1a3d7c !important;
-  border-radius: 8px !important;
-  background: #fff !important;
-  color: #1a3d7c !important;
-  font-weight: 700 !important;
-  padding: 6px 18px !important;
-  height: 36px !important;
-  transition: all .12s;
-}
-.pt-btn:hover { background: #1a3d7c !important; color: #fff !important; }
-.pt-btn-primary {
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  border-color: #1a3d7c !important;
-  color: #fff !important;
-}
-.pt-btn-primary:hover { filter: brightness(1.15); }
-
-/* Empty state box */
-.pt-empty {
-  border: 2px dashed #1a3d7c !important;
-  border-radius: 12px !important;
-  background: #f0f4ff !important;
-  color: #1a3d7c !important;
-  padding: 24px !important;
-  font-weight: 600;
-}
-
-/* ===== POLISHED THEME (pt-*) ===== */
-.pt-page {
-  max-width: 100% !important;
-  padding: 16px 32px 40px !important;
-  margin: 0 auto !important;
-  
-  font-size: 0.75rem !important;
-  color: #212529 !important;
-  box-sizing: border-box !important;
-}
-.pt-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: flex-end !important;
-  background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-  border: 2px solid #212529 !important;
-  border-radius: 10px !important;
-  padding: 16px 20px !important;
-  margin-bottom: 16px !important;
-  color: #fff !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-}
-.pt-header h1, .pt-header h2, .pt-title {
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  margin: 0 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
-  color: #fff !important;
-}
-.pt-header h1 i, .pt-header h2 i, .pt-title i { color: #fff !important; }
-.pt-subtitle, .pt-sub {
-  font-size: 0.75rem !important;
-  color: #dbeafe !important;
-  
-  margin-top: 2px !important;
-}
-.pt-header .btn, .pt-actions .btn {
-  height: 34px !important;
-  padding: 0 14px !important;
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  border-radius: 4px !important;
-  border: 1px solid #212529 !important;
-  background: #fff !important;
-  color: #212529 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-.pt-header .btn-primary, .pt-actions .btn-primary {
-  background: #198754 !important;
-  border-color: #198754 !important;
-  color: #fff !important;
-}
-.pt-card {
-  background: #fff !important;
-  border: 2px solid #212529 !important;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  margin-bottom: 16px !important;
-}
-.pt-card-hd, .pt-card-header {
-  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
-  color: #fff !important;
-  font-size: 0.78rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  padding: 10px 16px !important;
-  border-bottom: 2px solid #212529 !important;
-}
-.pt-table {
-  width: 100% !important;
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-  border: 2px solid #212529 !important;
-  border-radius: 8px 8px 0 0 !important;
-  background: #fff !important;
-  margin: 0 !important;
-  font-size: 0.75rem !important;
-}
-.pt-table thead th {
-  background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%) !important;
-  color: #fff !important;
-  font-size: 0.68rem !important;
-  font-weight: 800 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  padding: 10px 8px !important;
-  text-align: center !important;
-  border-bottom: 2px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  vertical-align: middle !important;
-}
-.pt-table thead th:first-child { border-top-left-radius: 8px !important; }
-.pt-table thead th:last-child { border-top-right-radius: 8px !important; border-right: none !important; }
-.pt-table tbody td {
-  padding: 10px 8px !important;
-  border-bottom: 1px solid #212529 !important;
-  border-right: 1px solid #212529 !important;
-  background: #fff !important;
-  vertical-align: middle !important;
-  color: #212529 !important;
-}
-.pt-table tbody td:last-child { border-right: none !important; }
-.pt-table tbody tr:last-child td { border-bottom: none !important; }
-.pt-table tbody tr:hover td { background: #eaf2ff !important; }
-
-/* ===== UNIFORM TABLE SIZES (ALL PAGES) ===== */
-table[class$="-table"] thead th {
-    font-size: 0.82rem !important; 
-    padding: 10px 8px !important;
-    font-weight: 700 !important;
-}
-table[class$="-table"] tbody td {
-    font-size: 0.85rem !important;
-    padding: 8px 8px !important;
-    line-height: 1.4 !important;
-}
-/* Fix for tables inside specific wrappers */
-.wrap table thead th, .table thead th { font-size: 0.82rem !important; }
-.wrap table tbody td, .table tbody td { font-size: 0.85rem !important; }
+.pt-page { max-width: 1400px; margin: 0 auto; padding: 20px; font-size: 0.85rem; }
+.pt-header { background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%); color: #fff; padding: 14px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.pt-title { font-size: 1.25rem; font-weight: 700; margin: 0; text-transform: uppercase; }
+.pt-picker { background: #f8f9fa; border: 2px solid #1a3d7c; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; display: flex; gap: 12px; align-items: end; }
+.pt-picker label { font-size: 0.7rem; font-weight: 800; color: #1a3d7c; text-transform: uppercase; margin-bottom: 4px; display: block; }
+.pt-picker select { min-width: 320px; padding: 6px 10px; border: 2px solid #ced4da; border-radius: 8px; height: 36px; }
+.pt-btn { border: 2px solid #1a3d7c; border-radius: 8px; background: #fff; color: #1a3d7c; font-weight: 700; padding: 6px 18px; height: 36px; cursor: pointer; }
+.pt-btn-primary { background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%); color: #fff; }
+.pt-card { border: 2px solid #212529; border-radius: 8px; background: #fff; margin-bottom: 16px; overflow: hidden; }
+.pt-card-hd { background: linear-gradient(180deg, #0d6efd 0%, #1a3d7c 100%); color: #fff; padding: 10px 16px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+.pt-card-body { padding: 0; }
+#gjs { border: 1px solid #ced4da; border-radius: 4px; height: 750px; }
 </style>
-
-
-
 {% endblock %}
 
 {% block content %}
 <div class="pt-page">
-
-  <style>
-.pt-card {
-    border: 2px solid #212529 !important;
-    border-radius: 8px !important;
-    margin-bottom: 16px !important;
-    background: #fff !important;
-}
-.pt-card-hd {
-    background: linear-gradient(135deg, #1a3d7c 0%, #0d6efd 100%) !important;
-    color: #fff !important;
-    padding: 8px 12px !important;
-    font-weight: 700 !important;
-    border-bottom: 2px solid #212529 !important;
-}
-.pt-card-body {
-    padding: 10px !important;
-}
-.pt-editor {
-    width: 100% !important;
-    min-height: 200px !important;
-    border: 1px solid #ced4da !important;
-    border-radius: 4px !important;
-    padding: 10px !important;
-    font-family: Consolas, monospace !important;
-    font-size: 0.85rem !important;
-    background: #f0f8ff !important;
-    resize: vertical !important;
-}
-.pt-editor:focus {
-    background: #fff !important;
-    border-color: #0d6efd !important;
-    outline: none !important;
-}
-</style><div class="pt-header">
+  <div class="pt-header">
     <div>
-      <h1 class="pt-title"><i class="bi bi-clipboard2-pulse"></i> PCR Template Setting</h1>
-      <div class="pt-sub">Reusable Methodology / Suggestion / Interpretation / Comments per PCR test</div>
+      <h1 class="pt-title"><i class="bi bi-layout-text-window"></i> PCR Template Builder</h1>
+      <div style="font-size: 0.8rem; color: #dbeafe;">Drag and drop to design the report layout</div>
     </div>
   </div>
 
   <form method="GET" action="{{ url_for('settings.pcr_templates') }}" class="pt-picker">
     <div>
-      <label for="test_id">Select PCR test</label>
-      <select name="test_id" id="test_id" onchange="this.form.submit()">
+      <label>Select PCR test</label>
+      <select name="test_id" onchange="this.form.submit()">
         <option value="">— choose a test —</option>
         {% for t in pcr_tests %}
         <option value="{{ t.id }}" {% if selected and selected.id == t.id %}selected{% endif %}>
@@ -310,194 +45,129 @@ table[class$="-table"] tbody td {
     <button type="submit" class="pt-btn">Load</button>
   </form>
 
-  {% if not selected %}
-    <div class="pt-empty">
-      <i class="bi bi-arrow-up"></i> Pick a PCR test above to edit its template.
-    </div>
-  {% else %}
-  <form method="POST" action="{{ url_for('settings.pcr_templates') }}">
+  {% if selected %}
+  <form method="POST" action="{{ url_for('settings.pcr_templates') }}" id="pcr-form">
     <input type="hidden" name="test_id" value="{{ selected.id }}">
-
-
-
-
-
-
-
-
-
-        <div class="pt-card">
-      <div class="pt-card-hd"><i class="bi bi-chat-left-quote"></i> Interpretation</div>
-      <div class="pt-card-body">
-        <div class="editor-wrapper">
-    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
-    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="p">Paragraph</option>
-        <option value="h1">Heading 1</option>
-        <option value="h2">Heading 2</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Consolas">Consolas</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="2">Small</option>
-        <option value="3" selected>Normal</option>
-        <option value="4">Large</option>
-    </select>
     
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
-</div>
-    <div class="editor-content" contenteditable="true">{{ (tpl.interpretation_html or '')|safe if tpl else '' }}</div>
-</div>
-<input type="hidden" name="interpretation_html" id="input-interpretation" value="{{ (tpl.interpretation_html or '') if tpl else '' }}">
-      </div>
-    </div>
     <div class="pt-card">
-      <div class="pt-card-hd"><i class="bi bi-journal-text"></i> Methodology</div>
+      <div class="pt-card-hd"><i class="bi bi-pencil-square"></i> Visual Layout Designer</div>
       <div class="pt-card-body">
-        <div class="editor-wrapper">
-    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
-    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="p">Paragraph</option>
-        <option value="h1">Heading 1</option>
-        <option value="h2">Heading 2</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Consolas">Consolas</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="2">Small</option>
-        <option value="3" selected>Normal</option>
-        <option value="4">Large</option>
-    </select>
-    
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
-</div>
-    <div class="editor-content" contenteditable="true">{{ (tpl.methodology_html or '')|safe if tpl else '' }}</div>
-</div>
-<input type="hidden" name="methodology_html" id="input-methodology" value="{{ (tpl.methodology_html or '') if tpl else '' }}">
+        <div id="gjs"></div>
+        <input type="hidden" name="layout_html" id="input-layout" value="{{ (tpl.layout_html or '') if tpl else '' }}">
       </div>
     </div>
-    <div class="pt-card">
-      <div class="pt-card-hd"><i class="bi bi-chat-dots"></i> Comments</div>
-      <div class="pt-card-body">
-        <div class="editor-wrapper">
-    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
-    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="p">Paragraph</option>
-        <option value="h1">Heading 1</option>
-        <option value="h2">Heading 2</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Consolas">Consolas</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="2">Small</option>
-        <option value="3" selected>Normal</option>
-        <option value="4">Large</option>
-    </select>
     
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
-</div>
-    <div class="editor-content" contenteditable="true">{{ (tpl.comments_html or '')|safe if tpl else '' }}</div>
-</div>
-<input type="hidden" name="comments_html" id="input-comments" value="{{ (tpl.comments_html or '') if tpl else '' }}">
+    <div class="pt-card" style="margin-top: 20px;">
+      <div class="pt-card-hd"><i class="bi bi-card-text"></i> Template Content</div>
+      <div class="pt-card-body" style="padding: 15px;">
+        
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; margin-bottom: 5px; display: block;">Interpretation</label>
+          <textarea name="interpretation_html" class="form-control" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">{{ tpl.interpretation_html if tpl else '' }}</textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; margin-bottom: 5px; display: block;">Methodology</label>
+          <textarea name="methodology_html" class="form-control" rows="6" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">{{ tpl.methodology_html if tpl else '' }}</textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; margin-bottom: 5px; display: block;">Comments</label>
+          <textarea name="comments_html" class="form-control" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">{{ tpl.comments_html if tpl else '' }}</textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+          <label style="font-weight: bold; margin-bottom: 5px; display: block;">Suggestion</label>
+          <textarea name="suggestion_html" class="form-control" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px;">{{ tpl.suggestion_html if tpl else '' }}</textarea>
+        </div>
+
       </div>
     </div>
-    <div class="pt-card">
-      <div class="pt-card-hd"><i class="bi bi-lightbulb"></i> Suggestion</div>
-      <div class="pt-card-body">
-        <div class="editor-wrapper">
-    <div class="editor-toolbar" style="background: #f8f9fa; border-bottom: 1px solid #ced4da; padding: 4px 8px; display: flex; gap: 4px; align-items: center;">
-    <select onchange="formatDoc(this, 'formatBlock', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="p">Paragraph</option>
-        <option value="h1">Heading 1</option>
-        <option value="h2">Heading 2</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontName', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Consolas">Consolas</option>
-    </select>
-    <select onchange="formatDoc(this, 'fontSize', this.value)" style="height: 24px; font-size: 12px; padding: 0 5px; border: 1px solid #ccc; border-radius: 3px; background: #fff; cursor: pointer;">
-        <option value="2">Small</option>
-        <option value="3" selected>Normal</option>
-        <option value="4">Large</option>
-    </select>
-    
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'bold')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-weight: bold; cursor: pointer; user-select: none;">B</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'italic')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; font-style: italic; cursor: pointer; user-select: none;">I</span>
-    <span onmousedown="event.preventDefault(); formatDoc(this, 'underline')" style="height: 24px; width: 24px; display: inline-flex; justify-content: center; align-items: center; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-decoration: underline; cursor: pointer; user-select: none;">U</span>
-</div>
-    <div class="editor-content" contenteditable="true">{{ (tpl.suggestion_html or '')|safe if tpl else '' }}</div>
-</div>
-<input type="hidden" name="suggestion_html" id="input-suggestion" value="{{ (tpl.suggestion_html or '') if tpl else '' }}">
-      </div>
-    </div>
-    <div class="pt-save-bar">
+
+    <div style="text-align: right; margin-top: 20px;">
       <button type="submit" class="pt-btn pt-btn-primary">
         <i class="bi bi-check-lg"></i> Save Template
       </button>
     </div>
   </form>
   {% endif %}
-
 </div>
 
-
-
-
-
 <script>
-function formatDoc(el, cmd, value) {
-    const contentDiv = el.closest('.editor-wrapper').querySelector('.editor-content');
-    contentDiv.focus();
-    if (value !== undefined) {
-        document.execCommand(cmd, false, value);
-    } else {
-        document.execCommand(cmd, false, null);
-    }
-    const input = contentDiv.closest('.pt-card-body').querySelector('input[type="hidden"]');
-    if (input) input.value = contentDiv.innerHTML;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-    ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-        const input = document.getElementById('input-' + name);
-        if (input) {
-            const contentDiv = input.closest('.pt-card-body').querySelector('.editor-content');
-            if (contentDiv) {
-                contentDiv.innerHTML = input.value;
-            }
+    if (!document.getElementById('gjs')) return;
+
+    const editor = grapesjs.init({
+        container: '#gjs',
+        fromElement: false,
+        height: '750px',
+        storageManager: false,
+        blockManager: {
+            blocks: [
+                { id: 'section', label: 'Section', content: '<div style="padding:20px; border: 1px dashed #ccc;">Section content</div>' },
+                { id: 'text', label: 'Text', content: '<p style="margin: 0 0 10px 0;">Insert text here</p>' },
+                { id: 'heading', label: 'Heading', content: '<h2 style="margin: 0 0 10px 0; font-size: 14pt; font-weight: bold;">Heading</h2>' },
+                { id: 'divider', label: 'Divider', content: '<hr style="border-top: 1px solid #000; margin: 15px 0;">' },
+                { id: 'specimen', label: 'Specimen Field', content: '<div style="display: flex; margin-bottom: 8px;"><div style="width: 120px; font-weight: bold;">SPECIMEN:</div><div>[[SPECIMEN]]</div></div>' },
+                { id: 'result', label: 'Result Field', content: '<div style="display: flex; margin-bottom: 8px;"><div style="width: 120px; font-weight: bold;">RESULT:</div><div>[[RESULT]]</div></div>' },
+                { id: 'viral_load', label: 'Viral Load', content: '<div style="display: flex; margin-bottom: 8px;"><div style="width: 120px; font-weight: bold;">VIRAL LOAD:</div><div>[[VIRAL_LOAD]]</div></div>' },
+                { id: 'interp', label: 'Interpretation', content: '<div style="margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 4px;">Interpretation:</div><div>[[INTERPRETATION]]</div></div>' },
+                { id: 'method', label: 'Methodology', content: '<div style="margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 4px;">Methodologies:</div><div>[[METHODOLOGY]]</div></div>' },
+                { id: 'comments', label: 'Comments', content: '<div style="margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 4px;">Comments:</div><div>[[COMMENTS]]</div></div>' },
+                { id: 'suggestion', label: 'Suggestion', content: '<div style="margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 4px;">Suggestion:</div><div>[[SUGGESTION]]</div></div>' }
+            ]
+        },
+        canvas: {
+            styles: [
+                'body { font-family: Arial, sans-serif; font-size: 10pt; color: #000; padding: 20px; }',
+                'h2 { font-size: 12pt; margin-top: 0; }'
+            ]
         }
     });
 
-    const form = document.querySelector('form[method="POST"]');
-    if (form) {
-        form.addEventListener('submit', function() {
-            ['interpretation', 'methodology', 'comments', 'suggestion'].forEach(function(name) {
-                const input = document.getElementById('input-' + name);
-                if (input) {
-                    const contentDiv = input.closest('.pt-card-body').querySelector('.editor-content');
-                    if (contentDiv) {
-                        input.value = contentDiv.innerHTML;
-                    }
-                }
-            });
-        });
+    let existingHtml = document.getElementById('input-layout').value;
+    if (!existingHtml) {
+        existingHtml = `
+        <div style="font-family: Arial, sans-serif; font-size: 10pt; color: #000; padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div style="font-weight: bold; font-size: 12pt;">MOLECULAR DIAGNOSTIC SECTION</div>
+                <div style="text-align: right; font-size: 9pt; font-weight: bold;">
+                    <div>Collection Date: [[COLLECTION_DATE]]</div>
+                    <div>Reporting Date: [[REPORTING_DATE]]</div>
+                </div>
+            </div>
+            <div style="border: 1px solid #000; padding: 5px 10px; font-weight: bold; margin-bottom: 15px;">
+                [[TEST_NAME]]
+            </div>
+            <div style="display: flex; margin-bottom: 8px;">
+                <div style="width: 120px; font-weight: bold;">SPECIMEN:</div>
+                <div>[[SPECIMEN]]</div>
+            </div>
+            <div style="display: flex; margin-bottom: 8px;">
+                <div style="width: 120px; font-weight: bold;">RESULT:</div>
+                <div>[[RESULT]]</div>
+            </div>
+            <div style="display: flex; margin-bottom: 15px;">
+                <div style="width: 120px; font-weight: bold;">VIRAL LOAD:</div>
+                <div>[[VIRAL_LOAD]]</div>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #000; margin: 15px 0 10px 0;">
+            <div style="font-weight: bold; margin-bottom: 5px;">Interpretation:</div>
+            <div style="font-size: 9.5pt; margin-bottom: 15px;">[[INTERPRETATION]]</div>
+            <hr style="border: 0; border-top: 1px solid #000; margin: 15px 0 10px 0;">
+            <div style="font-weight: bold; margin-bottom: 5px;">Methodologies:</div>
+            <div style="font-size: 9.5pt; margin-bottom: 15px;">[[METHODOLOGY]]</div>
+            <hr style="border: 0; border-top: 1px solid #000; margin: 15px 0 10px 0;">
+            <div style="font-weight: bold; margin-bottom: 5px;">Comments:</div>
+            <div style="font-size: 9.5pt; margin-bottom: 15px;">[[COMMENTS]]</div>
+        </div>
+        `;
     }
+    editor.setComponents(existingHtml);
+
+    document.getElementById('pcr-form').addEventListener('submit', function() {
+        document.getElementById('input-layout').value = editor.getHtml();
+    });
 });
 </script>
 {% endblock %}

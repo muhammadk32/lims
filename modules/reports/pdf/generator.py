@@ -1,4 +1,4 @@
-﻿"""Entry point — assembles the PDF from header, patient box, results, footer."""
+"""Entry point — assembles the PDF from header, patient box, results, footer."""
 import io
 
 from reportlab.lib.pagesizes import A4
@@ -111,6 +111,52 @@ def generate_report_pdf(order, item_id=None, extra_story=None, skip_footer=False
         pending    = [t for t in all_top if not t.is_verified]
         items_for_pdf = verified if verified else all_top
 
+    # ---- WEASYPRINT INTERCEPT FOR SINGLE PCR TEST ----
+    if item_id is not None and len(items_for_pdf) == 1:
+        _it = items_for_pdf[0]
+        _fmt = (getattr(getattr(_it, 'test', None), 'result_format', '') or '').lower()
+        if _fmt in ('pcr', 'pcr_quant', 'molecular'):
+            import os
+            _gtk_path = r'C:\Program Files\GTK3-Runtime Win64\bin'
+            if os.path.exists(_gtk_path):
+                os.environ['PATH'] = _gtk_path + os.pathsep + os.environ.get('PATH', '')
+            from flask import render_template, has_request_context, request
+            from weasyprint import HTML
+            from modules.results.models import Result
+            from modules.tests.models import PcrTemplate
+
+            _r = Result.query.filter_by(order_item_id=_it.id).first()
+            _tpl = PcrTemplate.query.filter_by(test_id=_it.test_id).first()
+
+            res_map = {_it.id: _r} if _r else {}
+            tpl_map = {_it.test_id: _tpl} if _tpl else {}
+            
+            # Render the exact HTML template used for the screen view
+            html_str = render_template('results/report.html', order=order, results_by_item=res_map, pcr_tpl_by_test=tpl_map, items_override=items_for_pdf)
+            
+            # Inject PDF-specific CSS overrides to prevent blank first page
+            css_override = """
+            <style>
+                @page { margin: 10mm; }
+                .page-sheet { min-height: 0 !important; margin-bottom: 0 !important; padding: 0 !important; }
+                body { margin: 0 !important; }
+                /* Force WeasyPrint to allow breaking inside table rows */
+                table, tr, td, tbody, thead { page-break-inside: auto !important; break-inside: auto !important; }
+                .pcr-row, .pcr-row td { page-break-inside: auto !important; break-inside: auto !important; }
+                /* WeasyPrint handles headers naturally now */
+                .rep-table { page-break-inside: auto !important; }
+            </style>
+            </head>
+            """
+            html_str = html_str.replace('</head>', css_override)
+            
+            base_url = request.url_root if has_request_context() else None
+            pdf_bytes = HTML(string=html_str, base_url=base_url).write_pdf()
+            
+            buffer.write(pdf_bytes)
+            buffer.seek(0)
+            return buffer
+    # ---------------------------------------------------
     # ---- Department ids for signature filtering (name-match) ----
     try:
         from modules.tests.models import TestCategory, LabDepartment

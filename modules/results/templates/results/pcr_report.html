@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PCR Report — Lab # {{ order.order_code }}</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+@page { size: A4; margin: 15mm; }
+body { font-family: Arial, sans-serif; font-size: 10pt; color: #000; line-height: 1.4; background: #fff; }
+.page-sheet { width: 100%; max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; }
+.print-bar { position: fixed; top: 10px; right: 10px; z-index: 999; display: flex; gap: 8px; }
+.print-bar button, .print-bar a { background: #0d6efd; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; cursor: pointer; text-decoration: none; }
+@media print { .print-bar { display: none !important; } .page-sheet { padding: 0; } }
+
+/* Header */
+.rep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.rep-header .title { font-weight: bold; font-size: 12pt; text-transform: uppercase; }
+.rep-header .dates { text-align: right; font-size: 9pt; font-weight: bold; }
+
+/* PCR Box */
+.pcr-box { border: 1px solid #000; padding: 5px 10px; font-weight: bold; margin-bottom: 15px; }
+
+/* Rows */
+.pcr-row { display: flex; margin-bottom: 8px; }
+.pcr-lbl { width: 120px; font-weight: bold; }
+.pcr-val { flex: 1; }
+
+/* Sections */
+.pcr-divider { border-top: 1px solid #000; margin: 15px 0 10px 0; }
+.pcr-section-title { font-weight: bold; margin-bottom: 5px; }
+.pcr-text { font-size: 9.5pt; white-space: pre-wrap; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="print-bar">
+  <button onclick="window.print()">Print</button>
+  <a href="{{ url_for('results.enter', order_id=order.id) }}">Close</a>
+</div>
+
+<div class="page-sheet">
+  {% for item in order.top_level_items %}
+    {% set r = item.result %}
+    {% set tpl = item.pcr_tpl %}
+    
+    <div style="page-break-inside: avoid; margin-bottom: 40px;">
+      {% if tpl and tpl.layout_html %}
+        {% set layout = tpl.layout_html %}
+        {% set layout = layout.replace('[[COLLECTION_DATE]]', order.created_at | localtime('%d-%b-%Y %I:%M %p') if order.created_at else '—') %}
+        {% set layout = layout.replace('[[REPORTING_DATE]]', order.reported_at | localtime('%d-%b-%Y %I:%M %p') if order.reported_at else 'Pending') %}
+        {% set layout = layout.replace('[[TEST_NAME]]', item.test.report_name or item.test.name) %}
+        {% set layout = layout.replace('[[SPECIMEN]]', r.specimen if r and r.specimen else '—') %}
+        {% set layout = layout.replace('[[RESULT]]', r.value if r and r.value else (r.result_type if r else '—')) %}
+        {% set layout = layout.replace('[[VIRAL_LOAD]]', r.viral_load_type if r and r.viral_load_type else '') %}
+        
+        {% set interp = r.interpretation_html if r and r.interpretation_html else (tpl.interpretation_html if tpl else '') %}
+        {% set method = r.method_html if r and r.method_html else (tpl.methodology_html if tpl else '') %}
+        {% set comments = r.comments_html if r and r.comments_html else (tpl.comments_html if tpl else '') %}
+        {% set suggestion = r.suggestion_html if r and r.suggestion_html else (tpl.suggestion_html if tpl else '') %}
+        
+        {% set layout = layout.replace('[[INTERPRETATION]]', interp|safe) %}
+        {% set layout = layout.replace('[[METHODOLOGY]]', method|safe) %}
+        {% set layout = layout.replace('[[COMMENTS]]', comments|safe) %}
+        {% set layout = layout.replace('[[SUGGESTION]]', suggestion|safe) %}
+        
+        {{ layout|safe }}
+      {% else %}
+      <div class="rep-header">
+        <div class="title">MOLECULAR DIAGNOSTIC SECTION</div>
+        <div class="dates">
+          <div>Collection Date: {{ order.created_at | localtime('%d-%b-%Y %I:%M %p') if order.created_at else '—' }}</div>
+          <div>Reporting Date: {{ order.reported_at | localtime('%d-%b-%Y %I:%M %p') if order.reported_at else 'Pending' }}</div>
+        </div>
+      </div>
+
+      <div class="pcr-box">{{ item.test.report_name or item.test.name }}</div>
+
+      <div class="pcr-row">
+        <div class="pcr-lbl">SPECIMEN:</div>
+        <div class="pcr-val">{{ r.specimen if r and r.specimen else '—' }}</div>
+      </div>
+      <div class="pcr-row">
+        <div class="pcr-lbl">RESULT:</div>
+        <div class="pcr-val">{{ r.value if r and r.value else (r.result_type if r else '—') }}</div>
+      </div>
+      {% if r and r.viral_load_type %}
+      <div class="pcr-row">
+        <div class="pcr-lbl">VIRAL LOAD:</div>
+        <div class="pcr-val">{{ r.viral_load_type }}</div>
+      </div>
+      {% endif %}
+
+      {% set interp = r.interpretation_html if r and r.interpretation_html else (tpl.interpretation_html if tpl else '') %}
+      {% if interp %}
+      <div class="pcr-divider"></div>
+      <div class="pcr-section-title">Interpretation:</div>
+      <div class="pcr-text">{{ interp|safe }}</div>
+      {% endif %}
+
+      {% set method = r.method_html if r and r.method_html else (tpl.methodology_html if tpl else '') %}
+      {% if method %}
+      <div class="pcr-divider"></div>
+      <div class="pcr-section-title">Methodologies:</div>
+      <div class="pcr-text">{{ method|safe }}</div>
+      {% endif %}
+
+      {% set suggestion = r.suggestion_html if r and r.suggestion_html else (tpl.suggestion_html if tpl else '') %}
+      {% if suggestion %}
+      <div class="pcr-divider"></div>
+      <div class="pcr-section-title">Suggestion:</div>
+      <div class="pcr-text">{{ suggestion|safe }}</div>
+      {% endif %}
+
+      {% set comments = r.comments_html if r and r.comments_html else (tpl.comments_html if tpl else '') %}
+      {% if comments %}
+      <div class="pcr-divider"></div>
+      <div class="pcr-section-title">Comments:</div>
+      <div class="pcr-text">{{ comments|safe }}</div>
+      {% endif %}
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+</body>
+</html>
