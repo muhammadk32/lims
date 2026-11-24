@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <style>
@@ -375,10 +375,18 @@ table[class$="-table"] tbody td {
     </div>
   </div>
 
-  {# ============ TITLE ============ #}
+  {# ============ REPORT VARS ============ #}
+  {% set _items = items_override if items_override is defined and items_override is not none else order.top_level_items %}
+  {% set is_single_pcr = (_items|length == 1 and (_items[0].test.result_format or '')|lower in ('pcr','pcr_quant','molecular')) %}
+  {% set _first_fmt = (_items[0].test.result_format or '')|lower if _items else '' %}
+
+  {# ============ TITLE (hidden on PCR pages) ============ #}
+  {% if _first_fmt not in ('pcr','pcr_quant','molecular') %}
   <div class="rep-title">R E S U L T   R E P O R T</div>
+  {% endif %}
 
   {# ============ RESULTS TABLE ============ #}
+  {% if _first_fmt not in ('pcr','pcr_quant','molecular') %}
   <table class="rep-table">
     <thead>
       <tr>
@@ -388,15 +396,18 @@ table[class$="-table"] tbody td {
         <th style="width: 28%;">Reference Range</th>
       </tr>
     </thead>
-                    <tbody>
+    <tbody>
+  {% endif %}
       {% set ns = namespace(last_report='', last_cat='') %}
-      {% for item in order.top_level_items %}
+      {% for item in _items %}
         {% set rn = (item.test.report_name or '')|trim %}
         {% set mode = item.test.report_name_mode or 'C' %}
         {% set cat = item.test.category_ref.name if item.test.category_ref else '' %}
+        {% set _fmt = (item.test.result_format or '')|lower %}
+        {% set _open = (_first_fmt not in ('pcr','pcr_quant','molecular')) if loop.first else (((loop.previtem.test.result_format or '')|lower not in ('pcr','pcr_quant','molecular')) or _fmt not in ('pcr','pcr_quant','molecular')) %}
 
         {# MODE A / C: show report_name band #}
-        {% if rn and mode in ('A','C') and rn != ns.last_report %}
+        {% if _open and not is_single_pcr and rn and mode in ('A','C') and rn != ns.last_report %}
           <tr class="rep-name-row">
             <td colspan="4" style="background:#e2e8f0; font-weight:800; font-size:10pt; text-transform:uppercase; letter-spacing:0.05em; padding:6px 8px; border:1px solid #adb5bd;">{{ rn }}</td>
           </tr>
@@ -404,14 +415,30 @@ table[class$="-table"] tbody td {
         {% endif %}
 
         {# MODE B / C: also show category (department) if changed #}
-        {% if cat and mode in ('B','C') and cat != ns.last_cat %}
+        {% if _open and not is_single_pcr and cat and mode in ('B','C') and cat != ns.last_cat %}
           <tr class="panel-title">
             <td colspan="4">{{ cat }}</td>
           </tr>
           {% set ns.last_cat = cat %}
         {% endif %}
 
-        {% if item.has_children %}
+        {% if _fmt in ('pcr','pcr_quant','molecular') %}
+          {% if _open %}</tbody></table>{% endif %}
+          <div class="pcr-container" style="width:100%; margin-top: 10px; margin-bottom: 10px;">
+            {% set _r = results_by_item.get(item.id) %}
+            {% set _tpl = pcr_tpl_by_test.get(item.test_id) %}
+            {% include 'results/_pcr_result_block.html' %}
+          </div>
+          {% set _next_fmt = (loop.nextitem.test.result_format or '')|lower if not loop.last else '' %}
+          {% if not loop.last and _next_fmt not in ('pcr','pcr_quant','molecular') %}
+          <table class="rep-table"><thead><tr>
+            <th style="width: 42%;">Test</th>
+            <th style="width: 18%;">Result</th>
+            <th style="width: 12%;">Unit</th>
+            <th style="width: 28%;">Reference Range</th>
+          </tr></thead><tbody>
+          {% endif %}
+        {% elif item.has_children %}
           <tr class="panel-title">
             <td colspan="4">{{ item.test.name }}</td>
           </tr>
@@ -438,8 +465,11 @@ table[class$="-table"] tbody td {
           </tr>
         {% endif %}
       {% endfor %}
+    {% set _last_fmt = (_items[-1].test.result_format or '')|lower if _items else '' %}
+    {% if _last_fmt not in ('pcr','pcr_quant','molecular') %}
     </tbody>
   </table>
+    {% endif %}
 
   {# ============ SIGNATURE PANEL ============ #}
   {% include 'results/_signatures_footer.html' %}
